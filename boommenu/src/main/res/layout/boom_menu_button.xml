@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.dd.ShadowLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:sl_shadowRadius="4dp"
+    app:sl_shadowColor="@color/shadow"
+    app:sl_dx="2dp"
+    app:sl_dy="2dp"
+    app:sl_cornerRadius="56dp">
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:background="@drawable/boom_menu_buttom"
+        android:layout_gravity="center"
+        >
+
+        <LinearLayout
+            android:id="@+id/linear_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            >
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</com.dd.ShadowLayout>
