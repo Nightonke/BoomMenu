@@ -27,7 +27,8 @@
         android:text="Button"
         android:gravity="center"
         android:textSize="10sp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="7dp"
+        android:textColor="@android:color/white"
         />
 
 </com.dd.ShadowLayout>

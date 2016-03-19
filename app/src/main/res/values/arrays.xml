@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="boom_type">
+
+        <item>Line</item>
+        <item>Parabola</item>
+
+    </string-array>
+
+</resources>

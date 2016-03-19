@@ -1,7 +1,11 @@
 package com.nightonke.boommenu;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableContainer;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
@@ -14,10 +18,6 @@ import android.widget.TextView;
 public class CircleButton extends FrameLayout {
 
     private Context mContext;
-
-    private Drawable drawable;
-    private String text;
-    private int color;
 
     private ImageButton imageButton;
     private TextView textView;
@@ -37,16 +37,21 @@ public class CircleButton extends FrameLayout {
     }
 
     public void setDrawable(Drawable drawable) {
-        this.drawable = drawable;
         if (imageButton != null) imageButton.setImageDrawable(drawable);
     }
 
     public void setText(String text) {
-        this.text = text;
         if (textView != null) textView.setText(text);
     }
 
     public void setColor(int color) {
-        this.color = color;
+        StateListDrawable stateListDrawable = (StateListDrawable) imageButton.getBackground();
+        DrawableContainer.DrawableContainerState drawableContainerState
+                = (DrawableContainer.DrawableContainerState) stateListDrawable.getConstantState();
+        Drawable[] drawables = drawableContainerState.getChildren();
+        int length = 3;
+        for (int i = 0; i < length; i++) {
+            ((GradientDrawable)drawables[i]).setColor(color );
+        }
     }
 }

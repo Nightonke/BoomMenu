@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">BoomMenuSample</string>
+    <string name="app_name">BoomMenu</string>
+
+    <string name="button_type">Button Type</string>
+    <string name="circle_button">Circle Button</string>
+    <string name="hamburger_button">Hamburger Button</string>
+
+    <string name="button_number">Button Number</string>
+
+    <string name="boom_type">Boom Type</string>
+
+    <string name="place_type">Place Type</string>
+
 </resources>

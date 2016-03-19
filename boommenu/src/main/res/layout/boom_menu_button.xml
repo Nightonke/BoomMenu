@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.dd.ShadowLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shadow_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:sl_shadowRadius="4dp"
@@ -16,16 +17,6 @@
         android:background="@drawable/boom_menu_buttom"
         android:layout_gravity="center"
         >
-
-        <LinearLayout
-            android:id="@+id/linear_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            >
-
-        </LinearLayout>
 
     </FrameLayout>
 

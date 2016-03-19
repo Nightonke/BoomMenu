@@ -2,18 +2,22 @@ package com.nightonke.boommenu;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.dd.ShadowLayout;
 import com.nightonke.boommenu.Eases.EaseType;
 
 /**
@@ -26,32 +30,49 @@ public class BoomMenuButton extends FrameLayout {
     private final int MIN_HAM_BUTTON_NUMBER = 1;
     private final int MAX_HAM_BUTTON_NUMBER = 4;
 
+    private ShadowLayout shadowLayout;
     private FrameLayout frameLayout;
-
-    private int buttonNum = 0;
-    private CircleButton[] circleButtons = new CircleButton[MAX_CIRCLE_BUTTON_NUMBER];
-    private Dot[] dots = new Dot[MAX_CIRCLE_BUTTON_NUMBER];
 
     private int[][] startLocations = new int[MAX_CIRCLE_BUTTON_NUMBER][2];
     private int[][] endLocations = new int[MAX_CIRCLE_BUTTON_NUMBER][2];
 
-    private int frames = 40;
-    private int duration = 800;
-
     private boolean animationPlaying = false;
 
-    private ButtonType buttonType;
-    private BoomType boomType;
+    private int buttonNum = 0;
+    private CircleButton[] circleButtons = new CircleButton[MAX_CIRCLE_BUTTON_NUMBER];
+    private Dot[] dots = new Dot[MAX_CIRCLE_BUTTON_NUMBER];
+    private int[] colors = new int[MAX_CIRCLE_BUTTON_NUMBER];
 
+    // Frames of animations
+    private int frames = 80;
+    // Duration of animations
+    private int duration = 800;
+    // Button type
+    private ButtonType buttonType = ButtonType.CIRCLE;
+    // Boom type
+    private BoomType boomType = BoomType.PARABOLA;
+    // Place type
+    private PlaceType placeType = null;
+    // Particle effect
+    private ParticleEffect particleEffect;
+    // Default dot width
     private int dotWidth = 10;
-    private int buttonWidth = 88;
-    
-    private EaseType showEaseType = EaseType.Linear;
-    private EaseType hideEaseType = EaseType.Linear;
-
-    private LinearLayout linearLayout;
+    // Default circle button width
+    private int buttonWidth = (int)Util.getInstance().dp2px(88);
+    // Movement ease
+    private EaseType showMoveEaseType = EaseType.EaseOutBack;
+    private EaseType hideMoveEaseType = EaseType.EaseOutCirc;
+    // Scale ease
+    private EaseType showScaleEaseType = EaseType.EaseOutBack;
+    private EaseType hideScaleEaseType = EaseType.Linear;
+    // Whether rotate
+    private int rotateDegree = 720;
+    // Rotate ease
+    private EaseType showRotateEaseType = EaseType.EaseOutBack;
+    private EaseType hideRotateEaseType = EaseType.EaseOutCirc;
 
     private OnClickListener onClickListener = null;
+    private AnimatorListener animatorListener = null;
 
     private Context mContext;
 
@@ -65,6 +86,7 @@ public class BoomMenuButton extends FrameLayout {
         mContext = context;
 
         LayoutInflater.from(context).inflate(R.layout.boom_menu_button, this, true);
+        shadowLayout = (ShadowLayout)findViewById(R.id.shadow_layout);
         frameLayout = (FrameLayout)findViewById(R.id.frame_layout);
         frameLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,8 +94,6 @@ public class BoomMenuButton extends FrameLayout {
                 shoot();
             }
         });
-        linearLayout = (LinearLayout)findViewById(R.id.linear_layout);
-
     }
 
     public void init(
@@ -81,32 +101,54 @@ public class BoomMenuButton extends FrameLayout {
             String[] strings,
             int[] colors,
             ButtonType buttonType,
-            BoomType boomType) {
-        this.buttonType = buttonType;
-        this.boomType = boomType;
-        
+            BoomType boomType,
+            PlaceType placeType,
+            ParticleEffect particleEffect,
+            EaseType showMoveEaseType,
+            EaseType showScaleEaseType,
+            EaseType showRotateEaseType,
+            EaseType hideMoveEaseType,
+            EaseType hideScaleEaseType,
+            EaseType hideRotateEaseType,
+            Integer rotateDegree) {
+
+        // judge
         errorJudge(drawables, strings, colors, buttonType);
 
-        // create buttons
-        buttonNum = (drawables == null ? strings.length : drawables.length);
+        this.buttonType = buttonType;
+        this.boomType = boomType;
+        if (placeType == null) throw new RuntimeException("Place type is null!");
+        else this.placeType = placeType;
+        if (particleEffect != null) this.particleEffect = particleEffect;
+        if (showMoveEaseType != null) this.showMoveEaseType = showMoveEaseType;
+        if (showScaleEaseType != null) this.showScaleEaseType = showScaleEaseType;
+        if (showRotateEaseType != null) this.showRotateEaseType = showRotateEaseType;
+        if (hideMoveEaseType != null) this.hideMoveEaseType = hideMoveEaseType;
+        if (hideScaleEaseType != null) this.hideScaleEaseType = hideScaleEaseType;
+        if (hideRotateEaseType != null) this.hideRotateEaseType = hideRotateEaseType;
+        if (rotateDegree != null) this.rotateDegree = rotateDegree;
+
         if (buttonType.equals(ButtonType.CIRCLE)) {
+            // circle buttons
+            // create buttons
+            buttonNum = (drawables == null ? strings.length : drawables.length);
             for (int i = 0; i < buttonNum; i++) {
                 circleButtons[i] = new CircleButton(mContext);
                 if (drawables != null) circleButtons[i].setDrawable(drawables[i]);
                 if (strings != null) circleButtons[i].setText(strings[i]);
+                if (colors != null) circleButtons[i].setColor(colors[i]);
             }
-        }
 
-        // create dots
-        linearLayout.removeAllViews();
-        for (int i = 0; i < buttonNum; i++) {
-            dots[i] = new Dot(mContext);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    10,
-                    10
-            );
-            params.setMargins(10, 10, 10, 10);
-            linearLayout.addView(dots[i], params);
+            // create dots
+            for (int i = 0; i < buttonNum; i++) {
+                dots[i] = new Dot(mContext);
+                if (colors != null) dots[i].setColor(colors[i]);
+            }
+
+            // place dots according to the number of them and the place type
+            placeDots();
+        } else if (buttonType.equals(ButtonType.HAM)) {
+            // hamburger button
         }
     }
 
@@ -155,6 +197,58 @@ public class BoomMenuButton extends FrameLayout {
         }
     }
 
+    private void placeDots() {
+        Log.d("BBB", placeType + "");
+        frameLayout.removeAllViews();
+        int width = frameLayout.getWidth();
+        FrameLayout.LayoutParams params = null;
+        switch (buttonNum) {
+            case 1:
+                params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                params.leftMargin = width / 2 - dotWidth / 2;
+                params.topMargin = width / 2 - dotWidth / 2;
+                frameLayout.addView(dots[0], params);
+                break;
+            case 2:
+                if (placeType.equals(PlaceType.CIRCLE_2_1)) {
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 3 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[0], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width * 2 / 3 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[1], params);
+                }
+                if (placeType.equals(PlaceType.CIRCLE_2_2)) {
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dotWidth / 2;
+                    params.topMargin = width / 3 - dotWidth / 2;
+                    frameLayout.addView(dots[0], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dotWidth / 2;
+                    params.topMargin = width * 2 / 3 - dotWidth / 2;
+                    frameLayout.addView(dots[1], params);
+                }
+                break;
+            case 3:
+                if (placeType.equals(PlaceType.CIRCLE_3_1)) {
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 4 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[0], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[1], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width * 3 / 4 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[2], params);
+                }
+        }
+    }
+
     private void shoot() {
         // listener
         if (onClickListener != null) onClickListener.onClick();
@@ -178,7 +272,11 @@ public class BoomMenuButton extends FrameLayout {
             });
         }
         animationLayout.setVisibility(VISIBLE);
-        animationLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.darkness));
+        ObjectAnimator objectAnimator = ObjectAnimator.ofInt(animationLayout, "backgroundColor",
+                ContextCompat.getColor(mContext, R.color.lightness),
+                ContextCompat.getColor(mContext, R.color.darkness)).setDuration(duration);
+        objectAnimator.setEvaluator(new ArgbEvaluator());
+        objectAnimator.start();
     }
 
     private void startShowAnimations() {
@@ -186,8 +284,8 @@ public class BoomMenuButton extends FrameLayout {
         getEndLocations();
         for (int i = 0; i < buttonNum; i++) {
             dots[i].getLocationOnScreen(startLocations[i]);
-            startLocations[i][0] -= ((int)Util.getInstance().dp2px(buttonWidth) - dots[i].getWidth()) / 2;
-            startLocations[i][1] -= ((int)Util.getInstance().dp2px(buttonWidth) - dots[i].getHeight()) / 2;
+            startLocations[i][0] -= (buttonWidth - dots[i].getWidth()) / 2;
+            startLocations[i][1] -= (buttonWidth - dots[i].getHeight()) / 2;
             setShowAnimation(dots[i], circleButtons[i], startLocations[i], endLocations[i]);
         }
     }
@@ -195,20 +293,37 @@ public class BoomMenuButton extends FrameLayout {
     private void getEndLocations() {
         int width = Util.getInstance().getScreenWidth(mContext);
         int height = Util.getInstance().getScreenHeight(mContext);
-        if (buttonNum == 2) {
-            endLocations[0][0] = width * 1 / 3 - (int)Util.getInstance().dp2px(buttonWidth) / 2;
-            endLocations[0][1] = height / 2 - (int)Util.getInstance().dp2px(buttonWidth) / 2;
-            endLocations[1][0] = width * 2 / 3 - (int)Util.getInstance().dp2px(buttonWidth) / 2;
-            endLocations[1][1] = height / 2 - (int)Util.getInstance().dp2px(buttonWidth) / 2;
+        if (buttonType.equals(ButtonType.CIRCLE)) {
+            switch (buttonNum) {
+                case 1:
+                    endLocations[0][0] = width / 2 - buttonWidth / 2;
+                    endLocations[0][1] = height / 2 - buttonWidth / 2;
+                    break;
+                case 2:
+                    if (placeType.equals(PlaceType.CIRCLE_2_1)) {
+                        endLocations[0][0] = width / 3 - buttonWidth / 2;
+                        endLocations[0][1] = height / 2 - buttonWidth / 2;
+                        endLocations[1][0] = width * 2 / 3 - buttonWidth / 2;
+                        endLocations[1][1] = height / 2 - buttonWidth / 2;
+                    }
+                    if (placeType.equals(PlaceType.CIRCLE_2_2)) {
+                        endLocations[0][0] = width / 2 - buttonWidth / 2;
+                        endLocations[0][1] = height / 3 - buttonWidth / 2;
+                        endLocations[1][0] = width / 2 - buttonWidth / 2;
+                        endLocations[1][1] = height * 2 / 3 - buttonWidth / 2;
+                    }
+                    break;
+                case 3:
+                    if (placeType.equals(PlaceType.CIRCLE_3_1)) {
+                        endLocations[0][0] = width / 4 - buttonWidth / 2;
+                        endLocations[0][1] = height / 2 - buttonWidth / 2;
+                        endLocations[1][0] = width / 2 - buttonWidth / 2;
+                        endLocations[1][1] = height / 2 - buttonWidth / 2;
+                        endLocations[2][0] = width * 3 / 4 - buttonWidth / 2;
+                        endLocations[2][1] = height / 2 - buttonWidth / 2;
+                    }
+            }
         }
-    }
-
-    public void setOnClickListener(OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
-    }
-
-    public interface OnClickListener {
-        void onClick();
     }
 
     private ViewGroup animationLayout = null;
@@ -228,8 +343,8 @@ public class BoomMenuButton extends FrameLayout {
         int x = location[0];
         int y = location[1];
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                (int)Util.getInstance().dp2px(buttonWidth),
-                (int)Util.getInstance().dp2px(buttonWidth));
+                buttonWidth,
+                buttonWidth);
         lp.leftMargin = x;
         lp.topMargin = y;
         animationLayout.addView(view, lp);
@@ -257,23 +372,23 @@ public class BoomMenuButton extends FrameLayout {
         getXY(sl, el, ml, xs, ys);
 
         ObjectAnimator xAnimator = ObjectAnimator.ofFloat(view, "x", xs).setDuration(duration);
-        xAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showEaseType));
+        xAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
         xAnimator.start();
 
         ObjectAnimator yAnimator = ObjectAnimator.ofFloat(view, "y", ys).setDuration(duration);
-        yAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showEaseType));
+        yAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
         yAnimator.start();
 
         ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX",
                 dotWidth / Util.getInstance().dp2px(buttonWidth),
                 1f).setDuration(duration);
-        scaleXAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showEaseType));
+        scaleXAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showScaleEaseType));
         scaleXAnimator.start();
 
         ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY",
                 dotWidth / Util.getInstance().dp2px(buttonWidth),
                 1f).setDuration(duration);
-        scaleYAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showEaseType));
+        scaleYAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showScaleEaseType));
         scaleYAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -336,35 +451,69 @@ public class BoomMenuButton extends FrameLayout {
         getXY(sl, el, ml, xs, ys);
 
         ObjectAnimator xAnimator = ObjectAnimator.ofFloat(button, "x", xs).setDuration(duration);
-        xAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideEaseType));
+        xAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
         xAnimator.start();
 
         ObjectAnimator yAnimator = ObjectAnimator.ofFloat(button, "y", ys).setDuration(duration);
-        yAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideEaseType));
+        yAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
         yAnimator.start();
 
         ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(button, "scaleX",
                 1f,
                 dotWidth / Util.getInstance().dp2px(buttonWidth)).setDuration(duration);
-        scaleXAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideEaseType));
+        scaleXAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideScaleEaseType));
         scaleXAnimator.start();
 
         ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(button, "scaleY",
                 1f,
                 dotWidth / Util.getInstance().dp2px(buttonWidth)).setDuration(duration);
-        scaleYAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideEaseType));
+        scaleYAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideScaleEaseType));
         scaleYAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                animationLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.lightness));
                 animationLayout.removeAllViews();
-                animationLayout.setVisibility(GONE);
                 dot.setVisibility(VISIBLE);
                 animationPlaying = false;
             }
         });
         scaleYAnimator.start();
+
+        ObjectAnimator objectAnimator = ObjectAnimator.ofInt(animationLayout, "backgroundColor",
+                ContextCompat.getColor(mContext, R.color.darkness),
+                ContextCompat.getColor(mContext, R.color.lightness)).setDuration(duration);
+        objectAnimator.setEvaluator(new ArgbEvaluator());
+        objectAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                animationLayout.setVisibility(GONE);
+            }
+        });
+        objectAnimator.start();
+    }
+
+
+
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
+
+    public void setAnimatorListener(AnimatorListener animatorListener) {
+        this.animatorListener = animatorListener;
+    }
+
+    public interface OnClickListener {
+        void onClick();
+    }
+
+    public interface AnimatorListener {
+        void toShow();
+        void showing();
+        void showed();
+        void toHide();
+        void hiding();
+        void hided();
     }
 
 }
