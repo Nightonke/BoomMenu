@@ -1,12 +1,7 @@
 package com.nightonke.boommenu;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.DrawableContainer;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.StateListDrawable;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
@@ -22,6 +17,8 @@ public class CircleButton extends FrameLayout {
 
     private ImageButton imageButton;
     private TextView textView;
+
+    private int radius = (int)Util.getInstance().dp2px(80) / 2;
 
     public CircleButton(Context context) {
         this(context, null);
@@ -45,17 +42,9 @@ public class CircleButton extends FrameLayout {
         if (textView != null) textView.setText(text);
     }
 
+    @SuppressWarnings("deprecation")
     public void setColor(int color) {
-        StateListDrawable stateListDrawable = new StateListDrawable();
-
-        Drawable normalDrawable = ContextCompat.getDrawable(mContext, R.drawable.circle_button_normal);
-        ((GradientDrawable)normalDrawable).setColor(color);
-        stateListDrawable.addState(new int[]{android.R.attr.state_enabled}, normalDrawable);
-
-        Drawable pressDrawable = ContextCompat.getDrawable(mContext, R.drawable.circle_button_press);
-        ((GradientDrawable)pressDrawable).setColor(Util.getInstance().getDarkerColor(color));
-        stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, pressDrawable);
-
-        imageButton.setBackgroundDrawable(stateListDrawable);
+        Util.getInstance().setCircleButtonStateListDrawable(
+                imageButton, radius, color, Util.getInstance().getLighterColor(color));
     }
 }
