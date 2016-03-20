@@ -12,6 +12,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.BoomType;
@@ -22,7 +23,9 @@ import com.nightonke.boommenu.Util;
 
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements
+        BoomMenuButton.OnSubButtonClickListener {
 
     private BoomMenuButton boomMenuButton;
 
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         mContext = this;
 
         boomMenuButton = (BoomMenuButton)findViewById(R.id.boom);
+        boomMenuButton.setOnSubButtonClickListener(this);
 
         initViews();
 
@@ -289,5 +293,10 @@ public class MainActivity extends AppCompatActivity {
         Random random = new Random();
         int p = random.nextInt(Colors.length);
         return Color.parseColor(Colors[p]);
+    }
+
+    @Override
+    public void onClick(int buttonIndex) {
+        Toast.makeText(this, "On click No." + buttonIndex + " button", Toast.LENGTH_SHORT).show();
     }
 }

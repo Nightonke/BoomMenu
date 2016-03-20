@@ -25,7 +25,7 @@ import java.util.Random;
 /**
  * Created by Weiping on 2016/3/19.
  */
-public class BoomMenuButton extends FrameLayout {
+public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircleButtonClickListener {
 
     private final int MIN_CIRCLE_BUTTON_NUMBER = 1;
     private final int MAX_CIRCLE_BUTTON_NUMBER = 9;
@@ -78,9 +78,12 @@ public class BoomMenuButton extends FrameLayout {
     // Rotate ease
     private EaseType showRotateEaseType = EaseType.EaseOutBack;
     private EaseType hideRotateEaseType = EaseType.EaseOutCirc;
+    // Auto dismiss
+    private boolean autoDismiss = true;
 
     private OnClickListener onClickListener = null;
     private AnimatorListener animatorListener = null;
+    private OnSubButtonClickListener onSubButtonClickListener = null;
 
     private Context mContext;
 
@@ -142,6 +145,7 @@ public class BoomMenuButton extends FrameLayout {
             buttonNum = (drawables == null ? strings.length : drawables.length);
             for (int i = 0; i < buttonNum; i++) {
                 circleButtons[i] = new CircleButton(mContext);
+                circleButtons[i].setOnCircleButtonClickListener(this, i);
                 if (drawables != null) circleButtons[i].setDrawable(drawables[i]);
                 if (strings != null) circleButtons[i].setText(strings[i]);
                 if (colors != null) circleButtons[i].setColor(colors[i]);
@@ -870,12 +874,26 @@ public class BoomMenuButton extends FrameLayout {
         objectAnimator.start();
     }
 
+    public void setAutoDismiss(boolean autoDismiss) {
+        this.autoDismiss = autoDismiss;
+    }
+
     public void setOnClickListener(OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
     public void setAnimatorListener(AnimatorListener animatorListener) {
         this.animatorListener = animatorListener;
+    }
+
+    public void setOnSubButtonClickListener(OnSubButtonClickListener onSubButtonClickListener) {
+        this.onSubButtonClickListener = onSubButtonClickListener;
+    }
+
+    @Override
+    public void onClick(int index) {
+        if (onSubButtonClickListener != null) onSubButtonClickListener.onClick(index);
+        if (autoDismiss && !animationPlaying) startHideAnimations();
     }
 
     public interface OnClickListener {
@@ -889,6 +907,10 @@ public class BoomMenuButton extends FrameLayout {
         void toHide();
         void hiding();
         void hided();
+    }
+
+    public interface OnSubButtonClickListener {
+        void onClick(int buttonIndex);
     }
 
 }
