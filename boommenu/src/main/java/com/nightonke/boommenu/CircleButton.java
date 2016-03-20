@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.DrawableContainer;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
@@ -45,13 +46,16 @@ public class CircleButton extends FrameLayout {
     }
 
     public void setColor(int color) {
-        StateListDrawable stateListDrawable = (StateListDrawable) imageButton.getBackground();
-        DrawableContainer.DrawableContainerState drawableContainerState
-                = (DrawableContainer.DrawableContainerState) stateListDrawable.getConstantState();
-        Drawable[] drawables = drawableContainerState.getChildren();
-        int length = 3;
-        for (int i = 0; i < length; i++) {
-            ((GradientDrawable)drawables[i]).setColor(color );
-        }
+        StateListDrawable stateListDrawable = new StateListDrawable();
+
+        Drawable normalDrawable = ContextCompat.getDrawable(mContext, R.drawable.circle_button_normal);
+        ((GradientDrawable)normalDrawable).setColor(color);
+        stateListDrawable.addState(new int[]{android.R.attr.state_enabled}, normalDrawable);
+
+        Drawable pressDrawable = ContextCompat.getDrawable(mContext, R.drawable.circle_button_press);
+        ((GradientDrawable)pressDrawable).setColor(Util.getInstance().getDarkerColor(color));
+        stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, pressDrawable);
+
+        imageButton.setBackgroundDrawable(stateListDrawable);
     }
 }
