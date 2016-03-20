@@ -98,6 +98,7 @@
                 android:text="@string/place_type"
                 android:textStyle="bold"
                 android:textSize="20sp"
+                android:layout_marginTop="20dp"
                 />
 
             <RadioGroup
@@ -105,6 +106,110 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
+
+            <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:text="@string/animation_duration"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+            />
+
+            <SeekBar
+                android:id="@+id/animation_duration_seek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progress="0"
+                />
+
+            <TextView
+                android:id="@+id/animation_duration_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|end"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:text="@string/animation_start_delay"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginTop="20dp"
+                />
+
+            <SeekBar
+                android:id="@+id/animation_start_delay_seek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progress="0"
+                />
+
+            <TextView
+                android:id="@+id/animation_start_delay_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|end"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:text="@string/animation_rotation_degree"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginTop="20dp"
+                />
+
+            <SeekBar
+                android:id="@+id/animation_rotation_degree_seek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progress="0"
+                />
+
+            <TextView
+                android:id="@+id/animation_rotation_degree_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|end"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@android:color/black"
+                    android:text="@string/auto_dismiss"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    />
+
+                <CheckBox
+                    android:id="@+id/auto_dismiss"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    />
+
+            </LinearLayout>
+
+
 
          </LinearLayout>
 

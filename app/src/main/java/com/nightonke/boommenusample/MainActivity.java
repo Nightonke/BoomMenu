@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -32,13 +34,27 @@ public class MainActivity extends AppCompatActivity
     private Context mContext;
 
     private RadioGroup buttonTypeGroup;
+    
     private SeekBar buttonNumberSeek;
     private TextView buttonNumberText;
+    
     private RadioGroup boomTypeGroup;
     private RadioButton[] boomTypeButtons;
+    
     private RadioGroup placeTypeGroup;
     private RadioButton[] placeTypeButtons;
     private int[] CirclePlaceTypes = new int[]{1, 2, 4, 2, 4, 6, 4, 3, 2};
+    
+    private SeekBar animationDurationSeek;
+    private TextView animationDurationText;
+
+    private SeekBar animationStartDelaySeek;
+    private TextView animationStartDelayText;
+
+    private SeekBar animationRotationDegreeSeek;
+    private TextView animationRotationDegreeText;
+    
+    private CheckBox autoDismiss;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +67,11 @@ public class MainActivity extends AppCompatActivity
         boomMenuButton.setOnSubButtonClickListener(this);
 
         initViews();
+    }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
         initBoom();
     }
 
@@ -113,8 +133,10 @@ public class MainActivity extends AppCompatActivity
                 initBoom();
             }
         });
+        
         buttonNumberSeek = (SeekBar)findViewById(R.id.button_number_seek);
         buttonNumberSeek.setMax(8);
+        buttonNumberSeek.setProgress(0);
         buttonNumberSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -134,8 +156,8 @@ public class MainActivity extends AppCompatActivity
             }
         });
         buttonNumberText = (TextView)findViewById(R.id.button_number_text);
-        buttonNumberSeek.setProgress(0);
         buttonNumberText.setText("1 Button(s)");
+        
         boomTypeGroup = (RadioGroup)findViewById(R.id.group_boom_type);
         boomTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -154,6 +176,7 @@ public class MainActivity extends AppCompatActivity
             boomTypeGroup.addView(boomTypeButtons[i]);
         }
         boomTypeButtons[1].setChecked(true);
+        
         placeTypeGroup = (RadioGroup)findViewById(R.id.group_place_type);
         placeTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -162,6 +185,87 @@ public class MainActivity extends AppCompatActivity
             }
         });
         setPlaceRadioButton(1);
+
+        animationDurationSeek = (SeekBar)findViewById(R.id.animation_duration_seek);
+        animationDurationSeek.setMax(9);
+        animationDurationSeek.setProgress(0);
+        animationDurationSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                animationDurationText.setText(((progress + 1) * 500) + " ms");
+                boomMenuButton.setDuration((progress + 1) * 500);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        animationDurationText = (TextView)findViewById(R.id.animation_duration_text);
+        animationDurationText.setText(((animationDurationSeek.getProgress() + 1) * 500) + " ms");
+        boomMenuButton.setDuration((animationDurationSeek.getProgress() + 1) * 500);
+
+        animationStartDelaySeek = (SeekBar)findViewById(R.id.animation_start_delay_seek);
+        animationStartDelaySeek.setMax(9);
+        animationStartDelaySeek.setProgress(0);
+        animationStartDelaySeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                animationStartDelayText.setText(((progress + 1) * 100) + " ms");
+                boomMenuButton.setDelay((progress + 1) * 100);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        animationStartDelayText = (TextView)findViewById(R.id.animation_start_delay_text);
+        animationStartDelayText.setText(((animationStartDelaySeek.getProgress() + 1) * 100) + " ms");
+        boomMenuButton.setDelay((animationStartDelaySeek.getProgress() + 1) * 100);
+
+        animationRotationDegreeSeek = (SeekBar)findViewById(R.id.animation_rotation_degree_seek);
+        animationRotationDegreeSeek.setMax(9);
+        animationRotationDegreeSeek.setProgress(0);
+        animationRotationDegreeSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                animationRotationDegreeText.setText((progress * 360) + " degrees");
+                boomMenuButton.setRotateDegree(progress * 360);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        animationRotationDegreeText = (TextView)findViewById(R.id.animation_rotation_degree_text);
+        animationRotationDegreeText.setText((animationRotationDegreeSeek.getProgress() * 360) + " degrees");
+        boomMenuButton.setRotateDegree(animationRotationDegreeSeek.getProgress() * 360);
+
+        autoDismiss = (CheckBox)findViewById(R.id.auto_dismiss);
+        autoDismiss.setChecked(true);
+        autoDismiss.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                boomMenuButton.setAutoDismiss(isChecked);
+            }
+        });
     }
 
     private BoomType getBoomType() {

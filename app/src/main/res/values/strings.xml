@@ -11,4 +11,9 @@
 
     <string name="place_type">Place Type</string>
 
+    <string name="animation_duration">Animation Duration</string>
+    <string name="animation_start_delay">Animation Start Delay</string>
+    <string name="animation_rotation_degree">Animation Rotation Degree</string>
+    <string name="auto_dismiss">Auto Dismiss</string>
+
 </resources>
