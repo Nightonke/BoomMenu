@@ -7,11 +7,10 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +33,8 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
     private final int MIN_HAM_BUTTON_NUMBER = 1;
     private final int MAX_HAM_BUTTON_NUMBER = 4;
 
+    private ViewGroup animationLayout = null;
+
     private ShadowLayout shadowLayout;
     private FrameLayout frameLayout;
 
@@ -41,12 +42,15 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
     private int[][] endLocations = new int[MAX_CIRCLE_BUTTON_NUMBER][2];
 
     private boolean animationPlaying = false;
+    private StateType state = StateType.CLOSED;
 
     private int buttonNum = 0;
     private CircleButton[] circleButtons = new CircleButton[MAX_CIRCLE_BUTTON_NUMBER];
     private Dot[] dots = new Dot[MAX_CIRCLE_BUTTON_NUMBER];
     private int[] colors = new int[MAX_CIRCLE_BUTTON_NUMBER];
 
+    // Is in action bar
+    private boolean isInActionBar = false;
     // Frames of animations
     private int frames = 80;
     // Duration of animations
@@ -69,6 +73,8 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
     private int dotWidth = 10;
     // Default circle button width
     private int buttonWidth = (int)Util.getInstance().dp2px(88);
+    // Boom button radius
+    private int boomButtonRadius = (int)Util.getInstance().dp2px(56);
     // Movement ease
     private EaseType showMoveEaseType = EaseType.EaseOutBack;
     private EaseType hideMoveEaseType = EaseType.EaseOutCirc;
@@ -100,21 +106,72 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
 
         mContext = context;
 
-        LayoutInflater.from(context).inflate(R.layout.boom_menu_button, this, true);
-        shadowLayout = (ShadowLayout)findViewById(R.id.shadow_layout);
-        frameLayout = (FrameLayout)findViewById(R.id.frame_layout);
-        frameLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shoot();
+        TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.BoomMenuButton, 0, 0);
+        if (attr != null) {
+            try {
+                isInActionBar = attr.getBoolean(R.styleable.BoomMenuButton_boom_inActionBar, false);
+            } finally {
+                attr.recycle();
             }
-        });
+        }
+
+        if (isInActionBar) {
+            LayoutInflater.from(context).inflate(R.layout.boom_menu_button_in_action_bar, this, true);
+            frameLayout = (FrameLayout)findViewById(R.id.frame_layout);
+            frameLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    shoot();
+                }
+            });
+        } else {
+            LayoutInflater.from(context).inflate(R.layout.boom_menu_button, this, true);
+            shadowLayout = (ShadowLayout)findViewById(R.id.shadow_layout);
+            frameLayout = (FrameLayout)findViewById(R.id.frame_layout);
+            frameLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    shoot();
+                }
+            });
+
+            setBoomButtonBackgroundColor(
+                    ContextCompat.getColor(mContext, R.color.default_boom_button_color_pressed),
+                    ContextCompat.getColor(mContext, R.color.default_boom_button_color));
+        }
     }
 
+    /**
+     * Init the boom menu button.
+     * Notice that you should call this NOT in your onCreate method.
+     * Because the width and height of boom menu button is 0.
+     * Call this in:
+     *
+     * @Override
+     * public void onWindowFocusChanged(boolean hasFocus) {
+     *     super.onWindowFocusChanged(hasFocus);
+     *     init(...);
+     * }
+     *
+     * @param drawables The drawables of images of sub buttons. Can not be null.
+     * @param strings The texts of sub buttons, ok to be null.
+     * @param colors The colors of sub buttons, including pressed-state and normal-state.
+     * @param buttonType The button type.
+     * @param boomType The boom type.
+     * @param placeType The place type.
+     * @param particleEffect Whether use particle effect.
+     * @param showMoveEaseType Ease type to move the sub buttons when showing.
+     * @param showScaleEaseType Ease type to scale the sub buttons when showing.
+     * @param showRotateEaseType Ease type to rotate the sub buttons when showing.
+     * @param hideMoveEaseType Ease type to move the sub buttons when dismissing.
+     * @param hideScaleEaseType Ease type to scale the sub buttons when dismissing.
+     * @param hideRotateEaseType Ease type to rotate the sub buttons when dismissing.
+     * @param rotateDegree Rotation degree.
+     */
     public void init(
             Drawable[] drawables,
             String[] strings,
-            int[] colors,
+            int[][] colors,
             ButtonType buttonType,
             BoomType boomType,
             PlaceType placeType,
@@ -152,13 +209,13 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
                 circleButtons[i].setOnCircleButtonClickListener(this, i);
                 if (drawables != null) circleButtons[i].setDrawable(drawables[i]);
                 if (strings != null) circleButtons[i].setText(strings[i]);
-                if (colors != null) circleButtons[i].setColor(colors[i]);
+                if (colors != null) circleButtons[i].setColor(colors[i][0], colors[i][1]);
             }
 
             // create dots
             for (int i = 0; i < buttonNum; i++) {
                 dots[i] = new Dot(mContext);
-                if (colors != null) dots[i].setColor(colors[i]);
+                if (colors != null) dots[i].setColor(colors[i][1]);
             }
 
             // place dots according to the number of them and the place type
@@ -168,44 +225,51 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         }
     }
 
+    /**
+     * Judge whether the input params to init boom menu button is incorrect.
+     *
+     * @param drawables The drawables of the sub buttons.
+     * @param strings The texts of the sub buttons.
+     * @param colors The colors(including the pressed-state and normal-state) of the sub buttons.
+     * @param buttonType The button type of the sub buttons.
+     */
     private void errorJudge(
             Drawable[] drawables,
             String[] strings,
-            int[] colors,
+            int[][] colors,
             ButtonType buttonType) {
-        if (drawables == null && strings == null) {
-            throw new RuntimeException("The button's drawables and strings are both null!");
+        if (drawables == null) {
+            throw new RuntimeException("The button's drawables are null!");
+        }
+        if (colors == null) {
+            throw new RuntimeException("The button's colors are null!");
         }
         if (buttonType.equals(ButtonType.CIRCLE)) {
-            if ((drawables != null
-                    && !(
+            if (       !(
                     MIN_CIRCLE_BUTTON_NUMBER <= drawables.length
-                            && drawables.length <= MAX_CIRCLE_BUTTON_NUMBER))
+                            && drawables.length <= MAX_CIRCLE_BUTTON_NUMBER)
                     || (strings != null
                     && !(
                     MIN_CIRCLE_BUTTON_NUMBER <= strings.length
                             && strings.length <= MAX_CIRCLE_BUTTON_NUMBER))
-                    || (colors != null
-                    && !(
+                    || !(
                     MIN_CIRCLE_BUTTON_NUMBER <= colors.length
-                            && colors.length <= MAX_CIRCLE_BUTTON_NUMBER))) {
+                            && colors.length <= MAX_CIRCLE_BUTTON_NUMBER)) {
                 throw new RuntimeException("The circle type button's length must be in [" +
                         MIN_CIRCLE_BUTTON_NUMBER + ", " +
                         MAX_CIRCLE_BUTTON_NUMBER + "]!");
             }
         } else if (buttonType.equals(ButtonType.HAM)) {
-            if ((drawables != null
-                    && !(
+            if ((      !(
                     MIN_HAM_BUTTON_NUMBER <= drawables.length
                             && drawables.length <= MAX_HAM_BUTTON_NUMBER))
                     || (strings != null
                     && !(
                     MIN_HAM_BUTTON_NUMBER <= strings.length
                             && strings.length <= MAX_HAM_BUTTON_NUMBER))
-                    || (colors != null
-                    && !(
+                    || !(
                     MIN_HAM_BUTTON_NUMBER <= colors.length
-                            && colors.length <= MAX_HAM_BUTTON_NUMBER))) {
+                            && colors.length <= MAX_HAM_BUTTON_NUMBER)) {
                 throw new RuntimeException("The ham type button's length must be in [" +
                         MIN_HAM_BUTTON_NUMBER + ", " +
                         MAX_HAM_BUTTON_NUMBER + "]!");
@@ -213,6 +277,9 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         }
     }
 
+    /**
+     * Place all dots to the boom menu botton.
+     */
     @SuppressWarnings("SuspiciousNameCombination")
     private void placeDots() {
         frameLayout.removeAllViews();
@@ -928,6 +995,9 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         }
     }
 
+    /**
+     * When the boom menu button is clicked.
+     */
     private void shoot() {
         // listener
         if (onClickListener != null) onClickListener.onClick();
@@ -939,6 +1009,9 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         startShowAnimations();
     }
 
+    /**
+     * Dim the background layout.
+     */
     private void dimAnimationLayout() {
         if (animationLayout == null) {
             animationLayout = createAnimationLayout();
@@ -961,12 +1034,14 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
                 if (animatorListener != null) animatorListener.toShow();
+                state = StateType.OPENING;
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 if (animatorListener != null) animatorListener.showed();
+                state = StateType.OPEN;
             }
         });
         objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -978,6 +1053,9 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         objectAnimator.start();
     }
 
+    /**
+     * Start all animations about showing the boom menu button.
+     */
     private void startShowAnimations() {
         if (animationLayout != null) animationLayout.removeAllViews();
         getEndLocations();
@@ -1017,6 +1095,9 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         }
     }
 
+    /**
+     * Get end location of all sub buttons.
+     */
     private void getEndLocations() {
         int width = Util.getInstance().getScreenWidth(mContext);
         int height = Util.getInstance().getScreenHeight(mContext);
@@ -1439,7 +1520,13 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         }
     }
 
-    private ViewGroup animationLayout = null;
+    /**
+     * Create the background layout as a "canvas" of all animations and sub buttons.
+     * Notice that we don't need to call this every time, we can set the visibility
+     * of the background layout to hide it.
+     *
+     * @return The background layout.
+     */
     private ViewGroup createAnimationLayout() {
         ViewGroup rootView = (ViewGroup) ((Activity)mContext).getWindow().getDecorView();
         LinearLayout animLayout = new LinearLayout(mContext);
@@ -1452,6 +1539,13 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         return animLayout;
     }
 
+    /**
+     * Put the sub button to the background layout.
+     *
+     * @param view The sub button.
+     * @param location Location in background layout.
+     * @return The sub button after set.
+     */
     private View setViewLocationInAnimationLayout(final View view, int[] location) {
         int x = location[0];
         int y = location[1];
@@ -1464,6 +1558,15 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         return view;
     }
 
+    /**
+     * Set show animation of each sub button.
+     *
+     * @param dot The dot corresponding to the sub button.
+     * @param button The sub button.
+     * @param startLocation Start location of the animation.
+     * @param endLocation End location of the animation.
+     * @param index Index of the sub button in the array.
+     */
     public void setShowAnimation(
             final View dot,
             final View button,
@@ -1537,6 +1640,15 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
 
     }
 
+    /**
+     * Get the function of the road of the animation of showing.
+     * Then calculate each points to be ready for the animation.
+     *
+     * @param startPoint Start point of the animation.
+     * @param endPoint End point of the animation.
+     * @param xs The values on the x axis.
+     * @param ys The values on the y axis.
+     */
     private void getShowXY(float[] startPoint, float[] endPoint, float[] xs, float[] ys) {
         if (boomType.equals(BoomType.LINE)) {
             float x1 = startPoint[0];
@@ -1559,7 +1671,7 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
             float x2 = endPoint[0];
             float y2 = endPoint[1];
             float x3 = (startPoint[0] + endPoint[0]) / 2;
-            float y3 = startPoint[1] / 2;
+            float y3 = Math.min(startPoint[1], endPoint[1]) / 2;
             float a, b, c;
 
             a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
@@ -1602,7 +1714,8 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
             float x2 = endPoint[0];
             float y2 = endPoint[1];
             float x3 = (startPoint[0] + endPoint[0]) / 2;
-            float y3 = (Util.getInstance().getScreenHeight(mContext) + startPoint[1]) / 2;
+            float y3 = (Util.getInstance().getScreenHeight(mContext)
+                    + Math.min(startPoint[1], endPoint[1])) / 2;
             float a, b, c;
 
             a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
@@ -1643,6 +1756,15 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
 
     }
 
+    /**
+     * Get the function of the road of the animation of dismissing.
+     * Then calculate each points to be ready for the animation.
+     *
+     * @param startPoint Start point of the animation.
+     * @param endPoint End point of the animation.
+     * @param xs The values on the x axis.
+     * @param ys The values on the y axis.
+     */
     private void getHideXY(float[] startPoint, float[] endPoint, float[] xs, float[] ys) {
         if (boomType.equals(BoomType.LINE)) {
             float x1 = startPoint[0];
@@ -1665,7 +1787,7 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
             float x2 = endPoint[0];
             float y2 = endPoint[1];
             float x3 = (startPoint[0] + endPoint[0]) / 2;
-            float y3 = startPoint[1] / 2;
+            float y3 = Math.min(startPoint[1], endPoint[1]) / 2;
             float a, b, c;
 
             a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
@@ -1708,7 +1830,8 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
             float x2 = endPoint[0];
             float y2 = endPoint[1];
             float x3 = (startPoint[0] + endPoint[0]) / 2;
-            float y3 = (Util.getInstance().getScreenHeight(mContext) + endPoint[1]) / 2;
+            float y3 = (Util.getInstance().getScreenHeight(mContext)
+                    + Math.min(startPoint[1], endPoint[1])) / 2;
             float a, b, c;
 
             a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
@@ -1749,6 +1872,9 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
 
     }
 
+    /**
+     * Start all animations about dismissing.
+     */
     private void startHideAnimations() {
         animationPlaying = true;
         lightAnimationLayout();
@@ -1784,6 +1910,15 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         }
     }
 
+    /**
+     * Set hide animation of each sub button.
+     *
+     * @param dot The dot corresponding to the sub button.
+     * @param button The sub button.
+     * @param startLocation Start location of the animation.
+     * @param endLocation End location of the animation.
+     * @param index Index of the sub button in the array.
+     */
     public void setHideAnimation(
             final View dot,
             final View button,
@@ -1792,7 +1927,6 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
             int index) {
 
         float[] sl = new float[2];
-        float[] ml = new float[2];
         float[] el = new float[2];
         sl[0] = startLocation[0] * 1.0f;
         sl[1] = startLocation[1] * 1.0f;
@@ -1846,6 +1980,9 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
 
     }
 
+    /**
+     * Light the background, used when the boom menu button is to dismiss.
+     */
     public void lightAnimationLayout() {
         ObjectAnimator objectAnimator = ObjectAnimator.ofInt(animationLayout, "backgroundColor",
                 ContextCompat.getColor(mContext, R.color.darkness),
@@ -1857,6 +1994,7 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
                 if (animatorListener != null) animatorListener.toHide();
+                state = StateType.CLOSING;
             }
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -1865,6 +2003,7 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
                 animationLayout.setVisibility(GONE);
                 animationPlaying = false;
                 if (animatorListener != null) animatorListener.hided();
+                state = StateType.CLOSED;
             }
         });
         objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -1876,68 +2015,180 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         objectAnimator.start();
     }
 
+    /**
+     * Set auto dismiss. If the boom menu button is auto dismiss, user can click one
+     * of the sub buttons to dismiss the boom menu botton.
+     *
+     * @param autoDismiss
+     */
     public void setAutoDismiss(boolean autoDismiss) {
         this.autoDismiss = autoDismiss;
     }
 
+    /**
+     * Set cancelable. If the boom menu button is cancelable, user can click
+     * the background to dismiss it.
+     *
+     * @param cancelable
+     */
     public void setCancelable(boolean cancelable) {
         this.cancelable = cancelable;
     }
 
+    /**
+     * Set animation duration.
+     *
+     * @param duration
+     */
     public void setDuration(int duration) {
         this.duration = duration;
     }
 
+    /**
+     * Set start delay.
+     *
+     * @param delay
+     */
     public void setDelay(int delay) {
         this.delay = delay;
     }
 
+    /**
+     * Set rotate degrees.
+     *
+     * @param rotateDegree
+     */
     public void setRotateDegree(int rotateDegree) {
         this.rotateDegree = rotateDegree;
     }
 
+    /**
+     * Set show order type.
+     *
+     * @param showOrderType
+     */
     public void setShowOrderType(OrderType showOrderType) {
         this.showOrderType = showOrderType;
     }
 
+    /**
+     * Set hide order type.
+     *
+     * @param hideOrderType
+     */
     public void setHideOrderType(OrderType hideOrderType) {
         this.hideOrderType = hideOrderType;
     }
 
+    /**
+     * Set OnClickListener.
+     *
+     * @param onClickListener
+     */
     public void setOnClickListener(OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
+    /**
+     * Set AnimatorListener.
+     *
+     * @param animatorListener
+     */
     public void setAnimatorListener(AnimatorListener animatorListener) {
         this.animatorListener = animatorListener;
     }
 
+    /**
+     * @return The imagebuttons of sub buttons.
+     */
     public ImageButton[] getImageButtons() {
         ImageButton[] imageButtons = new ImageButton[buttonNum];
         for (int i = 0; i < buttonNum; i++) imageButtons[i] = circleButtons[i].getImageButton();
         return imageButtons;
     }
 
+    /**
+     * @return The textviews of sub buttons.
+     */
     public TextView[] getTextViews() {
         TextView[] textViews = new TextView[buttonNum];
         for (int i = 0; i < buttonNum; i++) textViews[i] = circleButtons[i].getTextView();
         return textViews;
     }
 
+    /**
+     * Set OnSubButtonClickListener.
+     *
+     * @param onSubButtonClickListener
+     */
     public void setOnSubButtonClickListener(OnSubButtonClickListener onSubButtonClickListener) {
         this.onSubButtonClickListener = onSubButtonClickListener;
     }
 
+    /**
+     * Set the color of pressed-state or normal-state of boom menu button.
+     *
+     * @param pressedColor
+     * @param normalColor
+     */
+    public void setBoomButtonBackgroundColor(int pressedColor, int normalColor) {
+        Util.getInstance().setCircleButtonStateListDrawable(
+                frameLayout, boomButtonRadius, pressedColor, normalColor);
+    }
+
+    /**
+     * Set the offset of the shadow layouts of sub buttons.
+     * If xOffset is 0 and yOffset is 0, then the shadow layout is at the center.
+     *
+     * @param xOffset In pixels.
+     * @param yOffset In pixels.
+     */
+    public void setSubButtonShadowOffset(float xOffset, float yOffset) {
+        for (int i = 0; i < buttonNum; i++) {
+            if (buttonType.equals(ButtonType.CIRCLE)) {
+                circleButtons[i].setShadowDx(xOffset);
+                circleButtons[i].setShadowDy(yOffset);
+            }
+        }
+    }
+
+    /**
+     * Set the offset of the shadow layouts of boom menu button.
+     * If xOffset is 0 and yOffset is 0, then the shadow layout is at the center.
+     *
+     * @param xOffset In pixels.
+     * @param yOffset In pixels.
+     */
+    public void setBoomButtonShadowOffset(float xOffset, float yOffset) {
+        for (int i = 0; i < buttonNum; i++) {
+            if (buttonType.equals(ButtonType.CIRCLE)) {
+                circleButtons[i].setShadowDx(xOffset);
+                circleButtons[i].setShadowDy(yOffset);
+            }
+        }
+    }
+
+    /**
+     * Get the click event from CircleButton or HamButton
+     *
+     * @param index
+     */
     @Override
     public void onClick(int index) {
         if (onSubButtonClickListener != null) onSubButtonClickListener.onClick(index);
         if (autoDismiss && !animationPlaying) startHideAnimations();
     }
 
+    /**
+     * This interface tells when the boom menu button is clicked.
+     */
     public interface OnClickListener {
         void onClick();
     }
 
+    /**
+     * Animation listener.
+     */
     public interface AnimatorListener {
         void toShow();
         void showing(float fraction);
@@ -1947,19 +2198,23 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         void hided();
     }
 
+    /**
+     * This interface return which button is clicked.
+     */
     public interface OnSubButtonClickListener {
         void onClick(int buttonIndex);
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Log.d("BBB", "123");
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                if (cancelable && !animationPlaying) startHideAnimations();
-                return true;
+    /**
+     * If the boom menu button is open, dismiss it.
+     *
+     * @return True if dismiss, false if can not dismiss.
+     */
+    public boolean dismiss() {
+        if (state == StateType.OPEN) {
+            startHideAnimations();
+            return true;
         }
         return false;
     }
-
 }

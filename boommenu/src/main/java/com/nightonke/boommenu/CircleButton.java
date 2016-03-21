@@ -70,12 +70,9 @@ public class CircleButton extends FrameLayout {
         return textView;
     }
 
-    @SuppressWarnings("deprecation")
-    public void setColor(int color) {
+    public void setColor(int pressedColor, int normalColor) {
         Util.getInstance().setCircleButtonStateListDrawable(
-                imageButton, radius, color, Util.getInstance().getLighterColor(color));
-        setShadowDx(Util.getInstance().dp2px(2));
-        setShadowDy(Util.getInstance().dp2px(2));
+                imageButton, radius, pressedColor, normalColor);
     }
 
     public void setShadowColor(int mShadowColor) {

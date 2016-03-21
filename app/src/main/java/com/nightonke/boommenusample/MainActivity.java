@@ -1,11 +1,14 @@
 package com.nightonke.boommenusample;
 
+import android.support.v7.app.ActionBar;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -22,6 +25,7 @@ import com.nightonke.boommenu.ButtonType;
 import com.nightonke.boommenu.OrderType;
 import com.nightonke.boommenu.ParticleEffect;
 import com.nightonke.boommenu.PlaceType;
+import com.nightonke.boommenu.Util;
 
 import java.util.Random;
 
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity
         BoomMenuButton.AnimatorListener {
 
     private BoomMenuButton boomMenuButton;
+    private BoomMenuButton boomMenuButtonInActionBar;
 
     private Context mContext;
 
@@ -71,6 +76,22 @@ public class MainActivity extends AppCompatActivity
 
         mContext = this;
 
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater mInflater = LayoutInflater.from(this);
+
+        View mCustomView = mInflater.inflate(R.layout.custom_actionbar, null);
+        TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title_text);
+        mTitleTextView.setText(R.string.app_name);
+
+        boomMenuButtonInActionBar = (BoomMenuButton) mCustomView.findViewById(R.id.boom);
+        boomMenuButtonInActionBar.setOnSubButtonClickListener(this);
+        boomMenuButtonInActionBar.setAnimatorListener(this);
+
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+
         boomMenuButton = (BoomMenuButton)findViewById(R.id.boom);
         boomMenuButton.setOnSubButtonClickListener(this);
         boomMenuButton.setAnimatorListener(this);
@@ -81,7 +102,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (!isInit) initBoom();
+        if (!isInit) {
+            initBoom();
+            boomMenuButton.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
+        }
         isInit = true;
     }
 
@@ -118,8 +142,11 @@ public class MainActivity extends AppCompatActivity
         for (int i = 0; i < number; i++)
             strings[i] = STRINGS[i];
 
-        int[] colors = new int[number];
-        for (int i = 0; i < number; i++) colors[i] = GetRandomColor();
+        int[][] colors = new int[number][2];
+        for (int i = 0; i < number; i++) {
+            colors[i][1] = GetRandomColor();
+            colors[i][0] = Util.getInstance().getPressedColor(colors[i][1]);
+        }
 
         ButtonType buttonType = ButtonType.CIRCLE;
         switch (buttonTypeGroup.getCheckedRadioButtonId()) {
@@ -133,6 +160,22 @@ public class MainActivity extends AppCompatActivity
 
 
         boomMenuButton.init(
+                drawables,
+                strings,
+                colors,
+                buttonType,
+                getBoomType(),
+                getPlaceType(),
+                ParticleEffect.NONE,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        boomMenuButtonInActionBar.init(
                 drawables,
                 strings,
                 colors,
@@ -229,6 +272,7 @@ public class MainActivity extends AppCompatActivity
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 animationDurationText.setText(((progress + 1) * 500) + " ms");
                 boomMenuButton.setDuration((progress + 1) * 500);
+                boomMenuButtonInActionBar.setDuration((progress + 1) * 500);
             }
 
             @Override
@@ -244,15 +288,17 @@ public class MainActivity extends AppCompatActivity
         animationDurationText = (TextView)findViewById(R.id.animation_duration_text);
         animationDurationText.setText(((animationDurationSeek.getProgress() + 1) * 500) + " ms");
         boomMenuButton.setDuration((animationDurationSeek.getProgress() + 1) * 500);
+        boomMenuButtonInActionBar.setDuration((animationDurationSeek.getProgress() + 1) * 500);
 
         animationStartDelaySeek = (SeekBar)findViewById(R.id.animation_start_delay_seek);
-        animationStartDelaySeek.setMax(9);
+        animationStartDelaySeek.setMax(10);
         animationStartDelaySeek.setProgress(0);
         animationStartDelaySeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 animationStartDelayText.setText(((progress + 1) * 100) + " ms");
                 boomMenuButton.setDelay((progress + 1) * 100);
+                boomMenuButtonInActionBar.setDelay((progress + 1) * 100);
             }
 
             @Override
@@ -268,6 +314,7 @@ public class MainActivity extends AppCompatActivity
         animationStartDelayText = (TextView)findViewById(R.id.animation_start_delay_text);
         animationStartDelayText.setText(((animationStartDelaySeek.getProgress() + 1) * 100) + " ms");
         boomMenuButton.setDelay((animationStartDelaySeek.getProgress() + 1) * 100);
+        boomMenuButtonInActionBar.setDelay((animationStartDelaySeek.getProgress() + 1) * 100);
 
         animationRotationDegreeSeek = (SeekBar)findViewById(R.id.animation_rotation_degree_seek);
         animationRotationDegreeSeek.setMax(9);
@@ -277,6 +324,7 @@ public class MainActivity extends AppCompatActivity
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 animationRotationDegreeText.setText((progress * 360) + " degrees");
                 boomMenuButton.setRotateDegree(progress * 360);
+                boomMenuButtonInActionBar.setRotateDegree(progress * 360);
             }
 
             @Override
@@ -292,6 +340,7 @@ public class MainActivity extends AppCompatActivity
         animationRotationDegreeText = (TextView)findViewById(R.id.animation_rotation_degree_text);
         animationRotationDegreeText.setText((animationRotationDegreeSeek.getProgress() * 360) + " degrees");
         boomMenuButton.setRotateDegree(animationRotationDegreeSeek.getProgress() * 360);
+        boomMenuButtonInActionBar.setRotateDegree(animationRotationDegreeSeek.getProgress() * 360);
 
         autoDismiss = (CheckBox)findViewById(R.id.auto_dismiss);
         autoDismiss.setChecked(true);
@@ -299,6 +348,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 boomMenuButton.setAutoDismiss(isChecked);
+                boomMenuButtonInActionBar.setAutoDismiss(isChecked);
             }
         });
 
@@ -309,17 +359,21 @@ public class MainActivity extends AppCompatActivity
                 switch (checkedId) {
                     case R.id.show_order_type_default:
                         boomMenuButton.setShowOrderType(OrderType.DEFAULT);
+                        boomMenuButtonInActionBar.setShowOrderType(OrderType.DEFAULT);
                         break;
                     case R.id.show_order_type_reverse:
                         boomMenuButton.setShowOrderType(OrderType.REVERSE);
+                        boomMenuButtonInActionBar.setShowOrderType(OrderType.REVERSE);
                         break;
                     case R.id.show_order_type_random:
                         boomMenuButton.setShowOrderType(OrderType.RANDOM);
+                        boomMenuButtonInActionBar.setShowOrderType(OrderType.RANDOM);
                         break;
                 }
             }
         });
         boomMenuButton.setShowOrderType(OrderType.DEFAULT);
+        boomMenuButtonInActionBar.setShowOrderType(OrderType.DEFAULT);
 
         hideOrderTypeGroup = (RadioGroup) findViewById(R.id.group_hide_order_type);
         hideOrderTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -328,17 +382,21 @@ public class MainActivity extends AppCompatActivity
                 switch (checkedId) {
                     case R.id.hide_order_type_default:
                         boomMenuButton.setHideOrderType(OrderType.DEFAULT);
+                        boomMenuButtonInActionBar.setHideOrderType(OrderType.DEFAULT);
                         break;
                     case R.id.hide_order_type_reverse:
                         boomMenuButton.setHideOrderType(OrderType.REVERSE);
+                        boomMenuButtonInActionBar.setHideOrderType(OrderType.REVERSE);
                         break;
                     case R.id.hide_order_type_random:
                         boomMenuButton.setHideOrderType(OrderType.RANDOM);
+                        boomMenuButtonInActionBar.setHideOrderType(OrderType.RANDOM);
                         break;
                 }
             }
         });
         boomMenuButton.setHideOrderType(OrderType.DEFAULT);
+        boomMenuButtonInActionBar.setHideOrderType(OrderType.DEFAULT);
 
         animationListener = (ProgressBar)findViewById(R.id.animation_listener);
     }
@@ -455,10 +513,10 @@ public class MainActivity extends AppCompatActivity
         return PlaceType.CIRCLE_1_1;
     }
 
-    private String[] Colors = {"#F44336",
+    private String[] Colors = {
+            "#F44336",
             "#E91E63",
             "#9C27B0",
-            "#673AB7",
             "#2196F3",
             "#03A9F4",
             "#00BCD4",
@@ -515,5 +573,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void hided() {
         animationListener.setProgress(0);
+    }
+
+    @Override
+    public void onBackPressed() {
+        boomMenuButton.dismiss();
+        boomMenuButtonInActionBar.dismiss();
     }
 }

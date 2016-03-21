@@ -15,7 +15,6 @@
         android:id="@+id/frame_layout"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:background="@drawable/boom_menu_button"
         android:layout_gravity="center"
         >
 

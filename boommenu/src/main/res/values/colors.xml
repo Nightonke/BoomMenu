@@ -8,7 +8,10 @@
     <color name="shadow">#AA000000</color>
     <color name="darkness">#66000000</color>
     <color name="lightness">#00000000</color>
+    <color name="transparent">#00000000</color>
 
+    <color name="default_boom_button_color_pressed">#ff6297</color>
+    <color name="default_boom_button_color">#FF4081</color>
     <color name="default_shadow_color">#88757575</color>
     <color name="default_fill_color">#ffffff</color>
 </resources>

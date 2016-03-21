@@ -26,42 +26,6 @@ import android.view.WindowManager;
  */
 public class Util {
 
-    /**
-     * Dim the activity.
-     *
-     * @param context Context of the activity.
-     * @param from From alpha, in [0, 1].
-     * @param to To alpha, in [0, 1].
-     */
-    public void dimActivity(Context context, final float from, final float to) {
-        final Window window = ((Activity)context).getWindow();
-        ValueAnimator valueAnimator = ValueAnimator.ofFloat(from, to);
-        valueAnimator.setDuration(500);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                WindowManager.LayoutParams params = window.getAttributes();
-                params.alpha = (Float) animation.getAnimatedValue();
-                window.setAttributes(params);
-            }
-        });
-
-        valueAnimator.start();
-    }
-
-    public void dimView(Context context, final View view, final float from, final float to) {
-        ValueAnimator valueAnimator = ValueAnimator.ofFloat(from, to);
-        valueAnimator.setDuration(500);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                view.setAlpha((Float) animation.getAnimatedValue());
-            }
-        });
-
-        valueAnimator.start();
-    }
-
     public int getScreenWidth(Context context) {
         Display display = ((Activity)context).getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -82,18 +46,23 @@ public class Util {
         return Math.round(px);
     }
 
-    public int getLighterColor(int color) {
+    public int getDarkerColor(int color) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
         hsv[2] *= 0.8f;
         return Color.HSVToColor(hsv);
     }
 
-    public int getDarkerColor(int color) {
+    public int getLighterColor(int color) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
         hsv[2] *= 1.2f;
         return Color.HSVToColor(hsv);
+    }
+
+    public int getPressedColor(int color) {
+        if (getLighterColor(color) == color) return getDarkerColor(color);
+        else return getLighterColor(color);
     }
 
     @SuppressWarnings("deprecation")
