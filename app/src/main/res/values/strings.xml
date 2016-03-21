@@ -15,5 +15,17 @@
     <string name="animation_start_delay">Animation Start Delay</string>
     <string name="animation_rotation_degree">Animation Rotation Degree</string>
     <string name="auto_dismiss">Auto Dismiss</string>
+    
+    <string name="show_order_type">Show Order</string>
+    <string name="show_order_type_default">Default</string>
+    <string name="show_order_type_reverse">Reverse</string>
+    <string name="show_order_type_random">Random</string>
+
+    <string name="hide_order_type">Hide Order</string>
+    <string name="hide_order_type_default">Default</string>
+    <string name="hide_order_type_reverse">Reverse</string>
+    <string name="hide_order_type_random">Random</string>
+
+    <string name="animation_listener">Animation Listener</string>
 
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.dd.ShadowLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.nightonke.boommenu.ShadowLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shadow_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,25 +11,33 @@
     app:sl_dy="0dp"
     app:sl_cornerRadius="80dp">
 
-    <ImageButton
-        android:id="@+id/image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center"
-        android:background="@drawable/circle_button"
-        tools:ignore="ContentDescription"
-        />
-
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:text="Button"
-        android:gravity="center"
-        android:textSize="10sp"
-        android:layout_marginBottom="7dp"
-        android:textColor="@android:color/white"
-        />
+        >
 
-</com.dd.ShadowLayout>
+        <ImageButton
+            android:id="@+id/image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:background="@drawable/circle_button"
+            tools:ignore="ContentDescription"
+            android:scaleType="fitXY"
+            />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:gravity="center"
+            android:textSize="10sp"
+            android:layout_marginBottom="8.5dp"
+            android:textColor="@android:color/white"
+            />
+
+    </FrameLayout>
+
+</com.nightonke.boommenu.ShadowLayout>

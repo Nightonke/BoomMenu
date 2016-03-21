@@ -3,13 +3,13 @@ package com.nightonke.boommenusample;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -19,15 +19,16 @@ import android.widget.Toast;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.BoomType;
 import com.nightonke.boommenu.ButtonType;
+import com.nightonke.boommenu.OrderType;
 import com.nightonke.boommenu.ParticleEffect;
 import com.nightonke.boommenu.PlaceType;
-import com.nightonke.boommenu.Util;
 
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
         implements
-        BoomMenuButton.OnSubButtonClickListener {
+        BoomMenuButton.OnSubButtonClickListener,
+        BoomMenuButton.AnimatorListener {
 
     private BoomMenuButton boomMenuButton;
 
@@ -56,6 +57,13 @@ public class MainActivity extends AppCompatActivity
     
     private CheckBox autoDismiss;
 
+    private RadioGroup showOrderTypeGroup;
+    private RadioGroup hideOrderTypeGroup;
+
+    private ProgressBar animationListener;
+
+    private boolean isInit = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +73,7 @@ public class MainActivity extends AppCompatActivity
 
         boomMenuButton = (BoomMenuButton)findViewById(R.id.boom);
         boomMenuButton.setOnSubButtonClickListener(this);
+        boomMenuButton.setAnimatorListener(this);
 
         initViews();
     }
@@ -72,17 +81,42 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        initBoom();
+        if (!isInit) initBoom();
+        isInit = true;
     }
 
     private void initBoom() {
         int number = buttonNumberSeek.getProgress() + 1;
 
         Drawable[] drawables = new Drawable[number];
-        for (int i = 0; i < number; i++) drawables[i] = ContextCompat.getDrawable(mContext, R.drawable.mail);
+        int[] drawablesResource = new int[]{
+                R.drawable.mark,
+                R.drawable.refresh,
+                R.drawable.copy,
+                R.drawable.heart,
+                R.drawable.info,
+                R.drawable.like,
+                R.drawable.record,
+                R.drawable.search,
+                R.drawable.settings
+        };
+        for (int i = 0; i < number; i++)
+            drawables[i] = ContextCompat.getDrawable(mContext, drawablesResource[i]);
 
+        String[] STRINGS = new String[]{
+                "Mark",
+                "Refresh",
+                "Copy",
+                "Heart",
+                "Info",
+                "Like",
+                "Record",
+                "Search",
+                "Settings"
+        };
         String[] strings = new String[number];
-        for (int i = 0; i < number; i++) strings[i] = "Boom!";
+        for (int i = 0; i < number; i++)
+            strings[i] = STRINGS[i];
 
         int[] colors = new int[number];
         for (int i = 0; i < number; i++) colors[i] = GetRandomColor();
@@ -162,6 +196,7 @@ public class MainActivity extends AppCompatActivity
         boomTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+
                 initBoom();
             }
         });
@@ -266,6 +301,46 @@ public class MainActivity extends AppCompatActivity
                 boomMenuButton.setAutoDismiss(isChecked);
             }
         });
+
+        showOrderTypeGroup = (RadioGroup) findViewById(R.id.group_show_order_type);
+        showOrderTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.show_order_type_default:
+                        boomMenuButton.setShowOrderType(OrderType.DEFAULT);
+                        break;
+                    case R.id.show_order_type_reverse:
+                        boomMenuButton.setShowOrderType(OrderType.REVERSE);
+                        break;
+                    case R.id.show_order_type_random:
+                        boomMenuButton.setShowOrderType(OrderType.RANDOM);
+                        break;
+                }
+            }
+        });
+        boomMenuButton.setShowOrderType(OrderType.DEFAULT);
+
+        hideOrderTypeGroup = (RadioGroup) findViewById(R.id.group_hide_order_type);
+        hideOrderTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.hide_order_type_default:
+                        boomMenuButton.setHideOrderType(OrderType.DEFAULT);
+                        break;
+                    case R.id.hide_order_type_reverse:
+                        boomMenuButton.setHideOrderType(OrderType.REVERSE);
+                        break;
+                    case R.id.hide_order_type_random:
+                        boomMenuButton.setHideOrderType(OrderType.RANDOM);
+                        break;
+                }
+            }
+        });
+        boomMenuButton.setHideOrderType(OrderType.DEFAULT);
+
+        animationListener = (ProgressBar)findViewById(R.id.animation_listener);
     }
 
     private BoomType getBoomType() {
@@ -273,6 +348,12 @@ public class MainActivity extends AppCompatActivity
             return BoomType.LINE;
         } else if (boomTypeButtons[1].isChecked()) {
             return BoomType.PARABOLA;
+        } else if (boomTypeButtons[2].isChecked()) {
+            return BoomType.HORIZONTAL_THROW;
+        } else if (boomTypeButtons[3].isChecked()) {
+            return BoomType.PARABOLA_2;
+        } else if (boomTypeButtons[4].isChecked()) {
+            return BoomType.HORIZONTAL_THROW_2;
         }
         return BoomType.PARABOLA;
     }
@@ -401,6 +482,38 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onClick(int buttonIndex) {
-        Toast.makeText(this, "On click No." + buttonIndex + " button", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "On click " +
+                boomMenuButton.getTextViews()[buttonIndex].getText().toString() +
+                " button", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void toShow() {
+        animationListener.setProgress(0);
+    }
+
+    @Override
+    public void showing(float fraction) {
+        animationListener.setProgress((int) (fraction * 100));
+    }
+
+    @Override
+    public void showed() {
+        animationListener.setProgress(100);
+    }
+
+    @Override
+    public void toHide() {
+        animationListener.setProgress(100);
+    }
+
+    @Override
+    public void hiding(float fraction) {
+        animationListener.setProgress((int) ((1 - fraction) * 100));
+    }
+
+    @Override
+    public void hided() {
+        animationListener.setProgress(0);
     }
 }

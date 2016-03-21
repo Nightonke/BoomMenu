@@ -16,12 +16,12 @@ public class CircleButton extends FrameLayout {
 
     private Context mContext;
 
+    private ShadowLayout shadowLayout;
+    private FrameLayout frameLayout;
     private ImageButton imageButton;
     private TextView textView;
 
     private int radius = (int)Util.getInstance().dp2px(80) / 2;
-    private OnCircleButtonClickListener onCircleButtonClickListener;
-    private int index;
 
     public CircleButton(Context context) {
         this(context, null);
@@ -33,6 +33,8 @@ public class CircleButton extends FrameLayout {
         mContext = context;
 
         LayoutInflater.from(mContext).inflate(R.layout.circle_button, this, true);
+        shadowLayout = (ShadowLayout)findViewById(R.id.shadow_layout);
+        frameLayout = (FrameLayout)findViewById(R.id.frame_layout);
         imageButton = (ImageButton)findViewById(R.id.image);
         textView = (TextView)findViewById(R.id.text);
     }
@@ -40,8 +42,6 @@ public class CircleButton extends FrameLayout {
     public void setOnCircleButtonClickListener(
             final OnCircleButtonClickListener onCircleButtonClickListener,
             final int index) {
-        this.onCircleButtonClickListener = onCircleButtonClickListener;
-        this.index = index;
         imageButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,10 +58,36 @@ public class CircleButton extends FrameLayout {
         if (textView != null) textView.setText(text);
     }
 
+    public FrameLayout getFrameLayout() {
+        return frameLayout;
+    }
+
+    public ImageButton getImageButton() {
+        return imageButton;
+    }
+
+    public TextView getTextView() {
+        return textView;
+    }
+
     @SuppressWarnings("deprecation")
     public void setColor(int color) {
         Util.getInstance().setCircleButtonStateListDrawable(
                 imageButton, radius, color, Util.getInstance().getLighterColor(color));
+        setShadowDx(Util.getInstance().dp2px(2));
+        setShadowDy(Util.getInstance().dp2px(2));
+    }
+
+    public void setShadowColor(int mShadowColor) {
+        shadowLayout.setmShadowColor(mShadowColor);
+    }
+
+    public void setShadowDx(float mDx) {
+        shadowLayout.setmDx(mDx);
+    }
+
+    public void setShadowDy(float mDy) {
+        shadowLayout.setmDy(mDy);
     }
 
     public interface OnCircleButtonClickListener {

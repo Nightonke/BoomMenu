@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.dd.ShadowLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.nightonke.boommenu.ShadowLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/shadow_layout"
     android:layout_width="wrap_content"
@@ -14,10 +15,10 @@
         android:id="@+id/frame_layout"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:background="@drawable/boom_menu_buttom"
+        android:background="@drawable/boom_menu_button"
         android:layout_gravity="center"
         >
 
     </FrameLayout>
 
-</com.dd.ShadowLayout>
+</com.nightonke.boommenu.ShadowLayout>

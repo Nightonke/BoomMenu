@@ -11,14 +11,15 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.dd.ShadowLayout;
 import com.nightonke.boommenu.Eases.EaseType;
 
 import java.util.Random;
@@ -53,13 +54,13 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
     // Delay
     private int delay = 100;
     // Show order type
-    private OrderType showOrderType = OrderType.RANDOM;
+    private OrderType showOrderType = OrderType.DEFAULT;
     // Hide order type
-    private OrderType hideOrderType = OrderType.RANDOM;
+    private OrderType hideOrderType = OrderType.DEFAULT;
     // Button type
     private ButtonType buttonType = ButtonType.CIRCLE;
     // Boom type
-    private BoomType boomType = BoomType.PARABOLA;
+    private BoomType boomType = BoomType.HORIZONTAL_THROW;
     // Place type
     private PlaceType placeType = null;
     // Particle effect
@@ -81,6 +82,8 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
     private EaseType hideRotateEaseType = EaseType.Linear;
     // Auto dismiss
     private boolean autoDismiss = true;
+    // Cancelable
+    private boolean cancelable = true;
 
     private OnClickListener onClickListener = null;
     private AnimatorListener animatorListener = null;
@@ -210,8 +213,8 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         }
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     private void placeDots() {
-        Log.d("BBB", placeType + "");
         frameLayout.removeAllViews();
         int width = frameLayout.getWidth();
         FrameLayout.LayoutParams params = null;
@@ -247,7 +250,7 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
             case 3:
                 if (placeType.equals(PlaceType.CIRCLE_3_1)) {
                     params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
-                    params.leftMargin = width / 4 - dotWidth / 2;
+                    params.leftMargin = width / 3 - dotWidth / 2;
                     params.topMargin = width / 2 - dotWidth / 2;
                     frameLayout.addView(dots[0], params);
                     params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
@@ -255,14 +258,14 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
                     params.topMargin = width / 2 - dotWidth / 2;
                     frameLayout.addView(dots[1], params);
                     params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
-                    params.leftMargin = width * 3 / 4 - dotWidth / 2;
+                    params.leftMargin = width * 2 / 3 - dotWidth / 2;
                     params.topMargin = width / 2 - dotWidth / 2;
                     frameLayout.addView(dots[2], params);
                 }
                 if (placeType.equals(PlaceType.CIRCLE_3_2)) {
                     params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
                     params.leftMargin = width / 2 - dotWidth / 2;
-                    params.topMargin = width / 4 - dotWidth / 2;
+                    params.topMargin = width / 3 - dotWidth / 2;
                     frameLayout.addView(dots[0], params);
                     params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
                     params.leftMargin = width / 2 - dotWidth / 2;
@@ -270,7 +273,7 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
                     frameLayout.addView(dots[1], params);
                     params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
                     params.leftMargin = width / 2 - dotWidth / 2;
-                    params.topMargin = width * 3 / 4 - dotWidth / 2;
+                    params.topMargin = width * 2 / 3 - dotWidth / 2;
                     frameLayout.addView(dots[2], params);
                 }
                 if (placeType.equals(PlaceType.CIRCLE_3_3)) {
@@ -373,23 +376,23 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
                 if (placeType.equals(PlaceType.CIRCLE_5_2)) {
                     params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
                     params.leftMargin = width * 5 / 12 - dotWidth / 2;
-                    params.topMargin = (int) (width * 5 / 12 - dotWidth / 2);
+                    params.topMargin = width * 5 / 12 - dotWidth / 2;
                     frameLayout.addView(dots[0], params);
                     params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
                     params.leftMargin = width * 7 / 12 - dotWidth / 2;
-                    params.topMargin = (int) (width * 5 / 12 - dotWidth / 2);
+                    params.topMargin = width * 5 / 12 - dotWidth / 2;
                     frameLayout.addView(dots[1], params);
                     params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
                     params.leftMargin = width / 3 - dotWidth / 2;
-                    params.topMargin = (int) (width * 7 / 12 - dotWidth / 2);
+                    params.topMargin = width * 7 / 12 - dotWidth / 2;
                     frameLayout.addView(dots[2], params);
                     params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
                     params.leftMargin = width / 2 - dotWidth / 2;
-                    params.topMargin = (int) (width * 7 / 12 - dotWidth / 2);
+                    params.topMargin = width * 7 / 12 - dotWidth / 2;
                     frameLayout.addView(dots[3], params);
                     params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
                     params.leftMargin = width * 2 / 3 - dotWidth / 2;
-                    params.topMargin = (int) (width * 7 / 12 - dotWidth / 2);
+                    params.topMargin = width * 7 / 12 - dotWidth / 2;
                     frameLayout.addView(dots[4], params);
                 }
                 if (placeType.equals(PlaceType.CIRCLE_5_3)) {
@@ -730,6 +733,197 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
                     frameLayout.addView(dots[6], params);
                 }
                 break;
+            case 8:
+                if (placeType.equals(PlaceType.CIRCLE_8_1)) {
+                    int dis1 = width / 12;
+                    int dis2 = (int) (dis1 * Math.sqrt(3));
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 3 - dotWidth / 2;
+                    params.topMargin = width / 2 - dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[0], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[1], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width * 2 / 3 - dotWidth / 2;
+                    params.topMargin = width / 2 - dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[2], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dis1 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[3], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 + dis1 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[4], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 3 - dotWidth / 2;
+                    params.topMargin = width / 2 + dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[5], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dotWidth / 2;
+                    params.topMargin = width / 2 + dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[6], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width * 2 / 3 - dotWidth / 2;
+                    params.topMargin = width / 2 + dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[7], params);
+                }
+                if (placeType.equals(PlaceType.CIRCLE_8_2)) {
+                    int dis1 = width / 12;
+                    int dis2 = (int) (dis1 * Math.sqrt(3));
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dis2 - dotWidth / 2;
+                    params.topMargin = width / 3 - dotWidth / 2;
+                    frameLayout.addView(dots[0], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dis2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[1], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dis2 - dotWidth / 2;
+                    params.topMargin = width * 2 / 3 - dotWidth / 2;
+                    frameLayout.addView(dots[2], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dotWidth / 2;
+                    params.topMargin = width * 5 / 12 - dotWidth / 2;
+                    frameLayout.addView(dots[3], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dotWidth / 2;
+                    params.topMargin = width * 7 / 12 - dotWidth / 2;
+                    frameLayout.addView(dots[4], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 + dis2 - dotWidth / 2;
+                    params.topMargin = width / 3 - dotWidth / 2;
+                    frameLayout.addView(dots[5], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 + dis2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[6], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 + dis2 - dotWidth / 2;
+                    params.topMargin = width * 2 / 3 - dotWidth / 2;
+                    frameLayout.addView(dots[7], params);
+                }
+                if (placeType.equals(PlaceType.CIRCLE_8_3)) {
+                    int dis1 = width / 12;
+                    int dis2 = (int) (dis1 * Math.sqrt(3));
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dis2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[0], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dis2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[1], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dis2 - dotWidth / 2;
+                    params.topMargin = width / 2 + dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[2], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[3], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dotWidth / 2;
+                    params.topMargin = width / 2 + dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[4], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 + dis2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[5], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 + dis2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[6], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 + dis2 - dotWidth / 2;
+                    params.topMargin = width / 2 + dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[7], params);
+                }
+                break;
+            case 9:
+                if (placeType.equals(PlaceType.CIRCLE_9_1)) {
+                    int dis1 = width / 12;
+                    int dis2 = (int) (dis1 * Math.sqrt(3));
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dis2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[0], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dis2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[1], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dis2 - dotWidth / 2;
+                    params.topMargin = width / 2 + dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[2], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[3], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[4], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dotWidth / 2;
+                    params.topMargin = width / 2 + dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[5], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 + dis2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[6], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 + dis2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[7], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 + dis2 - dotWidth / 2;
+                    params.topMargin = width / 2 + dis2 - dotWidth / 2;
+                    frameLayout.addView(dots[8], params);
+                }
+                if (placeType.equals(PlaceType.CIRCLE_9_2)) {
+                    int dis1 = (int) (width / 12 * Math.sqrt(6));
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dis1 - dotWidth / 2;
+                    frameLayout.addView(dots[0], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dis1 / 2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dis1 / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[1], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 + dis1 / 2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dis1 / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[2], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dis1 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[3], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[4], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 + dis1 - dotWidth / 2;
+                    params.topMargin = width / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[5], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dis1 / 2 - dotWidth / 2;
+                    params.topMargin = width / 2 + dis1 / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[6], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 + dis1 / 2 - dotWidth / 2;
+                    params.topMargin = width / 2 + dis1 / 2 - dotWidth / 2;
+                    frameLayout.addView(dots[7], params);
+                    params = new FrameLayout.LayoutParams(dotWidth, dotWidth);
+                    params.leftMargin = width / 2 - dotWidth / 2;
+                    params.topMargin = width / 2 + dis1 - dotWidth / 2;
+                    frameLayout.addView(dots[8], params);
+                }
+                break;
 
         }
     }
@@ -752,7 +946,7 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
                 @Override
                 public void onClick(View v) {
                     if (animationPlaying) return;
-                    startHideAnimations();
+                    if (cancelable) startHideAnimations();
                 }
             });
         }
@@ -762,6 +956,25 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
                 ContextCompat.getColor(mContext, R.color.darkness))
                 .setDuration(duration + delay * (buttonNum - 1));
         objectAnimator.setEvaluator(new ArgbEvaluator());
+        objectAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                if (animatorListener != null) animatorListener.toShow();
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                if (animatorListener != null) animatorListener.showed();
+            }
+        });
+        objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                if (animatorListener != null) animatorListener.showing(animation.getAnimatedFraction());
+            }
+        });
         objectAnimator.start();
     }
 
@@ -1117,6 +1330,111 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
                         endLocations[6][0] = width / 2 - dis2 - buttonWidth / 2;
                         endLocations[6][1] = height / 2 - dis1 / 2 - buttonWidth / 2;
                     }
+                    break;
+                case 8:
+                    if (placeType.equals(PlaceType.CIRCLE_8_1)) {
+                        int dis1 = buttonWidth * 9 / 8;
+                        int dis2 = (int) (dis1 / 2 * Math.sqrt(3));
+                        endLocations[0][0] = width / 2 - dis1 - buttonWidth / 2;
+                        endLocations[0][1] = height / 2 - dis2 - buttonWidth / 2;
+                        endLocations[1][0] = width / 2 - buttonWidth / 2;
+                        endLocations[1][1] = height / 2 - dis2 - buttonWidth / 2;
+                        endLocations[2][0] = width / 2 + dis1 - buttonWidth / 2;
+                        endLocations[2][1] = height / 2 - dis2 - buttonWidth / 2;
+                        endLocations[3][0] = width / 2 - dis1 / 2 - buttonWidth / 2;
+                        endLocations[3][1] = height / 2 - buttonWidth / 2;
+                        endLocations[4][0] = width / 2 + dis1 / 2 - buttonWidth / 2;
+                        endLocations[4][1] = height / 2 - buttonWidth / 2;
+                        endLocations[5][0] = width / 2 - dis1 - buttonWidth / 2;
+                        endLocations[5][1] = height / 2 + dis2 - buttonWidth / 2;
+                        endLocations[6][0] = width / 2 - buttonWidth / 2;
+                        endLocations[6][1] = height / 2 + dis2 - buttonWidth / 2;
+                        endLocations[7][0] = width / 2 + dis1 - buttonWidth / 2;
+                        endLocations[7][1] = height / 2 + dis2 - buttonWidth / 2;
+                    }
+                    if (placeType.equals(PlaceType.CIRCLE_8_2)) {
+                        int dis1 = buttonWidth * 9 / 8;
+                        int dis2 = (int) (dis1 / 2 * Math.sqrt(3));
+                        endLocations[0][0] = width / 2 - dis2 - buttonWidth / 2;
+                        endLocations[0][1] = height / 2 - dis1 - buttonWidth / 2;
+                        endLocations[1][0] = width / 2 - dis2 - buttonWidth / 2;
+                        endLocations[1][1] = height / 2 - buttonWidth / 2;
+                        endLocations[2][0] = width / 2 - dis2 - buttonWidth / 2;
+                        endLocations[2][1] = height / 2 + dis1 - buttonWidth / 2;
+                        endLocations[3][0] = width / 2 - buttonWidth / 2;
+                        endLocations[3][1] = height / 2 - dis1 / 2 - buttonWidth / 2;
+                        endLocations[4][0] = width / 2 - buttonWidth / 2;
+                        endLocations[4][1] = height / 2 + dis1 / 2 - buttonWidth / 2;
+                        endLocations[5][0] = width / 2 + dis2 - buttonWidth / 2;
+                        endLocations[5][1] = height / 2 - dis1 - buttonWidth / 2;
+                        endLocations[6][0] = width / 2 + dis2 - buttonWidth / 2;
+                        endLocations[6][1] = height / 2 - buttonWidth / 2;
+                        endLocations[7][0] = width / 2 + dis2 - buttonWidth / 2;
+                        endLocations[7][1] = height / 2 + dis1 - buttonWidth / 2;
+                    }
+                    if (placeType.equals(PlaceType.CIRCLE_8_3)) {
+                        int dis1 = buttonWidth * 9 / 8;
+                        endLocations[0][0] = width / 2 - dis1 - buttonWidth / 2;
+                        endLocations[0][1] = height / 2 - dis1 - buttonWidth / 2;
+                        endLocations[1][0] = width / 2 - dis1 - buttonWidth / 2;
+                        endLocations[1][1] = height / 2 - buttonWidth / 2;
+                        endLocations[2][0] = width / 2 - dis1 - buttonWidth / 2;
+                        endLocations[2][1] = height / 2 + dis1 - buttonWidth / 2;
+                        endLocations[3][0] = width / 2 - buttonWidth / 2;
+                        endLocations[3][1] = height / 2 - dis1 - buttonWidth / 2;
+                        endLocations[4][0] = width / 2 - buttonWidth / 2;
+                        endLocations[4][1] = height / 2 + dis1 - buttonWidth / 2;
+                        endLocations[5][0] = width / 2 + dis1 - buttonWidth / 2;
+                        endLocations[5][1] = height / 2 - dis1 - buttonWidth / 2;
+                        endLocations[6][0] = width / 2 + dis1 - buttonWidth / 2;
+                        endLocations[6][1] = height / 2 - buttonWidth / 2;
+                        endLocations[7][0] = width / 2 + dis1 - buttonWidth / 2;
+                        endLocations[7][1] = height / 2 + dis1 - buttonWidth / 2;
+                    }
+                    break;
+                case 9:
+                    if (placeType.equals(PlaceType.CIRCLE_9_1)) {
+                        int dis1 = buttonWidth * 9 / 8;
+                        endLocations[0][0] = width / 2 - dis1 - buttonWidth / 2;
+                        endLocations[0][1] = height / 2 - dis1 - buttonWidth / 2;
+                        endLocations[1][0] = width / 2 - dis1 - buttonWidth / 2;
+                        endLocations[1][1] = height / 2 - buttonWidth / 2;
+                        endLocations[2][0] = width / 2 - dis1 - buttonWidth / 2;
+                        endLocations[2][1] = height / 2 + dis1 - buttonWidth / 2;
+                        endLocations[3][0] = width / 2 - buttonWidth / 2;
+                        endLocations[3][1] = height / 2 - dis1 - buttonWidth / 2;
+                        endLocations[4][0] = width / 2 - buttonWidth / 2;
+                        endLocations[4][1] = height / 2 - buttonWidth / 2;
+                        endLocations[5][0] = width / 2 - buttonWidth / 2;
+                        endLocations[5][1] = height / 2 + dis1 - buttonWidth / 2;
+                        endLocations[6][0] = width / 2 + dis1 - buttonWidth / 2;
+                        endLocations[6][1] = height / 2 - dis1 - buttonWidth / 2;
+                        endLocations[7][0] = width / 2 + dis1 - buttonWidth / 2;
+                        endLocations[7][1] = height / 2 - buttonWidth / 2;
+                        endLocations[8][0] = width / 2 + dis1 - buttonWidth / 2;
+                        endLocations[8][1] = height / 2 + dis1 - buttonWidth / 2;
+                    }
+                    if (placeType.equals(PlaceType.CIRCLE_9_2)) {
+                        int dis1 = (int) (buttonWidth * 8 / 8 * Math.sqrt(2));
+                        endLocations[0][0] = width / 2 - buttonWidth / 2;
+                        endLocations[0][1] = height / 2 - dis1 - buttonWidth / 2;
+                        endLocations[1][0] = width / 2 - dis1 / 2 - buttonWidth / 2;
+                        endLocations[1][1] = height / 2 - dis1 / 2 - buttonWidth / 2;
+                        endLocations[2][0] = width / 2 + dis1 / 2 - buttonWidth / 2;
+                        endLocations[2][1] = height / 2 - dis1 / 2 - buttonWidth / 2;
+                        endLocations[3][0] = width / 2 - dis1 - buttonWidth / 2;
+                        endLocations[3][1] = height / 2 - buttonWidth / 2;
+                        endLocations[4][0] = width / 2 - buttonWidth / 2;
+                        endLocations[4][1] = height / 2 - buttonWidth / 2;
+                        endLocations[5][0] = width / 2 + dis1 - buttonWidth / 2;
+                        endLocations[5][1] = height / 2 - buttonWidth / 2;
+                        endLocations[6][0] = width / 2 - dis1 / 2 - buttonWidth / 2;
+                        endLocations[6][1] = height / 2 + dis1 / 2 - buttonWidth / 2;
+                        endLocations[7][0] = width / 2 + dis1 / 2 - buttonWidth / 2;
+                        endLocations[7][1] = height / 2 + dis1 / 2 - buttonWidth / 2;
+                        endLocations[8][0] = width / 2 - buttonWidth / 2;
+                        endLocations[8][1] = height / 2 + dis1 - buttonWidth / 2;
+                    }
             }
         }
     }
@@ -1164,12 +1482,10 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         sl[1] = startLocation[1] * 1.0f;
         el[0] = endLocation[0] * 1.0f;
         el[1] = endLocation[1] * 1.0f;
-        ml[0] = (sl[0] + el[0]) / 2;  // + (new Random().nextInt(200) - 100);
-        ml[1] = sl[1] / 2;
 
         float[] xs = new float[frames + 1];
         float[] ys = new float[frames + 1];
-        getXY(sl, el, ml, xs, ys);
+        getShowXY(sl, el, xs, ys);
 
         ObjectAnimator xAnimator = ObjectAnimator.ofFloat(view, "x", xs).setDuration(duration);
         xAnimator.setStartDelay(delay * index);
@@ -1209,35 +1525,228 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         });
         scaleYAnimator.start();
 
-        ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(view, "rotation",
-                0,
-                rotateDegree).setDuration(duration);
-        rotateAnimator.setStartDelay(delay * index);
-        rotateAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showRotateEaseType));
-        rotateAnimator.start();
+        if (view instanceof CircleButton) {
+            ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(
+                    ((CircleButton) view).getFrameLayout(), "rotation",
+                    0,
+                    rotateDegree).setDuration(duration);
+            rotateAnimator.setStartDelay(delay * index);
+            rotateAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showRotateEaseType));
+            rotateAnimator.start();
+        }
+
     }
 
-    private void getXY(float[] startPoint, float[] endPoint, float[] midPoint, float[] xs, float[] ys) {
-        float x1 = startPoint[0];
-        float y1 = startPoint[1];
-        float x2 = endPoint[0];
-        float y2 = endPoint[1];
-        float x3 = midPoint[0];
-        float y3 = midPoint[1];
-        float a, b, c;
+    private void getShowXY(float[] startPoint, float[] endPoint, float[] xs, float[] ys) {
+        if (boomType.equals(BoomType.LINE)) {
+            float x1 = startPoint[0];
+            float y1 = startPoint[1];
+            float x2 = endPoint[0];
+            float y2 = endPoint[1];
+            float k = (y2 - y1) / (x2 - x1);
+            float b = y1 - x1 * k;
 
-        a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
-                / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
-        b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
-        c = y1 - (x1 * x1) * a - x1 * b;
+            float per = 1f / frames;
+            float xx = endPoint[0] - startPoint[0];
+            for (int i = 0; i <= frames; i++) {
+                float offset = i * per;
+                xs[i] = startPoint[0] + offset * xx;
+                ys[i] = k * xs[i] + b;
+            }
+        } else if (boomType.equals(BoomType.PARABOLA)) {
+            float x1 = startPoint[0];
+            float y1 = startPoint[1];
+            float x2 = endPoint[0];
+            float y2 = endPoint[1];
+            float x3 = (startPoint[0] + endPoint[0]) / 2;
+            float y3 = startPoint[1] / 2;
+            float a, b, c;
 
-        float per = 1f / frames;
-        float xx = endPoint[0] - startPoint[0];
-        for (int i = 0; i <= frames; i++) {
-            float offset = i * per;
-            xs[i] = startPoint[0] + offset * xx;
-            ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
+            a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
+                    / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
+            b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
+            c = y1 - (x1 * x1) * a - x1 * b;
+
+            float per = 1f / frames;
+            float xx = x2 - x1;
+            for (int i = 0; i <= frames; i++) {
+                float offset = i * per;
+                xs[i] = x1 + offset * xx;
+                ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
+            }
+        } else if (boomType.equals(BoomType.HORIZONTAL_THROW)) {
+            float x1 = startPoint[0];
+            float y1 = startPoint[1];
+            float x3 = endPoint[0];
+            float y3 = endPoint[1];
+            float x2 = x3 * 2 - x1;
+            float y2 = y1;
+
+            float a, b, c;
+
+            a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
+                    / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
+            b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
+            c = y1 - (x1 * x1) * a - x1 * b;
+
+            float per = 1f / frames;
+            float xx = x3 - x1;
+            for (int i = 0; i <= frames; i++) {
+                float offset = i * per;
+                xs[i] = x1 + offset * xx;
+                ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
+            }
+        } else if (boomType.equals(BoomType.PARABOLA_2)) {
+            float x1 = startPoint[0];
+            float y1 = startPoint[1];
+            float x2 = endPoint[0];
+            float y2 = endPoint[1];
+            float x3 = (startPoint[0] + endPoint[0]) / 2;
+            float y3 = (Util.getInstance().getScreenHeight(mContext) + startPoint[1]) / 2;
+            float a, b, c;
+
+            a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
+                    / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
+            b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
+            c = y1 - (x1 * x1) * a - x1 * b;
+
+            float per = 1f / frames;
+            float xx = x2 - x1;
+            for (int i = 0; i <= frames; i++) {
+                float offset = i * per;
+                xs[i] = x1 + offset * xx;
+                ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
+            }
+        } else if (boomType.equals(BoomType.HORIZONTAL_THROW_2)) {
+            float x1 = endPoint[0];
+            float y1 = endPoint[1];
+            float x3 = startPoint[0];
+            float y3 = startPoint[1];
+            float x2 = x3 * 2 - x1;
+            float y2 = y1;
+
+            float a, b, c;
+
+            a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
+                    / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
+            b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
+            c = y1 - (x1 * x1) * a - x1 * b;
+
+            float per = 1f / frames;
+            float xx = endPoint[0] - startPoint[0];
+            for (int i = 0; i <= frames; i++) {
+                float offset = i * per;
+                xs[i] = startPoint[0] + offset * xx;
+                ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
+            }
         }
+
+    }
+
+    private void getHideXY(float[] startPoint, float[] endPoint, float[] xs, float[] ys) {
+        if (boomType.equals(BoomType.LINE)) {
+            float x1 = startPoint[0];
+            float y1 = startPoint[1];
+            float x2 = endPoint[0];
+            float y2 = endPoint[1];
+            float k = (y2 - y1) / (x2 - x1);
+            float b = y1 - x1 * k;
+
+            float per = 1f / frames;
+            float xx = endPoint[0] - startPoint[0];
+            for (int i = 0; i <= frames; i++) {
+                float offset = i * per;
+                xs[i] = startPoint[0] + offset * xx;
+                ys[i] = k * xs[i] + b;
+            }
+        } else if (boomType.equals(BoomType.PARABOLA)) {
+            float x1 = startPoint[0];
+            float y1 = startPoint[1];
+            float x2 = endPoint[0];
+            float y2 = endPoint[1];
+            float x3 = (startPoint[0] + endPoint[0]) / 2;
+            float y3 = startPoint[1] / 2;
+            float a, b, c;
+
+            a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
+                    / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
+            b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
+            c = y1 - (x1 * x1) * a - x1 * b;
+
+            float per = 1f / frames;
+            float xx = endPoint[0] - startPoint[0];
+            for (int i = 0; i <= frames; i++) {
+                float offset = i * per;
+                xs[i] = startPoint[0] + offset * xx;
+                ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
+            }
+        } else if (boomType.equals(BoomType.HORIZONTAL_THROW)) {
+            float x1 = endPoint[0];
+            float y1 = endPoint[1];
+            float x3 = startPoint[0];
+            float y3 = startPoint[1];
+            float x2 = x3 * 2 - x1;
+            float y2 = y1;
+
+            float a, b, c;
+
+            a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
+                    / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
+            b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
+            c = y1 - (x1 * x1) * a - x1 * b;
+
+            float per = 1f / frames;
+            float xx = endPoint[0] - startPoint[0];
+            for (int i = 0; i <= frames; i++) {
+                float offset = i * per;
+                xs[i] = startPoint[0] + offset * xx;
+                ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
+            }
+        } else if (boomType.equals(BoomType.PARABOLA_2)) {
+            float x1 = startPoint[0];
+            float y1 = startPoint[1];
+            float x2 = endPoint[0];
+            float y2 = endPoint[1];
+            float x3 = (startPoint[0] + endPoint[0]) / 2;
+            float y3 = (Util.getInstance().getScreenHeight(mContext) + endPoint[1]) / 2;
+            float a, b, c;
+
+            a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
+                    / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
+            b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
+            c = y1 - (x1 * x1) * a - x1 * b;
+
+            float per = 1f / frames;
+            float xx = x2 - x1;
+            for (int i = 0; i <= frames; i++) {
+                float offset = i * per;
+                xs[i] = x1 + offset * xx;
+                ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
+            }
+        } else if (boomType.equals(BoomType.HORIZONTAL_THROW_2)) {
+            float x1 = startPoint[0];
+            float y1 = startPoint[1];
+            float x3 = endPoint[0];
+            float y3 = endPoint[1];
+            float x2 = x3 * 2 - x1;
+            float y2 = y1;
+
+            float a, b, c;
+
+            a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
+                    / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
+            b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
+            c = y1 - (x1 * x1) * a - x1 * b;
+
+            float per = 1f / frames;
+            float xx = endPoint[0] - startPoint[0];
+            for (int i = 0; i <= frames; i++) {
+                float offset = i * per;
+                xs[i] = startPoint[0] + offset * xx;
+                ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
+            }
+        }
+
     }
 
     private void startHideAnimations() {
@@ -1248,7 +1757,7 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
                 setHideAnimation(dots[i], circleButtons[i], endLocations[i], startLocations[i], i);
             }
         } else if (hideOrderType.equals(OrderType.REVERSE)) {
-            for (int i = buttonNum - 1; i >= 0; i--) {
+            for (int i = 0; i < buttonNum; i++) {
                 setHideAnimation(dots[i], circleButtons[i], endLocations[i], startLocations[i], buttonNum - i - 1);
             }
         } else if (hideOrderType.equals(OrderType.RANDOM)) {
@@ -1289,12 +1798,10 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         sl[1] = startLocation[1] * 1.0f;
         el[0] = endLocation[0] * 1.0f;
         el[1] = endLocation[1] * 1.0f;
-        ml[0] = (sl[0] + el[0]) / 2;  // + (new Random().nextInt(200) - 100);
-        ml[1] = sl[1] / 2;
 
         float[] xs = new float[frames + 1];
         float[] ys = new float[frames + 1];
-        getXY(sl, el, ml, xs, ys);
+        getHideXY(sl, el, xs, ys);
 
         ObjectAnimator xAnimator = ObjectAnimator.ofFloat(button, "x", xs).setDuration(duration);
         xAnimator.setStartDelay(index * delay);
@@ -1327,12 +1834,16 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         });
         scaleYAnimator.start();
 
-        ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(button, "rotation",
-                0,
-                -rotateDegree).setDuration(duration);
-        rotateAnimator.setStartDelay(index * delay);
-        rotateAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideRotateEaseType));
-        rotateAnimator.start();
+        if (button instanceof CircleButton) {
+            ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(
+                    ((CircleButton) button).getFrameLayout(), "rotation",
+                    0,
+                    -rotateDegree).setDuration(duration);
+            rotateAnimator.setStartDelay(index * delay);
+            rotateAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideRotateEaseType));
+            rotateAnimator.start();
+        }
+
     }
 
     public void lightAnimationLayout() {
@@ -1343,11 +1854,23 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         objectAnimator.setEvaluator(new ArgbEvaluator());
         objectAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                if (animatorListener != null) animatorListener.toHide();
+            }
+            @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 animationLayout.removeAllViews();
                 animationLayout.setVisibility(GONE);
                 animationPlaying = false;
+                if (animatorListener != null) animatorListener.hided();
+            }
+        });
+        objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                if (animatorListener != null) animatorListener.hiding(animation.getAnimatedFraction());
             }
         });
         objectAnimator.start();
@@ -1355,6 +1878,10 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
 
     public void setAutoDismiss(boolean autoDismiss) {
         this.autoDismiss = autoDismiss;
+    }
+
+    public void setCancelable(boolean cancelable) {
+        this.cancelable = cancelable;
     }
 
     public void setDuration(int duration) {
@@ -1369,12 +1896,32 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         this.rotateDegree = rotateDegree;
     }
 
+    public void setShowOrderType(OrderType showOrderType) {
+        this.showOrderType = showOrderType;
+    }
+
+    public void setHideOrderType(OrderType hideOrderType) {
+        this.hideOrderType = hideOrderType;
+    }
+
     public void setOnClickListener(OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
     public void setAnimatorListener(AnimatorListener animatorListener) {
         this.animatorListener = animatorListener;
+    }
+
+    public ImageButton[] getImageButtons() {
+        ImageButton[] imageButtons = new ImageButton[buttonNum];
+        for (int i = 0; i < buttonNum; i++) imageButtons[i] = circleButtons[i].getImageButton();
+        return imageButtons;
+    }
+
+    public TextView[] getTextViews() {
+        TextView[] textViews = new TextView[buttonNum];
+        for (int i = 0; i < buttonNum; i++) textViews[i] = circleButtons[i].getTextView();
+        return textViews;
     }
 
     public void setOnSubButtonClickListener(OnSubButtonClickListener onSubButtonClickListener) {
@@ -1393,15 +1940,26 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
 
     public interface AnimatorListener {
         void toShow();
-        void showing();
+        void showing(float fraction);
         void showed();
         void toHide();
-        void hiding();
+        void hiding(float fraction);
         void hided();
     }
 
     public interface OnSubButtonClickListener {
         void onClick(int buttonIndex);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.d("BBB", "123");
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                if (cancelable && !animationPlaying) startHideAnimations();
+                return true;
+        }
+        return false;
     }
 
 }

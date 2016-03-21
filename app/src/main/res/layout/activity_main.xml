@@ -209,9 +209,105 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:text="@string/show_order_type"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginTop="20dp"
+                />
 
+            <RadioGroup
+                android:id="@+id/group_show_order_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
 
-         </LinearLayout>
+                <RadioButton
+                    android:id="@+id/show_order_type_default"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/show_order_type_default"
+                    android:checked="true"
+                    />
+
+                <RadioButton
+                    android:id="@+id/show_order_type_reverse"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/show_order_type_reverse"
+                    />
+
+                <RadioButton
+                    android:id="@+id/show_order_type_random"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/show_order_type_random"
+                    />
+                
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:text="@string/hide_order_type"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginTop="20dp"
+                />
+            
+            <RadioGroup
+                android:id="@+id/group_hide_order_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <RadioButton
+                    android:id="@+id/hide_order_type_default"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hide_order_type_default"
+                    android:checked="true"
+                    />
+
+                <RadioButton
+                    android:id="@+id/hide_order_type_reverse"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hide_order_type_reverse"
+                    />
+
+                <RadioButton
+                    android:id="@+id/hide_order_type_random"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hide_order_type_random"
+                    />
+
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:text="@string/animation_listener"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginTop="20dp"
+                />
+
+            <ProgressBar
+                android:id="@+id/animation_listener"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progress="0"
+                style="?android:attr/progressBarStyleHorizontal"
+                />
+
+        </LinearLayout>
 
     </ScrollView>
 
