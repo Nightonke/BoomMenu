@@ -7,11 +7,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity
     private BoomMenuButton boomMenuButtonInActionBar;
 
     private Context mContext;
+    private View mCustomView;
 
     private RadioGroup buttonTypeGroup;
     
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     private RadioGroup placeTypeGroup;
     private RadioButton[] placeTypeButtons;
     private int[] CirclePlaceTypes = new int[]{1, 2, 4, 2, 4, 6, 4, 3, 2};
+    private int[] HamPlaceTypes = new int[]{1, 1, 1, 1};
     
     private SeekBar animationDurationSeek;
     private TextView animationDurationText;
@@ -81,7 +85,7 @@ public class MainActivity extends AppCompatActivity
         mActionBar.setDisplayShowTitleEnabled(false);
         LayoutInflater mInflater = LayoutInflater.from(this);
 
-        View mCustomView = mInflater.inflate(R.layout.custom_actionbar, null);
+        mCustomView = mInflater.inflate(R.layout.custom_actionbar, null);
         TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title_text);
         mTitleTextView.setText(R.string.app_name);
 
@@ -91,6 +95,8 @@ public class MainActivity extends AppCompatActivity
 
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
+
+        ((Toolbar) mCustomView.getParent()).setContentInsetsAbsolute(0,0);
 
         boomMenuButton = (BoomMenuButton)findViewById(R.id.boom);
         boomMenuButton.setOnSubButtonClickListener(this);
@@ -102,9 +108,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
+
         if (!isInit) {
             initBoom();
-            boomMenuButton.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
         }
         isInit = true;
     }
@@ -190,6 +196,9 @@ public class MainActivity extends AppCompatActivity
                 null,
                 null,
                 null);
+
+        boomMenuButton.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
+        boomMenuButtonInActionBar.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
     }
 
     private void initViews() {
@@ -421,15 +430,26 @@ public class MainActivity extends AppCompatActivity
         int length = 1;
         if (buttonTypeGroup.getCheckedRadioButtonId() == R.id.circle_button) {
             length = CirclePlaceTypes[index - 1];
-        }
-        placeTypeButtons = new RadioButton[length];
-        for (int i = 0; i < length; i++) {
-            placeTypeButtons[i] = new RadioButton(this);
-            placeTypeButtons[i].setText("CIRCLE_" + index + "_" + (i + 1));
-            placeTypeButtons[i].setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
-            placeTypeGroup.addView(placeTypeButtons[i]);
+            placeTypeButtons = new RadioButton[length];
+            for (int i = 0; i < length; i++) {
+                placeTypeButtons[i] = new RadioButton(this);
+                placeTypeButtons[i].setText("CIRCLE_" + index + "_" + (i + 1));
+                placeTypeButtons[i].setLayoutParams(new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                placeTypeGroup.addView(placeTypeButtons[i]);
+            }
+        } else if (buttonTypeGroup.getCheckedRadioButtonId() == R.id.hamburger_button) {
+            length = HamPlaceTypes[index - 1];
+            placeTypeButtons = new RadioButton[length];
+            for (int i = 0; i < length; i++) {
+                placeTypeButtons[i] = new RadioButton(this);
+                placeTypeButtons[i].setText("HAM" + index + "_" + (i + 1));
+                placeTypeButtons[i].setLayoutParams(new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                placeTypeGroup.addView(placeTypeButtons[i]);
+            }
         }
         placeTypeButtons[0].setChecked(true);
     }
@@ -507,6 +527,24 @@ public class MainActivity extends AppCompatActivity
                     return PlaceType.CIRCLE_9_1;
                 } else if (placeTypeButtons[1].isChecked()) {
                     return PlaceType.CIRCLE_9_2;
+                }
+            }
+        } else if (buttonTypeGroup.getCheckedRadioButtonId() == R.id.hamburger_button) {
+            if (buttonNumberSeek.getProgress() == 0) {
+                if (placeTypeButtons[0].isChecked()) {
+                    return PlaceType.HAM_1_1;
+                }
+            } else if (buttonNumberSeek.getProgress() == 1) {
+                if (placeTypeButtons[0].isChecked()) {
+                    return PlaceType.HAM_2_1;
+                }
+            } else if (buttonNumberSeek.getProgress() == 2) {
+                if (placeTypeButtons[0].isChecked()) {
+                    return PlaceType.HAM_3_1;
+                }
+            } else if (buttonNumberSeek.getProgress() == 3) {
+                if (placeTypeButtons[0].isChecked()) {
+                    return PlaceType.HAM_4_1;
                 }
             }
         }

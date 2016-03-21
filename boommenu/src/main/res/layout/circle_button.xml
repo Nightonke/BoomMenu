@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.nightonke.boommenu.ShadowLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.nightonke.boommenu.ShadowLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/shadow_layout"
     android:layout_width="wrap_content"
@@ -18,7 +19,16 @@
         >
 
         <ImageButton
-            android:id="@+id/image"
+            android:id="@+id/image_button"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            tools:ignore="ContentDescription"
+            android:scaleType="fitXY"
+            />
+
+        <ImageView
+            android:id="@+id/image_view"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_gravity="center"
@@ -36,6 +46,7 @@
             android:textSize="10sp"
             android:layout_marginBottom="8.5dp"
             android:textColor="@android:color/white"
+            android:maxLines="1"
             />
 
     </FrameLayout>

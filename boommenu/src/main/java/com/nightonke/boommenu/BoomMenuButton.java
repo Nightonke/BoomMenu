@@ -11,11 +11,13 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,7 +28,11 @@ import java.util.Random;
 /**
  * Created by Weiping on 2016/3/19.
  */
-public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircleButtonClickListener {
+
+public class BoomMenuButton extends FrameLayout
+        implements
+        CircleButton.OnCircleButtonClickListener,
+        HamButton.OnHamButtonClickListener {
 
     private final int MIN_CIRCLE_BUTTON_NUMBER = 1;
     private final int MAX_CIRCLE_BUTTON_NUMBER = 9;
@@ -46,8 +52,9 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
 
     private int buttonNum = 0;
     private CircleButton[] circleButtons = new CircleButton[MAX_CIRCLE_BUTTON_NUMBER];
+    private HamButton[] hamButtons = new HamButton[MAX_HAM_BUTTON_NUMBER];
     private Dot[] dots = new Dot[MAX_CIRCLE_BUTTON_NUMBER];
-    private int[] colors = new int[MAX_CIRCLE_BUTTON_NUMBER];
+    private Bar[] bars = new Bar[MAX_HAM_BUTTON_NUMBER];
 
     // Is in action bar
     private boolean isInActionBar = false;
@@ -73,6 +80,14 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
     private int dotWidth = 10;
     // Default circle button width
     private int buttonWidth = (int)Util.getInstance().dp2px(88);
+    // Default bar width
+    private int barWidth = 50;
+    // Default bar height
+    private int barHeight = 8;
+    // Default ham button width
+    private int hamButtonWidth = 0;
+    // Default ham button height
+    private int hamButtonHeight = (int) Util.getInstance().dp2px(60);
     // Boom button radius
     private int boomButtonRadius = (int)Util.getInstance().dp2px(56);
     // Movement ease
@@ -80,7 +95,7 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
     private EaseType hideMoveEaseType = EaseType.EaseOutCirc;
     // Scale ease
     private EaseType showScaleEaseType = EaseType.EaseOutBack;
-    private EaseType hideScaleEaseType = EaseType.Linear;
+    private EaseType hideScaleEaseType = EaseType.EaseOutCirc;
     // Whether rotate
     private int rotateDegree = 720;
     // Rotate ease
@@ -139,6 +154,8 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
                     ContextCompat.getColor(mContext, R.color.default_boom_button_color_pressed),
                     ContextCompat.getColor(mContext, R.color.default_boom_button_color));
         }
+
+        hamButtonWidth = (int) (Util.getInstance().getScreenWidth(getContext()) * 5 / 7 + Util.getInstance().dp2px(4));
     }
 
     /**
@@ -203,25 +220,44 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         if (buttonType.equals(ButtonType.CIRCLE)) {
             // circle buttons
             // create buttons
-            buttonNum = (drawables == null ? strings.length : drawables.length);
+            buttonNum = drawables.length;
             for (int i = 0; i < buttonNum; i++) {
                 circleButtons[i] = new CircleButton(mContext);
                 circleButtons[i].setOnCircleButtonClickListener(this, i);
-                if (drawables != null) circleButtons[i].setDrawable(drawables[i]);
+                circleButtons[i].setDrawable(drawables[i]);
                 if (strings != null) circleButtons[i].setText(strings[i]);
-                if (colors != null) circleButtons[i].setColor(colors[i][0], colors[i][1]);
+                circleButtons[i].setColor(colors[i][0], colors[i][1]);
             }
 
             // create dots
             for (int i = 0; i < buttonNum; i++) {
                 dots[i] = new Dot(mContext);
-                if (colors != null) dots[i].setColor(colors[i][1]);
+                dots[i].setColor(colors[i][1]);
             }
 
             // place dots according to the number of them and the place type
             placeDots();
         } else if (buttonType.equals(ButtonType.HAM)) {
             // hamburger button
+            hamButtonWidth = Util.getInstance().getScreenWidth(getContext()) * 5 / 7;
+            // create buttons
+            buttonNum = drawables.length;
+            for (int i = 0; i < buttonNum; i++) {
+                hamButtons[i] = new HamButton(mContext);
+                hamButtons[i].setOnHamButtonClickListener(this, i);
+                hamButtons[i].setDrawable(drawables[i]);
+                if (strings != null) hamButtons[i].setText(strings[i]);
+                hamButtons[i].setColor(colors[i][0], colors[i][1]);
+            }
+
+            // create bars
+            for (int i = 0; i < buttonNum; i++) {
+                bars[i] = new Bar(mContext);
+                bars[i].setColor(colors[i][1]);
+            }
+
+            // place bars according to the number of them and the place type
+            placeBars();
         }
     }
 
@@ -996,6 +1032,74 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
     }
 
     /**
+     * Place all bars to the boom menu botton.
+     */
+    private void placeBars() {
+        frameLayout.removeAllViews();
+        int width = frameLayout.getWidth();
+        int height = frameLayout.getHeight();
+        FrameLayout.LayoutParams params = null;
+        switch (buttonNum) {
+            case 1:
+                if (placeType.equals(PlaceType.HAM_1_1)) {
+                    params = new FrameLayout.LayoutParams(barWidth, barHeight);
+                    params.leftMargin = width / 2 - barWidth / 2;
+                    params.topMargin = height / 2 - barHeight / 2;
+                    frameLayout.addView(bars[0], params);
+                }
+                break;
+            case 2:
+                if (placeType.equals(PlaceType.HAM_2_1)) {
+                    params = new FrameLayout.LayoutParams(barWidth, barHeight);
+                    params.leftMargin = width / 2 - barWidth / 2;
+                    params.topMargin = height / 2 - barHeight * 3 / 2;
+                    frameLayout.addView(bars[0], params);
+                    params = new FrameLayout.LayoutParams(barWidth, barHeight);
+                    params.leftMargin = width / 2 - barWidth / 2;
+                    params.topMargin = height / 2 + barHeight / 2;
+                    frameLayout.addView(bars[1], params);
+                }
+                break;
+            case 3:
+                if (placeType.equals(PlaceType.HAM_3_1)) {
+                    params = new FrameLayout.LayoutParams(barWidth, barHeight);
+                    params.leftMargin = width / 2 - barWidth / 2;
+                    params.topMargin = height / 2 - barHeight * 13 / 6;
+                    frameLayout.addView(bars[0], params);
+                    params = new FrameLayout.LayoutParams(barWidth, barHeight);
+                    params.leftMargin = width / 2 - barWidth / 2;
+                    params.topMargin = height / 2 - barHeight / 2;
+                    frameLayout.addView(bars[1], params);
+                    params = new FrameLayout.LayoutParams(barWidth, barHeight);
+                    params.leftMargin = width / 2 - barWidth / 2;
+                    params.topMargin = height / 2 + barHeight * 7 / 6;
+                    frameLayout.addView(bars[2], params);
+                }
+                break;
+            case 4:
+                if (placeType.equals(PlaceType.HAM_4_1)) {
+                    params = new FrameLayout.LayoutParams(barWidth, barHeight);
+                    params.leftMargin = width / 2 - barWidth / 2;
+                    params.topMargin = height / 2 - barHeight * 11 / 4;
+                    frameLayout.addView(bars[0], params);
+                    params = new FrameLayout.LayoutParams(barWidth, barHeight);
+                    params.leftMargin = width / 2 - barWidth / 2;
+                    params.topMargin = height / 2 - barHeight * 5 / 4;
+                    frameLayout.addView(bars[1], params);
+                    params = new FrameLayout.LayoutParams(barWidth, barHeight);
+                    params.leftMargin = width / 2 - barWidth / 2;
+                    params.topMargin = height / 2 + barHeight / 4;
+                    frameLayout.addView(bars[2], params);
+                    params = new FrameLayout.LayoutParams(barWidth, barHeight);
+                    params.leftMargin = width / 2 - barWidth / 2;
+                    params.topMargin = height / 2 + barHeight * 7 / 4;
+                    frameLayout.addView(bars[3], params);
+                }
+                break;
+        }
+    }
+
+    /**
      * When the boom menu button is clicked.
      */
     private void shoot() {
@@ -1003,6 +1107,7 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         if (onClickListener != null) onClickListener.onClick();
         // wait for the before animations finished
         if (animationPlaying) return;
+        animationPlaying = true;
         // dim the animation layout
         dimAnimationLayout();
         // start all animations
@@ -1058,41 +1163,80 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
      */
     private void startShowAnimations() {
         if (animationLayout != null) animationLayout.removeAllViews();
-        getEndLocations();
-        if (showOrderType.equals(OrderType.DEFAULT)) {
-            for (int i = 0; i < buttonNum; i++) {
-                dots[i].getLocationOnScreen(startLocations[i]);
-                startLocations[i][0] -= (buttonWidth - dots[i].getWidth()) / 2;
-                startLocations[i][1] -= (buttonWidth - dots[i].getHeight()) / 2;
-                setShowAnimation(dots[i], circleButtons[i], startLocations[i], endLocations[i], i);
-            }
-        } else if (showOrderType.equals(OrderType.REVERSE)) {
-            for (int i = 0; i < buttonNum; i++) {
-                dots[i].getLocationOnScreen(startLocations[i]);
-                startLocations[i][0] -= (buttonWidth - dots[i].getWidth()) / 2;
-                startLocations[i][1] -= (buttonWidth - dots[i].getHeight()) / 2;
-                setShowAnimation(dots[i], circleButtons[i], startLocations[i], endLocations[i], buttonNum - i - 1);
-            }
-        } else if (showOrderType.equals(OrderType.RANDOM)) {
-            Random random = new Random();
-            boolean[] used = new boolean[buttonNum];
-            for (int i = 0; i < buttonNum; i++) used[i] = false;
-            int count = 0;
-            while (true) {
-                int i = random.nextInt(buttonNum);
-                if (!used[i]) {
-                    used[i] = true;
-                    
-                    dots[count].getLocationOnScreen(startLocations[count]);
-                    startLocations[count][0] -= (buttonWidth - dots[count].getWidth()) / 2;
-                    startLocations[count][1] -= (buttonWidth - dots[count].getHeight()) / 2;
-                    setShowAnimation(dots[count], circleButtons[count], startLocations[count], endLocations[count], i);
+        if (buttonType.equals(ButtonType.CIRCLE)) {
+            getEndLocations();
+            if (showOrderType.equals(OrderType.DEFAULT)) {
+                for (int i = 0; i < buttonNum; i++) {
+                    dots[i].getLocationOnScreen(startLocations[i]);
+                    startLocations[i][0] -= (buttonWidth - dots[i].getWidth()) / 2;
+                    startLocations[i][1] -= (buttonWidth - dots[i].getHeight()) / 2;
+                    setShowAnimation(dots[i], circleButtons[i], startLocations[i], endLocations[i], i);
+                }
+            } else if (showOrderType.equals(OrderType.REVERSE)) {
+                for (int i = 0; i < buttonNum; i++) {
+                    dots[i].getLocationOnScreen(startLocations[i]);
+                    startLocations[i][0] -= (buttonWidth - dots[i].getWidth()) / 2;
+                    startLocations[i][1] -= (buttonWidth - dots[i].getHeight()) / 2;
+                    setShowAnimation(dots[i], circleButtons[i], startLocations[i], endLocations[i], buttonNum - i - 1);
+                }
+            } else if (showOrderType.equals(OrderType.RANDOM)) {
+                Random random = new Random();
+                boolean[] used = new boolean[buttonNum];
+                for (int i = 0; i < buttonNum; i++) used[i] = false;
+                int count = 0;
+                while (true) {
+                    int i = random.nextInt(buttonNum);
+                    if (!used[i]) {
+                        used[i] = true;
 
-                    count++;
-                    if (count == buttonNum) break;
+                        dots[count].getLocationOnScreen(startLocations[count]);
+                        startLocations[count][0] -= (buttonWidth - dots[count].getWidth()) / 2;
+                        startLocations[count][1] -= (buttonWidth - dots[count].getHeight()) / 2;
+                        setShowAnimation(dots[count], circleButtons[count], startLocations[count], endLocations[count], i);
+
+                        count++;
+                        if (count == buttonNum) break;
+                    }
+                }
+            }
+        } else if (buttonType.equals(ButtonType.HAM)) {
+            getEndLocations();
+            if (showOrderType.equals(OrderType.DEFAULT)) {
+                for (int i = 0; i < buttonNum; i++) {
+                    bars[i].getLocationOnScreen(startLocations[i]);
+                    startLocations[i][0] -= (hamButtonWidth - bars[i].getWidth()) / 2;
+                    startLocations[i][1] -= (hamButtonHeight - bars[i].getHeight()) / 2;
+                    setShowAnimation(bars[i], hamButtons[i], startLocations[i], endLocations[i], i);
+                }
+            } else if (showOrderType.equals(OrderType.REVERSE)) {
+                for (int i = 0; i < buttonNum; i++) {
+                    bars[i].getLocationOnScreen(startLocations[i]);
+                    startLocations[i][0] -= (hamButtonWidth - bars[i].getWidth()) / 2;
+                    startLocations[i][1] -= (hamButtonHeight - bars[i].getHeight()) / 2;
+                    setShowAnimation(bars[i], hamButtons[i], startLocations[i], endLocations[i], buttonNum - i - 1);
+                }
+            } else if (showOrderType.equals(OrderType.RANDOM)) {
+                Random random = new Random();
+                boolean[] used = new boolean[buttonNum];
+                for (int i = 0; i < buttonNum; i++) used[i] = false;
+                int count = 0;
+                while (true) {
+                    int i = random.nextInt(buttonNum);
+                    if (!used[i]) {
+                        used[i] = true;
+
+                        bars[count].getLocationOnScreen(startLocations[count]);
+                        startLocations[count][0] -= (hamButtonWidth - bars[count].getWidth()) / 2;
+                        startLocations[count][1] -= (hamButtonHeight - bars[count].getHeight()) / 2;
+                        setShowAnimation(bars[count], hamButtons[count], startLocations[count], endLocations[count], i);
+
+                        count++;
+                        if (count == buttonNum) break;
+                    }
                 }
             }
         }
+
     }
 
     /**
@@ -1517,6 +1661,37 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
                         endLocations[8][1] = height / 2 + dis1 - buttonWidth / 2;
                     }
             }
+        } else if (buttonType.equals(ButtonType.HAM)) {
+            switch (buttonNum) {
+                case 1:
+                    endLocations[0][0] = width / 2 - hamButtonWidth / 2;
+                    endLocations[0][1] = height / 2 - hamButtonHeight / 2;
+                    break;
+                case 2:
+                    endLocations[0][0] = width / 2 - hamButtonWidth / 2;
+                    endLocations[0][1] = height / 2 - hamButtonHeight;
+                    endLocations[1][0] = width / 2 - hamButtonWidth / 2;
+                    endLocations[1][1] = height / 2 + hamButtonHeight;
+                    break;
+                case 3:
+                    endLocations[0][0] = width / 2 - hamButtonWidth / 2;
+                    endLocations[0][1] = height / 2 - hamButtonHeight * 7 / 4;
+                    endLocations[1][0] = width / 2 - hamButtonWidth / 2;
+                    endLocations[1][1] = height / 2 - hamButtonHeight / 2;
+                    endLocations[2][0] = width / 2 - hamButtonWidth / 2;
+                    endLocations[2][1] = height / 2 + hamButtonHeight * 3 / 4;
+                    break;
+                case 4:
+                    endLocations[0][0] = width / 2 - hamButtonWidth / 2;
+                    endLocations[0][1] = height / 2 - hamButtonHeight * 23 / 10;
+                    endLocations[1][0] = width / 2 - hamButtonWidth / 2;
+                    endLocations[1][1] = height / 2 - hamButtonHeight * 11/ 10;
+                    endLocations[2][0] = width / 2 - hamButtonWidth / 2;
+                    endLocations[2][1] = height / 2 + hamButtonHeight / 10;
+                    endLocations[3][0] = width / 2 - hamButtonWidth / 2;
+                    endLocations[3][1] = height / 2 + hamButtonHeight * 13 / 10;
+                    break;
+            }
         }
     }
 
@@ -1549,9 +1724,16 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
     private View setViewLocationInAnimationLayout(final View view, int[] location) {
         int x = location[0];
         int y = location[1];
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                buttonWidth,
-                buttonWidth);
+        LinearLayout.LayoutParams lp = null;
+        if (buttonType.equals(ButtonType.CIRCLE)) {
+            lp = new LinearLayout.LayoutParams(
+                    buttonWidth,
+                    buttonWidth);
+        } else if (buttonType.equals(ButtonType.HAM)) {
+            lp = new LinearLayout.LayoutParams(
+                    hamButtonWidth,
+                    hamButtonHeight);
+        }
         lp.leftMargin = x;
         lp.topMargin = y;
         animationLayout.addView(view, lp);
@@ -1573,13 +1755,11 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
             int[] startLocation,
             int[] endLocation,
             int index) {
-        animationPlaying = true;
         button.bringToFront();
 
         final View view = setViewLocationInAnimationLayout(button, startLocation);
 
         float[] sl = new float[2];
-        float[] ml = new float[2];
         float[] el = new float[2];
         sl[0] = startLocation[0] * 1.0f;
         sl[1] = startLocation[1] * 1.0f;
@@ -1600,17 +1780,28 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         yAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
         yAnimator.start();
 
-        view.setScaleX(dotWidth / buttonWidth);
+        // scale animation
+        float scaleW = 0;
+        float scaleH = 0;
+        if (buttonType.equals(ButtonType.CIRCLE)) {
+            scaleW = dotWidth * 1.0f / buttonWidth;
+            scaleH = dotWidth * 1.0f / buttonWidth;
+        } else if (buttonType.equals(ButtonType.HAM)) {
+            scaleW = barWidth * 1.0f / hamButtonWidth;
+            scaleH = barHeight * 1.0f / hamButtonHeight;
+        }
+
+        view.setScaleX(scaleW);
         ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX",
-                dotWidth / buttonWidth,
+                scaleW,
                 1f).setDuration(duration);
         scaleXAnimator.setStartDelay(delay * index);
         scaleXAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showScaleEaseType));
         scaleXAnimator.start();
 
-        view.setScaleY(dotWidth / buttonWidth);
+        view.setScaleY(scaleH);
         ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY",
-                dotWidth / buttonWidth,
+                scaleH,
                 1f).setDuration(duration);
         scaleYAnimator.setStartDelay(delay * index);
         scaleYAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showScaleEaseType));
@@ -1628,6 +1819,30 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         });
         scaleYAnimator.start();
 
+        // alpha animation
+        View view1 = null;
+        View view2 = null;
+        if (button instanceof CircleButton) {
+            view1 = ((CircleButton) button).getImageView();
+            view2 = ((CircleButton) button).getTextView();
+        } else if (button instanceof HamButton) {
+            view1 = ((HamButton) button).getImageView();
+            view2 = ((HamButton) button).getTextView();
+        }
+        ObjectAnimator alphaAnimator1 = ObjectAnimator.ofFloat(view1, "alpha",
+                0f,
+                1f).setDuration(duration);
+        alphaAnimator1.setStartDelay(delay * index);
+        alphaAnimator1.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
+        alphaAnimator1.start();
+        ObjectAnimator alphaAnimator2 = ObjectAnimator.ofFloat(view2, "alpha",
+                0f,
+                1f).setDuration(duration);
+        alphaAnimator2.setStartDelay(delay * index);
+        alphaAnimator2.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
+        alphaAnimator2.start();
+
+        // rotation animation
         if (view instanceof CircleButton) {
             ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(
                     ((CircleButton) view).getFrameLayout(), "rotation",
@@ -1753,7 +1968,6 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
                 ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
             }
         }
-
     }
 
     /**
@@ -1878,33 +2092,66 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
     private void startHideAnimations() {
         animationPlaying = true;
         lightAnimationLayout();
-        if (hideOrderType.equals(OrderType.DEFAULT)) {
-            for (int i = 0; i < buttonNum; i++) {
-                setHideAnimation(dots[i], circleButtons[i], endLocations[i], startLocations[i], i);
-            }
-        } else if (hideOrderType.equals(OrderType.REVERSE)) {
-            for (int i = 0; i < buttonNum; i++) {
-                setHideAnimation(dots[i], circleButtons[i], endLocations[i], startLocations[i], buttonNum - i - 1);
-            }
-        } else if (hideOrderType.equals(OrderType.RANDOM)) {
-            Random random = new Random();
-            boolean[] used = new boolean[buttonNum];
-            for (int i = 0; i < buttonNum; i++) used[i] = false;
-            int count = 0;
-            while (true) {
-                int i = random.nextInt(buttonNum);
-                if (!used[i]) {
-                    used[i] = true;
+        if (buttonType.equals(ButtonType.CIRCLE)) {
+            if (hideOrderType.equals(OrderType.DEFAULT)) {
+                for (int i = 0; i < buttonNum; i++) {
+                    setHideAnimation(dots[i], circleButtons[i], endLocations[i], startLocations[i], i);
+                }
+            } else if (hideOrderType.equals(OrderType.REVERSE)) {
+                for (int i = 0; i < buttonNum; i++) {
+                    setHideAnimation(dots[i], circleButtons[i], endLocations[i], startLocations[i], buttonNum - i - 1);
+                }
+            } else if (hideOrderType.equals(OrderType.RANDOM)) {
+                Random random = new Random();
+                boolean[] used = new boolean[buttonNum];
+                for (int i = 0; i < buttonNum; i++) used[i] = false;
+                int count = 0;
+                while (true) {
+                    int i = random.nextInt(buttonNum);
+                    if (!used[i]) {
+                        used[i] = true;
 
-                    setHideAnimation(
-                            dots[count],
-                            circleButtons[count],
-                            endLocations[count],
-                            startLocations[count],
-                            i);
+                        setHideAnimation(
+                                dots[count],
+                                circleButtons[count],
+                                endLocations[count],
+                                startLocations[count],
+                                i);
 
-                    count++;
-                    if (count == buttonNum) break;
+                        count++;
+                        if (count == buttonNum) break;
+                    }
+                }
+            }
+        } else if (buttonType.equals(ButtonType.HAM)) {
+            if (hideOrderType.equals(OrderType.DEFAULT)) {
+                for (int i = 0; i < buttonNum; i++) {
+                    setHideAnimation(bars[i], hamButtons[i], endLocations[i], startLocations[i], i);
+                }
+            } else if (hideOrderType.equals(OrderType.REVERSE)) {
+                for (int i = 0; i < buttonNum; i++) {
+                    setHideAnimation(bars[i], hamButtons[i], endLocations[i], startLocations[i], buttonNum - i - 1);
+                }
+            } else if (hideOrderType.equals(OrderType.RANDOM)) {
+                Random random = new Random();
+                boolean[] used = new boolean[buttonNum];
+                for (int i = 0; i < buttonNum; i++) used[i] = false;
+                int count = 0;
+                while (true) {
+                    int i = random.nextInt(buttonNum);
+                    if (!used[i]) {
+                        used[i] = true;
+
+                        setHideAnimation(
+                                bars[count],
+                                hamButtons[count],
+                                endLocations[count],
+                                startLocations[count],
+                                i);
+
+                        count++;
+                        if (count == buttonNum) break;
+                    }
                 }
             }
         }
@@ -1926,6 +2173,7 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
             int[] endLocation,
             int index) {
 
+        // position animation
         float[] sl = new float[2];
         float[] el = new float[2];
         sl[0] = startLocation[0] * 1.0f;
@@ -1947,16 +2195,27 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         yAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
         yAnimator.start();
 
+        // scale animation
+        float scaleW = 0;
+        float scaleH = 0;
+        if (buttonType.equals(ButtonType.CIRCLE)) {
+            scaleW = dotWidth * 1.0f / buttonWidth;
+            scaleH = dotWidth * 1.0f / buttonWidth;
+        } else if (buttonType.equals(ButtonType.HAM)) {
+            scaleW = barWidth * 1.0f / hamButtonWidth;
+            scaleH = barHeight * 1.0f / hamButtonHeight;
+        }
+
         ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(button, "scaleX",
                 1f,
-                dotWidth / buttonWidth).setDuration(duration);
+                scaleW).setDuration(duration);
         scaleXAnimator.setStartDelay(index * delay);
         scaleXAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideScaleEaseType));
         scaleXAnimator.start();
 
         ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(button, "scaleY",
                 1f,
-                dotWidth / buttonWidth).setDuration(duration);
+                scaleH).setDuration(duration);
         scaleYAnimator.setStartDelay(index * delay);
         scaleYAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideScaleEaseType));
         scaleYAnimator.addListener(new AnimatorListenerAdapter() {
@@ -1968,6 +2227,30 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
         });
         scaleYAnimator.start();
 
+        // alpha animation
+        View view1 = null;
+        View view2 = null;
+        if (button instanceof CircleButton) {
+            view1 = ((CircleButton) button).getImageView();
+            view2 = ((CircleButton) button).getTextView();
+        } else if (button instanceof HamButton) {
+            view1 = ((HamButton) button).getImageView();
+            view2 = ((HamButton) button).getTextView();
+        }
+        ObjectAnimator alphaAnimator1 = ObjectAnimator.ofFloat(view1, "alpha",
+                1f,
+                0f).setDuration(duration);
+        alphaAnimator1.setStartDelay(delay * index);
+        alphaAnimator1.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
+        alphaAnimator1.start();
+        ObjectAnimator alphaAnimator2 = ObjectAnimator.ofFloat(view2, "alpha",
+                1f,
+                0f).setDuration(duration);
+        alphaAnimator2.setStartDelay(delay * index);
+        alphaAnimator2.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
+        alphaAnimator2.start();
+
+        // rotation animation
         if (button instanceof CircleButton) {
             ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(
                     ((CircleButton) button).getFrameLayout(), "rotation",
@@ -2108,11 +2391,28 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
     }
 
     /**
+     * @return The imageviews of ham buttons.
+     */
+    public ImageView[] getImageViews() {
+        ImageView[] imageViews = new ImageView[buttonNum];
+        if (buttonType.equals(ButtonType.CIRCLE)) {
+            for (int i = 0; i < buttonNum; i++) imageViews[i] = circleButtons[i].getImageView();
+        } else if (buttonType.equals(ButtonType.HAM)) {
+            for (int i = 0; i < buttonNum; i++) imageViews[i] = hamButtons[i].getImageView();
+        }
+        return imageViews;
+    }
+
+    /**
      * @return The textviews of sub buttons.
      */
     public TextView[] getTextViews() {
         TextView[] textViews = new TextView[buttonNum];
-        for (int i = 0; i < buttonNum; i++) textViews[i] = circleButtons[i].getTextView();
+        if (buttonType.equals(ButtonType.CIRCLE)) {
+            for (int i = 0; i < buttonNum; i++) textViews[i] = circleButtons[i].getTextView();
+        } else if (buttonType.equals(ButtonType.HAM)) {
+            for (int i = 0; i < buttonNum; i++) textViews[i] = hamButtons[i].getTextView();
+        }
         return textViews;
     }
 
@@ -2148,6 +2448,9 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
             if (buttonType.equals(ButtonType.CIRCLE)) {
                 circleButtons[i].setShadowDx(xOffset);
                 circleButtons[i].setShadowDy(yOffset);
+            } else if (buttonType.equals(ButtonType.HAM)) {
+                hamButtons[i].setShadowDx(xOffset);
+                hamButtons[i].setShadowDy(yOffset);
             }
         }
     }
@@ -2160,12 +2463,8 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
      * @param yOffset In pixels.
      */
     public void setBoomButtonShadowOffset(float xOffset, float yOffset) {
-        for (int i = 0; i < buttonNum; i++) {
-            if (buttonType.equals(ButtonType.CIRCLE)) {
-                circleButtons[i].setShadowDx(xOffset);
-                circleButtons[i].setShadowDy(yOffset);
-            }
-        }
+        shadowLayout.setmDx(xOffset);
+        shadowLayout.setmDy(yOffset);
     }
 
     /**
@@ -2175,6 +2474,7 @@ public class BoomMenuButton extends FrameLayout implements CircleButton.OnCircle
      */
     @Override
     public void onClick(int index) {
+        if (!state.equals(StateType.OPEN)) return;
         if (onSubButtonClickListener != null) onSubButtonClickListener.onClick(index);
         if (autoDismiss && !animationPlaying) startHideAnimations();
     }

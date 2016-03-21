@@ -7,11 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
  * Created by Weiping on 2016/3/19.
  */
+
 public class CircleButton extends FrameLayout {
 
     private Context mContext;
@@ -19,6 +21,7 @@ public class CircleButton extends FrameLayout {
     private ShadowLayout shadowLayout;
     private FrameLayout frameLayout;
     private ImageButton imageButton;
+    private ImageView imageView;
     private TextView textView;
 
     private int radius = (int)Util.getInstance().dp2px(80) / 2;
@@ -35,7 +38,8 @@ public class CircleButton extends FrameLayout {
         LayoutInflater.from(mContext).inflate(R.layout.circle_button, this, true);
         shadowLayout = (ShadowLayout)findViewById(R.id.shadow_layout);
         frameLayout = (FrameLayout)findViewById(R.id.frame_layout);
-        imageButton = (ImageButton)findViewById(R.id.image);
+        imageButton = (ImageButton)findViewById(R.id.image_button);
+        imageView = (ImageView)findViewById(R.id.image_view);
         textView = (TextView)findViewById(R.id.text);
     }
 
@@ -51,7 +55,7 @@ public class CircleButton extends FrameLayout {
     }
 
     public void setDrawable(Drawable drawable) {
-        if (imageButton != null) imageButton.setImageDrawable(drawable);
+        if (imageView != null) imageView.setImageDrawable(drawable);
     }
 
     public void setText(String text) {
@@ -64,6 +68,10 @@ public class CircleButton extends FrameLayout {
 
     public ImageButton getImageButton() {
         return imageButton;
+    }
+
+    public ImageView getImageView() {
+        return imageView;
     }
 
     public TextView getTextView() {

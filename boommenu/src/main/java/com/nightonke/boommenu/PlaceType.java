@@ -32,7 +32,12 @@ public enum PlaceType {
     CIRCLE_8_2(24),
     CIRCLE_8_3(25),
     CIRCLE_9_1(26),
-    CIRCLE_9_2(27);
+    CIRCLE_9_2(27),
+
+    HAM_1_1(28),
+    HAM_2_1(29),
+    HAM_3_1(30),
+    HAM_4_1(31);
 
     int type;
 

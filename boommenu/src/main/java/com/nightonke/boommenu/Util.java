@@ -66,7 +66,8 @@ public class Util {
     }
 
     @SuppressWarnings("deprecation")
-    public void setCircleButtonStateListDrawable(View circleButton, int radius, int pressedColor, int normalColor) {
+    public void setCircleButtonStateListDrawable(
+            View circleButton, int radius, int pressedColor, int normalColor) {
         Bitmap imagePressed = Bitmap.createBitmap(
                 2 * radius,
                 2 * radius,
@@ -103,6 +104,42 @@ public class Util {
             circleButton.setBackground(stateListDrawable);
         }else{
             circleButton.setBackgroundDrawable(stateListDrawable);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    public void setHamButtonStateListDrawable(
+            View linearLayout, int width, int height, int pressedColor, int normalColor) {
+        Bitmap imagePressed = Bitmap.createBitmap(
+                width,
+                height,
+                Bitmap.Config.ARGB_8888);
+        Canvas canvasPressed = new Canvas(imagePressed);
+        Paint paintPressed = new Paint();
+        paintPressed.setAntiAlias(true);
+        paintPressed.setColor(pressedColor);
+        canvasPressed.drawRoundRect(new RectF(0, 0, width, height), dp2px(2), dp2px(2), paintPressed);
+
+        Bitmap imageNormal = Bitmap.createBitmap(
+                width,
+                height,
+                Bitmap.Config.ARGB_8888);
+        Canvas canvasNormal = new Canvas(imageNormal);
+        Paint paintNormal = new Paint();
+        paintNormal.setAntiAlias(true);
+        paintNormal.setColor(normalColor);
+        canvasNormal.drawRoundRect(new RectF(0, 0, width, height), dp2px(2), dp2px(2), paintNormal);
+
+        StateListDrawable stateListDrawable= new StateListDrawable();
+        stateListDrawable.addState(new int[]{android.R.attr.state_pressed},
+                new BitmapDrawable(linearLayout.getContext().getResources(), imagePressed));
+        stateListDrawable.addState(StateSet.WILD_CARD,
+                new BitmapDrawable(linearLayout.getContext().getResources(), imageNormal));
+
+        if(android.os.Build.VERSION.SDK_INT >= 16){
+            linearLayout.setBackground(stateListDrawable);
+        }else{
+            linearLayout.setBackgroundDrawable(stateListDrawable);
         }
     }
 
