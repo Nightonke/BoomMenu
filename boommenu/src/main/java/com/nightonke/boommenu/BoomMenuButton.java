@@ -87,7 +87,7 @@ public class BoomMenuButton extends FrameLayout
     // Default ham button width
     private int hamButtonWidth = 0;
     // Default ham button height
-    private int hamButtonHeight = (int) Util.getInstance().dp2px(60);
+    private int hamButtonHeight = (int) Util.getInstance().dp2px(66 + 4);
     // Boom button radius
     private int boomButtonRadius = (int)Util.getInstance().dp2px(56);
     // Movement ease
@@ -155,7 +155,8 @@ public class BoomMenuButton extends FrameLayout
                     ContextCompat.getColor(mContext, R.color.default_boom_button_color));
         }
 
-        hamButtonWidth = (int) (Util.getInstance().getScreenWidth(getContext()) * 5 / 7 + Util.getInstance().dp2px(4));
+        hamButtonWidth = (int) (Util.getInstance().getScreenWidth(getContext()) * 5 / 7
+                + Util.getInstance().dp2px(4));
     }
 
     /**
@@ -1754,7 +1755,7 @@ public class BoomMenuButton extends FrameLayout
             final View button,
             int[] startLocation,
             int[] endLocation,
-            int index) {
+            final int index) {
         button.bringToFront();
 
         final View view = setViewLocationInAnimationLayout(button, startLocation);
@@ -1895,10 +1896,10 @@ public class BoomMenuButton extends FrameLayout
             c = y1 - (x1 * x1) * a - x1 * b;
 
             float per = 1f / frames;
-            float xx = x2 - x1;
+            float xx = endPoint[0] - startPoint[0];
             for (int i = 0; i <= frames; i++) {
                 float offset = i * per;
-                xs[i] = x1 + offset * xx;
+                xs[i] = startPoint[0] + offset * xx;
                 ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
             }
         } else if (boomType.equals(BoomType.HORIZONTAL_THROW)) {

@@ -26,7 +26,7 @@ public class HamButton extends FrameLayout {
     private TextView textView;
 
     private int width = 0;
-    private int height = (int)Util.getInstance().dp2px(56);
+    private int height = (int)Util.getInstance().dp2px(66);
 
     public HamButton(Context context) {
         this(context, null);
@@ -44,7 +44,7 @@ public class HamButton extends FrameLayout {
         textView = (TextView)findViewById(R.id.text);
 
         width = Util.getInstance().getScreenWidth(getContext()) * 5 / 7;
-        height = (int)Util.getInstance().dp2px(56);
+        height = (int)Util.getInstance().dp2px(66);
 
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) linearLayout.getLayoutParams();
         layoutParams.width = width - (int)Util.getInstance().dp2px(8);

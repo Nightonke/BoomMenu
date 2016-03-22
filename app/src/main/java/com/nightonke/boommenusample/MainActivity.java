@@ -1,5 +1,7 @@
 package com.nightonke.boommenusample;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.content.Context;
 import android.graphics.Color;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity
 
     private BoomMenuButton boomMenuButton;
     private BoomMenuButton boomMenuButtonInActionBar;
+    private BoomMenuButton boomInfo;
 
     private Context mContext;
     private View mCustomView;
@@ -102,6 +105,22 @@ public class MainActivity extends AppCompatActivity
         boomMenuButton.setOnSubButtonClickListener(this);
         boomMenuButton.setAnimatorListener(this);
 
+        boomInfo = (BoomMenuButton)mCustomView.findViewById(R.id.info);
+        boomInfo.setOnSubButtonClickListener(new BoomMenuButton.OnSubButtonClickListener() {
+            @Override
+            public void onClick(int buttonIndex) {
+                if (buttonIndex == 0) {
+                    Toast.makeText(mContext, "Boom!", Toast.LENGTH_SHORT).show();
+                } else if (buttonIndex == 1) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(
+                            "https://github.com/Nightonke/BoomMenu")));
+                } else if (buttonIndex == 2) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(
+                            "https://github.com/Nightonke")));
+                }
+            }
+        });
+
         initViews();
     }
 
@@ -111,8 +130,45 @@ public class MainActivity extends AppCompatActivity
 
         if (!isInit) {
             initBoom();
+            initInfoBoom();
         }
         isInit = true;
+    }
+
+    private void initInfoBoom() {
+
+        Drawable[] drawables = new Drawable[3];
+        int[] drawablesResource = new int[]{
+                R.drawable.boom,
+                R.drawable.java,
+                R.drawable.github
+        };
+        for (int i = 0; i < 3; i++)
+            drawables[i] = ContextCompat.getDrawable(mContext, drawablesResource[i]);
+
+        int[][] colors = new int[3][2];
+        for (int i = 0; i < 3; i++) {
+            colors[i][1] = GetRandomColor();
+            colors[i][0] = Util.getInstance().getPressedColor(colors[i][1]);
+        }
+
+        boomInfo.init(
+                drawables,
+                new String[]{"BoomMenuButton", "View source code", "Follow me"},
+                colors,
+                ButtonType.HAM,
+                BoomType.PARABOLA,
+                PlaceType.HAM_3_1,
+                ParticleEffect.NONE,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        boomInfo.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
     }
 
     private void initBoom() {
@@ -617,5 +673,6 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         boomMenuButton.dismiss();
         boomMenuButtonInActionBar.dismiss();
+        boomInfo.dismiss();
     }
 }

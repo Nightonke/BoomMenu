@@ -28,6 +28,15 @@
         android:layout_toEndOf="@+id/boom"
         />
 
-
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/info"
+        android:layout_width="56dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="?android:actionBarItemBackground"
+        app:boom_inActionBar="true"
+        />
 
 </RelativeLayout>
