@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.BoomType;
 import com.nightonke.boommenu.ButtonType;
+import com.nightonke.boommenu.DimType;
 import com.nightonke.boommenu.OrderType;
 import com.nightonke.boommenu.ParticleEffect;
 import com.nightonke.boommenu.PlaceType;
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity
         boomMenuButton = (BoomMenuButton)findViewById(R.id.boom);
         boomMenuButton.setOnSubButtonClickListener(this);
         boomMenuButton.setAnimatorListener(this);
+        boomMenuButton.setDimType(DimType.DIM_0);
 
         boomInfo = (BoomMenuButton)mCustomView.findViewById(R.id.info);
         boomInfo.setOnSubButtonClickListener(new BoomMenuButton.OnSubButtonClickListener() {

@@ -29,6 +29,7 @@ import java.util.Random;
  * Created by Weiping on 2016/3/19.
  */
 
+@SuppressWarnings("JavaDoc")
 public class BoomMenuButton extends FrameLayout
         implements
         CircleButton.OnCircleButtonClickListener,
@@ -105,6 +106,8 @@ public class BoomMenuButton extends FrameLayout
     private boolean autoDismiss = true;
     // Cancelable
     private boolean cancelable = true;
+    // Dim value
+    private DimType dimType = DimType.DIM_6;
 
     private OnClickListener onClickListener = null;
     private AnimatorListener animatorListener = null;
@@ -1131,8 +1134,8 @@ public class BoomMenuButton extends FrameLayout
         }
         animationLayout.setVisibility(VISIBLE);
         ObjectAnimator objectAnimator = ObjectAnimator.ofInt(animationLayout, "backgroundColor",
-                ContextCompat.getColor(mContext, R.color.lightness),
-                ContextCompat.getColor(mContext, R.color.darkness))
+                DimType.DIM_0.value,
+                dimType.value)
                 .setDuration(duration + delay * (buttonNum - 1));
         objectAnimator.setEvaluator(new ArgbEvaluator());
         objectAnimator.addListener(new AnimatorListenerAdapter() {
@@ -2269,8 +2272,8 @@ public class BoomMenuButton extends FrameLayout
      */
     public void lightAnimationLayout() {
         ObjectAnimator objectAnimator = ObjectAnimator.ofInt(animationLayout, "backgroundColor",
-                ContextCompat.getColor(mContext, R.color.darkness),
-                ContextCompat.getColor(mContext, R.color.lightness))
+                dimType.value,
+                DimType.DIM_0.value)
                 .setDuration(duration + delay * (buttonNum - 1));
         objectAnimator.setEvaluator(new ArgbEvaluator());
         objectAnimator.addListener(new AnimatorListenerAdapter() {
@@ -2466,6 +2469,17 @@ public class BoomMenuButton extends FrameLayout
     public void setBoomButtonShadowOffset(float xOffset, float yOffset) {
         shadowLayout.setmDx(xOffset);
         shadowLayout.setmDy(yOffset);
+    }
+
+    /**
+     * Set the dim type.
+     * Dim_0 for no dim.
+     * Max is Dim_9.
+     *
+     * @param dimType
+     */
+    public void setDimType(DimType dimType) {
+        this.dimType = dimType;
     }
 
     /**

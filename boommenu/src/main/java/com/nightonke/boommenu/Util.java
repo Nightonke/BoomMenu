@@ -49,14 +49,14 @@ public class Util {
     public int getDarkerColor(int color) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
-        hsv[2] *= 0.8f;
+        hsv[2] *= 0.9f;
         return Color.HSVToColor(hsv);
     }
 
     public int getLighterColor(int color) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
-        hsv[2] *= 1.2f;
+        hsv[2] *= 1.1f;
         return Color.HSVToColor(hsv);
     }
 
