@@ -2,14 +2,13 @@ package com.nightonke.boommenu;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -21,9 +20,14 @@ public class HamButton extends FrameLayout {
     private Context mContext;
 
     private ShadowLayout shadowLayout;
-    private LinearLayout linearLayout;
+    private FrameLayout frameLayout;
+    private View ripple;
     private ImageView imageView;
     private TextView textView;
+
+    private ClickEffectType clickEffectType = ClickEffectType.RIPPLE;
+    private OnHamButtonClickListener onHamButtonClickListener;
+    private int index;
 
     private int width = 0;
     private int height = (int)Util.getInstance().dp2px(66);
@@ -39,16 +43,17 @@ public class HamButton extends FrameLayout {
 
         LayoutInflater.from(mContext).inflate(R.layout.ham_button, this, true);
         shadowLayout = (ShadowLayout)findViewById(R.id.shadow_layout);
-        linearLayout = (LinearLayout) findViewById(R.id.linear_layout);
+        frameLayout = (FrameLayout)findViewById(R.id.frame_layout);
+        ripple = findViewById(R.id.ripple);
         imageView = (ImageView)findViewById(R.id.image);
         textView = (TextView)findViewById(R.id.text);
 
-        width = Util.getInstance().getScreenWidth(getContext()) * 5 / 7;
+        width = Util.getInstance().getScreenWidth(getContext()) * 8 / 9;
         height = (int)Util.getInstance().dp2px(66);
 
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) linearLayout.getLayoutParams();
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) frameLayout.getLayoutParams();
         layoutParams.width = width - (int)Util.getInstance().dp2px(8);
-        linearLayout.setLayoutParams(layoutParams);
+        frameLayout.setLayoutParams(layoutParams);
         ViewGroup.LayoutParams layoutParams1 = shadowLayout.getLayoutParams();
         layoutParams1.width = width;
         layoutParams1.height = height + (int)Util.getInstance().dp2px(4);
@@ -57,12 +62,9 @@ public class HamButton extends FrameLayout {
 
     public void setOnHamButtonClickListener(
             final OnHamButtonClickListener onHamButtonClickListener, final int index) {
-        linearLayout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onHamButtonClickListener.onClick(index);
-            }
-        });
+        this.onHamButtonClickListener = onHamButtonClickListener;
+        this.index = index;
+        setRipple(clickEffectType);
     }
 
     public void setDrawable(Drawable drawable) {
@@ -73,8 +75,8 @@ public class HamButton extends FrameLayout {
         if (textView != null) textView.setText(text);
     }
 
-    public LinearLayout getLinearLayout() {
-        return linearLayout;
+    public FrameLayout getFrameLayout() {
+        return frameLayout;
     }
 
     public ImageView getImageView() {
@@ -85,9 +87,31 @@ public class HamButton extends FrameLayout {
         return textView;
     }
 
+    public void setRipple(ClickEffectType clickEffectType) {
+        this.clickEffectType = clickEffectType;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                && clickEffectType.equals(ClickEffectType.RIPPLE)) {
+            ripple.setVisibility(VISIBLE);
+            ripple.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onHamButtonClickListener.onClick(index);
+                }
+            });
+        } else {
+            ripple.setVisibility(GONE);
+            frameLayout.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onHamButtonClickListener.onClick(index);
+                }
+            });
+        }
+    }
+
     public void setColor(int pressedColor, int normalColor) {
         Util.getInstance().setHamButtonStateListDrawable(
-                linearLayout, width, height, pressedColor, normalColor);
+                frameLayout, width, height, pressedColor, normalColor);
     }
 
     public void setShadowColor(int mShadowColor) {

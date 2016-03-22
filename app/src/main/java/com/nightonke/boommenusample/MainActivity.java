@@ -1,13 +1,13 @@
 package com.nightonke.boommenusample;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.support.v7.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -26,6 +25,7 @@ import android.widget.Toast;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.BoomType;
 import com.nightonke.boommenu.ButtonType;
+import com.nightonke.boommenu.ClickEffectType;
 import com.nightonke.boommenu.DimType;
 import com.nightonke.boommenu.OrderType;
 import com.nightonke.boommenu.ParticleEffect;
@@ -72,6 +72,8 @@ public class MainActivity extends AppCompatActivity
 
     private RadioGroup showOrderTypeGroup;
     private RadioGroup hideOrderTypeGroup;
+
+    private RadioGroup clickEffect;
 
     private ProgressBar animationListener;
 
@@ -150,7 +152,7 @@ public class MainActivity extends AppCompatActivity
 
         int[][] colors = new int[3][2];
         for (int i = 0; i < 3; i++) {
-            colors[i][1] = GetRandomColor();
+            colors[i][1] = ContextCompat.getColor(mContext, R.color.material_white);
             colors[i][0] = Util.getInstance().getPressedColor(colors[i][1]);
         }
 
@@ -171,6 +173,7 @@ public class MainActivity extends AppCompatActivity
                 null);
 
         boomInfo.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
+        boomInfo.setTextViewColor(ContextCompat.getColor(mContext, R.color.black));
     }
 
     private void initBoom() {
@@ -466,6 +469,25 @@ public class MainActivity extends AppCompatActivity
         boomMenuButtonInActionBar.setHideOrderType(OrderType.DEFAULT);
 
         animationListener = (ProgressBar)findViewById(R.id.animation_listener);
+
+        clickEffect = (RadioGroup)findViewById(R.id.group_click_effect);
+        clickEffect.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.click_effect_ripple:
+                        boomMenuButton.setClickEffectType(ClickEffectType.RIPPLE);
+                        boomMenuButtonInActionBar.setClickEffectType(ClickEffectType.RIPPLE);
+                        boomInfo.setClickEffectType(ClickEffectType.RIPPLE);
+                        break;
+                    case R.id.click_effect_normal:
+                        boomMenuButton.setClickEffectType(ClickEffectType.NORMAL);
+                        boomMenuButtonInActionBar.setClickEffectType(ClickEffectType.NORMAL);
+                        boomInfo.setClickEffectType(ClickEffectType.NORMAL);
+                        break;
+                }
+            }
+        });
     }
 
     private BoomType getBoomType() {

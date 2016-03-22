@@ -1,7 +1,9 @@
 package com.nightonke.boommenu;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,8 +23,13 @@ public class CircleButton extends FrameLayout {
     private ShadowLayout shadowLayout;
     private FrameLayout frameLayout;
     private ImageButton imageButton;
+    private View ripple;
     private ImageView imageView;
     private TextView textView;
+
+    private ClickEffectType clickEffectType = ClickEffectType.RIPPLE;
+    private OnCircleButtonClickListener onCircleButtonClickListener;
+    private int index;
 
     private int radius = (int)Util.getInstance().dp2px(80) / 2;
 
@@ -39,19 +46,17 @@ public class CircleButton extends FrameLayout {
         shadowLayout = (ShadowLayout)findViewById(R.id.shadow_layout);
         frameLayout = (FrameLayout)findViewById(R.id.frame_layout);
         imageButton = (ImageButton)findViewById(R.id.image_button);
+        ripple = findViewById(R.id.ripple);
         imageView = (ImageView)findViewById(R.id.image_view);
         textView = (TextView)findViewById(R.id.text);
     }
 
     public void setOnCircleButtonClickListener(
-            final OnCircleButtonClickListener onCircleButtonClickListener,
-            final int index) {
-        imageButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onCircleButtonClickListener.onClick(index);
-            }
-        });
+            OnCircleButtonClickListener onCircleButtonClickListener,
+            int index) {
+        this.onCircleButtonClickListener = onCircleButtonClickListener;
+        this.index = index;
+        setRipple(clickEffectType);
     }
 
     public void setDrawable(Drawable drawable) {
@@ -81,6 +86,28 @@ public class CircleButton extends FrameLayout {
     public void setColor(int pressedColor, int normalColor) {
         Util.getInstance().setCircleButtonStateListDrawable(
                 imageButton, radius, pressedColor, normalColor);
+    }
+
+    public void setRipple(ClickEffectType clickEffectType) {
+        this.clickEffectType = clickEffectType;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                && clickEffectType.equals(ClickEffectType.RIPPLE)) {
+            ripple.setVisibility(VISIBLE);
+            ripple.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onCircleButtonClickListener.onClick(index);
+                }
+            });
+        } else {
+            ripple.setVisibility(GONE);
+            imageButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onCircleButtonClickListener.onClick(index);
+                }
+            });
+        }
     }
 
     public void setShadowColor(int mShadowColor) {

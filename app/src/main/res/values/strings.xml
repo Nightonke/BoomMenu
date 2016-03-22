@@ -28,4 +28,8 @@
 
     <string name="animation_listener">Animation Listener</string>
 
+    <string name="click_effect">Click Effect</string>
+    <string name="click_effect_ripple">Ripple</string>
+    <string name="click_effect_normal">Normal</string>
+
 </resources>

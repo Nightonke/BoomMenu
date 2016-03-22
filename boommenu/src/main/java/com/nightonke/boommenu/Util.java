@@ -1,25 +1,25 @@
 package com.nightonke.boommenu;
 
-import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.StateListDrawable;
-import android.graphics.drawable.shapes.OvalShape;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.StateSet;
 import android.view.Display;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 /**
  * Created by Weiping on 2016/3/19.
@@ -118,7 +118,7 @@ public class Util {
         Paint paintPressed = new Paint();
         paintPressed.setAntiAlias(true);
         paintPressed.setColor(pressedColor);
-        canvasPressed.drawRoundRect(new RectF(0, 0, width, height), dp2px(2), dp2px(2), paintPressed);
+        canvasPressed.drawRoundRect(new RectF(0, 0, width, height), dp2px(3), dp2px(3), paintPressed);
 
         Bitmap imageNormal = Bitmap.createBitmap(
                 width,
@@ -128,7 +128,7 @@ public class Util {
         Paint paintNormal = new Paint();
         paintNormal.setAntiAlias(true);
         paintNormal.setColor(normalColor);
-        canvasNormal.drawRoundRect(new RectF(0, 0, width, height), dp2px(2), dp2px(2), paintNormal);
+        canvasNormal.drawRoundRect(new RectF(0, 0, width, height), dp2px(3), dp2px(3), paintNormal);
 
         StateListDrawable stateListDrawable= new StateListDrawable();
         stateListDrawable.addState(new int[]{android.R.attr.state_pressed},

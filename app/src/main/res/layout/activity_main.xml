@@ -308,10 +308,42 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:text="@string/click_effect"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginTop="20dp"
+                />
+
+            <RadioGroup
+                android:id="@+id/group_click_effect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <RadioButton
+                    android:id="@+id/click_effect_ripple"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/click_effect_ripple"
+                    android:checked="true"
+                    />
+
+                <RadioButton
+                    android:id="@+id/click_effect_normal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/click_effect_normal"
+                    />
+
+            </RadioGroup>
+
         </LinearLayout>
 
     </ScrollView>
-
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/boom"

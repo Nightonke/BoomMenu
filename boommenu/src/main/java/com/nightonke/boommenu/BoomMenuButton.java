@@ -9,9 +9,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +44,7 @@ public class BoomMenuButton extends FrameLayout
 
     private ShadowLayout shadowLayout;
     private FrameLayout frameLayout;
+    private View ripple;
 
     private int[][] startLocations = new int[MAX_CIRCLE_BUTTON_NUMBER][2];
     private int[][] endLocations = new int[MAX_CIRCLE_BUTTON_NUMBER][2];
@@ -108,6 +109,8 @@ public class BoomMenuButton extends FrameLayout
     private boolean cancelable = true;
     // Dim value
     private DimType dimType = DimType.DIM_6;
+    // Click effect
+    private ClickEffectType clickEffectType = ClickEffectType.RIPPLE;
 
     private OnClickListener onClickListener = null;
     private AnimatorListener animatorListener = null;
@@ -146,19 +149,16 @@ public class BoomMenuButton extends FrameLayout
             LayoutInflater.from(context).inflate(R.layout.boom_menu_button, this, true);
             shadowLayout = (ShadowLayout)findViewById(R.id.shadow_layout);
             frameLayout = (FrameLayout)findViewById(R.id.frame_layout);
-            frameLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    shoot();
-                }
-            });
+            ripple = findViewById(R.id.ripple);
+
+            setRipple(clickEffectType);
 
             setBoomButtonBackgroundColor(
                     ContextCompat.getColor(mContext, R.color.default_boom_button_color_pressed),
                     ContextCompat.getColor(mContext, R.color.default_boom_button_color));
         }
 
-        hamButtonWidth = (int) (Util.getInstance().getScreenWidth(getContext()) * 5 / 7
+        hamButtonWidth = (int) (Util.getInstance().getScreenWidth(getContext()) * 8 / 9
                 + Util.getInstance().dp2px(4));
     }
 
@@ -243,7 +243,7 @@ public class BoomMenuButton extends FrameLayout
             placeDots();
         } else if (buttonType.equals(ButtonType.HAM)) {
             // hamburger button
-            hamButtonWidth = Util.getInstance().getScreenWidth(getContext()) * 5 / 7;
+            hamButtonWidth = Util.getInstance().getScreenWidth(getContext()) * 8 / 9;
             // create buttons
             buttonNum = drawables.length;
             for (int i = 0; i < buttonNum; i++) {
@@ -2480,6 +2480,75 @@ public class BoomMenuButton extends FrameLayout
      */
     public void setDimType(DimType dimType) {
         this.dimType = dimType;
+    }
+
+    /**
+     * Set the click effect.
+     *
+     * @param clickEffectType
+     */
+    public void setClickEffectType(ClickEffectType clickEffectType) {
+        setRipple(clickEffectType);
+        if (buttonType.equals(ButtonType.CIRCLE)) {
+            for (int i = 0; i < buttonNum; i++) circleButtons[i].setRipple(clickEffectType);
+        } else if (buttonType.equals(ButtonType.HAM)) {
+            for (int i = 0; i < buttonNum; i++) hamButtons[i].setRipple(clickEffectType);
+        }
+    }
+
+    /**
+     * Set the click effect of the boom button.
+     *
+     * @param clickEffectType
+     */
+    private void setRipple(ClickEffectType clickEffectType) {
+        this.clickEffectType = clickEffectType;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                && clickEffectType.equals(ClickEffectType.RIPPLE)
+                && ripple != null) {
+            ripple.setVisibility(VISIBLE);
+            ripple.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    shoot();
+                }
+            });
+        } else {
+            if (ripple != null) ripple.setVisibility(GONE);
+            frameLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    shoot();
+                }
+            });
+        }
+    }
+
+    /**
+     * Set the color of all textviews in the sub buttons.
+     *
+     * @param color
+     */
+    public void setTextViewColor(int color) {
+        if (buttonType.equals(ButtonType.CIRCLE)) {
+            for (int i = 0; i < buttonNum; i++) circleButtons[i].getTextView().setTextColor(color);
+        } else if (buttonType.equals(ButtonType.HAM)) {
+            for (int i = 0; i < buttonNum; i++) hamButtons[i].getTextView().setTextColor(color);
+        }
+    }
+
+    /**
+     * Set the color of all textviews in the sub buttons corresonding to the array.
+     *
+     * @param colors
+     */
+    public void setTextViewColor(int[] colors) {
+        int length = Math.min(buttonNum, colors.length);
+        if (buttonType.equals(ButtonType.CIRCLE)) {
+            for (int i = 0; i < length; i++) circleButtons[i].getTextView().setTextColor(colors[i]);
+        } else if (buttonType.equals(ButtonType.HAM)) {
+            for (int i = 0; i < length; i++) hamButtons[i].getTextView().setTextColor(colors[i]);
+        }
     }
 
     /**
