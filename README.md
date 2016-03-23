@@ -91,7 +91,7 @@ boomMenuButton = (BoomMenuButton)findViewById(R.id.boom);
 **3.**Initialize the boom menu button in the onWindowFocusChanged() method in activity:
 ```java
 @Override
-public void onWindowFocusChanged(boolean hasFocus) {
+onWindowFocusChanged(boolean hasFocus) {
     super.onWindowFocusChanged(hasFocus);
     
     boomMenuButton.init(
@@ -205,9 +205,36 @@ There are 2 types of sub buttons in BMB(boom menu button). Hamburger and circle.
 For hamberger type, there are [1, 4] sub buttons. For circle type, there are [1, 9] sub buttons.
 
 ### Boom Types
-There are 5 boom types provided in this version. They are ```BoomType.LINE```, ```BoomType.PARABOLA_2``` and ``````, ```BoomType.HORIZONTAL_THROW```, ```BoomType.PARABOLA_2``` and ```BoomType.HORIZONTAL_THROW_2```. Just try them for fun in the demo. You can choose your favorite BoomType when initializing the BMB, or set it:
+There are 5 boom types provided in this version. They are ```BoomType.LINE```, ```BoomType.PARABOLA_2``` , ```BoomType.HORIZONTAL_THROW```, ```BoomType.PARABOLA_2``` and ```BoomType.HORIZONTAL_THROW_2```. Just try them for fun in the demo. You can choose your favorite BoomType when initializing the BMB, or set it:
 ```java
 setBoomType(newBoomType);
 ```
+
+### Place Types
+There are 32 types for placing the sub buttons in BMB or in the screen. You can use ```PlaceType.CIRCLE_X_X``` and ```PlaceType.HAM_X_X``` (the former X is the number of sub buttons and the latter X is type number) to initialize BMB.  
+![PlayType 1~8](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_1.png)  
+![PlayType 9~16](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_2.png)  
+![PlayType 17~24](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_3.png)  
+![PlayType 25~32](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_4.png)  
+For more information for Place type, please check [PlaceType.class](https://github.com/Nightonke/BoomMenu/blob/master/boommenu/src/main/java/com/nightonke/boommenu/Types/PlaceType.java)
+
+### Ease Types
+You can set 30 ease types for 6 part of animations when the BMB is showing or hiding. You can set the moving, scaling and rotating or showing and hiding animation when initializing the BMB. And also, you can set 6 types by the setters:
+```java
+setShowMoveEaseType(showMoveEaseType);
+
+setShowScaleEaseType(showScaleEaseType);
+
+setShowRotateEaseType(showRotateEaseType);
+
+setHideMoveEaseType(hideMoveEaseType);
+
+setHideScaleEaseType(hideScaleEaseType);
+
+setHideRotateEaseType(hideRotateEaseType);
+```
+For more ease types, you can check [Ease Type Package](https://github.com/Nightonke/BoomMenu/tree/master/boommenu/src/main/java/com/nightonke/boommenu/Eases). Or check the [library](https://github.com/Nightonke/WoWoViewPager#ease) that I made(This part is the same).
+
+
 
 
