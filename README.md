@@ -40,6 +40,8 @@ Yes, this library is about a menu which can ... BOOM!
 18. [Sub Button Texts Color]()
 19. [Dim Types]()
 20. [Shadow of Sub Buttons and Boom Button]()
+21. [Get States and Dismiss]()
+22. [Get Sub Views of Sub Button]()
 
 [Versions](https://github.com/Nightonke/BoomMenu#versions)  
 [Todo](https://github.com/Nightonke/BoomMenu#todo)  
@@ -219,7 +221,7 @@ There are 32 types for placing the sub buttons in BMB or in the screen. You can 
 For more information for Place type, please check [PlaceType.class](https://github.com/Nightonke/BoomMenu/blob/master/boommenu/src/main/java/com/nightonke/boommenu/Types/PlaceType.java)
 
 ### Ease Types
-You can set 30 ease types for 6 part of animations when the BMB is showing or hiding. You can set the moving, scaling and rotating or showing and hiding animation when initializing the BMB. And also, you can set 6 types by the setters:
+You can set 30 ease types for 6 part of animations when the BMB is showing or hiding. You can set the moving, scaling and rotating or showing and hiding animation when initializing the BMB, or set them to null to use the default ease types. And also, you can set 6 types by the setters:
 ```java
 setShowMoveEaseType(showMoveEaseType);
 
@@ -235,6 +237,68 @@ setHideRotateEaseType(hideRotateEaseType);
 ```
 For more ease types, you can check [Ease Type Package](https://github.com/Nightonke/BoomMenu/tree/master/boommenu/src/main/java/com/nightonke/boommenu/Eases). Or check the [library](https://github.com/Nightonke/WoWoViewPager#ease) that I made(This part is the same).
 
+### Boom Animation Duration
+Set the duration of the boom animation by ```setDuration(duration)``` (in ms). The default duration is 800ms.
 
+### Animation Start Delay
+Use ```setDelay(delay)``` to set the delay between each 2 sub buttons(in ms). For instance, if the delay is 0, then all the sub buttons will boom out at the same time. The default delay is 100ms.
 
+### Rotation Degree
+You can set the degree to rotate the sub button. But only for circle types, I forbade applying rotation animation to hamburger types button because the shadow or a rolling rectangle is hard to display. The default rotation degree is 720. Set the degree when initializing BMB or use ```setRotateDegree(rotateDegree);```
 
+### Auto Dismiss
+When you click a sub button, the BMB will automatically hide all the sub buttons. If you want to stop this, just use ```setAutoDismiss(autoDismiss)``` to set autoDismiss to false.
+
+### Cancelable
+When click other place except the sub buttons, the BMB will hide all the sub buttons. You can use ```setCancelable(cancelable)``` to set the value to false. But remember to set one button to perform the cancelable job, otherwise the BMB will be uncancelable.
+
+### Show Order and Hide Order
+Set the order of showing or hiding sub buttons with ```OrderType.DEFAULT```, ```OrderType.REVERSE``` and ```OrderType.RANDOM```. Use ```setShowOrderType(showOrderType)``` and ```setHideOrderType(hideOrderType)``` to set these values.
+
+### Sub Buttons Click Listener
+```java
+boomMenuButton.setOnSubButtonClickListener(new BoomMenuButton.OnSubButtonClickListener() {
+    @Override
+    public void onClick(int buttonIndex) {
+        // return the index of the sub button clicked
+    }
+});
+```
+
+### Animation Listener
+```java
+boomInfo.setAnimatorListener(new BoomMenuButton.AnimatorListener() {
+    @Override
+    public void toShow() {
+        // the moment when the BMB is clicked and the showing animation is about to start
+    }
+
+    @Override
+    public void showing(float fraction) {
+        // the showing animation is playing, the fraction is the process of animation
+    }
+
+    @Override
+    public void showed() {
+        // the showing animation is just played 
+    }
+
+    @Override
+    public void toHide() {
+        // the BMB is about to play the hiding animation
+    }
+
+    @Override
+    public void hiding(float fraction) {
+        // the hiding animation is playing
+    }
+
+    @Override
+    public void hided() {
+        // the hiding animation is just played
+    }
+});
+```
+
+### Click Effects
+Use ```setClickEffectType(clickEffectType)``` set click effect of all the buttons of BMB(including itself). Use ```ClickEffectType.RIPPLE``` to set the ripple effect(only word after Android 5.0) or ```ClickEffectType.NORMAL``` to set the normal effect of buttons with ```setClickEffectType(clickEffectType)``` method.
