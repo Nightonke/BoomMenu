@@ -63,37 +63,21 @@ public class EasyUseActivity extends AppCompatActivity {
             subButtonColors[i][0] = Util.getInstance().getPressedColor(subButtonColors[i][1]);
         }
 
-
-        /**
-         * @param drawables The drawables of images of sub buttons. Can not be null.
-         * @param strings The texts of sub buttons, ok to be null.
-         * @param colors The colors of sub buttons, including pressed-state and normal-state.
-         * @param buttonType The button type.
-         * @param boomType The boom type.
-         * @param placeType The place type.
-         * @param particleEffect Whether use particle effect.
-         * @param showMoveEaseType Ease type to move the sub buttons when showing.
-         * @param showScaleEaseType Ease type to scale the sub buttons when showing.
-         * @param showRotateEaseType Ease type to rotate the sub buttons when showing.
-         * @param hideMoveEaseType Ease type to move the sub buttons when dismissing.
-         * @param hideScaleEaseType Ease type to scale the sub buttons when dismissing.
-         * @param hideRotateEaseType Ease type to rotate the sub buttons when dismissing.
-         * @param rotateDegree Rotation degree.
-         */
         boomMenuButton.init(
-                subButtonDrawables,
-                subButtonTexts,
-                subButtonColors,
-                ButtonType.HAM,
-                BoomType.PARABOLA,
-                PlaceType.HAM_3_1,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
+                subButtonDrawables, // The drawables of images of sub buttons. Can not be null.
+                subButtonTexts,     // The texts of sub buttons, ok to be null.
+                subButtonColors,    // The colors of sub buttons, including pressed-state and normal-state.
+                ButtonType.HAM,     // The button type.
+                BoomType.PARABOLA,  // The boom type.
+                PlaceType.HAM_3_1,  // The place type.
+                null,               // Ease type to move the sub buttons when showing.
+                null,               // Ease type to scale the sub buttons when showing.
+                null,               // Ease type to rotate the sub buttons when showing.
+                null,               // Ease type to move the sub buttons when dismissing.
+                null,               // Ease type to scale the sub buttons when dismissing.
+                null,               // Ease type to rotate the sub buttons when dismissing.
+                null                // Rotation degree.
+        );
 
         boomMenuButton.setTextViewColor(ContextCompat.getColor(this, R.color.black));
     }
