@@ -14,45 +14,56 @@ Yes, this library is about a menu which can ... BOOM!
 # Guide
 
 [中文文档](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md)  
-[Gradle](https://github.com/Nightonke/BoomMenu#gradle)  
+[Gradle & Maven](https://github.com/Nightonke/BoomMenu#gradle-and-maven)  
 [Note](https://github.com/Nightonke/BoomMenu#note)  
 [Demo](https://github.com/Nightonke/BoomMenu#demo)  
 
 ###Usage
 
-1. [Easy to Use in 3 Steps]()
-2. [Use in Action Bar]()
-3. [Use in Floating Action Button]()
-4. [Hamburger Button and Circle Button]()
-5. [Number of Sub Buttons]()
-6. [Boom Types]()
-7. [Place Types]()
-8. [Ease Types]()
-9. [Boom Animation Duration]()
-10. [Animation Start Delay]()
-11. [Rotation Degree]()
-12. [Auto Dismiss]()
-13. [Cancelable]()
-14. [Show Order and Hide Order]()
-15. [Sub Buttons Click Listener]()
-16. [Animation Listener]()
-17. [Click Effects]()
-18. [Sub Button Texts Color]()
-19. [Dim Types]()
-20. [Shadow of Sub Buttons and Boom Button]()
+1. [Easy to Use in 3 Steps](https://github.com/Nightonke/BoomMenu#easy-to-use-in-3-steps)
+2. [Use in Action Bar](https://github.com/Nightonke/BoomMenu#use-in-action-bar)
+3. [Use in Floating Action Button](https://github.com/Nightonke/BoomMenu#use-in-floating-action-button)
+4. [Hamburger Button and Circle Button](https://github.com/Nightonke/BoomMenu#hamburger-button-and-circle-button)
+5. [Number of Sub Buttons](https://github.com/Nightonke/BoomMenu#number-of-sub-buttons)
+6. [Boom Types](https://github.com/Nightonke/BoomMenu#boom-types)
+7. [Place Types](https://github.com/Nightonke/BoomMenu#place-types)
+8. [Ease Types](https://github.com/Nightonke/BoomMenu#ease-types)
+9. [Boom Animation Duration](https://github.com/Nightonke/BoomMenu#boom-animation-duration)
+10. [Animation Start Delay](https://github.com/Nightonke/BoomMenu#animation-start-delay)
+11. [Rotation Degree](https://github.com/Nightonke/BoomMenu#rotation-degree)
+12. [Auto Dismiss](https://github.com/Nightonke/BoomMenu#auto-dismiss)
+13. [Cancelable](https://github.com/Nightonke/BoomMenu#cancelable)
+14. [Show Order and Hide Order](https://github.com/Nightonke/BoomMenu#show-order-and-hide-order)
+15. [Sub Buttons Click Listener](https://github.com/Nightonke/BoomMenu#sub-buttons-click-listener)
+16. [Animation Listener](https://github.com/Nightonke/BoomMenu#animation-listener)
+17. [Click Effects](https://github.com/Nightonke/BoomMenu#click-effects)
+18. [Sub Button Texts Color](https://github.com/Nightonke/BoomMenu#sub-button-texts-color)
+19. [Dim Types](https://github.com/Nightonke/BoomMenu#dim-types)
+20. [Shadow of Sub Buttons and Boom Button](https://github.com/Nightonke/BoomMenu#shadow-of-sub-buttons-and-boom-button)
+21. [Get States and Dismiss](https://github.com/Nightonke/BoomMenu#get-states-and-dismiss)
+22. [Get Sub Views of Sub Button](https://github.com/Nightonke/BoomMenu#get-sub-views-of-sub-button)
 
 [Versions](https://github.com/Nightonke/BoomMenu#versions)  
 [Todo](https://github.com/Nightonke/BoomMenu#todo)  
 [License](https://github.com/Nightonke/BoomMenu#license)  
 
-# Gradle
+# Gradle and Maven
 Just add the "compile 'com.nightonke:BoomMenu:1.0.0'" in your build.gradle of your module.  
 ```
 dependencies {
     ...
-    compile 'com.nightonke:BoomMenu:1.0.0'
+    compile 'com.nightonke:boommenu:1.0.1'
     ...
 }
+```
+Or maven:
+```maven
+<dependency>
+  <groupId>com.nightonke</groupId>
+  <artifactId>boommenu</artifactId>
+  <version>1.0.1</version>
+  <type>pom</type>
+</dependency>
 ```
 
 # Note
@@ -91,7 +102,7 @@ boomMenuButton = (BoomMenuButton)findViewById(R.id.boom);
 **3.**Initialize the boom menu button in the onWindowFocusChanged() method in activity:
 ```java
 @Override
-public void onWindowFocusChanged(boolean hasFocus) {
+onWindowFocusChanged(boolean hasFocus) {
     super.onWindowFocusChanged(hasFocus);
     
     boomMenuButton.init(
@@ -205,9 +216,174 @@ There are 2 types of sub buttons in BMB(boom menu button). Hamburger and circle.
 For hamberger type, there are [1, 4] sub buttons. For circle type, there are [1, 9] sub buttons.
 
 ### Boom Types
-There are 5 boom types provided in this version. They are ```BoomType.LINE```, ```BoomType.PARABOLA_2``` and ``````, ```BoomType.HORIZONTAL_THROW```, ```BoomType.PARABOLA_2``` and ```BoomType.HORIZONTAL_THROW_2```. Just try them for fun in the demo. You can choose your favorite BoomType when initializing the BMB, or set it:
+There are 5 boom types provided in this version. They are ```BoomType.LINE```, ```BoomType.PARABOLA_2``` , ```BoomType.HORIZONTAL_THROW```, ```BoomType.PARABOLA_2``` and ```BoomType.HORIZONTAL_THROW_2```. Just try them for fun in the demo. You can choose your favorite BoomType when initializing the BMB, or set it:
 ```java
 setBoomType(newBoomType);
 ```
 
+### Place Types
+There are 32 types for placing the sub buttons in BMB or in the screen. You can use ```PlaceType.CIRCLE_X_X``` and ```PlaceType.HAM_X_X``` (the former X is the number of sub buttons and the latter X is type number) to initialize BMB.  
+![PlayType 1~8](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_1.png)  
+![PlayType 9~16](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_2.png)  
+![PlayType 17~24](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_3.png)  
+![PlayType 25~32](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_4.png)  
+For more information for Place type, please check [PlaceType.class](https://github.com/Nightonke/BoomMenu/blob/master/boommenu/src/main/java/com/nightonke/boommenu/Types/PlaceType.java)
 
+### Ease Types
+You can set 30 ease types for 6 part of animations when the BMB is showing or hiding. You can set the moving, scaling and rotating or showing and hiding animation when initializing the BMB, or set them to null to use the default ease types. And also, you can set 6 types by the setters:
+```java
+setShowMoveEaseType(showMoveEaseType);
+
+setShowScaleEaseType(showScaleEaseType);
+
+setShowRotateEaseType(showRotateEaseType);
+
+setHideMoveEaseType(hideMoveEaseType);
+
+setHideScaleEaseType(hideScaleEaseType);
+
+setHideRotateEaseType(hideRotateEaseType);
+```
+For more ease types, you can check [Ease Type Package](https://github.com/Nightonke/BoomMenu/tree/master/boommenu/src/main/java/com/nightonke/boommenu/Eases). Or check the [library](https://github.com/Nightonke/WoWoViewPager#ease) that I made(This part is the same).
+
+### Boom Animation Duration
+Set the duration of the boom animation by ```setDuration(duration)``` (in ms). The default duration is 800ms.
+
+### Animation Start Delay
+Use ```setDelay(delay)``` to set the delay between each 2 sub buttons(in ms). For instance, if the delay is 0, then all the sub buttons will boom out at the same time. The default delay is 100ms.
+
+### Rotation Degree
+You can set the degree to rotate the sub button. But only for circle types, I forbade applying rotation animation to hamburger types button because the shadow or a rolling rectangle is hard to display. The default rotation degree is 720. Set the degree when initializing BMB or use ```setRotateDegree(rotateDegree);```
+
+### Auto Dismiss
+When you click a sub button, the BMB will automatically hide all the sub buttons. If you want to stop this, just use ```setAutoDismiss(autoDismiss)``` to set autoDismiss to false.
+
+### Cancelable
+When click other place except the sub buttons, the BMB will hide all the sub buttons. You can use ```setCancelable(cancelable)``` to set the value to false. But remember to set one button to perform the cancelable job, otherwise the BMB will be uncancelable.
+
+### Show Order and Hide Order
+Set the order of showing or hiding sub buttons with ```OrderType.DEFAULT```, ```OrderType.REVERSE``` and ```OrderType.RANDOM```. Use ```setShowOrderType(showOrderType)``` and ```setHideOrderType(hideOrderType)``` to set these values.
+
+### Sub Buttons Click Listener
+```java
+boomMenuButton.setOnSubButtonClickListener(new BoomMenuButton.OnSubButtonClickListener() {
+    @Override
+    public void onClick(int buttonIndex) {
+        // return the index of the sub button clicked
+    }
+});
+```
+
+### Animation Listener
+```java
+boomInfo.setAnimatorListener(new BoomMenuButton.AnimatorListener() {
+    @Override
+    public void toShow() {
+        // the moment when the BMB is clicked and the showing animation is about to start
+    }
+
+    @Override
+    public void showing(float fraction) {
+        // the showing animation is playing, the fraction is the process of animation
+    }
+
+    @Override
+    public void showed() {
+        // the showing animation is just played 
+    }
+
+    @Override
+    public void toHide() {
+        // the BMB is about to play the hiding animation
+    }
+
+    @Override
+    public void hiding(float fraction) {
+        // the hiding animation is playing
+    }
+
+    @Override
+    public void hided() {
+        // the hiding animation is just played
+    }
+});
+```
+
+### Click Effects
+Use ```setClickEffectType(clickEffectType)``` set click effect of all the buttons of BMB(including itself). Use ```ClickEffectType.RIPPLE``` to set the ripple effect(only word after Android 5.0) or ```ClickEffectType.NORMAL``` to set the normal effect of buttons with ```setClickEffectType(clickEffectType)``` method.
+
+### Sub Button Texts Color
+Use ```setTextViewColor(int color)``` to set the color of all the textviews of sub buttons. Or use ```setTextViewColor(int[] colors)``` to set different color of textviews of sub buttons.
+
+### Dim Types
+You can use DimType to control the dim degree when showing the sub buttons. You may notice that in the demo, when you click the floating action button, the background would not be dim. But, when you click the BMB in the action bar, the background would be dim. There are 10 values of dim degree:
+```java
+public enum DimType {
+    DIM_0(Color.parseColor("#00000000")),
+    DIM_1(Color.parseColor("#11000000")),
+    DIM_2(Color.parseColor("#22000000")),
+    DIM_3(Color.parseColor("#33000000")),
+    DIM_4(Color.parseColor("#44000000")),
+    DIM_5(Color.parseColor("#55000000")),
+    DIM_6(Color.parseColor("#66000000")),
+    DIM_7(Color.parseColor("#77000000")),
+    DIM_8(Color.parseColor("#88000000")),
+    DIM_9(Color.parseColor("#99000000"));
+    
+    public int value;
+
+    DimType(int value) {
+        this.value = value;
+    }
+}
+```
+Use ```setDimType(DimType dimType)``` to set the dim degree of BMB. For instance, you can use ```boomMenuButton.setDimType(DimType.DIM_0);``` to keep the background light when showing sub buttons.
+
+### Shadow of Sub Buttons and Boom Button
+You can set the offset of the shadow of sub buttons and the BMB. Use ```setSubButtonShadowOffset(float xOffset, float yOffset)``` (in pixel)to set the offset of sub buttons and ```setBoomButtonShadowOffset(float xOffset, float yOffset)``` to the BMB's.
+
+### Get States and Dismiss
+You can get the current state of BMB with:
+```java
+boolean isClosed();
+
+boolean isClosing();
+
+boolean isOpen();
+
+boolean isOpening();
+```
+
+And use ```boolean dismiss()``` to force the BMB to play hiding animation. Returns true if the BMB is going to hide, returns false if the BMB cannot hide right now(because it is showing, hiding or hided).
+
+### Get Sub Views of Sub Button
+If you wanna modify the sub views in the sub button. There are several methods to do that:
+```java
+ImageView[] getImageViews();
+
+TextView[] getTextViews();
+```
+
+# Versions
+### 1.0.1  
+First version.
+
+# Todo
+1. Particle effects are coming soon.
+2. Make BMB ready for using in listview.  
+
+# License
+
+    Copyright 2016 Nightonke
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
