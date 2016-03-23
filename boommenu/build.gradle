@@ -1,5 +1,29 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'boommenu'
+
+    publishedGroupId = 'com.nightonke'
+    libraryName = 'boommenu'
+    artifact = 'boommenu'
+
+    libraryDescription = 'A menu which can ... BOOM!'
+
+    siteUrl = 'https://github.com/Nightonke/BoomMenu'
+    gitUrl = 'https://github.com/Nightonke/BoomMenu.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'nightonke'
+    developerName = 'Weiping Huang'
+    developerEmail = 'nightonke@outlook.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -8,7 +32,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
     }
     buildTypes {
         release {
@@ -21,5 +45,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:appcompat-v7:23.2.0'
 }
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'

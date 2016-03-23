@@ -11,6 +11,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nightonke.boommenu.Types.ClickEffectType;
+
 /**
  * Created by Weiping on 2016/3/19.
  */

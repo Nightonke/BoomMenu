@@ -23,13 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nightonke.boommenu.BoomMenuButton;
-import com.nightonke.boommenu.BoomType;
-import com.nightonke.boommenu.ButtonType;
-import com.nightonke.boommenu.ClickEffectType;
-import com.nightonke.boommenu.DimType;
-import com.nightonke.boommenu.OrderType;
-import com.nightonke.boommenu.ParticleEffect;
-import com.nightonke.boommenu.PlaceType;
+import com.nightonke.boommenu.Types.BoomType;
+import com.nightonke.boommenu.Types.ButtonType;
+import com.nightonke.boommenu.Types.ClickEffectType;
+import com.nightonke.boommenu.Types.DimType;
+import com.nightonke.boommenu.Types.OrderType;
+import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Util;
 
 import java.util.Random;
@@ -37,7 +36,8 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity
         implements
         BoomMenuButton.OnSubButtonClickListener,
-        BoomMenuButton.AnimatorListener {
+        BoomMenuButton.AnimatorListener,
+        View.OnClickListener {
 
     private BoomMenuButton boomMenuButton;
     private BoomMenuButton boomMenuButtonInActionBar;
@@ -163,7 +163,6 @@ public class MainActivity extends AppCompatActivity
                 ButtonType.HAM,
                 BoomType.PARABOLA,
                 PlaceType.HAM_3_1,
-                ParticleEffect.NONE,
                 null,
                 null,
                 null,
@@ -174,6 +173,7 @@ public class MainActivity extends AppCompatActivity
 
         boomInfo.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
         boomInfo.setTextViewColor(ContextCompat.getColor(mContext, R.color.black));
+        boomInfo.setBoomType(BoomType.PARABOLA_2);
     }
 
     private void initBoom() {
@@ -233,7 +233,6 @@ public class MainActivity extends AppCompatActivity
                 buttonType,
                 getBoomType(),
                 getPlaceType(),
-                ParticleEffect.NONE,
                 null,
                 null,
                 null,
@@ -249,7 +248,6 @@ public class MainActivity extends AppCompatActivity
                 buttonType,
                 getBoomType(),
                 getPlaceType(),
-                ParticleEffect.NONE,
                 null,
                 null,
                 null,
@@ -488,6 +486,8 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
+        findViewById(R.id.easy_example).setOnClickListener(this);
     }
 
     private BoomType getBoomType() {
@@ -524,7 +524,7 @@ public class MainActivity extends AppCompatActivity
             placeTypeButtons = new RadioButton[length];
             for (int i = 0; i < length; i++) {
                 placeTypeButtons[i] = new RadioButton(this);
-                placeTypeButtons[i].setText("HAM" + index + "_" + (i + 1));
+                placeTypeButtons[i].setText("HAM_" + index + "_" + (i + 1));
                 placeTypeButtons[i].setLayoutParams(new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -695,8 +695,23 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        boomMenuButton.dismiss();
-        boomMenuButtonInActionBar.dismiss();
-        boomInfo.dismiss();
+        if (boomMenuButton.isClosed()
+                && boomMenuButtonInActionBar.isClosed()
+                && boomInfo.isClosed()) {
+            super.onBackPressed();
+        } else {
+            boomMenuButton.dismiss();
+            boomMenuButtonInActionBar.dismiss();
+            boomInfo.dismiss();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.easy_example:
+                startActivity(new Intent(this, EasyUseActivity.class));
+                break;
+        }
     }
 }

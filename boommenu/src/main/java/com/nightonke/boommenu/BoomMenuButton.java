@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nightonke.boommenu.Eases.EaseType;
+import com.nightonke.boommenu.Types.BoomType;
+import com.nightonke.boommenu.Types.ButtonType;
+import com.nightonke.boommenu.Types.ClickEffectType;
+import com.nightonke.boommenu.Types.DimType;
+import com.nightonke.boommenu.Types.OrderType;
+import com.nightonke.boommenu.Types.PlaceType;
+import com.nightonke.boommenu.Types.StateType;
 
 import java.util.Random;
 
@@ -60,6 +68,11 @@ public class BoomMenuButton extends FrameLayout
 
     // Is in action bar
     private boolean isInActionBar = false;
+    // Boom button color
+    private int boomButtonColor = 0;
+    // Boom button pressed color
+    private int boomButtonPressedColor = 0;
+
     // Frames of animations
     private int frames = 80;
     // Duration of animations
@@ -76,8 +89,6 @@ public class BoomMenuButton extends FrameLayout
     private BoomType boomType = BoomType.HORIZONTAL_THROW;
     // Place type
     private PlaceType placeType = null;
-    // Particle effect
-    private ParticleEffect particleEffect;
     // Default dot width
     private int dotWidth = 10;
     // Default circle button width
@@ -131,6 +142,10 @@ public class BoomMenuButton extends FrameLayout
         if (attr != null) {
             try {
                 isInActionBar = attr.getBoolean(R.styleable.BoomMenuButton_boom_inActionBar, false);
+                boomButtonColor = attr.getColor(R.styleable.BoomMenuButton_boom_button_color,
+                        ContextCompat.getColor(mContext, R.color.default_boom_button_color));
+                boomButtonPressedColor = attr.getColor(R.styleable.BoomMenuButton_boom_button_pressed_color,
+                        ContextCompat.getColor(mContext, R.color.default_boom_button_color_pressed));
             } finally {
                 attr.recycle();
             }
@@ -152,14 +167,12 @@ public class BoomMenuButton extends FrameLayout
             ripple = findViewById(R.id.ripple);
 
             setRipple(clickEffectType);
-
-            setBoomButtonBackgroundColor(
-                    ContextCompat.getColor(mContext, R.color.default_boom_button_color_pressed),
-                    ContextCompat.getColor(mContext, R.color.default_boom_button_color));
+            setBoomButtonBackgroundColor(boomButtonPressedColor, boomButtonColor);
         }
 
         hamButtonWidth = (int) (Util.getInstance().getScreenWidth(getContext()) * 8 / 9
                 + Util.getInstance().dp2px(4));
+
     }
 
     /**
@@ -168,7 +181,7 @@ public class BoomMenuButton extends FrameLayout
      * Because the width and height of boom menu button is 0.
      * Call this in:
      *
-     * @Override
+     * (This method needs to be overrided in activity)
      * public void onWindowFocusChanged(boolean hasFocus) {
      *     super.onWindowFocusChanged(hasFocus);
      *     init(...);
@@ -180,7 +193,6 @@ public class BoomMenuButton extends FrameLayout
      * @param buttonType The button type.
      * @param boomType The boom type.
      * @param placeType The place type.
-     * @param particleEffect Whether use particle effect.
      * @param showMoveEaseType Ease type to move the sub buttons when showing.
      * @param showScaleEaseType Ease type to scale the sub buttons when showing.
      * @param showRotateEaseType Ease type to rotate the sub buttons when showing.
@@ -196,7 +208,6 @@ public class BoomMenuButton extends FrameLayout
             ButtonType buttonType,
             BoomType boomType,
             PlaceType placeType,
-            ParticleEffect particleEffect,
             EaseType showMoveEaseType,
             EaseType showScaleEaseType,
             EaseType showRotateEaseType,
@@ -212,7 +223,6 @@ public class BoomMenuButton extends FrameLayout
         this.boomType = boomType;
         if (placeType == null) throw new RuntimeException("Place type is null!");
         else this.placeType = placeType;
-        if (particleEffect != null) this.particleEffect = particleEffect;
         if (showMoveEaseType != null) this.showMoveEaseType = showMoveEaseType;
         if (showScaleEaseType != null) this.showScaleEaseType = showScaleEaseType;
         if (showRotateEaseType != null) this.showRotateEaseType = showRotateEaseType;
@@ -1934,7 +1944,8 @@ public class BoomMenuButton extends FrameLayout
             float y2 = endPoint[1];
             float x3 = (startPoint[0] + endPoint[0]) / 2;
             float y3 = (Util.getInstance().getScreenHeight(mContext)
-                    + Math.min(startPoint[1], endPoint[1])) / 2;
+                    - Math.max(startPoint[1], endPoint[1])) / 2
+                    + Math.max(startPoint[1], endPoint[1]);
             float a, b, c;
 
             a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
@@ -2049,7 +2060,8 @@ public class BoomMenuButton extends FrameLayout
             float y2 = endPoint[1];
             float x3 = (startPoint[0] + endPoint[0]) / 2;
             float y3 = (Util.getInstance().getScreenHeight(mContext)
-                    + Math.min(startPoint[1], endPoint[1])) / 2;
+                    - Math.max(startPoint[1], endPoint[1])) / 2
+                    + Math.max(startPoint[1], endPoint[1]);
             float a, b, c;
 
             a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
@@ -2552,6 +2564,47 @@ public class BoomMenuButton extends FrameLayout
     }
 
     /**
+     * Set the boom type of boom button.
+     *
+     * @param boomType
+     */
+    public void setBoomType(BoomType boomType) {
+        this.boomType = boomType;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isClosed() {
+        return state.equals(StateType.CLOSED);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isClosing() {
+        return state.equals(StateType.CLOSING);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isOpen() {
+        return state.equals(StateType.OPEN);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isOpening() {
+        return state.equals(StateType.OPENING);
+    }
+
+    /**
      * Get the click event from CircleButton or HamButton
      *
      * @param index
@@ -2600,5 +2653,12 @@ public class BoomMenuButton extends FrameLayout
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Log.d("BBB", "onDetached");
+        frameLayout.removeAllViews();
     }
 }

@@ -341,6 +341,23 @@
 
             </RadioGroup>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:text="@string/examples"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginTop="20dp"
+                />
+
+            <Button
+                android:id="@+id/easy_example"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/easy_example"
+                />
+
         </LinearLayout>
 
     </ScrollView>
