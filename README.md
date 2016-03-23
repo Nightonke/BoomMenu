@@ -47,7 +47,7 @@ Yes, this library is about a menu which can ... BOOM!
 [Todo](https://github.com/Nightonke/BoomMenu#todo)  
 [License](https://github.com/Nightonke/BoomMenu#license)  
 
-# Gradle
+# Gradle and Maven
 Just add the "compile 'com.nightonke:BoomMenu:1.0.0'" in your build.gradle of your module.  
 ```
 dependencies {
