@@ -2654,11 +2654,4 @@ public class BoomMenuButton extends FrameLayout
         }
         return false;
     }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        Log.d("BBB", "onDetached");
-        frameLayout.removeAllViews();
-    }
 }
