@@ -38,6 +38,8 @@ Yes, this library is about a menu which can ... BOOM!
 16. [Animation Listener]()
 17. [Click Effects]()
 18. [Sub Button Texts Color]()
+19. [Dim Types]()
+20. [Shadow of Sub Buttons and Boom Button]()
 
 [Versions](https://github.com/Nightonke/BoomMenu#versions)  
 [Todo](https://github.com/Nightonke/BoomMenu#todo)  
@@ -55,7 +57,7 @@ dependencies {
 
 # Note
 1. I use the ShadowLayout from [dmytrodanylyk-ShadowLayout](https://github.com/dmytrodanylyk/shadow-layout) to create the shadow effect of the buttons.
-2. The boom menu button is **NOT** ready to be used in list item yet. Because the memory-leak when create the bitmaps(I guess). But **don't worry** about using it in action bar or in floating action bar. If somebody can help me to fix the memory-leak bug, that would be so helpful and appreciated.
+2. The boom menu button is **NOT** ready to be used in list item yet. Because the memory-leak when creating the bitmaps(I guess). But **don't worry** about using it in action bar or in floating action bar. If somebody can help me to fix the memory-leak bug, that would be so helpful and appreciated.
 
 # Demo
 You can check most of the options that you can set when using boom menu button in this demo. When you read the code of the demo, don't be afraid of the length of the code in MainActivity.class. Most of codes are for the logic of the RadioGroups.
@@ -86,7 +88,7 @@ Check the code in [EaseUseActivity](https://github.com/Nightonke/BoomMenu/blob/m
 boomMenuButton = (BoomMenuButton)findViewById(R.id.boom);
 ```
 
-**3.**Init the boom menu button in the onWindowFocusChanged() method in activity:
+**3.**Initialize the boom menu button in the onWindowFocusChanged() method in activity:
 ```java
 @Override
 public void onWindowFocusChanged(boolean hasFocus) {
@@ -110,7 +112,7 @@ public void onWindowFocusChanged(boolean hasFocus) {
 }
 ```
 
-# Use in Action Bar
+### Use in Action Bar
 
 To add boom menu button in action bar just:
 
@@ -174,6 +176,38 @@ protected void onCreate(Bundle savedInstanceState) {
     ((Toolbar) mCustomView.getParent()).setContentInsetsAbsolute(0,0);
 }
 ```
-**3**.Init the boom menu button in the onWindowFocusChanged() method in activity. Just like what we do in the step3 in [Easy to Use in 3 Steps](https://github.com/Nightonke/BoomMenu#easy-to-use-in-3-steps)
+**3**.Initialize the boom menu button in the onWindowFocusChanged() method in activity. Just like what we do in the step3 in [Easy to Use in 3 Steps](https://github.com/Nightonke/BoomMenu#easy-to-use-in-3-steps)
+
+###Use in Floating Action Button
+
+Similar with above. But just add some params in xml:
+```xml
+<com.nightonke.boommenu.BoomMenuButton
+    android:id="@+id/boom"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:boom_inActionBar="false"
+    app:boom_button_color="@color/colorPrimary"
+    app:boom_button_pressed_color="@color/colorPrimary"
+    />
+```
+
+| Param    | Type    | What It Does   |
+| ------------- |-------------| -----|
+| app:boom_inActionBar | boolean | true for boom menu button in action bar |
+| app:boom_button_color | color | the color of the boom menu button, only work in floating action button |
+| app:boom_button_pressed_color | color | the color when pressing the boom menu button, only work when the ClickEffect is normal |
+
+### Hamburger Button and Circle Button
+There are 2 types of sub buttons in BMB(boom menu button). Hamburger and circle. You can use ```ButtonType.HAM``` and ```ButtonType.CIRCLE``` to initialize the BMB. 
+
+### Number of Sub Buttons
+For hamberger type, there are [1, 4] sub buttons. For circle type, there are [1, 9] sub buttons.
+
+### Boom Types
+There are 5 boom types provided in this version. They are ```BoomType.LINE```, ```BoomType.PARABOLA_2``` and ``````, ```BoomType.HORIZONTAL_THROW```, ```BoomType.PARABOLA_2``` and ```BoomType.HORIZONTAL_THROW_2```. Just try them for fun in the demo. You can choose your favorite BoomType when initializing the BMB, or set it:
+```java
+setBoomType(newBoomType);
+```
 
 
