@@ -14,34 +14,34 @@ Yes, this library is about a menu which can ... BOOM!
 # Guide
 
 [中文文档](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md)  
-[Gradle](https://github.com/Nightonke/BoomMenu#gradle)  
+[Gradle & Maven](https://github.com/Nightonke/BoomMenu#gradle-and-maven)  
 [Note](https://github.com/Nightonke/BoomMenu#note)  
 [Demo](https://github.com/Nightonke/BoomMenu#demo)  
 
 ###Usage
 
-1. [Easy to Use in 3 Steps]()
-2. [Use in Action Bar]()
-3. [Use in Floating Action Button]()
-4. [Hamburger Button and Circle Button]()
-5. [Number of Sub Buttons]()
-6. [Boom Types]()
-7. [Place Types]()
-8. [Ease Types]()
-9. [Boom Animation Duration]()
-10. [Animation Start Delay]()
-11. [Rotation Degree]()
-12. [Auto Dismiss]()
-13. [Cancelable]()
-14. [Show Order and Hide Order]()
-15. [Sub Buttons Click Listener]()
-16. [Animation Listener]()
-17. [Click Effects]()
-18. [Sub Button Texts Color]()
-19. [Dim Types]()
-20. [Shadow of Sub Buttons and Boom Button]()
-21. [Get States and Dismiss]()
-22. [Get Sub Views of Sub Button]()
+1. [Easy to Use in 3 Steps](https://github.com/Nightonke/BoomMenu#easy-to-use-in-3-steps)
+2. [Use in Action Bar](https://github.com/Nightonke/BoomMenu#use-in-action-bar)
+3. [Use in Floating Action Button](https://github.com/Nightonke/BoomMenu#use-in-floating-action-button)
+4. [Hamburger Button and Circle Button](https://github.com/Nightonke/BoomMenu#hamburger-button-and-circle-button)
+5. [Number of Sub Buttons](https://github.com/Nightonke/BoomMenu#number-of-sub-buttons)
+6. [Boom Types](https://github.com/Nightonke/BoomMenu#boom-types)
+7. [Place Types](https://github.com/Nightonke/BoomMenu#place-types)
+8. [Ease Types](https://github.com/Nightonke/BoomMenu#ease-types)
+9. [Boom Animation Duration](https://github.com/Nightonke/BoomMenu#boom-animation-duration)
+10. [Animation Start Delay](https://github.com/Nightonke/BoomMenu#animation-start-delay)
+11. [Rotation Degree](https://github.com/Nightonke/BoomMenu#rotation-degree)
+12. [Auto Dismiss](https://github.com/Nightonke/BoomMenu#auto-dismiss)
+13. [Cancelable](https://github.com/Nightonke/BoomMenu#cancelable)
+14. [Show Order and Hide Order](https://github.com/Nightonke/BoomMenu#show-order-and-hide-order)
+15. [Sub Buttons Click Listener](https://github.com/Nightonke/BoomMenu#sub-buttons-click-listener)
+16. [Animation Listener](https://github.com/Nightonke/BoomMenu#animation-listener)
+17. [Click Effects](https://github.com/Nightonke/BoomMenu#click-effects)
+18. [Sub Button Texts Color](https://github.com/Nightonke/BoomMenu#sub-button-texts-color)
+19. [Dim Types](https://github.com/Nightonke/BoomMenu#dim-types)
+20. [Shadow of Sub Buttons and Boom Button](https://github.com/Nightonke/BoomMenu#shadow-of-sub-buttons-and-boom-button)
+21. [Get States and Dismiss](https://github.com/Nightonke/BoomMenu#get-states-and-dismiss)
+22. [Get Sub Views of Sub Button](https://github.com/Nightonke/BoomMenu#get-sub-views-of-sub-button)
 
 [Versions](https://github.com/Nightonke/BoomMenu#versions)  
 [Todo](https://github.com/Nightonke/BoomMenu#todo)  
@@ -52,9 +52,18 @@ Just add the "compile 'com.nightonke:BoomMenu:1.0.0'" in your build.gradle of yo
 ```
 dependencies {
     ...
-    compile 'com.nightonke:BoomMenu:1.0.0'
+    compile 'com.nightonke:boommenu:1.0.1'
     ...
 }
+```
+Or maven:
+```maven
+<dependency>
+  <groupId>com.nightonke</groupId>
+  <artifactId>boommenu</artifactId>
+  <version>1.0.1</version>
+  <type>pom</type>
+</dependency>
 ```
 
 # Note
@@ -360,7 +369,7 @@ TextView[] getTextViews();
 First version.
 
 # Todo
-1. Particle effects are coming.
+1. Particle effects are coming soon.
 2. Make BMB ready for using in listview.  
 
 # License
