@@ -71,7 +71,11 @@ Or maven:
 2. The boom menu button is **NOT** ready to be used in list item yet. Because the memory-leak when creating the bitmaps(I guess). But **don't worry** about using it in action bar or in floating action bar. If somebody can help me to fix the memory-leak bug, that would be so helpful and appreciated.
 
 # Demo
-You can check most of the options that you can set when using boom menu button in this demo. When you read the code of the demo, don't be afraid of the length of the code in MainActivity.class. Most of codes are for the logic of the RadioGroups.
+You can check most of the options that you can set when using boom menu button in this demo. When you read the code of the demo, don't be afraid of the length of the code in MainActivity.class. Most of codes are for the logic of the RadioGroups.  
+![Boom V1.0.1](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.1.png)  
+Or by link:  
+[Boom V1.0.1 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.1.apk?raw=true)  
+[Boom V1.0.1 in Fir](http://fir.im/tv85)  
 
 # Usage
 
