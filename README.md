@@ -65,7 +65,7 @@ You can check most of the options that you can set when using boom menu button i
 ### Easy to Use in 3 Steps
 Check the code in [EaseUseActivity](https://github.com/Nightonke/BoomMenu/blob/master/app/src/main/java/com/nightonke/boommenusample/EasyUseActivity.java) and you will found out all to do are 3 steps:
 
-**1**. Add BoomMenuButton in xml file:
+**1**.Add BoomMenuButton in xml file:
 ```xml
 <com.nightonke.boommenu.BoomMenuButton
     android:id="@+id/boom"
@@ -109,5 +109,71 @@ public void onWindowFocusChanged(boolean hasFocus) {
     ); 
 }
 ```
+
+# Use in Action Bar
+
+To add boom menu button in action bar just:
+
+**1**.Create your own action bar layout, custom_actionbar.xml:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent">
+
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/boom"
+        android:layout_width="56dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:background="?android:actionBarItemBackground"
+        app:boom_inActionBar="true"
+        />
+
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textAllCaps="true"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#fff"
+        android:layout_toRightOf="@+id/boom"
+        android:layout_toEndOf="@+id/boom"
+        />
+
+</RelativeLayout>
+```
+**2**.Custom the default action bar in onCreate() method:
+```java
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+
+    ActionBar mActionBar = getSupportActionBar();
+    mActionBar.setDisplayShowHomeEnabled(false);
+    mActionBar.setDisplayShowTitleEnabled(false);
+    LayoutInflater mInflater = LayoutInflater.from(this);
+
+    mCustomView = mInflater.inflate(R.layout.custom_actionbar, null);
+    TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title_text);
+    mTitleTextView.setText(R.string.app_name);
+
+    boomMenuButtonInActionBar = (BoomMenuButton) mCustomView.findViewById(R.id.boom);
+    boomMenuButtonInActionBar.setOnSubButtonClickListener(this);
+    boomMenuButtonInActionBar.setAnimatorListener(this);
+
+    mActionBar.setCustomView(mCustomView);
+    mActionBar.setDisplayShowCustomEnabled(true);
+
+    ((Toolbar) mCustomView.getParent()).setContentInsetsAbsolute(0,0);
+}
+```
+**3**.Init the boom menu button in the onWindowFocusChanged() method in activity. Just like what we do in the step3 in [Easy to Use in 3 Steps](https://github.com/Nightonke/BoomMenu#easy-to-use-in-3-steps)
 
 
