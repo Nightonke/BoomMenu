@@ -302,3 +302,79 @@ boomInfo.setAnimatorListener(new BoomMenuButton.AnimatorListener() {
 
 ### Click Effects
 Use ```setClickEffectType(clickEffectType)``` set click effect of all the buttons of BMB(including itself). Use ```ClickEffectType.RIPPLE``` to set the ripple effect(only word after Android 5.0) or ```ClickEffectType.NORMAL``` to set the normal effect of buttons with ```setClickEffectType(clickEffectType)``` method.
+
+### Sub Button Texts Color
+Use ```setTextViewColor(int color)``` to set the color of all the textviews of sub buttons. Or use ```setTextViewColor(int[] colors)``` to set different color of textviews of sub buttons.
+
+### Dim Types
+You can use DimType to control the dim degree when showing the sub buttons. You may notice that in the demo, when you click the floating action button, the background would not be dim. But, when you click the BMB in the action bar, the background would be dim. There are 10 values of dim degree:
+```java
+public enum DimType {
+    DIM_0(Color.parseColor("#00000000")),
+    DIM_1(Color.parseColor("#11000000")),
+    DIM_2(Color.parseColor("#22000000")),
+    DIM_3(Color.parseColor("#33000000")),
+    DIM_4(Color.parseColor("#44000000")),
+    DIM_5(Color.parseColor("#55000000")),
+    DIM_6(Color.parseColor("#66000000")),
+    DIM_7(Color.parseColor("#77000000")),
+    DIM_8(Color.parseColor("#88000000")),
+    DIM_9(Color.parseColor("#99000000"));
+    
+    public int value;
+
+    DimType(int value) {
+        this.value = value;
+    }
+}
+```
+Use ```setDimType(DimType dimType)``` to set the dim degree of BMB. For instance, you can use ```boomMenuButton.setDimType(DimType.DIM_0);``` to keep the background light when showing sub buttons.
+
+### Shadow of Sub Buttons and Boom Button
+You can set the offset of the shadow of sub buttons and the BMB. Use ```setSubButtonShadowOffset(float xOffset, float yOffset)``` (in pixel)to set the offset of sub buttons and ```setBoomButtonShadowOffset(float xOffset, float yOffset)``` to the BMB's.
+
+### Get States and Dismiss
+You can get the current state of BMB with:
+```java
+boolean isClosed();
+
+boolean isClosing();
+
+boolean isOpen();
+
+boolean isOpening();
+```
+
+And use ```boolean dismiss()``` to force the BMB to play hiding animation. Returns true if the BMB is going to hide, returns false if the BMB cannot hide right now(because it is showing, hiding or hided).
+
+### Get Sub Views of Sub Button
+If you wanna modify the sub views in the sub button. There are several methods to do that:
+```java
+ImageView[] getImageViews();
+
+TextView[] getTextViews();
+```
+
+# Versions
+### 1.0.1  
+First version.
+
+# Todo
+1. Particle effects are coming.
+2. Make BMB ready for using in listview.  
+
+# License
+
+    Copyright 2016 Nightonke
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
