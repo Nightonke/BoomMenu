@@ -12,7 +12,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -2602,6 +2601,30 @@ public class BoomMenuButton extends FrameLayout
      */
     public boolean isOpening() {
         return state.equals(StateType.OPENING);
+    }
+
+    public void setShowMoveEaseType(EaseType showMoveEaseType) {
+        this.showMoveEaseType = showMoveEaseType;
+    }
+
+    public void setShowScaleEaseType(EaseType showScaleEaseType) {
+        this.showScaleEaseType = showScaleEaseType;
+    }
+
+    public void setShowRotateEaseType(EaseType showRotateEaseType) {
+        this.showRotateEaseType = showRotateEaseType;
+    }
+
+    public void setHideMoveEaseType(EaseType hideMoveEaseType) {
+        this.hideMoveEaseType = hideMoveEaseType;
+    }
+
+    public void setHideScaleEaseType(EaseType hideScaleEaseType) {
+        this.hideScaleEaseType = hideScaleEaseType;
+    }
+
+    public void setHideRotateEaseType(EaseType hideRotateEaseType) {
+        this.hideRotateEaseType = hideRotateEaseType;
     }
 
     /**

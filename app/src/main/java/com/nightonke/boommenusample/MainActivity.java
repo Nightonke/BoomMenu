@@ -124,6 +124,37 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+        boomInfo.setAnimatorListener(new BoomMenuButton.AnimatorListener() {
+            @Override
+            public void toShow() {
+
+            }
+
+            @Override
+            public void showing(float fraction) {
+
+            }
+
+            @Override
+            public void showed() {
+
+            }
+
+            @Override
+            public void toHide() {
+
+            }
+
+            @Override
+            public void hiding(float fraction) {
+
+            }
+
+            @Override
+            public void hided() {
+
+            }
+        });
 
         initViews();
     }

@@ -5,6 +5,7 @@ import android.graphics.Color;
 /**
  * Created by Weiping on 2016/3/22.
  */
+
 public enum DimType {
 
     DIM_0(Color.parseColor("#00000000")),
