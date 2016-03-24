@@ -48,11 +48,11 @@ BoomMenu可以让你的菜单按钮 ... 瞬间爆炸！
 [License](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#license)  
 
 # Gradle and Maven
-添加 "compile 'com.nightonke:boommenu:1.0.1'" 到app模块中的build.gradle即可：  
+添加 "compile 'com.nightonke:boommenu:1.0.2'" 到app模块中的build.gradle即可：  
 ```
 dependencies {
     ...
-    compile 'com.nightonke:boommenu:1.0.1'
+    compile 'com.nightonke:boommenu:1.0.2'
     ...
 }
 ```
@@ -61,7 +61,7 @@ dependencies {
 <dependency>
   <groupId>com.nightonke</groupId>
   <artifactId>boommenu</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <type>pom</type>
 </dependency>
 ```
@@ -73,12 +73,12 @@ dependencies {
 # Demo
 你可以在这个demo中选择绝大部分的BoomMenuButton的选项来查看其不同的效果。当你查看demo的MainActivity的时候，不用担心里面过长的代码，很多代码都是为了处理RadioGroup的逻辑。   
 
-![Boom V1.0.1](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.1.png)  
+![Boom V1.0.2](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.1.png)  
 
 通过链接下载：  
 
-[Boom V1.0.1 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.1.apk?raw=true)  
-[Boom V1.0.1 in Fir](http://fir.im/tv85)  
+[Boom V1.0.2 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.1.apk?raw=true)  
+[Boom V1.0.2 in Fir](http://fir.im/tv85)  
 
 # Usage
 
@@ -374,6 +374,8 @@ TextView[] getTextViews();
 # Versions
 ### 1.0.1  
 第一个版本。
+### 1.0.2  
+修复在lollipop版本之下运行崩溃的错误。
 
 # Todo
 1. 粒子效果。
