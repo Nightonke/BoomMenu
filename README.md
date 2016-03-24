@@ -48,11 +48,11 @@ Yes, this library is about a menu which can ... BOOM!
 [License](https://github.com/Nightonke/BoomMenu#license)  
 
 # Gradle and Maven
-Just add the "compile 'com.nightonke:BoomMenu:1.0.1'" in your build.gradle of your module.  
+Just add the "compile 'com.nightonke:BoomMenu:1.0.2'" in your build.gradle of your module.  
 ```
 dependencies {
     ...
-    compile 'com.nightonke:boommenu:1.0.1'
+    compile 'com.nightonke:boommenu:1.0.2'
     ...
 }
 ```
@@ -61,7 +61,7 @@ Or maven:
 <dependency>
   <groupId>com.nightonke</groupId>
   <artifactId>boommenu</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <type>pom</type>
 </dependency>
 ```
@@ -72,10 +72,10 @@ Or maven:
 
 # Demo
 You can check most of the options that you can set when using boom menu button in this demo. When you read the code of the demo, don't be afraid of the length of the code in MainActivity.class. Most of codes are for the logic of the RadioGroups.  
-![Boom V1.0.1](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.1.png)  
+![Boom V1.0.2](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.2.png)  
 Or by link:  
-[Boom V1.0.1 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.1.apk?raw=true)  
-[Boom V1.0.1 in Fir](http://fir.im/tv85)  
+[Boom V1.0.2 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.2.apk?raw=true)  
+[Boom V1.0.2 in Fir](http://fir.im/tv85)  
 
 # Usage
 
@@ -371,6 +371,8 @@ TextView[] getTextViews();
 # Versions
 ### 1.0.1  
 First version.
+### 1.0.2  
+Fix a bug that now BMB should be able to used in version below lollipop.
 
 # Todo
 1. Particle effects are coming soon.
