@@ -11,14 +11,14 @@
 
 BoomMenu可以让你的菜单按钮 ... 瞬间爆炸！
 
-# Guide
+# 目录
 
 [English Version](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md)  
 [Gradle & Maven](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#gradle-and-maven)  
 [Note](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#note)  
 [Demo](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#demo)  
 
-###Usage
+###用法
 
 1. [Easy to Use in 3 Steps](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#easy-to-use-in-3-steps)
 2. [Use in Action Bar](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#use-in-action-bar)
@@ -217,27 +217,27 @@ protected void onCreate(Bundle savedInstanceState) {
 | app:boom_button_pressed_color | color | BoomMenuButton的按下背景颜色，仅仅在点击效果为Normal时有效 |
 
 ### Hamburger Button and Circle Button
-在BMB(BoomMenuButton)中有两种子按钮类型， Hamburger 和 circle. You can use ```ButtonType.HAM``` and ```ButtonType.CIRCLE``` to initialize the BMB. 
+在BMB(BoomMenuButton)中有两种子按钮类型，Hamburger和circle。你可以使用 ```ButtonType.HAM``` 和 ```ButtonType.CIRCLE``` 来初始化BMB。 
 
 ### Number of Sub Buttons
-For hamberger type, there are [1, 4] sub buttons. For circle type, there are [1, 9] sub buttons.
+对于HAM类型，可以有1到4个自按钮。对于CIRCLE类型，可以有1到9个子按钮。
 
 ### Boom Types
-There are 5 boom types provided in this version. They are ```BoomType.LINE```, ```BoomType.PARABOLA_2``` , ```BoomType.HORIZONTAL_THROW```, ```BoomType.PARABOLA_2``` and ```BoomType.HORIZONTAL_THROW_2```. Just try them for fun in the demo. You can choose your favorite BoomType when initializing the BMB, or set it:
+当前版本中提供了5种展开的类型，它们是 ```BoomType.LINE```， ```BoomType.PARABOLA_2``` ， ```BoomType.HORIZONTAL_THROW```， ```BoomType.PARABOLA_2``` 和 ```BoomType.HORIZONTAL_THROW_2```。 Demo中提供了这5中方式的效果，你可以在初始化的时候设置展开类型，或者通过setter：
 ```java
 setBoomType(newBoomType);
 ```
 
 ### Place Types
-There are 32 types for placing the sub buttons in BMB or in the screen. You can use ```PlaceType.CIRCLE_X_X``` and ```PlaceType.HAM_X_X``` (the former X is the number of sub buttons and the latter X is type number) to initialize BMB.  
-![PlayType 1~8](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md/blob/master/Pictures/place_type_1.png)  
-![PlayType 9~16](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md/blob/master/Pictures/place_type_2.png)  
-![PlayType 17~24](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md/blob/master/Pictures/place_type_3.png)  
-![PlayType 25~32](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md/blob/master/Pictures/place_type_4.png)  
-For more information for Place type, please check [PlaceType.class](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md/blob/master/boommenu/src/main/java/com/nightonke/boommenu/Types/PlaceType.java)
+当前版本有32种对子按钮的排列方式。你可以使用 ```PlaceType.CIRCLE_X_X``` 和```PlaceType.HAM_X_X``` （前一个X代表子按钮数量，后一个代表排列方式）来初始化BMB。  
+![PlayType 1~8](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_1.png)  
+![PlayType 9~16](https://github.com/Nightonke/BoomMenu/blob/master/master/Pictures/place_type_2.png)  
+![PlayType 17~24](https://github.com/Nightonke/BoomMenu/blob/master/master/Pictures/place_type_3.png)  
+![PlayType 25~32](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_4.png)  
+更多信息请查看 [PlaceType.class](https://github.com/Nightonke/BoomMenu/blob/master/boommenu/src/main/java/com/nightonke/boommenu/Types/PlaceType.java)
 
 ### Ease Types
-You can set 30 ease types for 6 part of animations when the BMB is showing or hiding. You can set the moving, scaling and rotating or showing and hiding animation when initializing the BMB, or set them to null to use the default ease types. And also, you can set 6 types by the setters:
+对6种展开或隐藏的子动画有30种缓动函数可以使用。你可以设置移动、缩放、旋转动画的缓动效果当初始化BMB的时候，如果设置为null则表明使用默认值。当然，也可以通过setter来设置：
 ```java
 setShowMoveEaseType(showMoveEaseType);
 
@@ -251,32 +251,32 @@ setHideScaleEaseType(hideScaleEaseType);
 
 setHideRotateEaseType(hideRotateEaseType);
 ```
-For more ease types, you can check [Ease Type Package](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md/tree/master/boommenu/src/main/java/com/nightonke/boommenu/Eases). Or check the [library](https://github.com/Nightonke/WoWoViewPager#ease) that I made(This part is the same).
+更多信息，请查看 [Ease Type Package](https://github.com/Nightonke/BoomMenu/tree/master/boommenu/src/main/java/com/nightonke/boommenu/Eases)。 或者查看之前我写的 [开源库](https://github.com/Nightonke/WoWoViewPager#ease) （缓动效果是一样的）。
 
 ### Boom Animation Duration
-Set the duration of the boom animation by ```setDuration(duration)``` (in ms). The default duration is 800ms.
+通过 ```setDuration(duration)``` （ms为单位）来设置展开或隐藏的延时。 默认值为 800ms。
 
 ### Animation Start Delay
-Use ```setDelay(delay)``` to set the delay between each 2 sub buttons(in ms). For instance, if the delay is 0, then all the sub buttons will boom out at the same time. The default delay is 100ms.
+通过 ```setDelay(delay)``` 来设置每两个子按钮之间动画的延时（ms为单位）。 比如，如果延时设为0，那么所有子按钮都会同时展开或隐藏，默认值为100ms。
 
 ### Rotation Degree
-You can set the degree to rotate the sub button. But only for circle types, I forbade applying rotation animation to hamburger types button because the shadow or a rolling rectangle is hard to display. The default rotation degree is 720. Set the degree when initializing BMB or use ```setRotateDegree(rotateDegree);```
+你可以设置子按钮展开或隐藏时的旋转角度。但是注意，只对圆形的子按钮有效，因为对于长方形的子按钮来说，旋转时其阴影效果很难绘制。默认值为720度。你可以在初始化的时候设置或者通过setter  ```setRotateDegree(rotateDegree)``` 来设置。
 
 ### Auto Dismiss
-When you click a sub button, the BMB will automatically hide all the sub buttons. If you want to stop this, just use ```setAutoDismiss(autoDismiss)``` to set autoDismiss to false.
+当点击一个子按钮的时候，默认BMB是会隐藏所有子按钮的。如果你不想这样，你可以用 ```setAutoDismiss(autoDismiss)``` 把自动隐藏值设为false。
 
 ### Cancelable
-When click other place except the sub buttons, the BMB will hide all the sub buttons. You can use ```setCancelable(cancelable)``` to set the value to false. But remember to set one button to perform the cancelable job, otherwise the BMB will be uncancelable.
+当子按钮全部展开后，点击除了子按钮的区域，BMB会执行隐藏所有子按钮的动画。如果你不想这样，可以用过 ```setCancelable(cancelable)``` 来吧cancelable值设为false。 但是要记得把某个子按钮的点击事件中用BMB的dismiss()函数来隐藏子按钮，否则BMB会无法隐藏。
 
 ### Show Order and Hide Order
-Set the order of showing or hiding sub buttons with ```OrderType.DEFAULT```, ```OrderType.REVERSE``` and ```OrderType.RANDOM```. Use ```setShowOrderType(showOrderType)``` and ```setHideOrderType(hideOrderType)``` to set these values.
+设置展开或隐藏时的子按钮顺序，可以通过 ```OrderType.DEFAULT```， ```OrderType.REVERSE``` 和```OrderType.RANDOM```。 用setter ```setShowOrderType(showOrderType)``` 和 ```setHideOrderType(hideOrderType)``` 来设置相应的值。
 
 ### Sub Buttons Click Listener
 ```java
 boomMenuButton.setOnSubButtonClickListener(new BoomMenuButton.OnSubButtonClickListener() {
     @Override
     public void onClick(int buttonIndex) {
-        // return the index of the sub button clicked
+        // 返回被点击的子按钮下标
     }
 });
 ```
@@ -286,44 +286,44 @@ boomMenuButton.setOnSubButtonClickListener(new BoomMenuButton.OnSubButtonClickLi
 boomInfo.setAnimatorListener(new BoomMenuButton.AnimatorListener() {
     @Override
     public void toShow() {
-        // the moment when the BMB is clicked and the showing animation is about to start
+        // 当BMB即将开始执行展开动画
     }
 
     @Override
     public void showing(float fraction) {
-        // the showing animation is playing, the fraction is the process of animation
+        // 展开动画正在进行，fraction表示进度
     }
 
     @Override
     public void showed() {
-        // the showing animation is just played 
+        // 展开动画刚刚结束 
     }
 
     @Override
     public void toHide() {
-        // the BMB is about to play the hiding animation
+        // BMB即将开始执行隐藏动画
     }
 
     @Override
     public void hiding(float fraction) {
-        // the hiding animation is playing
+        // 隐藏动画正在进行，fraction表示进度
     }
 
     @Override
     public void hided() {
-        // the hiding animation is just played
+        // 隐藏动画刚刚结束
     }
 });
 ```
 
 ### Click Effects
-Use ```setClickEffectType(clickEffectType)``` set click effect of all the buttons of BMB(including itself). Use ```ClickEffectType.RIPPLE``` to set the ripple effect(only word after Android 5.0) or ```ClickEffectType.NORMAL``` to set the normal effect of buttons with ```setClickEffectType(clickEffectType)``` method.
+使用 ```setClickEffectType(clickEffectType)``` 来为所有按钮（包括BMB自身）设置点击效果。 用 ```ClickEffectType.RIPPLE``` 来设置波纹效果（只在Android 5.0或其后有效） 或 ```ClickEffectType.NORMAL``` 来设置普通点击效果。 
 
 ### Sub Button Texts Color
-Use ```setTextViewColor(int color)``` to set the color of all the textviews of sub buttons. Or use ```setTextViewColor(int[] colors)``` to set different color of textviews of sub buttons.
+用 ```setTextViewColor(int color)``` 来为所有的子按钮设置文本颜色。或者通过 ```setTextViewColor(int[] colors)``` 来为子按钮分别设置文本颜色。
 
 ### Dim Types
-You can use DimType to control the dim degree when showing the sub buttons. You may notice that in the demo, when you click the floating action button, the background would not be dim. But, when you click the BMB in the action bar, the background would be dim. There are 10 values of dim degree:
+使用DimType来设置背景的暗淡效果。注意到在demo中，当点击FloatingActionButton时，背景并不会暗淡，但是点击ActionBar中的BMB时，背景会变暗淡。有10个值可以来设置暗淡效果：
 ```java
 public enum DimType {
     DIM_0(Color.parseColor("#00000000")),
@@ -344,13 +344,13 @@ public enum DimType {
     }
 }
 ```
-Use ```setDimType(DimType dimType)``` to set the dim degree of BMB. For instance, you can use ```boomMenuButton.setDimType(DimType.DIM_0);``` to keep the background light when showing sub buttons.
+用 ```setDimType(DimType dimType)``` 来设置BMB的暗淡效果。比如，你可以使用 ```boomMenuButton.setDimType(DimType.DIM_0);``` 来保持背景的明亮。
 
 ### Shadow of Sub Buttons and Boom Button
-You can set the offset of the shadow of sub buttons and the BMB. Use ```setSubButtonShadowOffset(float xOffset, float yOffset)``` (in pixel)to set the offset of sub buttons and ```setBoomButtonShadowOffset(float xOffset, float yOffset)``` to the BMB's.
+你可以设置子按钮和BMB的阴影偏移效果。用 ```setSubButtonShadowOffset(float xOffset, float yOffset)``` （pixel为单位）来设置子按钮的阴影偏移效果，用 ```setBoomButtonShadowOffset(float xOffset, float yOffset)``` 来设置BMB的阴影偏移效果。
 
 ### Get States and Dismiss
-You can get the current state of BMB with:
+通过以下函数来获得BMB当前的状态：
 ```java
 boolean isClosed();
 
@@ -361,10 +361,10 @@ boolean isOpen();
 boolean isOpening();
 ```
 
-And use ```boolean dismiss()``` to force the BMB to play hiding animation. Returns true if the BMB is going to hide, returns false if the BMB cannot hide right now(because it is showing, hiding or hided).
+用 ```boolean dismiss()``` 来强制执行BMB的隐藏效果。返回真如果BMB可以执行隐藏动画，返回假如果当前BMB不可执行隐藏动画（因为BMB正在执行展开、隐藏动画或正处于未展开的状态）。
 
 ### Get Sub Views of Sub Button
-If you wanna modify the sub views in the sub button. There are several methods to do that:
+如果想对子按钮的子控件稍加修改，可以调用：
 ```java
 ImageView[] getImageViews();
 
@@ -373,11 +373,11 @@ TextView[] getTextViews();
 
 # Versions
 ### 1.0.1  
-First version.
+第一个版本。
 
 # Todo
-1. Particle effects are coming soon.
-2. Make BMB ready for using in listview.  
+1. 粒子效果。
+2. 让BMB可以在listview中使用。  
 
 # License
 
