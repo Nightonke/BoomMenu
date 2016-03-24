@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.nightonke.boommenu.ShadowLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shadow_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:sl_shadowColor="@color/shadow"
+    app:sl_dx="0dp"
+    app:sl_dy="0dp"
+    app:sl_cornerRadius="2dp">
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:clickable="true"
+        >
+
+        <View
+            android:id="@+id/ripple"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:clickable="true" />
+
+        <LinearLayout
+            android:id="@+id/linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            >
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center_vertical|start"
+                tools:ignore="ContentDescription"
+                android:scaleType="fitXY"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                />
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical|start"
+                android:gravity="center_vertical|start"
+                android:textSize="16sp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:textColor="@android:color/white"
+                android:maxLines="2"
+                />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</com.nightonke.boommenu.ShadowLayout>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.nightonke.boommenu.ShadowLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shadow_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:sl_shadowRadius="@dimen/default_shadow_radius"
+    app:sl_shadowColor="@color/shadow"
+    app:sl_dx="0dp"
+    app:sl_dy="0dp"
+    app:sl_cornerRadius="@dimen/default_circle_button_corner_2radius">
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="@dimen/default_circle_button_corner_2radius"
+        android:layout_height="@dimen/default_circle_button_corner_2radius"
+        android:background="@drawable/circle_button"
+        >
+
+        <ImageButton
+            android:id="@+id/image_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            tools:ignore="ContentDescription"
+            android:scaleType="fitXY"
+            />
+
+        <View
+            android:id="@+id/ripple"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:clickable="true"/>
+
+        <ImageView
+            android:id="@+id/image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/circle_button"
+            tools:ignore="ContentDescription"
+            android:scaleType="fitXY"
+            />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:gravity="center"
+            android:textSize="@dimen/default_circle_button_text_size"
+            android:layout_marginBottom="8.5dp"
+            android:textColor="@android:color/white"
+            android:maxLines="1"
+            />
+
+    </FrameLayout>
+
+</com.nightonke.boommenu.ShadowLayout>

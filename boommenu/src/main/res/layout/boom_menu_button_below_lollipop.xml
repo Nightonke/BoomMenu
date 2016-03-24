@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.nightonke.boommenu.ShadowLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/shadow_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:sl_shadowRadius="4dp"
+    app:sl_shadowColor="@color/shadow"
+    app:sl_dx="2dp"
+    app:sl_dy="2dp"
+    app:sl_cornerRadius="56dp">
+
+    <FrameLayout
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        >
+
+        <FrameLayout
+            android:id="@+id/frame_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            >
+
+        </FrameLayout>
+
+        <View
+            android:id="@+id/ripple"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true" />
+
+    </FrameLayout>
+
+</com.nightonke.boommenu.ShadowLayout>

@@ -160,7 +160,11 @@ public class BoomMenuButton extends FrameLayout
                 }
             });
         } else {
-            LayoutInflater.from(context).inflate(R.layout.boom_menu_button, this, true);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                LayoutInflater.from(context).inflate(R.layout.boom_menu_button, this, true);
+            } else {
+                LayoutInflater.from(context).inflate(R.layout.boom_menu_button_below_lollipop, this, true);
+            }
             shadowLayout = (ShadowLayout)findViewById(R.id.shadow_layout);
             frameLayout = (FrameLayout)findViewById(R.id.frame_layout);
             ripple = findViewById(R.id.ripple);
