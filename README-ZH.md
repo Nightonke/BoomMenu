@@ -231,8 +231,8 @@ setBoomType(newBoomType);
 ### Place Types
 当前版本有32种对子按钮的排列方式。你可以使用 ```PlaceType.CIRCLE_X_X``` 和```PlaceType.HAM_X_X``` （前一个X代表子按钮数量，后一个代表排列方式）来初始化BMB。  
 ![PlayType 1~8](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_1.png)  
-![PlayType 9~16](https://github.com/Nightonke/BoomMenu/blob/master/master/Pictures/place_type_2.png)  
-![PlayType 17~24](https://github.com/Nightonke/BoomMenu/blob/master/master/Pictures/place_type_3.png)  
+![PlayType 9~16](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_2.png)  
+![PlayType 17~24](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_3.png)  
 ![PlayType 25~32](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_4.png)  
 更多信息请查看 [PlaceType.class](https://github.com/Nightonke/BoomMenu/blob/master/boommenu/src/main/java/com/nightonke/boommenu/Types/PlaceType.java)
 
