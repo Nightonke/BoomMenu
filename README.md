@@ -314,7 +314,7 @@ boomInfo.setAnimatorListener(new BoomMenuButton.AnimatorListener() {
 ```
 
 ### Click Effects
-Use ```setClickEffectType(clickEffectType)``` set click effect of all the buttons of BMB(including itself). Use ```ClickEffectType.RIPPLE``` to set the ripple effect(only word after Android 5.0) or ```ClickEffectType.NORMAL``` to set the normal effect of buttons with ```setClickEffectType(clickEffectType)``` method.
+Use ```setClickEffectType(clickEffectType)``` set click effect of all the buttons of BMB(including itself). Use ```ClickEffectType.RIPPLE``` to set the ripple effect(only work at or after Android 5.0) or ```ClickEffectType.NORMAL``` to set the normal effect of buttons.
 
 ### Sub Button Texts Color
 Use ```setTextViewColor(int color)``` to set the color of all the textviews of sub buttons. Or use ```setTextViewColor(int[] colors)``` to set different color of textviews of sub buttons.
