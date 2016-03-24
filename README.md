@@ -48,7 +48,7 @@ Yes, this library is about a menu which can ... BOOM!
 [License](https://github.com/Nightonke/BoomMenu#license)  
 
 # Gradle and Maven
-Just add the "compile 'com.nightonke:BoomMenu:1.0.0'" in your build.gradle of your module.  
+Just add the "compile 'com.nightonke:BoomMenu:1.0.1'" in your build.gradle of your module.  
 ```
 dependencies {
     ...
@@ -71,7 +71,11 @@ Or maven:
 2. The boom menu button is **NOT** ready to be used in list item yet. Because the memory-leak when creating the bitmaps(I guess). But **don't worry** about using it in action bar or in floating action bar. If somebody can help me to fix the memory-leak bug, that would be so helpful and appreciated.
 
 # Demo
-You can check most of the options that you can set when using boom menu button in this demo. When you read the code of the demo, don't be afraid of the length of the code in MainActivity.class. Most of codes are for the logic of the RadioGroups.
+You can check most of the options that you can set when using boom menu button in this demo. When you read the code of the demo, don't be afraid of the length of the code in MainActivity.class. Most of codes are for the logic of the RadioGroups.  
+![Boom V1.0.1](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.1.png)  
+Or by link:  
+[Boom V1.0.1 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.1.apk?raw=true)  
+[Boom V1.0.1 in Fir](http://fir.im/tv85)  
 
 # Usage
 
@@ -310,7 +314,7 @@ boomInfo.setAnimatorListener(new BoomMenuButton.AnimatorListener() {
 ```
 
 ### Click Effects
-Use ```setClickEffectType(clickEffectType)``` set click effect of all the buttons of BMB(including itself). Use ```ClickEffectType.RIPPLE``` to set the ripple effect(only word after Android 5.0) or ```ClickEffectType.NORMAL``` to set the normal effect of buttons with ```setClickEffectType(clickEffectType)``` method.
+Use ```setClickEffectType(clickEffectType)``` set click effect of all the buttons of BMB(including itself). Use ```ClickEffectType.RIPPLE``` to set the ripple effect(only work at or after Android 5.0) or ```ClickEffectType.NORMAL``` to set the normal effect of buttons.
 
 ### Sub Button Texts Color
 Use ```setTextViewColor(int color)``` to set the color of all the textviews of sub buttons. Or use ```setTextViewColor(int[] colors)``` to set different color of textviews of sub buttons.
