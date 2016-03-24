@@ -1,15 +1,15 @@
 # BoomMenu
 
-Tired of these menu buttons?
+是否觉得这种菜单按钮有点无聊？
 
-![Old Menu Buttons](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md/raw/master/Pictures/old_action_bar_menu.png)
+![Old Menu Buttons](https://github.com/Nightonke/BoomMenu/raw/master/Pictures/old_action_bar_menu.png)
 
-Why not try these:
+要不，试试这个：
 
-![Circle](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md/blob/master/Pictures/show_circle.gif?raw=true)
-![Ham](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md/blob/master/Pictures/show_ham.gif?raw=true)
+![Circle](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/show_circle.gif?raw=true)
+![Ham](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/show_ham.gif?raw=true)
 
-Yes, this library is about a menu which can ... BOOM!
+BoomMenu可以让你的菜单按钮 ... 瞬间爆炸！
 
 # Guide
 
@@ -48,7 +48,7 @@ Yes, this library is about a menu which can ... BOOM!
 [License](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#license)  
 
 # Gradle and Maven
-Just add the "compile 'com.nightonke:BoomMenu:1.0.0'" in your build.gradle of your module.  
+添加 "compile 'com.nightonke:boommenu:1.0.1'" 到app模块中的build.gradle即可：  
 ```
 dependencies {
     ...
@@ -56,7 +56,7 @@ dependencies {
     ...
 }
 ```
-Or maven:
+或者通过 maven:
 ```maven
 <dependency>
   <groupId>com.nightonke</groupId>
@@ -67,22 +67,25 @@ Or maven:
 ```
 
 # Note
-1. I use the ShadowLayout from [dmytrodanylyk-ShadowLayout](https://github.com/dmytrodanylyk/shadow-layout) to create the shadow effect of the buttons.
-2. The boom menu button is **NOT** ready to be used in list item yet. Because the memory-leak when creating the bitmaps(I guess). But **don't worry** about using it in action bar or in floating action bar. If somebody can help me to fix the memory-leak bug, that would be so helpful and appreciated.
+1. 使用了 [dmytrodanylyk-ShadowLayout](https://github.com/dmytrodanylyk/shadow-layout) 来为按钮产生阴影效果。
+2. BoomMenuButton现在还**没可以**用于listview中，因为bitmap回收处理没有弄好。但是这并**不影响**在ActionBar或者FloatingActionButton里面使用。如果有人知道这个bug怎么解决，请提交你的代码，万分感谢！
 
 # Demo
-You can check most of the options that you can set when using boom menu button in this demo. When you read the code of the demo, don't be afraid of the length of the code in MainActivity.class. Most of codes are for the logic of the RadioGroups.  
-![Boom V1.0.1](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md/blob/master/Apk/BoomMenu%20V1.0.1.png)  
-Or by link:  
-[Boom V1.0.1 in Github](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md/blob/master/Apk/BoomMenu%20V1.0.1.apk?raw=true)  
+你可以在这个demo中选择绝大部分的BoomMenuButton的选项来查看其不同的效果。当你查看demo的MainActivity的时候，不用担心里面过长的代码，很多代码都是为了处理RadioGroup的逻辑。   
+
+![Boom V1.0.1](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.1.png)  
+
+通过链接下载：  
+
+[Boom V1.0.1 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.1.apk?raw=true)  
 [Boom V1.0.1 in Fir](http://fir.im/tv85)  
 
 # Usage
 
 ### Easy to Use in 3 Steps
-Check the code in [EaseUseActivity](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md/blob/master/app/src/main/java/com/nightonke/boommenusample/EasyUseActivity.java) and you will found out all to do are 3 steps:
+查看demo中的一个 [简单示例](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md/blob/master/app/src/main/java/com/nightonke/boommenusample/EasyUseActivity.java) ，你就会发现，其实只需要三步即可使用：
 
-**1**.Add BoomMenuButton in xml file:
+**1**.添加BoomMenuButton到xml中：
 ```xml
 <com.nightonke.boommenu.BoomMenuButton
     android:id="@+id/boom"
@@ -98,40 +101,40 @@ Check the code in [EaseUseActivity](https://github.com/Nightonke/BoomMenu/blob/m
     />
 ```
 
-**2.**Get the view in xml in onCreate() method:
+**2.**在onCreate()方法中findView：  
 ```java
 boomMenuButton = (BoomMenuButton)findViewById(R.id.boom);
 ```
 
-**3.**Initialize the boom menu button in the onWindowFocusChanged() method in activity:
+**3.**在onWindowFocusChanged()方法中初始化BoomMenuButton：
 ```java
 @Override
 onWindowFocusChanged(boolean hasFocus) {
     super.onWindowFocusChanged(hasFocus);
     
     boomMenuButton.init(
-            subButtonDrawables, // The drawables of images of sub buttons. Can not be null.
-            subButtonTexts,     // The texts of sub buttons, ok to be null.
-            subButtonColors,    // The colors of sub buttons, including pressed-state and normal-state.
-            ButtonType.HAM,     // The button type.
-            BoomType.PARABOLA,  // The boom type.
-            PlaceType.HAM_3_1,  // The place type.
-            null,               // Ease type to move the sub buttons when showing.
-            null,               // Ease type to scale the sub buttons when showing.
-            null,               // Ease type to rotate the sub buttons when showing.
-            null,               // Ease type to move the sub buttons when dismissing.
-            null,               // Ease type to scale the sub buttons when dismissing.
-            null,               // Ease type to rotate the sub buttons when dismissing.
-            null                // Rotation degree.
+            subButtonDrawables, // 子按钮的图标Drawable数组，不可以为null
+            subButtonTexts,     // 子按钮的文本String数组，可以为null
+            subButtonColors,    // 子按钮的背景颜色color二维数组，包括按下和正常状态的颜色，不可为null
+            ButtonType.HAM,     // 子按钮的类型
+            BoomType.PARABOLA,  // 爆炸类型
+            PlaceType.HAM_3_1,  // 排列类型
+            null,               // 展开时子按钮移动的缓动函数类型
+            null,               // 展开时子按钮放大的缓动函数类型
+            null,               // 展开时子按钮旋转的缓动函数类型
+            null,               // 隐藏时子按钮移动的缓动函数类型
+            null,               // 隐藏时子按钮缩小的缓动函数类型
+            null,               // 隐藏时子按钮旋转的缓动函数类型
+            null                // 旋转角度
     ); 
 }
 ```
 
 ### Use in Action Bar
 
-To add boom menu button in action bar just:
+如何在ActionBar中使用BoomMenuButton：
 
-**1**.Create your own action bar layout, custom_actionbar.xml:
+**1**.自定义一个ActionBar的layout，比如custom_actionbar.xml：
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -165,7 +168,7 @@ To add boom menu button in action bar just:
 
 </RelativeLayout>
 ```
-**2**.Custom the default action bar in onCreate() method:
+**2**.在onCreate()方法中应用你的自定义ActionBar：
 ```java
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -191,11 +194,11 @@ protected void onCreate(Bundle savedInstanceState) {
     ((Toolbar) mCustomView.getParent()).setContentInsetsAbsolute(0,0);
 }
 ```
-**3**.Initialize the boom menu button in the onWindowFocusChanged() method in activity. Just like what we do in the step3 in [Easy to Use in 3 Steps](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#easy-to-use-in-3-steps)
+**3**.在onWindowFocusChanged()方法中初始化BoomMenuButton。就像在[简单使用](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#easy-to-use-in-3-steps)中介绍的一样。
 
 ###Use in Floating Action Button
 
-Similar with above. But just add some params in xml:
+如何在FloatingActionButton中使用？与上述类似，稍微修改一下xml文件：
 ```xml
 <com.nightonke.boommenu.BoomMenuButton
     android:id="@+id/boom"
@@ -207,14 +210,14 @@ Similar with above. But just add some params in xml:
     />
 ```
 
-| Param    | Type    | What It Does   |
+| 参数    | 类型    | 干啥的   |
 | ------------- |-------------| -----|
-| app:boom_inActionBar | boolean | true for boom menu button in action bar |
-| app:boom_button_color | color | the color of the boom menu button, only work in floating action button |
-| app:boom_button_pressed_color | color | the color when pressing the boom menu button, only work when the ClickEffect is normal |
+| app:boom_inActionBar | boolean |真，表示应用在ActionBar中 |
+| app:boom_button_color | color | BoomMenuButton的背景色，仅仅在FloatingActionButton中有效 |
+| app:boom_button_pressed_color | color | BoomMenuButton的按下背景颜色，仅仅在点击效果为Normal时有效 |
 
 ### Hamburger Button and Circle Button
-There are 2 types of sub buttons in BMB(boom menu button). Hamburger and circle. You can use ```ButtonType.HAM``` and ```ButtonType.CIRCLE``` to initialize the BMB. 
+在BMB(BoomMenuButton)中有两种子按钮类型， Hamburger 和 circle. You can use ```ButtonType.HAM``` and ```ButtonType.CIRCLE``` to initialize the BMB. 
 
 ### Number of Sub Buttons
 For hamberger type, there are [1, 4] sub buttons. For circle type, there are [1, 9] sub buttons.
