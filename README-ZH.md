@@ -48,11 +48,11 @@ BoomMenu可以让你的菜单按钮 ... 瞬间爆炸！
 [License](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#license)  
 
 # Gradle and Maven
-添加 "compile 'com.nightonke:boommenu:1.0.1'" 到app模块中的build.gradle即可：  
+添加 "compile 'com.nightonke:boommenu:1.0.2'" 到app模块中的build.gradle即可：  
 ```
 dependencies {
     ...
-    compile 'com.nightonke:boommenu:1.0.1'
+    compile 'com.nightonke:boommenu:1.0.2'
     ...
 }
 ```
@@ -61,7 +61,7 @@ dependencies {
 <dependency>
   <groupId>com.nightonke</groupId>
   <artifactId>boommenu</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <type>pom</type>
 </dependency>
 ```
@@ -73,12 +73,12 @@ dependencies {
 # Demo
 你可以在这个demo中选择绝大部分的BoomMenuButton的选项来查看其不同的效果。当你查看demo的MainActivity的时候，不用担心里面过长的代码，很多代码都是为了处理RadioGroup的逻辑。   
 
-![Boom V1.0.1](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.1.png)  
+![Boom V1.0.2](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.1.png)  
 
 通过链接下载：  
 
-[Boom V1.0.1 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.1.apk?raw=true)  
-[Boom V1.0.1 in Fir](http://fir.im/tv85)  
+[Boom V1.0.2 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.1.apk?raw=true)  
+[Boom V1.0.2 in Fir](http://fir.im/tv85)  
 
 # Usage
 
@@ -231,8 +231,8 @@ setBoomType(newBoomType);
 ### Place Types
 当前版本有32种对子按钮的排列方式。你可以使用 ```PlaceType.CIRCLE_X_X``` 和```PlaceType.HAM_X_X``` （前一个X代表子按钮数量，后一个代表排列方式）来初始化BMB。  
 ![PlayType 1~8](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_1.png)  
-![PlayType 9~16](https://github.com/Nightonke/BoomMenu/blob/master/master/Pictures/place_type_2.png)  
-![PlayType 17~24](https://github.com/Nightonke/BoomMenu/blob/master/master/Pictures/place_type_3.png)  
+![PlayType 9~16](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_2.png)  
+![PlayType 17~24](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_3.png)  
 ![PlayType 25~32](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/place_type_4.png)  
 更多信息请查看 [PlaceType.class](https://github.com/Nightonke/BoomMenu/blob/master/boommenu/src/main/java/com/nightonke/boommenu/Types/PlaceType.java)
 
@@ -374,6 +374,8 @@ TextView[] getTextViews();
 # Versions
 ### 1.0.1  
 第一个版本。
+### 1.0.2  
+修复在lollipop版本之下运行崩溃的错误。
 
 # Todo
 1. 粒子效果。
