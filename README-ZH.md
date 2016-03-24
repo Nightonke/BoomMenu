@@ -13,7 +13,7 @@ BoomMenu可以让你的菜单按钮 ... 瞬间爆炸！
 
 # 目录
 
-[English Version](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md)  
+[English Version](https://github.com/Nightonke/BoomMenu)  
 [Gradle & Maven](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#gradle-and-maven)  
 [Note](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#note)  
 [Demo](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#demo)  
