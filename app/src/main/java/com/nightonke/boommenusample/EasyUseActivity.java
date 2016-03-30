@@ -24,19 +24,6 @@ public class EasyUseActivity extends AppCompatActivity {
         boomMenuButton = (BoomMenuButton)findViewById(R.id.boom);
     }
 
-    /**
-     * Init the boom menu button.
-     * Notice that you should call this NOT in your onCreate method.
-     * Because the width and height of boom menu button is 0.
-     * Call this in:
-     *
-     * @Override
-     * public void onWindowFocusChanged(boolean hasFocus) {
-     *     super.onWindowFocusChanged(hasFocus);
-     *     init(...);
-     * }
-     *
-     */
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -78,7 +65,6 @@ public class EasyUseActivity extends AppCompatActivity {
                 null,               // Ease type to rotate the sub buttons when dismissing.
                 null                // Rotation degree.
         );
-
         boomMenuButton.setTextViewColor(ContextCompat.getColor(this, R.color.black));
     }
 }
