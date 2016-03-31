@@ -64,7 +64,7 @@ Or maven:
 <dependency>
   <groupId>com.nightonke</groupId>
   <artifactId>boommenu</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <type>pom</type>
 </dependency>
 ```
@@ -217,7 +217,7 @@ Similar with above. But just add some params in xml:
 | app:boom_button_color | color | the color of the boom menu button, only work in floating action button |
 | app:boom_button_pressed_color | color | the color when pressing the boom menu button, only work when the ClickEffect is normal |
 
-### Use in Action Bar
+### Use in List
 
 To add boom menu button in action bar just:
 
