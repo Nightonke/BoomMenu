@@ -12,14 +12,21 @@
         android:layout_weight="1"
         android:layout_marginStart="15dp"
         android:layout_marginLeft="15dp"
+        android:gravity="center_vertical"
         />
 
     <com.nightonke.boommenu.BoomMenuButton
-        android:id="@+id/boom"
+        android:id="@+id/boom_circle"
         android:layout_width="56dp"
         android:layout_height="match_parent"
-        android:background="?android:actionBarItemBackground"
-        app:boom_inActionBar="true"
+        app:boom_inList="true"
+        />
+
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/boom_ham"
+        android:layout_width="56dp"
+        android:layout_height="match_parent"
+        app:boom_inList="true"
         />
 
 </LinearLayout>

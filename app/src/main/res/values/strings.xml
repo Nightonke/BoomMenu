@@ -34,6 +34,7 @@
 
     <string name="examples">Examples</string>
     <string name="easy_example">Easy Example</string>
+    <string name="list_view_example">ListView Example</string>
 
     <string name="easy_example_text">This is an easy use of BoomMenuButton.</string>
 

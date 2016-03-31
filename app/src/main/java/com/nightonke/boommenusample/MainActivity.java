@@ -519,6 +519,7 @@ public class MainActivity extends AppCompatActivity
         });
 
         findViewById(R.id.easy_example).setOnClickListener(this);
+        findViewById(R.id.list_view_example).setOnClickListener(this);
     }
 
     private BoomType getBoomType() {
@@ -742,6 +743,9 @@ public class MainActivity extends AppCompatActivity
         switch (v.getId()) {
             case R.id.easy_example:
                 startActivity(new Intent(this, EasyUseActivity.class));
+                break;
+            case R.id.list_view_example:
+                startActivity(new Intent(this, ListViewActivity.class));
                 break;
         }
     }

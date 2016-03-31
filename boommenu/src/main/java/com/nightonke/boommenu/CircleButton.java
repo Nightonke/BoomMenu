@@ -84,6 +84,10 @@ public class CircleButton extends FrameLayout {
         return imageView;
     }
 
+    public ShadowLayout getShadowLayout() {
+        return shadowLayout;
+    }
+
     public TextView getTextView() {
         return textView;
     }
@@ -116,7 +120,7 @@ public class CircleButton extends FrameLayout {
     }
 
     public void setShadowColor(int mShadowColor) {
-        shadowLayout.setmShadowColor(mShadowColor);
+        shadowLayout.setShadowColor(mShadowColor);
     }
 
     public void setShadowDx(float mDx) {

@@ -11,7 +11,8 @@ import android.widget.FrameLayout;
 
 public class ShadowLayout extends FrameLayout {
 
-    private int mShadowColor;
+    private int ShadowColor;
+    private int OriginalShadowColor;
     private float mShadowRadius;
     private float mCornerRadius;
     private float mDx;
@@ -83,7 +84,7 @@ public class ShadowLayout extends FrameLayout {
 
     @SuppressWarnings("deprecation")
     private void setBackgroundCompat(int w, int h) {
-        Bitmap bitmap = createShadowBitmap(w, h, mCornerRadius, mShadowRadius, mDx, mDy, mShadowColor, Color.TRANSPARENT);
+        Bitmap bitmap = createShadowBitmap(w, h, mCornerRadius, mShadowRadius, mDx, mDy, ShadowColor, Color.TRANSPARENT);
         BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) {
             setBackgroundDrawable(drawable);
@@ -104,7 +105,8 @@ public class ShadowLayout extends FrameLayout {
             mShadowRadius = attr.getDimension(R.styleable.ShadowLayout_sl_shadowRadius, getResources().getDimension(R.dimen.default_shadow_radius));
             mDx = attr.getDimension(R.styleable.ShadowLayout_sl_dx, 0);
             mDy = attr.getDimension(R.styleable.ShadowLayout_sl_dy, 0);
-            mShadowColor = attr.getColor(R.styleable.ShadowLayout_sl_shadowColor,
+            OriginalShadowColor = ShadowColor
+                    = attr.getColor(R.styleable.ShadowLayout_sl_shadowColor,
                     ContextCompat.getColor(context, R.color.default_shadow_color));
         } finally {
             attr.recycle();
@@ -157,9 +159,17 @@ public class ShadowLayout extends FrameLayout {
         return output;
     }
 
-    public void setmShadowColor(int mShadowColor) {
-        this.mShadowColor = mShadowColor;
+    public void setShadowColor(int shadowColor) {
+        this.ShadowColor = shadowColor;
         invalidate();
+    }
+
+    public int getOriginalShadowColor() {
+        return OriginalShadowColor;
+    }
+
+    public int getShadowColor() {
+        return ShadowColor;
     }
 
     public void setmShadowRadius(float mShadowRadius) {

@@ -93,6 +93,10 @@ public class HamButton extends FrameLayout {
         return textView;
     }
 
+    public ShadowLayout getShadowLayout() {
+        return shadowLayout;
+    }
+
     public void setRipple(ClickEffectType clickEffectType) {
         this.clickEffectType = clickEffectType;
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
@@ -121,7 +125,7 @@ public class HamButton extends FrameLayout {
     }
 
     public void setShadowColor(int mShadowColor) {
-        shadowLayout.setmShadowColor(mShadowColor);
+        shadowLayout.setShadowColor(mShadowColor);
     }
 
     public void setShadowDx(float mDx) {

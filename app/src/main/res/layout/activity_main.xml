@@ -358,6 +358,13 @@
                 android:text="@string/easy_example"
                 />
 
+            <Button
+                android:id="@+id/list_view_example"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/list_view_example"
+                />
+
         </LinearLayout>
 
     </ScrollView>

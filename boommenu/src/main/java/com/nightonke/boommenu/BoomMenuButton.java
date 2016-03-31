@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
@@ -59,14 +60,24 @@ public class BoomMenuButton extends FrameLayout
     private boolean animationPlaying = false;
     private StateType state = StateType.CLOSED;
 
+    // Params about buttons
     private int buttonNum = 0;
     private CircleButton[] circleButtons = new CircleButton[MAX_CIRCLE_BUTTON_NUMBER];
     private HamButton[] hamButtons = new HamButton[MAX_HAM_BUTTON_NUMBER];
     private Dot[] dots = new Dot[MAX_CIRCLE_BUTTON_NUMBER];
     private Bar[] bars = new Bar[MAX_HAM_BUTTON_NUMBER];
 
+    // Store the drawables of buttons
+    private Drawable[] drawables = null;
+    // Store the colors of buttons
+    private int[][] colors = null;
+    // Store the strings of buttons
+    private String[] strings = null;
+
     // Is in action bar
     private boolean isInActionBar = false;
+    // Is in list item
+    private boolean isInList = false;
     // Boom button color
     private int boomButtonColor = 0;
     // Boom button pressed color
@@ -121,6 +132,9 @@ public class BoomMenuButton extends FrameLayout
     private DimType dimType = DimType.DIM_6;
     // Click effect
     private ClickEffectType clickEffectType = ClickEffectType.RIPPLE;
+    // Sub buttons offsets of shadow
+    private float subButtonsXOffsetOfShadow = 0;
+    private float subButtonsYOffsetOfShadow = 0;
 
     private OnClickListener onClickListener = null;
     private AnimatorListener animatorListener = null;
@@ -141,6 +155,7 @@ public class BoomMenuButton extends FrameLayout
         if (attr != null) {
             try {
                 isInActionBar = attr.getBoolean(R.styleable.BoomMenuButton_boom_inActionBar, false);
+                isInList = attr.getBoolean(R.styleable.BoomMenuButton_boom_inList, false);
                 boomButtonColor = attr.getColor(R.styleable.BoomMenuButton_boom_button_color,
                         ContextCompat.getColor(mContext, R.color.default_boom_button_color));
                 boomButtonPressedColor = attr.getColor(R.styleable.BoomMenuButton_boom_button_pressed_color,
@@ -150,7 +165,7 @@ public class BoomMenuButton extends FrameLayout
             }
         }
 
-        if (isInActionBar) {
+        if (isInActionBar || isInList) {
             LayoutInflater.from(context).inflate(R.layout.boom_menu_button_in_action_bar, this, true);
             frameLayout = (FrameLayout)findViewById(R.id.frame_layout);
             frameLayout.setOnClickListener(new View.OnClickListener() {
@@ -175,7 +190,6 @@ public class BoomMenuButton extends FrameLayout
 
         hamButtonWidth = (int) (Util.getInstance().getScreenWidth(getContext()) * 8 / 9
                 + Util.getInstance().dp2px(4));
-
     }
 
     /**
@@ -238,12 +252,20 @@ public class BoomMenuButton extends FrameLayout
             // circle buttons
             // create buttons
             buttonNum = drawables.length;
-            for (int i = 0; i < buttonNum; i++) {
-                circleButtons[i] = new CircleButton(mContext);
-                circleButtons[i].setOnCircleButtonClickListener(this, i);
-                circleButtons[i].setDrawable(drawables[i]);
-                if (strings != null) circleButtons[i].setText(strings[i]);
-                circleButtons[i].setColor(colors[i][0], colors[i][1]);
+
+            if (isInList) {
+                // store the drawables, THEN we will build the buttons when create them
+                this.drawables = drawables;
+                this.colors = colors;
+                this.strings = strings;
+            } else {
+                for (int i = 0; i < buttonNum; i++) {
+                    circleButtons[i] = new CircleButton(mContext);
+                    circleButtons[i].setOnCircleButtonClickListener(this, i);
+                    circleButtons[i].setDrawable(drawables[i]);
+                    if (strings != null) circleButtons[i].setText(strings[i]);
+                    circleButtons[i].setColor(colors[i][0], colors[i][1]);
+                }
             }
 
             // create dots
@@ -259,12 +281,20 @@ public class BoomMenuButton extends FrameLayout
             hamButtonWidth = Util.getInstance().getScreenWidth(getContext()) * 8 / 9;
             // create buttons
             buttonNum = drawables.length;
-            for (int i = 0; i < buttonNum; i++) {
-                hamButtons[i] = new HamButton(mContext);
-                hamButtons[i].setOnHamButtonClickListener(this, i);
-                hamButtons[i].setDrawable(drawables[i]);
-                if (strings != null) hamButtons[i].setText(strings[i]);
-                hamButtons[i].setColor(colors[i][0], colors[i][1]);
+
+            if (isInList) {
+                // store the drawables, THEN we will build the buttons when create them
+                this.drawables = drawables;
+                this.colors = colors;
+                this.strings = strings;
+            } else {
+                for (int i = 0; i < buttonNum; i++) {
+                    hamButtons[i] = new HamButton(mContext);
+                    hamButtons[i].setOnHamButtonClickListener(this, i);
+                    hamButtons[i].setDrawable(drawables[i]);
+                    if (strings != null) hamButtons[i].setText(strings[i]);
+                    hamButtons[i].setColor(colors[i][0], colors[i][1]);
+                }
             }
 
             // create bars
@@ -1120,6 +1150,31 @@ public class BoomMenuButton extends FrameLayout
      * When the boom menu button is clicked.
      */
     private void shoot() {
+        // create the buttons
+        if (isInList) {
+            if (buttonType.equals(ButtonType.CIRCLE)) {
+                for (int i = 0; i < buttonNum; i++) {
+                    circleButtons[i] = new CircleButton(mContext);
+                    circleButtons[i].setOnCircleButtonClickListener(this, i);
+                    circleButtons[i].setDrawable(drawables[i]);
+                    if (strings != null) circleButtons[i].setText(strings[i]);
+                    circleButtons[i].setColor(colors[i][0], colors[i][1]);
+                    circleButtons[i].setShadowDx(subButtonsXOffsetOfShadow);
+                    circleButtons[i].setShadowDy(subButtonsYOffsetOfShadow);
+                }
+            } else if (buttonType.equals(ButtonType.HAM)) {
+                for (int i = 0; i < buttonNum; i++) {
+                    hamButtons[i] = new HamButton(mContext);
+                    hamButtons[i].setOnHamButtonClickListener(this, i);
+                    hamButtons[i].setDrawable(this.drawables[i]);
+                    if (this.strings != null) hamButtons[i].setText(this.strings[i]);
+                    hamButtons[i].setColor(this.colors[i][0], this.colors[i][1]);
+                    hamButtons[i].setShadowDx(subButtonsXOffsetOfShadow);
+                    hamButtons[i].setShadowDy(subButtonsYOffsetOfShadow);
+                }
+            }
+        }
+
         // listener
         if (onClickListener != null) onClickListener.onClick();
         // wait for the before animations finished
@@ -2190,7 +2245,7 @@ public class BoomMenuButton extends FrameLayout
             final View button,
             int[] startLocation,
             int[] endLocation,
-            int index) {
+            final int index) {
 
         // position animation
         float[] sl = new float[2];
@@ -2242,6 +2297,10 @@ public class BoomMenuButton extends FrameLayout
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 dot.setVisibility(VISIBLE);
+                if (isInList) {
+                    if (buttonType.equals(ButtonType.CIRCLE)) circleButtons[index] = null;
+                    else if (buttonType.equals(ButtonType.HAM)) hamButtons[index] = null;
+                }
             }
         });
         scaleYAnimator.start();
@@ -2405,7 +2464,9 @@ public class BoomMenuButton extends FrameLayout
      */
     public ImageButton[] getImageButtons() {
         ImageButton[] imageButtons = new ImageButton[buttonNum];
-        for (int i = 0; i < buttonNum; i++) imageButtons[i] = circleButtons[i].getImageButton();
+        for (int i = 0; i < buttonNum; i++) {
+            if (circleButtons[i] != null) imageButtons[i] = circleButtons[i].getImageButton();
+        }
         return imageButtons;
     }
 
@@ -2415,9 +2476,11 @@ public class BoomMenuButton extends FrameLayout
     public ImageView[] getImageViews() {
         ImageView[] imageViews = new ImageView[buttonNum];
         if (buttonType.equals(ButtonType.CIRCLE)) {
-            for (int i = 0; i < buttonNum; i++) imageViews[i] = circleButtons[i].getImageView();
+            for (int i = 0; i < buttonNum; i++)
+                if (circleButtons[i] != null) imageViews[i] = circleButtons[i].getImageView();
         } else if (buttonType.equals(ButtonType.HAM)) {
-            for (int i = 0; i < buttonNum; i++) imageViews[i] = hamButtons[i].getImageView();
+            for (int i = 0; i < buttonNum; i++)
+                if (hamButtons[i] != null) imageViews[i] = hamButtons[i].getImageView();
         }
         return imageViews;
     }
@@ -2428,9 +2491,11 @@ public class BoomMenuButton extends FrameLayout
     public TextView[] getTextViews() {
         TextView[] textViews = new TextView[buttonNum];
         if (buttonType.equals(ButtonType.CIRCLE)) {
-            for (int i = 0; i < buttonNum; i++) textViews[i] = circleButtons[i].getTextView();
+            for (int i = 0; i < buttonNum; i++)
+                if (circleButtons != null) textViews[i] = circleButtons[i].getTextView();
         } else if (buttonType.equals(ButtonType.HAM)) {
-            for (int i = 0; i < buttonNum; i++) textViews[i] = hamButtons[i].getTextView();
+            for (int i = 0; i < buttonNum; i++)
+                if (hamButtons[i] != null) textViews[i] = hamButtons[i].getTextView();
         }
         return textViews;
     }
@@ -2465,11 +2530,21 @@ public class BoomMenuButton extends FrameLayout
     public void setSubButtonShadowOffset(float xOffset, float yOffset) {
         for (int i = 0; i < buttonNum; i++) {
             if (buttonType.equals(ButtonType.CIRCLE)) {
-                circleButtons[i].setShadowDx(xOffset);
-                circleButtons[i].setShadowDy(yOffset);
+                if (circleButtons[i] != null) {
+                    circleButtons[i].setShadowDx(xOffset);
+                    circleButtons[i].setShadowDy(yOffset);
+                } else {
+                    subButtonsXOffsetOfShadow = xOffset;
+                    subButtonsYOffsetOfShadow = xOffset;
+                }
             } else if (buttonType.equals(ButtonType.HAM)) {
-                hamButtons[i].setShadowDx(xOffset);
-                hamButtons[i].setShadowDy(yOffset);
+                if (hamButtons[i] != null) {
+                    hamButtons[i].setShadowDx(xOffset);
+                    hamButtons[i].setShadowDy(yOffset);
+                } else {
+                    subButtonsXOffsetOfShadow = xOffset;
+                    subButtonsYOffsetOfShadow = xOffset;
+                }
             }
         }
     }
@@ -2677,6 +2752,19 @@ public class BoomMenuButton extends FrameLayout
     public boolean dismiss() {
         if (state == StateType.OPEN) {
             startHideAnimations();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * If the boom menu button is closed, open it.
+     *
+     * @return True if open, false if can not open.
+     */
+    public boolean boom() {
+        if (state == StateType.CLOSED) {
+            shoot();
             return true;
         }
         return false;

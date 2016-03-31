@@ -11,6 +11,7 @@
 
     <declare-styleable name="BoomMenuButton">
         <attr name="boom_inActionBar" format="boolean"/>
+        <attr name="boom_inList" format="boolean"/>
         <attr name="boom_button_color" format="color"/>
         <attr name="boom_button_pressed_color" format="color"/>
     </declare-styleable>
