@@ -10,6 +10,7 @@ Why not try these:
 ![Ham](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/show_ham.gif?raw=true)
 
 ![List](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/show_list.gif?raw=true)
+![Share](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/show_share.gif?raw=true)
 
 Yes, this library is about a menu which can ... BOOM!
 
@@ -26,6 +27,7 @@ Yes, this library is about a menu which can ... BOOM!
 2. [Use in Action Bar](https://github.com/Nightonke/BoomMenu#use-in-action-bar)
 3. [Use in Floating Action Button](https://github.com/Nightonke/BoomMenu#use-in-floating-action-button)
 4. [Use in List](https://github.com/Nightonke/BoomMenu#use-in-list)
+5. [Use in Share Style](https://github.com/Nightonke/BoomMenu#use-in-share-style)
 4. [Hamburger Button and Circle Button](https://github.com/Nightonke/BoomMenu#hamburger-button-and-circle-button)
 5. [Number of Sub Buttons](https://github.com/Nightonke/BoomMenu#number-of-sub-buttons)
 6. [Boom Types](https://github.com/Nightonke/BoomMenu#boom-types)
@@ -51,11 +53,11 @@ Yes, this library is about a menu which can ... BOOM!
 [License](https://github.com/Nightonke/BoomMenu#license)  
 
 # Gradle and Maven
-Just add the "compile 'com.nightonke:BoomMenu:1.0.4'" in your build.gradle of your module.  
+Just add the "compile 'com.nightonke:BoomMenu:1.0.5'" in your build.gradle of your module.  
 ```
 dependencies {
     ...
-    compile 'com.nightonke:boommenu:1.0.4'
+    compile 'com.nightonke:boommenu:1.0.5'
     ...
 }
 ```
@@ -64,7 +66,7 @@ Or maven:
 <dependency>
   <groupId>com.nightonke</groupId>
   <artifactId>boommenu</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <type>pom</type>
 </dependency>
 ```
@@ -75,10 +77,10 @@ Or maven:
 
 # Demo
 You can check most of the options that you can set when using boom menu button in this demo. When you read the code of the demo, don't be afraid of the length of the code in MainActivity.class. Most of codes are for the logic of the RadioGroups.  
-![Boom V1.0.4](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.4.png)  
+![Boom V1.0.5](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.5.png)  
 Or by link:  
-[Boom V1.0.4 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.4.apk?raw=true)  
-[Boom V1.0.4 in Fir](http://fir.im/tv85)  
+[Boom V1.0.5 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.5.apk?raw=true)  
+[Boom V1.0.5 in Fir](http://fir.im/tv85)  
 
 # Usage
 
@@ -219,7 +221,7 @@ Similar with above. But just add some params in xml:
 
 ### Use in List
 
-To add boom menu button in action bar just:
+To add boom menu button in list just:
 
 **1**.Create your list-item layout, notice that the app:boom_inList value should be true:
 ```xml
@@ -293,6 +295,12 @@ public View getView(int position, View convertView, final ViewGroup parent) {
 }
 ```
 For more information, please check [ListViewActivity.class](https://github.com/Nightonke/BoomMenu/blob/master/app/src/main/java/com/nightonke/boommenusample/ListViewActivity.java)
+
+### Use in Share Style
+
+Share style is the new place type of BMB in version 1.0.5. You can see the effect in the gifs. To use this, just change the place type as ```PlaceType.SHARE_X_X```. Just try it in the demo.
+
+For more information, please check [ShareActivity.class](https://github.com/Nightonke/BoomMenu/blob/master/app/src/main/java/com/nightonke/boommenusample/ShareActivity.java)
 
 ### Hamburger Button and Circle Button
 There are 2 types of sub buttons in BMB(boom menu button). Hamburger and circle. You can use ```ButtonType.HAM``` and ```ButtonType.CIRCLE``` to initialize the BMB. 
@@ -458,6 +466,8 @@ Fix a bug that now BMB should be able to used in version below lollipop.
 Fix the bug that's in Android 4.0, the image of the circle button is black.
 ### 1.0.4
 Now the BMB can be used in list.
+### 1.0.5
+Share style.
 
 # Todo
 1. Particle effects are coming soon.
