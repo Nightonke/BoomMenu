@@ -109,14 +109,14 @@
                 />
 
             <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:text="@string/animation_duration"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:layout_marginTop="20dp"
-            />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:text="@string/animation_duration"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginTop="20dp"
+                />
 
             <SeekBar
                 android:id="@+id/animation_duration_seek"
@@ -363,6 +363,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/list_view_example"
+                />
+
+            <Button
+                android:id="@+id/share_example"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/share_example"
                 />
 
         </LinearLayout>

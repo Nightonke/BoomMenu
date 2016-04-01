@@ -4,15 +4,18 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
-import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +69,7 @@ public class BoomMenuButton extends FrameLayout
     private HamButton[] hamButtons = new HamButton[MAX_HAM_BUTTON_NUMBER];
     private Dot[] dots = new Dot[MAX_CIRCLE_BUTTON_NUMBER];
     private Bar[] bars = new Bar[MAX_HAM_BUTTON_NUMBER];
+    private ShareLines shareLines = null;
 
     // Store the drawables of buttons
     private Drawable[] drawables = null;
@@ -192,6 +196,8 @@ public class BoomMenuButton extends FrameLayout
 
         hamButtonWidth = (int) (Util.getInstance().getScreenWidth(getContext()) * 8 / 9
                 + Util.getInstance().dp2px(4));
+
+        setWillNotDraw(false);
     }
 
     /**
@@ -375,7 +381,27 @@ public class BoomMenuButton extends FrameLayout
                 dotWidth,
                 dotHeight
         );
-        for (int i = 0; i < ps.length; i++) frameLayout.addView(dots[i], ps[i]);
+
+        if (placeType.SHARE_3_1.v <= placeType.v && placeType.v <= PlaceType.SHARE_9_2.v) {
+            shareLines = new ShareLines(mContext);
+            float[][] locations = new float[3][2];
+            locations[0][0] = ps[0].leftMargin + dotWidth / 2;
+            locations[0][1] = ps[0].topMargin + dotHeight / 2;
+            locations[1][0] = ps[1].leftMargin + dotWidth / 2;
+            locations[1][1] = ps[1].topMargin + dotHeight / 2;
+            locations[2][0] = ps[2].leftMargin + dotWidth / 2;
+            locations[2][1] = ps[2].topMargin + dotHeight / 2;
+            shareLines.setLocations(locations);
+            shareLines.setOffset(1);
+
+            FrameLayout.LayoutParams p
+                    = new FrameLayout.LayoutParams(frameLayout.getWidth(), frameLayout.getHeight());
+            frameLayout.addView(shareLines, p);
+        }
+
+        for (int i = 0; i < buttonNum; i++) {
+            frameLayout.addView(dots[i], ps[i]);
+        }
     }
 
     /**
@@ -475,6 +501,15 @@ public class BoomMenuButton extends FrameLayout
             }
         });
         objectAnimator.start();
+
+        // share lines animation
+        if (placeType.SHARE_3_1.v <= placeType.v && placeType.v <= PlaceType.SHARE_9_2.v) {
+            ObjectAnimator shareLinesAnimator = ObjectAnimator.ofFloat(shareLines, "offset",
+                    1f,
+                    0f).setDuration(duration + delay * (buttonNum - 1));
+            shareLinesAnimator.setStartDelay(0);
+            shareLinesAnimator.start();
+        }
     }
 
     /**
@@ -730,7 +765,6 @@ public class BoomMenuButton extends FrameLayout
             rotateAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showRotateEaseType));
             rotateAnimator.start();
         }
-
     }
 
     /**
@@ -1180,6 +1214,15 @@ public class BoomMenuButton extends FrameLayout
             }
         });
         objectAnimator.start();
+
+        // share lines animation
+        if (placeType.SHARE_3_1.v <= placeType.v && placeType.v <= PlaceType.SHARE_9_2.v) {
+            ObjectAnimator shareLinesAnimator = ObjectAnimator.ofFloat(shareLines, "offset",
+                    0f,
+                    1f).setDuration(duration + delay * (buttonNum - 1));
+            shareLinesAnimator.setStartDelay(0);
+            shareLinesAnimator.start();
+        }
     }
 
     /**

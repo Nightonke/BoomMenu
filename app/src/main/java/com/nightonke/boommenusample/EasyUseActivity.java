@@ -80,5 +80,6 @@ public class EasyUseActivity extends AppCompatActivity {
         );
 
         boomMenuButton.setTextViewColor(ContextCompat.getColor(this, R.color.black));
+        boomMenuButton.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
     }
 }

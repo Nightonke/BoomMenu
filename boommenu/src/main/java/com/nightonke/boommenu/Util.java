@@ -17,6 +17,7 @@ import android.view.Display;
 import android.view.View;
 
 import java.lang.ref.WeakReference;
+import java.math.BigDecimal;
 
 /**
  * Created by Weiping on 2016/3/19.
@@ -145,6 +146,19 @@ public class Util {
             linearLayout.setBackgroundDrawable(stateListDrawable.get());
         }
 
+    }
+
+    /**
+     * Round to certain number of decimals
+     *
+     * @param d
+     * @param decimalPlace
+     * @return
+     */
+    public float round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
     }
 
     private static Util ourInstance = new Util();

@@ -440,6 +440,12 @@ public class EndLocationsFactory {
             endLocations[2][1] = screenHeight / 2 + buttonHeight / 10;
             endLocations[3][0] = screenWidth / 2 - buttonWidth / 2;
             endLocations[3][1] = screenHeight / 2 + buttonHeight * 13 / 10;
+        } else if (PlaceType.SHARE_3_1.v <= placeType.v && placeType.v <= PlaceType.SHARE_9_2.v) {
+            // the end locations of share is the same as the circle's
+            endLocations = EndLocationsFactory.getEndLocations(
+                    PlaceType.valueOf(placeType.v -
+                            (PlaceType.SHARE_3_1.v - PlaceType.CIRCLE_3_1.v)),
+                    screenWidth, screenHeight, buttonWidth, buttonWidth);
         }
         
         return endLocations;

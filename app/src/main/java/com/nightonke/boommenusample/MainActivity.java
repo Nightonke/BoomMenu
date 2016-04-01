@@ -520,6 +520,7 @@ public class MainActivity extends AppCompatActivity
 
         findViewById(R.id.easy_example).setOnClickListener(this);
         findViewById(R.id.list_view_example).setOnClickListener(this);
+        findViewById(R.id.share_example).setOnClickListener(this);
     }
 
     private BoomType getBoomType() {
@@ -746,6 +747,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.list_view_example:
                 startActivity(new Intent(this, ListViewActivity.class));
+                break;
+            case R.id.share_example:
+                startActivity(new Intent(this, ShareActivity.class));
                 break;
         }
     }

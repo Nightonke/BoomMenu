@@ -581,6 +581,37 @@ public class PlaceParamsFactory {
             ps[8] = new FrameLayout.LayoutParams(dotWidth, dotHeight);
             ps[8].leftMargin = buttonWidth / 2 - dotWidth / 2;
             ps[8].topMargin = buttonHeight / 2 + dis1 - dotWidth / 2;
+        } else if (PlaceType.SHARE_3_1.v <= placeType.v && placeType.v <= PlaceType.SHARE_9_2.v) {
+            int dis1 = buttonWidth / 6;
+            int dis2 = (int) (Math.sqrt(3) / 2 * dis1);
+            ps = new FrameLayout.LayoutParams[9];
+            ps[0] = new FrameLayout.LayoutParams(dotWidth, dotHeight);
+            ps[0].leftMargin = buttonWidth / 2 + dis1 / 2 - dotWidth / 2;
+            ps[0].topMargin = buttonHeight / 2 - dis2 - dotWidth / 2;
+            ps[1] = new FrameLayout.LayoutParams(dotWidth, dotHeight);
+            ps[1].leftMargin = buttonWidth / 2 - dis1 - dotWidth / 2;
+            ps[1].topMargin = buttonHeight / 2 - dotWidth / 2;
+            ps[2] = new FrameLayout.LayoutParams(dotWidth, dotHeight);
+            ps[2].leftMargin = buttonWidth / 2 + dis1 / 2 - dotWidth / 2;
+            ps[2].topMargin = buttonHeight / 2 + dis2 - dotWidth / 2;
+            ps[3] = new FrameLayout.LayoutParams(dotWidth, dotHeight);
+            ps[3].leftMargin = buttonWidth / 2 + dis1 / 2 - dotWidth / 2;
+            ps[3].topMargin = buttonHeight / 2 - dis2 - dotWidth / 2;
+            ps[4] = new FrameLayout.LayoutParams(dotWidth, dotHeight);
+            ps[4].leftMargin = buttonWidth / 2 - dis1 - dotWidth / 2;
+            ps[4].topMargin = buttonHeight / 2 - dotWidth / 2;
+            ps[5] = new FrameLayout.LayoutParams(dotWidth, dotHeight);
+            ps[5].leftMargin = buttonWidth / 2 + dis1 / 2 - dotWidth / 2;
+            ps[5].topMargin = buttonHeight / 2 + dis2 - dotWidth / 2;
+            ps[6] = new FrameLayout.LayoutParams(dotWidth, dotHeight);
+            ps[6].leftMargin = buttonWidth / 2 + dis1 / 2 - dotWidth / 2;
+            ps[6].topMargin = buttonHeight / 2 - dis2 - dotWidth / 2;
+            ps[7] = new FrameLayout.LayoutParams(dotWidth, dotHeight);
+            ps[7].leftMargin = buttonWidth / 2 - dis1 - dotWidth / 2;
+            ps[7].topMargin = buttonHeight / 2 - dotWidth / 2;
+            ps[8] = new FrameLayout.LayoutParams(dotWidth, dotHeight);
+            ps[8].leftMargin = buttonWidth / 2 + dis1 / 2 - dotWidth / 2;
+            ps[8].topMargin = buttonHeight / 2 + dis2 - dotWidth / 2;
         }
         return ps;
     }

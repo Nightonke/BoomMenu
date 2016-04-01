@@ -1,5 +1,8 @@
 package com.nightonke.boommenu.Types;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Weiping on 2016/3/19.
  */
@@ -37,11 +40,49 @@ public enum PlaceType {
     HAM_1_1(28),
     HAM_2_1(29),
     HAM_3_1(30),
-    HAM_4_1(31);
+    HAM_4_1(31),
 
-    int type;
+    SHARE_3_1(32),
+    SHARE_3_2(33),
+    SHARE_3_3(34),
+    SHARE_3_4(35),
+    SHARE_4_1(36),
+    SHARE_4_2(37),
+    SHARE_5_1(38),
+    SHARE_5_2(39),
+    SHARE_5_3(40),
+    SHARE_5_4(41),
+    SHARE_6_1(42),
+    SHARE_6_2(43),
+    SHARE_6_3(44),
+    SHARE_6_4(45),
+    SHARE_6_5(46),
+    SHARE_6_6(47),
+    SHARE_7_1(48),
+    SHARE_7_2(49),
+    SHARE_7_3(50),
+    SHARE_7_4(51),
+    SHARE_8_1(52),
+    SHARE_8_2(53),
+    SHARE_8_3(54),
+    SHARE_9_1(55),
+    SHARE_9_2(56);
 
-    PlaceType(int type) {
-        this.type = type;
+    public int v;
+
+    PlaceType(int v) {
+        this.v = v;
+    }
+
+    private static Map<Integer, PlaceType> map = new HashMap<Integer, PlaceType>();
+
+    static {
+        for (PlaceType placeType : PlaceType.values()) {
+            map.put(placeType.v, placeType);
+        }
+    }
+
+    public static PlaceType valueOf(int v) {
+        return map.get(v);
     }
 }

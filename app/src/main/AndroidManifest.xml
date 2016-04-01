@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".EasyUseActivity" />
-        <activity android:name=".ListViewActivity"></activity>
+        <activity android:name=".ListViewActivity" />
+        <activity android:name=".ShareActivity"></activity>
     </application>
 
 </manifest>
