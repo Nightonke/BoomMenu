@@ -9,6 +9,8 @@ Why not try these:
 ![Circle](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/show_circle.gif?raw=true)
 ![Ham](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/show_ham.gif?raw=true)
 
+![List](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/show_list.gif?raw=true)
+
 Yes, this library is about a menu which can ... BOOM!
 
 # Guide
@@ -23,6 +25,7 @@ Yes, this library is about a menu which can ... BOOM!
 1. [Easy to Use in 3 Steps](https://github.com/Nightonke/BoomMenu#easy-to-use-in-3-steps)
 2. [Use in Action Bar](https://github.com/Nightonke/BoomMenu#use-in-action-bar)
 3. [Use in Floating Action Button](https://github.com/Nightonke/BoomMenu#use-in-floating-action-button)
+4. [Use in List](https://github.com/Nightonke/BoomMenu#use-in-list)
 4. [Hamburger Button and Circle Button](https://github.com/Nightonke/BoomMenu#hamburger-button-and-circle-button)
 5. [Number of Sub Buttons](https://github.com/Nightonke/BoomMenu#number-of-sub-buttons)
 6. [Boom Types](https://github.com/Nightonke/BoomMenu#boom-types)
@@ -48,11 +51,11 @@ Yes, this library is about a menu which can ... BOOM!
 [License](https://github.com/Nightonke/BoomMenu#license)  
 
 # Gradle and Maven
-Just add the "compile 'com.nightonke:BoomMenu:1.0.3'" in your build.gradle of your module.  
+Just add the "compile 'com.nightonke:BoomMenu:1.0.4'" in your build.gradle of your module.  
 ```
 dependencies {
     ...
-    compile 'com.nightonke:boommenu:1.0.3'
+    compile 'com.nightonke:boommenu:1.0.4'
     ...
 }
 ```
@@ -61,21 +64,21 @@ Or maven:
 <dependency>
   <groupId>com.nightonke</groupId>
   <artifactId>boommenu</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <type>pom</type>
 </dependency>
 ```
 
 # Note
 1. I use the ShadowLayout from [dmytrodanylyk-ShadowLayout](https://github.com/dmytrodanylyk/shadow-layout) to create the shadow effect of the buttons.
-2. The boom menu button is **NOT** ready to be used in list item yet. Because the memory-leak when creating the bitmaps(I guess). But **don't worry** about using it in action bar or in floating action bar. If somebody can help me to fix the memory-leak bug, that would be so helpful and appreciated.
+2. Boom menu button can be used in list since version 1.0.4.
 
 # Demo
 You can check most of the options that you can set when using boom menu button in this demo. When you read the code of the demo, don't be afraid of the length of the code in MainActivity.class. Most of codes are for the logic of the RadioGroups.  
-![Boom V1.0.3](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.3.png)  
+![Boom V1.0.4](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.4.png)  
 Or by link:  
-[Boom V1.0.3 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.3.apk?raw=true)  
-[Boom V1.0.3 in Fir](http://fir.im/tv85)  
+[Boom V1.0.4 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.4.apk?raw=true)  
+[Boom V1.0.4 in Fir](http://fir.im/tv85)  
 
 # Usage
 
@@ -210,8 +213,86 @@ Similar with above. But just add some params in xml:
 | Param    | Type    | What It Does   |
 | ------------- |-------------| -----|
 | app:boom_inActionBar | boolean | true for boom menu button in action bar |
+| app:boom_inList | boolean | true for boom menu button in list |
 | app:boom_button_color | color | the color of the boom menu button, only work in floating action button |
 | app:boom_button_pressed_color | color | the color when pressing the boom menu button, only work when the ClickEffect is normal |
+
+### Use in List
+
+To add boom menu button in action bar just:
+
+**1**.Create your list-item layout, notice that the app:boom_inList value should be true:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text_view"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_weight="1"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:gravity="center_vertical"
+        />
+
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/boom_circle"
+        android:layout_width="56dp"
+        android:layout_height="match_parent"
+        app:boom_inList="true"
+        />
+
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/boom_ham"
+        android:layout_width="56dp"
+        android:layout_height="match_parent"
+        app:boom_inList="true"
+        />
+
+</LinearLayout>
+```
+**2**.Init the boom menu button with delays in adapter:
+```java
+@Override
+public View getView(int position, View convertView, final ViewGroup parent) {
+
+    ...
+
+    viewHolder.circleBoomMenuButton.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+            viewHolder.circleBoomMenuButton.init(
+                    circleSubButtonDrawables, // The drawables of images of sub buttons. Can not be null.
+                    circleSubButtonTexts,     // The texts of sub buttons, ok to be null.
+                    subButtonColors,          // The colors of sub buttons, including pressed-state and normal-state.
+                    ButtonType.CIRCLE,        // The button type.
+                    BoomType.PARABOLA,        // The boom type.
+                    PlaceType.CIRCLE_3_1,     // The place type.
+                    null,                     // Ease type to move the sub buttons when showing.
+                    null,                     // Ease type to scale the sub buttons when showing.
+                    null,                     // Ease type to rotate the sub buttons when showing.
+                    null,                     // Ease type to move the sub buttons when dismissing.
+                    null,                     // Ease type to scale the sub buttons when dismissing.
+                    null,                     // Ease type to rotate the sub buttons when dismissing.
+                    null                      // Rotation degree.
+            );
+            viewHolder.hamBoomMenuButton.setSubButtonShadowOffset(
+                    Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
+            viewHolder.circleBoomMenuButton.setSubButtonShadowOffset(
+                    Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
+        }
+    }, 1);
+
+    ...
+    
+}
+```
+For more information, please check [ListViewActivity.class](https://github.com/Nightonke/BoomMenu/blob/master/app/src/main/java/com/nightonke/boommenusample/ListViewActivity.java)
 
 ### Hamburger Button and Circle Button
 There are 2 types of sub buttons in BMB(boom menu button). Hamburger and circle. You can use ```ButtonType.HAM``` and ```ButtonType.CIRCLE``` to initialize the BMB. 
@@ -375,10 +456,12 @@ First version.
 Fix a bug that now BMB should be able to used in version below lollipop.
 ### 1.0.3
 Fix the bug that's in Android 4.0, the image of the circle button is black.
+### 1.0.4
+Now the BMB can be used in list.
 
 # Todo
 1. Particle effects are coming soon.
-2. Make BMB ready for using in listview.  
+2. ~~Make BMB ready for using in listview~~.  
 
 # License
 
