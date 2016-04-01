@@ -31,6 +31,9 @@ public class ShareActivity extends AppCompatActivity {
     private RadioButton[] placeTypeButtons;
     private int[] SharePlaceTypes = new int[]{1, 2, 4, 2, 4, 6, 4, 3, 2};
 
+    private SeekBar shareLineWidthSeek;
+    private TextView shareLineWidthText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,6 +123,8 @@ public class ShareActivity extends AppCompatActivity {
         );
 
         boomMenuButton.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
+        boomMenuButton.setShareLine1Color(GetRandomColor());
+        boomMenuButton.setShareLine2Color(GetRandomColor());
     }
     
     private void initViews() {
@@ -157,6 +162,29 @@ public class ShareActivity extends AppCompatActivity {
             }
         });
         setPlaceRadioButton(3);
+
+        shareLineWidthSeek = (SeekBar)findViewById(R.id.share_line_width_seek);
+        shareLineWidthSeek.setMax(100);
+        shareLineWidthSeek.setProgress(50);
+        shareLineWidthSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                shareLineWidthText.setText("Width: " + Util.getInstance().round(progress * 6f / 100, 1));
+                boomMenuButton.setShareLineWidth(shareLineWidthSeek.getProgress() * 6f / 100);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        shareLineWidthText = (TextView)findViewById(R.id.share_line_width_text);
+        shareLineWidthText.setText("Width: 3.0");
     }
 
     private void setPlaceRadioButton(int index) {

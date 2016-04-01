@@ -1618,4 +1618,28 @@ public class BoomMenuButton extends FrameLayout
         }
         return false;
     }
+
+    /**
+     * Set the width of the share icon lines
+     * @param width
+     */
+    public void setShareLineWidth(float width) {
+        if (shareLines != null) shareLines.setLineWidth(width);
+    }
+
+    /**
+     * Set the color of the share icon line 1
+     * @param color
+     */
+    public void setShareLine1Color(int color) {
+        if (shareLines != null) shareLines.setLine1Color(color);
+    }
+
+    /**
+     * Set the color of the share icon line 2
+     * @param color
+     */
+    public void setShareLine2Color(int color) {
+        if (shareLines != null) shareLines.setLine2Color(color);
+    }
 }

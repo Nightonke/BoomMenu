@@ -62,6 +62,30 @@
             android:layout_height="wrap_content"
             />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:text="@string/share_line_width"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+            />
+
+        <SeekBar
+            android:id="@+id/share_line_width_seek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="0"
+            />
+
+        <TextView
+            android:id="@+id/share_line_width_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|end"
+            />
+
     </LinearLayout>
 
     <com.nightonke.boommenu.BoomMenuButton

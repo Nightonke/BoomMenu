@@ -15,7 +15,11 @@ public class ShareLines extends View {
     
     private float[][] locations;
     private float offset = 1;
-    
+
+    private float lineWidth = 3f;
+    private int line1Color = Color.WHITE;
+    private int line2Color = Color.WHITE;
+
     public ShareLines(Context context) {
         this(context, null);
     }
@@ -36,19 +40,35 @@ public class ShareLines extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setStrokeWidth(3f);
+        paint.setColor(line1Color);
+        paint.setStrokeWidth(lineWidth);
         paint.setAntiAlias(true);
         canvas.drawLine(
                 locations[1][0],
                 locations[1][1],
                 (locations[0][0] - locations[1][0]) * offset + locations[1][0],
                 (locations[0][1] - locations[1][1]) * offset + locations[1][1], paint);
+        paint.setColor(line2Color);
         canvas.drawLine(
                 locations[1][0],
                 locations[1][1],
                 (locations[2][0] - locations[1][0]) * offset + locations[1][0],
                 (locations[2][1] - locations[1][1]) * offset + locations[1][1], paint);
         super.onDraw(canvas);
+    }
+
+    public void setLineWidth(float lineWidth) {
+        this.lineWidth = lineWidth;
+        invalidate();
+    }
+
+    public void setLine1Color(int line1Color) {
+        this.line1Color = line1Color;
+        invalidate();
+    }
+
+    public void setLine2Color(int line2Color) {
+        this.line2Color = line2Color;
+        invalidate();
     }
 }

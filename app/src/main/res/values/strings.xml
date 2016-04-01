@@ -40,4 +40,6 @@
     <string name="easy_example_text">This is an easy use of BoomMenuButton.</string>
     <string name="share_example_text">This is a share example of BoomMenuButton.</string>
 
+    <string name="share_line_width">Line Width</string>
+
 </resources>
