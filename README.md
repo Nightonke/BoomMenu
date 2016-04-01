@@ -116,7 +116,7 @@ boomMenuButton = (BoomMenuButton)findViewById(R.id.boom);
 **3.**Initialize the boom menu button in the onWindowFocusChanged() method in activity:
 ```java
 @Override
-onWindowFocusChanged(boolean hasFocus) {
+public void onWindowFocusChanged(boolean hasFocus) {
     super.onWindowFocusChanged(hasFocus);
     
     boomMenuButton.init(
