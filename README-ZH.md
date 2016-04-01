@@ -119,7 +119,7 @@ boomMenuButton = (BoomMenuButton)findViewById(R.id.boom);
 **3.**在onWindowFocusChanged()方法中初始化BoomMenuButton：
 ```java
 @Override
-onWindowFocusChanged(boolean hasFocus) {
+public void onWindowFocusChanged(boolean hasFocus) {
     super.onWindowFocusChanged(hasFocus);
     
     boomMenuButton.init(
