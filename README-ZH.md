@@ -10,6 +10,7 @@
 ![Ham](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/show_ham.gif?raw=true)
 
 ![List](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/show_list.gif?raw=true)
+![Share](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/show_share.gif?raw=true)
 
 BoomMenu可以让你的菜单按钮 ... 瞬间爆炸！
 
@@ -26,6 +27,7 @@ BoomMenu可以让你的菜单按钮 ... 瞬间爆炸！
 2. [Use in Action Bar](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#use-in-action-bar)
 3. [Use in Floating Action Button](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#use-in-floating-action-button)
 4. [Use in List](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#use-in-list)
+5. [Use in Share Style](https://github.com/Nightonke/BoomMenu#use-in-share-style)
 4. [Hamburger Button and Circle Button](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#hamburger-button-and-circle-button)
 5. [Number of Sub Buttons](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#number-of-sub-buttons)
 6. [Boom Types](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#boom-types)
@@ -51,11 +53,11 @@ BoomMenu可以让你的菜单按钮 ... 瞬间爆炸！
 [License](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#license)  
 
 # Gradle and Maven
-添加 "compile 'com.nightonke:boommenu:1.0.4'" 到app模块中的build.gradle即可：  
+添加 "compile 'com.nightonke:boommenu:1.0.5'" 到app模块中的build.gradle即可：  
 ```
 dependencies {
     ...
-    compile 'com.nightonke:boommenu:1.0.4'
+    compile 'com.nightonke:boommenu:1.0.5'
     ...
 }
 ```
@@ -64,7 +66,7 @@ dependencies {
 <dependency>
   <groupId>com.nightonke</groupId>
   <artifactId>boommenu</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <type>pom</type>
 </dependency>
 ```
@@ -76,12 +78,12 @@ dependencies {
 # Demo
 你可以在这个demo中选择绝大部分的BoomMenuButton的选项来查看其不同的效果。当你查看demo的MainActivity的时候，不用担心里面过长的代码，很多代码都是为了处理RadioGroup的逻辑。   
 
-![Boom V1.0.4](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.4.png)  
+![Boom V1.0.5](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.5.png)  
 
 通过链接下载：  
 
-[Boom V1.0.4 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.4.apk?raw=true)  
-[Boom V1.0.4 in Fir](http://fir.im/tv85)  
+[Boom V1.0.5 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.5.apk?raw=true)  
+[Boom V1.0.5 in Fir](http://fir.im/tv85)  
 
 # Usage
 
@@ -298,6 +300,12 @@ public View getView(int position, View convertView, final ViewGroup parent) {
 ```
 更多信息请查看[代码](https://github.com/Nightonke/BoomMenu/blob/master/app/src/main/java/com/nightonke/boommenusample/ListViewActivity.java)
 
+### Use in Share Style
+
+分享风格的按钮在版本1.0.5已经可以使用，效果就像开篇的gif。只需要把place type改成```PlaceType.SHARE_X_X```即可，demo中有分享风格按钮的所有示例。
+
+更多信息请查看[代码](https://github.com/Nightonke/BoomMenu/blob/master/app/src/main/java/com/nightonke/boommenusample/ShareActivity.java)
+
 ### Hamburger Button and Circle Button
 在BMB(BoomMenuButton)中有两种子按钮类型，Hamburger和circle。你可以使用 ```ButtonType.HAM``` 和 ```ButtonType.CIRCLE``` 来初始化BMB。 
 
@@ -462,6 +470,8 @@ TextView[] getTextViews();
 修复在Android4.0版本中出现的圆形子按钮图片背景色为黑色的bug。
 ### 1.0.4
 BMB已经可以在列表中使用。
+### 1.0.5
+分享风格按钮。
 
 # Todo
 1. 粒子效果。
