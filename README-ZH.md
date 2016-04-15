@@ -58,11 +58,11 @@ BoomMenu可以让你的菜单按钮 ... 瞬间爆炸！
 [License](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#license)  
 
 # Gradle and Maven
-添加 "compile 'com.nightonke:boommenu:1.0.5'" 到app模块中的build.gradle即可：  
+添加 "compile 'com.nightonke:boommenu:1.0.6'" 到app模块中的build.gradle即可：  
 ```
 dependencies {
     ...
-    compile 'com.nightonke:boommenu:1.0.5'
+    compile 'com.nightonke:boommenu:1.0.6'
     ...
 }
 ```
@@ -71,7 +71,7 @@ dependencies {
 <dependency>
   <groupId>com.nightonke</groupId>
   <artifactId>boommenu</artifactId>
-  <version>1.0.5</version>
+  <version>1.0.6</version>
   <type>pom</type>
 </dependency>
 ```
@@ -83,12 +83,12 @@ dependencies {
 # Demo
 你可以在这个demo中选择绝大部分的BoomMenuButton的选项来查看其不同的效果。当你查看demo的MainActivity的时候，不用担心里面过长的代码，很多代码都是为了处理RadioGroup的逻辑。   
 
-![Boom V1.0.5](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.5.png)  
+![Boom V1.0.6](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.6.png)  
 
 通过链接下载：  
 
-[Boom V1.0.5 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.5.apk?raw=true)  
-[Boom V1.0.5 in Fir](http://fir.im/tv85)  
+[Boom V1.0.6 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.6.apk?raw=true)  
+[Boom V1.0.6 in Fir](http://fir.im/tv85)  
 
 # Usage
 
@@ -307,7 +307,7 @@ public View getView(int position, View convertView, final ViewGroup parent) {
 
 ### Use in Share Style
 
-分享风格的按钮在版本1.0.5已经可以使用，效果就像开篇的gif。只需要把place type改成```PlaceType.SHARE_X_X```即可，demo中有分享风格按钮的所有示例。
+分享风格的按钮在版本1.0.6已经可以使用，效果就像开篇的gif。只需要把place type改成```PlaceType.SHARE_X_X```即可，demo中有分享风格按钮的所有示例。可以用 ```setShareLineWidth(float width)``` 来设置分享按钮中线段的宽度，或者用 ```setShareLine1Color(int color)``` 和 ```setShareLine2Color(int color)``` 来改变线段的颜色。
 
 更多信息请查看[代码](https://github.com/Nightonke/BoomMenu/blob/master/app/src/main/java/com/nightonke/boommenusample/ShareActivity.java)
 
@@ -477,6 +477,8 @@ TextView[] getTextViews();
 BMB已经可以在列表中使用。
 ### 1.0.5
 分享风格按钮。
+### 1.0.6
+分享风格按钮相关设置。
 
 # Todo
 1. 粒子效果。

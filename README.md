@@ -58,11 +58,11 @@ Yes, this library is about a menu which can ... BOOM!
 [License](https://github.com/Nightonke/BoomMenu#license)  
 
 # Gradle and Maven
-Just add the "compile 'com.nightonke:BoomMenu:1.0.5'" in your build.gradle of your module.  
+Just add the "compile 'com.nightonke:BoomMenu:1.0.6'" in your build.gradle of your module.  
 ```
 dependencies {
     ...
-    compile 'com.nightonke:boommenu:1.0.5'
+    compile 'com.nightonke:boommenu:1.0.6'
     ...
 }
 ```
@@ -71,7 +71,7 @@ Or maven:
 <dependency>
   <groupId>com.nightonke</groupId>
   <artifactId>boommenu</artifactId>
-  <version>1.0.5</version>
+  <version>1.0.6</version>
   <type>pom</type>
 </dependency>
 ```
@@ -82,10 +82,10 @@ Or maven:
 
 # Demo
 You can check most of the options that you can set when using boom menu button in this demo. When you read the code of the demo, don't be afraid of the length of the code in MainActivity.class. Most of codes are for the logic of the RadioGroups.  
-![Boom V1.0.5](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.5.png)  
+![Boom V1.0.6](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.6.png)  
 Or by link:  
-[Boom V1.0.5 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.5.apk?raw=true)  
-[Boom V1.0.5 in Fir](http://fir.im/tv85)  
+[Boom V1.0.6 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.6.apk?raw=true)  
+[Boom V1.0.6 in Fir](http://fir.im/tv85)  
 
 # Usage
 
@@ -303,7 +303,9 @@ For more information, please check [ListViewActivity.class](https://github.com/N
 
 ### Use in Share Style
 
-Share style is the new place type of BMB in version 1.0.5. You can see the effect in the gifs. To use this, just change the place type as ```PlaceType.SHARE_X_X```. Just try it in the demo.
+Share style is the new place type of BMB in version 1.0.6. You can see the effect in the gifs. To use this, just change the place type as ```PlaceType.SHARE_X_X```. Just try it in the demo.
+
+You can set the width of lines in share icon with ```setShareLineWidth(float width)``` and change the lines colors with ```setShareLine1Color(int color)``` and ```setShareLine2Color(int color)```.
 
 For more information, please check [ShareActivity.class](https://github.com/Nightonke/BoomMenu/blob/master/app/src/main/java/com/nightonke/boommenusample/ShareActivity.java)
 
@@ -473,6 +475,8 @@ Fix the bug that's in Android 4.0, the image of the circle button is black.
 Now the BMB can be used in list.
 ### 1.0.5
 Share style.
+### 1.0.6
+Setters for share style.
 
 # Todo
 1. Particle effects are coming soon.
