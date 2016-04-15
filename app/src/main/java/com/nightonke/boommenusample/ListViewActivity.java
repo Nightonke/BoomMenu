@@ -116,74 +116,48 @@ public class ListViewActivity extends AppCompatActivity {
             viewHolder.circleBoomMenuButton.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    viewHolder.circleBoomMenuButton.init(
-                            circleSubButtonDrawables, // The drawables of images of sub buttons. Can not be null.
-                            circleSubButtonTexts,     // The texts of sub buttons, ok to be null.
-                            subButtonColors,          // The colors of sub buttons, including pressed-state and normal-state.
-                            ButtonType.CIRCLE,        // The button type.
-                            BoomType.PARABOLA,        // The boom type.
-                            PlaceType.CIRCLE_3_1,     // The place type.
-                            null,                     // Ease type to move the sub buttons when showing.
-                            null,                     // Ease type to scale the sub buttons when showing.
-                            null,                     // Ease type to rotate the sub buttons when showing.
-                            null,                     // Ease type to move the sub buttons when dismissing.
-                            null,                     // Ease type to scale the sub buttons when dismissing.
-                            null,                     // Ease type to rotate the sub buttons when dismissing.
-                            null                      // Rotation degree.
-                    );
-                    viewHolder.hamBoomMenuButton.setSubButtonShadowOffset(
-                            Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
-                    viewHolder.circleBoomMenuButton.setSubButtonShadowOffset(
-                            Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
+                    // Now with Builder, you can init BMB more convenient
+                    new BoomMenuButton.Builder()
+                            .subButtons(circleSubButtonDrawables, subButtonColors, circleSubButtonTexts)
+                            .button(ButtonType.CIRCLE)
+                            .boom(BoomType.PARABOLA)
+                            .place(PlaceType.CIRCLE_3_1)
+                            .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+                            .onSubButtonClick(new BoomMenuButton.OnSubButtonClickListener() {
+                                @Override
+                                public void onClick(int buttonIndex) {
+                                    Toast.makeText(
+                                            parent.getContext(),
+                                            "On click " + circleSubButtonTexts[buttonIndex],
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .init(viewHolder.circleBoomMenuButton);
                 }
             }, 1);
 
             viewHolder.hamBoomMenuButton.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    viewHolder.hamBoomMenuButton.init(
-                            hamSubButtonDrawables, // The drawables of images of sub buttons. Can not be null.
-                            hamSubButtonTexts,  // The texts of sub buttons, ok to be null.
-                            subButtonColors,    // The colors of sub buttons, including pressed-state and normal-state.
-                            ButtonType.HAM,     // The button type.
-                            BoomType.PARABOLA,  // The boom type.
-                            PlaceType.HAM_3_1,  // The place type.
-                            null,               // Ease type to move the sub buttons when showing.
-                            null,               // Ease type to scale the sub buttons when showing.
-                            null,               // Ease type to rotate the sub buttons when showing.
-                            null,               // Ease type to move the sub buttons when dismissing.
-                            null,               // Ease type to scale the sub buttons when dismissing.
-                            null,               // Ease type to rotate the sub buttons when dismissing.
-                            null                // Rotation degree.
-                    );
-                    viewHolder.hamBoomMenuButton.setSubButtonShadowOffset(
-                            Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
+                    // Now with Builder, you can init BMB more convenient
+                    new BoomMenuButton.Builder()
+                            .subButtons(hamSubButtonDrawables, subButtonColors, hamSubButtonTexts)
+                            .button(ButtonType.HAM)
+                            .boom(BoomType.PARABOLA)
+                            .place(PlaceType.HAM_3_1)
+                            .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+                            .onSubButtonClick(new BoomMenuButton.OnSubButtonClickListener() {
+                                @Override
+                                public void onClick(int buttonIndex) {
+                                    Toast.makeText(
+                                            parent.getContext(),
+                                            "On click " + hamSubButtonTexts[buttonIndex],
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .init(viewHolder.hamBoomMenuButton);
                 }
             }, 1);
-
-            // set listener
-
-            viewHolder.circleBoomMenuButton.setOnSubButtonClickListener(
-                    new BoomMenuButton.OnSubButtonClickListener() {
-                        @Override
-                        public void onClick(int buttonIndex) {
-                        Toast.makeText(
-                                parent.getContext(),
-                                "On click " + circleSubButtonTexts[buttonIndex],
-                                Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-            viewHolder.hamBoomMenuButton.setOnSubButtonClickListener(
-                    new BoomMenuButton.OnSubButtonClickListener() {
-                        @Override
-                        public void onClick(int buttonIndex) {
-                            Toast.makeText(
-                                    parent.getContext(),
-                                    "On click " + hamSubButtonTexts[buttonIndex],
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
 
             return convertView;
         }

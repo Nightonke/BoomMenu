@@ -63,23 +63,35 @@ public class EasyUseActivity extends AppCompatActivity {
             subButtonColors[i][0] = Util.getInstance().getPressedColor(subButtonColors[i][1]);
         }
 
-        boomMenuButton.init(
-                subButtonDrawables, // The drawables of images of sub buttons. Can not be null.
-                subButtonTexts,     // The texts of sub buttons, ok to be null.
-                subButtonColors,    // The colors of sub buttons, including pressed-state and normal-state.
-                ButtonType.HAM,     // The button type.
-                BoomType.PARABOLA,  // The boom type.
-                PlaceType.HAM_3_1,  // The place type.
-                null,               // Ease type to move the sub buttons when showing.
-                null,               // Ease type to scale the sub buttons when showing.
-                null,               // Ease type to rotate the sub buttons when showing.
-                null,               // Ease type to move the sub buttons when dismissing.
-                null,               // Ease type to scale the sub buttons when dismissing.
-                null,               // Ease type to rotate the sub buttons when dismissing.
-                null                // Rotation degree.
-        );
+        // Now with Builder, you can init BMB more convenient
+        new BoomMenuButton.Builder()
+                .addSubButton(ContextCompat.getDrawable(this, R.drawable.boom), subButtonColors[0], "BoomMenuButton")
+                .addSubButton(ContextCompat.getDrawable(this, R.drawable.java), subButtonColors[0], "View source code")
+                .addSubButton(ContextCompat.getDrawable(this, R.drawable.github), subButtonColors[0], "Follow me")
+                .button(ButtonType.HAM)
+                .boom(BoomType.PARABOLA)
+                .place(PlaceType.HAM_3_1)
+                .subButtonTextColor(ContextCompat.getColor(this, R.color.black))
+                .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+                .init(boomMenuButton);
 
-        boomMenuButton.setTextViewColor(ContextCompat.getColor(this, R.color.black));
-        boomMenuButton.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
+//        boomMenuButton.init(
+//                subButtonDrawables, // The drawables of images of sub buttons. Can not be null.
+//                subButtonTexts,     // The texts of sub buttons, ok to be null.
+//                subButtonColors,    // The colors of sub buttons, including pressed-state and normal-state.
+//                ButtonType.HAM,     // The button type.
+//                BoomType.PARABOLA,  // The boom type.
+//                PlaceType.HAM_3_1,  // The place type.
+//                null,               // Ease type to move the sub buttons when showing.
+//                null,               // Ease type to scale the sub buttons when showing.
+//                null,               // Ease type to rotate the sub buttons when showing.
+//                null,               // Ease type to move the sub buttons when dismissing.
+//                null,               // Ease type to scale the sub buttons when dismissing.
+//                null,               // Ease type to rotate the sub buttons when dismissing.
+//                null                // Rotation degree.
+//        );
+//
+//        boomMenuButton.setTextViewColor(ContextCompat.getColor(this, R.color.black));
+//        boomMenuButton.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
     }
 }

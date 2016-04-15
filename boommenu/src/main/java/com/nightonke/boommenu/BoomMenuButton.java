@@ -34,6 +34,9 @@ import com.nightonke.boommenu.Types.OrderType;
 import com.nightonke.boommenu.Types.PlaceType;
 import com.nightonke.boommenu.Types.StateType;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -446,6 +449,7 @@ public class BoomMenuButton extends FrameLayout
                     hamButtons[i].setShadowDy(subButtonsYOffsetOfShadow);
                 }
             }
+            setRipple(clickEffectType);
         }
 
         // listener
@@ -1246,6 +1250,14 @@ public class BoomMenuButton extends FrameLayout
     }
 
     /**
+     * Set frames for animaitons.
+     * @param frames
+     */
+    public void setFrames(int frames) {
+        this.frames = frames;
+    }
+
+    /**
      * Set animation duration.
      *
      * @param duration
@@ -1406,8 +1418,10 @@ public class BoomMenuButton extends FrameLayout
      * @param yOffset In pixels.
      */
     public void setBoomButtonShadowOffset(float xOffset, float yOffset) {
-        shadowLayout.setmDx(xOffset);
-        shadowLayout.setmDy(yOffset);
+        if (shadowLayout != null) {
+            shadowLayout.setmDx(xOffset);
+            shadowLayout.setmDy(yOffset);
+        }
     }
 
     /**
@@ -1429,9 +1443,17 @@ public class BoomMenuButton extends FrameLayout
     public void setClickEffectType(ClickEffectType clickEffectType) {
         setRipple(clickEffectType);
         if (buttonType.equals(ButtonType.CIRCLE)) {
-            for (int i = 0; i < buttonNum; i++) circleButtons[i].setRipple(clickEffectType);
+            if (circleButtons != null) {
+                for (int i = 0; i < buttonNum; i++) {
+                    if (circleButtons[i] != null) circleButtons[i].setRipple(clickEffectType);
+                }
+            }
         } else if (buttonType.equals(ButtonType.HAM)) {
-            for (int i = 0; i < buttonNum; i++) hamButtons[i].setRipple(clickEffectType);
+            if (hamButtons != null) {
+                for (int i = 0; i < buttonNum; i++) {
+                    if (hamButtons[i] != null) hamButtons[i].setRipple(clickEffectType);
+                }
+            }
         }
     }
 
@@ -1470,9 +1492,17 @@ public class BoomMenuButton extends FrameLayout
      */
     public void setTextViewColor(int color) {
         if (buttonType.equals(ButtonType.CIRCLE)) {
-            for (int i = 0; i < buttonNum; i++) circleButtons[i].getTextView().setTextColor(color);
+            if (circleButtons != null) {
+                for (int i = 0; i < buttonNum; i++) {
+                    if (circleButtons[i] != null) circleButtons[i].getTextView().setTextColor(color);
+                }
+            }
         } else if (buttonType.equals(ButtonType.HAM)) {
-            for (int i = 0; i < buttonNum; i++) hamButtons[i].getTextView().setTextColor(color);
+            if (hamButtons != null) {
+                for (int i = 0; i < buttonNum; i++) {
+                    if (hamButtons[i] != null) hamButtons[i].getTextView().setTextColor(color);
+                }
+            }
         }
     }
 
@@ -1484,9 +1514,17 @@ public class BoomMenuButton extends FrameLayout
     public void setTextViewColor(int[] colors) {
         int length = Math.min(buttonNum, colors.length);
         if (buttonType.equals(ButtonType.CIRCLE)) {
-            for (int i = 0; i < length; i++) circleButtons[i].getTextView().setTextColor(colors[i]);
+            if (circleButtons != null) {
+                for (int i = 0; i < length; i++) {
+                    if (circleButtons[i] != null) circleButtons[i].getTextView().setTextColor(colors[i]);
+                }
+            }
         } else if (buttonType.equals(ButtonType.HAM)) {
-            for (int i = 0; i < length; i++) hamButtons[i].getTextView().setTextColor(colors[i]);
+            if (hamButtons != null) {
+                for (int i = 0; i < length; i++) {
+                    if (hamButtons[i] != null) hamButtons[i].getTextView().setTextColor(colors[i]);
+                }
+            }
         }
     }
 
@@ -1641,5 +1679,287 @@ public class BoomMenuButton extends FrameLayout
      */
     public void setShareLine2Color(int color) {
         if (shareLines != null) shareLines.setLine2Color(color);
+    }
+
+    /**
+     * Builder
+     * Fuck this... That's so long...
+     */
+    public static class Builder {
+
+        // required parameters
+        private ArrayList<Drawable> drawables = null;
+        private ArrayList<int[]> colors = null;
+        private ArrayList<String> strings = null;
+
+        private int frames = 80;
+
+        private int duration = 800;
+
+        private int delay = 100;
+
+        private OrderType showOrderType = OrderType.DEFAULT;
+
+        private OrderType hideOrderType = OrderType.DEFAULT;
+
+        private ButtonType buttonType = ButtonType.CIRCLE;
+
+        private BoomType boomType = BoomType.HORIZONTAL_THROW;
+
+        private PlaceType placeType = null;
+
+        private EaseType showMoveEaseType = EaseType.EaseOutBack;
+        private EaseType hideMoveEaseType = EaseType.EaseOutCirc;
+
+        private EaseType showScaleEaseType = EaseType.EaseOutBack;
+        private EaseType hideScaleEaseType = EaseType.EaseOutCirc;
+
+        private int rotateDegree = 720;
+        private EaseType showRotateEaseType = EaseType.EaseOutBack;
+        private EaseType hideRotateEaseType = EaseType.Linear;
+
+        private boolean autoDismiss = true;
+
+        private boolean cancelable = true;
+
+        private DimType dimType = DimType.DIM_6;
+
+        private ClickEffectType clickEffectType = ClickEffectType.RIPPLE;
+
+        private float boomButtonXOffsetOfShadow = 0;
+        private float boomButtonYOffsetOfShadow = 0;
+
+        private float subButtonsXOffsetOfShadow = 0;
+        private float subButtonsYOffsetOfShadow = 0;
+        private int subButtonTextColor = Color.WHITE;
+
+        private OnClickListener onClickListener = null;
+        private AnimatorListener animatorListener = null;
+        private OnSubButtonClickListener onSubButtonClickListener = null;
+
+        private float shareLineWidth = 3f;
+        private int shareLine1Color = Color.WHITE;
+        private int shareLine2Color = Color.WHITE;
+
+        public Builder subButtons(ArrayList<Drawable> drawables, ArrayList<int[]> colors, ArrayList<String> strings) {
+            this.drawables = drawables;
+            this.colors = colors;
+            this.strings = strings;
+            return this;
+        }
+
+        public Builder subButtons(Drawable[] drawables, int[][] colors, String[] strings) {
+            this.drawables = new ArrayList<>(Arrays.asList(drawables));
+            this.colors = new ArrayList<>(Arrays.asList(colors));
+            this.strings = new ArrayList<>(Arrays.asList(strings));
+            return this;
+        }
+
+        public Builder frames(int frames) {
+            this.frames = frames;
+            return this;
+        }
+
+        public Builder duration(int duration) {
+            this.duration = duration;
+            return this;
+        }
+
+        public Builder delay(int delay) {
+            this.delay = delay;
+            return this;
+        }
+
+        public Builder showOrder(OrderType showOrderType) {
+            this.showOrderType = showOrderType;
+            return this;
+        }
+        
+        public Builder hideOrder(OrderType hideOrderType) {
+            this.hideOrderType = hideOrderType;
+            return this;
+        }
+        
+        public Builder button(ButtonType buttonType) {
+            this.buttonType = buttonType;
+            return this;
+        }
+
+        public Builder boom(BoomType boomType) {
+            this.boomType = boomType;
+            return this;
+        }
+        
+        public Builder place(PlaceType placeType) {
+            this.placeType = placeType;
+            return this;
+        }
+        
+        public Builder showMoveEase(EaseType showMoveEaseType) {
+            this.showMoveEaseType = showMoveEaseType;
+            return this;
+        }
+        
+        public Builder hideMoveEase(EaseType hideMoveEaseType) {
+            this.hideMoveEaseType = hideMoveEaseType;
+            return this;
+        }
+        
+        public Builder showScaleEase(EaseType showScaleEaseType) {
+            this.showScaleEaseType = showScaleEaseType;
+            return this;
+        }
+        
+        public Builder hideScaleType(EaseType hideScaleEaseType) {
+            this.hideScaleEaseType = hideScaleEaseType;
+            return this;
+        }
+
+        public Builder rotateDegree(int rotateDegree) {
+            this.rotateDegree = rotateDegree;
+            return this;
+        }
+
+        public Builder showRotateEase(EaseType showRotateEaseType) {
+            this.showRotateEaseType = showRotateEaseType;
+            return this;
+        }
+
+        public Builder hideRotateType(EaseType hideRotateEaseType) {
+            this.hideRotateEaseType = hideRotateEaseType;
+            return this;
+        }
+
+        public Builder autoDismiss(boolean autoDismiss) {
+            this.autoDismiss = autoDismiss;
+            return this;
+        }
+
+        public Builder cancelable(boolean cancelable) {
+            this.cancelable = cancelable;
+            return this;
+        }
+
+        public Builder dim(DimType dimType) {
+            this.dimType = dimType;
+            return this;
+        }
+
+        public Builder clickEffect(ClickEffectType clickEffectType) {
+            this.clickEffectType = clickEffectType;
+            return this;
+        }
+
+        public Builder boomButtonShadow(float boomButtonXOffsetOfShadow, float boomButtonYOffsetOfShadow) {
+            this.boomButtonXOffsetOfShadow = boomButtonXOffsetOfShadow;
+            this.boomButtonYOffsetOfShadow = boomButtonYOffsetOfShadow;
+            return this;
+        }
+
+        public Builder subButtonsShadow(float subButtonsXOffsetOfShadow, float subButtonsYOffsetOfShadow) {
+            this.subButtonsXOffsetOfShadow = subButtonsXOffsetOfShadow;
+            this.subButtonsYOffsetOfShadow = subButtonsYOffsetOfShadow;
+            return this;
+        }
+
+        public Builder subButtonTextColor(int subButtonTextColor) {
+            this.subButtonTextColor = subButtonTextColor;
+            return this;
+        }
+
+        public Builder onBoomButtonBlick(OnClickListener onClickListener) {
+            this.onClickListener = onClickListener;
+            return this;
+        }
+
+        public Builder animator(AnimatorListener animatorListener) {
+            this.animatorListener = animatorListener;
+            return this;
+        }
+
+        public Builder onSubButtonClick(OnSubButtonClickListener onSubButtonClickListener) {
+            this.onSubButtonClickListener = onSubButtonClickListener;
+            return this;
+        }
+
+        public Builder shareStyle(float shareLineWidth, int shareLine1Color, int shareLine2Color) {
+            this.shareLineWidth = shareLineWidth;
+            this.shareLine1Color = shareLine1Color;
+            this.shareLine2Color = shareLine2Color;
+            return this;
+        }
+
+        /**
+         * Add a sub button with 3 params.
+         * @param drawable
+         * @param twoColors
+         * @param string
+         * @return
+         */
+        public Builder addSubButton(Drawable drawable, int[] twoColors, String string) {
+            if (drawables == null) drawables = new ArrayList<>();
+            drawables.add(drawable);
+            if (colors == null) colors = new ArrayList<>();
+            colors.add(twoColors);
+            if (strings == null) strings = new ArrayList<>();
+            strings.add(string);
+            return this;
+        }
+
+        /**
+         * Add a sub button with 2 params.
+         * @param drawable
+         * @param twoColors
+         * @return
+         */
+        public Builder addSubButton(Drawable drawable, int[] twoColors) {
+            if (drawables == null) drawables = new ArrayList<>();
+            drawables.add(drawable);
+            if (colors == null) colors = new ArrayList<>();
+            colors.add(twoColors);
+            return this;
+        }
+
+        public BoomMenuButton init(BoomMenuButton boomMenuButton) {
+            Drawable[] drawablesInArray = new Drawable[drawables.size()];
+            for (int i = 0; i < drawables.size(); i++) drawablesInArray[i] = drawables.get(i);
+            String[] stringsInArray = new String[strings.size()];
+            for (int i = 0; i < strings.size(); i++) stringsInArray[i] = strings.get(i);
+            int[][] colorsInArray = new int[colors.size()][2];
+            for (int i = 0; i < colors.size(); i++) colorsInArray[i] = colors.get(i);
+            boomMenuButton.init(
+                    drawablesInArray,
+                    stringsInArray,
+                    colorsInArray,
+                    buttonType,
+                    boomType,
+                    placeType,
+                    showMoveEaseType,
+                    showScaleEaseType,
+                    showRotateEaseType,
+                    hideMoveEaseType,
+                    hideScaleEaseType,
+                    hideRotateEaseType,
+                    rotateDegree);
+            boomMenuButton.setFrames(frames);
+            boomMenuButton.setDuration(duration);
+            boomMenuButton.setDelay(delay);
+            boomMenuButton.setShowOrderType(showOrderType);
+            boomMenuButton.setHideOrderType(hideOrderType);
+            boomMenuButton.setAutoDismiss(autoDismiss);
+            boomMenuButton.setCancelable(cancelable);
+            boomMenuButton.setDimType(dimType);
+            boomMenuButton.setClickEffectType(clickEffectType);
+            boomMenuButton.setBoomButtonShadowOffset(boomButtonXOffsetOfShadow, boomButtonYOffsetOfShadow);
+            boomMenuButton.setSubButtonShadowOffset(subButtonsXOffsetOfShadow, subButtonsYOffsetOfShadow);
+            boomMenuButton.setTextViewColor(subButtonTextColor);
+            boomMenuButton.setOnClickListener(onClickListener);
+            boomMenuButton.setAnimatorListener(animatorListener);
+            boomMenuButton.setOnSubButtonClickListener(onSubButtonClickListener);
+            boomMenuButton.setShareLineWidth(shareLineWidth);
+            boomMenuButton.setShareLine1Color(shareLine1Color);
+            boomMenuButton.setShareLine2Color(shareLine2Color);
+            return boomMenuButton;
+        }
     }
 }

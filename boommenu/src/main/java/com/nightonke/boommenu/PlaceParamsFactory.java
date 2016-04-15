@@ -15,7 +15,7 @@ public class PlaceParamsFactory {
             int buttonWidth,
             int buttonHeight,
             int dotWidth,
-            int dotHeight) { 
+            int dotHeight) {
         FrameLayout.LayoutParams[] ps = null;
         if (placeType.equals(PlaceType.CIRCLE_1_1)) {
             ps = new FrameLayout.LayoutParams[1];
@@ -614,6 +614,7 @@ public class PlaceParamsFactory {
             ps[8].leftMargin = buttonWidth / 2 + dis1 / 2 - dotWidth / 2;
             ps[8].topMargin = buttonHeight / 2 + dis2 - dotWidth / 2;
         }
+        // to support RTL mode
         for (int i = 0; i < ps.length; i++) ps[i].gravity = Gravity.TOP | Gravity.LEFT;
         return ps;
     }
@@ -667,6 +668,7 @@ public class PlaceParamsFactory {
             ps[3].leftMargin = buttonWidth / 2 - barWidth / 2;
             ps[3].topMargin = buttonHeight / 2 + barHeight * 7 / 4;
         }
+        // to support RTL mode
         for (int i = 0; i < ps.length; i++) ps[i].gravity = Gravity.TOP | Gravity.LEFT;
         return ps;
     }
