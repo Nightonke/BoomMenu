@@ -15,7 +15,7 @@ public class PlaceParamsFactory {
             int buttonWidth,
             int buttonHeight,
             int dotWidth,
-            int dotHeight) {
+            int dotHeight) { 
         FrameLayout.LayoutParams[] ps = null;
         if (placeType.equals(PlaceType.CIRCLE_1_1)) {
             ps = new FrameLayout.LayoutParams[1];
