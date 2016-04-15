@@ -1,5 +1,6 @@
 package com.nightonke.boommenu;
 
+import android.view.Gravity;
 import android.widget.FrameLayout;
 
 import com.nightonke.boommenu.Types.PlaceType;
@@ -613,6 +614,7 @@ public class PlaceParamsFactory {
             ps[8].leftMargin = buttonWidth / 2 + dis1 / 2 - dotWidth / 2;
             ps[8].topMargin = buttonHeight / 2 + dis2 - dotWidth / 2;
         }
+        for (int i = 0; i < ps.length; i++) ps[i].gravity = Gravity.TOP | Gravity.LEFT;
         return ps;
     }
 
@@ -665,6 +667,7 @@ public class PlaceParamsFactory {
             ps[3].leftMargin = buttonWidth / 2 - barWidth / 2;
             ps[3].topMargin = buttonHeight / 2 + barHeight * 7 / 4;
         }
+        for (int i = 0; i < ps.length; i++) ps[i].gravity = Gravity.TOP | Gravity.LEFT;
         return ps;
     }
 }
