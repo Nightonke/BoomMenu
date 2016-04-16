@@ -96,8 +96,6 @@ public class MainActivity extends AppCompatActivity
         mTitleTextView.setText(R.string.app_name);
 
         boomMenuButtonInActionBar = (BoomMenuButton) mCustomView.findViewById(R.id.boom);
-        boomMenuButtonInActionBar.setOnSubButtonClickListener(this);
-        boomMenuButtonInActionBar.setAnimatorListener(this);
 
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
@@ -105,56 +103,8 @@ public class MainActivity extends AppCompatActivity
         ((Toolbar) mCustomView.getParent()).setContentInsetsAbsolute(0,0);
 
         boomMenuButton = (BoomMenuButton)findViewById(R.id.boom);
-        boomMenuButton.setOnSubButtonClickListener(this);
-        boomMenuButton.setAnimatorListener(this);
-        boomMenuButton.setDimType(DimType.DIM_0);
 
         boomInfo = (BoomMenuButton)mCustomView.findViewById(R.id.info);
-        boomInfo.setOnSubButtonClickListener(new BoomMenuButton.OnSubButtonClickListener() {
-            @Override
-            public void onClick(int buttonIndex) {
-                if (buttonIndex == 0) {
-                    Toast.makeText(mContext, "Boom!", Toast.LENGTH_SHORT).show();
-                } else if (buttonIndex == 1) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(
-                            "https://github.com/Nightonke/BoomMenu")));
-                } else if (buttonIndex == 2) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(
-                            "https://github.com/Nightonke")));
-                }
-            }
-        });
-        boomInfo.setAnimatorListener(new BoomMenuButton.AnimatorListener() {
-            @Override
-            public void toShow() {
-
-            }
-
-            @Override
-            public void showing(float fraction) {
-
-            }
-
-            @Override
-            public void showed() {
-
-            }
-
-            @Override
-            public void toHide() {
-
-            }
-
-            @Override
-            public void hiding(float fraction) {
-
-            }
-
-            @Override
-            public void hided() {
-
-            }
-        });
 
         initViews();
     }
@@ -187,24 +137,29 @@ public class MainActivity extends AppCompatActivity
             colors[i][0] = Util.getInstance().getPressedColor(colors[i][1]);
         }
 
-        boomInfo.init(
-                drawables,
-                new String[]{"BoomMenuButton", "View source code", "Follow me"},
-                colors,
-                ButtonType.HAM,
-                BoomType.PARABOLA,
-                PlaceType.HAM_3_1,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
-
-        boomInfo.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
-        boomInfo.setTextViewColor(ContextCompat.getColor(mContext, R.color.black));
-        boomInfo.setBoomType(BoomType.PARABOLA_2);
+        // Now with Builder, you can init BMB more convenient
+        new BoomMenuButton.Builder()
+                .subButtons(drawables, colors, new String[]{"BoomMenuButton", "View source code", "Follow me"})
+                .button(ButtonType.HAM)
+                .boom(BoomType.PARABOLA_2)
+                .place(PlaceType.HAM_3_1)
+                .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+                .subButtonTextColor(ContextCompat.getColor(mContext, R.color.black))
+                .onSubButtonClick(new BoomMenuButton.OnSubButtonClickListener() {
+                    @Override
+                    public void onClick(int buttonIndex) {
+                        if (buttonIndex == 0) {
+                            Toast.makeText(mContext, "Boom!", Toast.LENGTH_SHORT).show();
+                        } else if (buttonIndex == 1) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(
+                                    "https://github.com/Nightonke/BoomMenu")));
+                        } else if (buttonIndex == 2) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(
+                                    "https://github.com/Nightonke")));
+                        }
+                    }
+                })
+                .init(boomInfo);
     }
 
     private void initBoom() {
@@ -256,39 +211,29 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
+        // Now with Builder, you can init BMB more convenient
+        new BoomMenuButton.Builder()
+                .subButtons(drawables, colors, strings)
+                .button(buttonType)
+                .boom(getBoomType())
+                .place(getPlaceType())
+                .boomButtonShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+                .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+                .onSubButtonClick(this)
+                .animator(this)
+                .init(boomMenuButton);
 
-        boomMenuButton.init(
-                drawables,
-                strings,
-                colors,
-                buttonType,
-                getBoomType(),
-                getPlaceType(),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
-
-        boomMenuButtonInActionBar.init(
-                drawables,
-                strings,
-                colors,
-                buttonType,
-                getBoomType(),
-                getPlaceType(),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
-
-        boomMenuButton.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
-        boomMenuButtonInActionBar.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
+        // Now with Builder, you can init BMB more convenient
+        new BoomMenuButton.Builder()
+                .subButtons(drawables, colors, strings)
+                .button(buttonType)
+                .boom(getBoomType())
+                .place(getPlaceType())
+                .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+                .onSubButtonClick(this)
+                .animator(this)
+                .dim(DimType.DIM_0)
+                .init(boomMenuButtonInActionBar);
     }
 
     private void initViews() {
@@ -521,6 +466,7 @@ public class MainActivity extends AppCompatActivity
         findViewById(R.id.easy_example).setOnClickListener(this);
         findViewById(R.id.list_view_example).setOnClickListener(this);
         findViewById(R.id.share_example).setOnClickListener(this);
+        findViewById(R.id.builder_example).setOnClickListener(this);
     }
 
     private BoomType getBoomType() {
@@ -750,6 +696,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.share_example:
                 startActivity(new Intent(this, ShareActivity.class));
+                break;
+            case R.id.builder_example:
+                startActivity(new Intent(this, BuilderActivity.class));
                 break;
         }
     }

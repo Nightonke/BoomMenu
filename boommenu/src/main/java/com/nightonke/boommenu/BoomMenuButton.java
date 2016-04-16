@@ -1920,7 +1920,41 @@ public class BoomMenuButton extends FrameLayout
             return this;
         }
 
+        /**
+         * Add a sub button with 4 params.
+         * @param context
+         * @param drawable
+         * @param twoColors
+         * @param string
+         * @return
+         */
+        public Builder addSubButton(Context context, int drawable, int[] twoColors, String string) {
+            if (drawables == null) drawables = new ArrayList<>();
+            drawables.add(ContextCompat.getDrawable(context, drawable));
+            if (colors == null) colors = new ArrayList<>();
+            colors.add(twoColors);
+            if (strings == null) strings = new ArrayList<>();
+            strings.add(string);
+            return this;
+        }
+
+        /**
+         * Add a sub button with 3 params.
+         * @param context
+         * @param drawable
+         * @param twoColors
+         * @return
+         */
+        public Builder addSubButton(Context context, int drawable, int[] twoColors) {
+            if (drawables == null) drawables = new ArrayList<>();
+            drawables.add(ContextCompat.getDrawable(context, drawable));
+            if (colors == null) colors = new ArrayList<>();
+            colors.add(twoColors);
+            return this;
+        }
+
         public BoomMenuButton init(BoomMenuButton boomMenuButton) {
+            if (boomMenuButton == null) throw new RuntimeException("BMB is null!");
             Drawable[] drawablesInArray = new Drawable[drawables.size()];
             for (int i = 0; i < drawables.size(); i++) drawablesInArray[i] = drawables.get(i);
             String[] stringsInArray = new String[strings.size()];

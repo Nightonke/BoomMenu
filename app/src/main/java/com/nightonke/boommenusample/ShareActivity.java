@@ -102,29 +102,20 @@ public class ShareActivity extends AppCompatActivity {
 
         int[][] colors = new int[number][2];
         for (int i = 0; i < number; i++) {
-            colors[i][1] = GetRandomColor();
+            colors[i][1] = getRandomColor();
             colors[i][0] = Util.getInstance().getPressedColor(colors[i][1]);
         }
 
-        boomMenuButton.init(
-                drawables,                  // The drawables of images of sub buttons. Can not be null.
-                strings,                    // The texts of sub buttons, ok to be null.
-                colors,                     // The colors of sub buttons, including pressed-state and normal-state.
-                ButtonType.CIRCLE,          // The button type.
-                BoomType.HORIZONTAL_THROW_2,// The boom type.
-                getPlaceType(),             // The place type.
-                null,                       // Ease type to move the sub buttons when showing.
-                null,                       // Ease type to scale the sub buttons when showing.
-                null,                       // Ease type to rotate the sub buttons when showing.
-                null,                       // Ease type to move the sub buttons when dismissing.
-                null,                       // Ease type to scale the sub buttons when dismissing.
-                null,                       // Ease type to rotate the sub buttons when dismissing.
-                null                        // Rotation degree.
-        );
-
-        boomMenuButton.setSubButtonShadowOffset(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2));
-        boomMenuButton.setShareLine1Color(GetRandomColor());
-        boomMenuButton.setShareLine2Color(GetRandomColor());
+        // Now with Builder, you can init BMB more convenient
+        new BoomMenuButton.Builder()
+                .subButtons(drawables, colors, strings)
+                .button(ButtonType.CIRCLE)
+                .boom(BoomType.HORIZONTAL_THROW_2)
+                .place(getPlaceType())
+                .boomButtonShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+                .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+                .shareStyle(3f, getRandomColor(), getRandomColor())
+                .init(boomMenuButton);
     }
     
     private void initViews() {
@@ -290,7 +281,7 @@ public class ShareActivity extends AppCompatActivity {
             "#9E9E9E",
             "#607D8B"};
 
-    public int GetRandomColor() {
+    public int getRandomColor() {
         Random random = new Random();
         int p = random.nextInt(Colors.length);
         return Color.parseColor(Colors[p]);

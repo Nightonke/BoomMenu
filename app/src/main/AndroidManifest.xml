@@ -18,7 +18,8 @@
         </activity>
         <activity android:name=".EasyUseActivity" />
         <activity android:name=".ListViewActivity" />
-        <activity android:name=".ShareActivity"></activity>
+        <activity android:name=".ShareActivity" />
+        <activity android:name=".BuilderActivity"></activity>
     </application>
 
 </manifest>
