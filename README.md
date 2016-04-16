@@ -33,6 +33,7 @@ Yes, this library is about a menu which can ... BOOM!
 3. [Use in Floating Action Button](https://github.com/Nightonke/BoomMenu#use-in-floating-action-button)
 4. [Use in List](https://github.com/Nightonke/BoomMenu#use-in-list)
 5. [Use in Share Style](https://github.com/Nightonke/BoomMenu#use-in-share-style)
+6. [Use with Builder](https://github.com/Nightonke/BoomMenu#use-with-builder)
 4. [Hamburger Button and Circle Button](https://github.com/Nightonke/BoomMenu#hamburger-button-and-circle-button)
 5. [Number of Sub Buttons](https://github.com/Nightonke/BoomMenu#number-of-sub-buttons)
 6. [Boom Types](https://github.com/Nightonke/BoomMenu#boom-types)
@@ -58,11 +59,11 @@ Yes, this library is about a menu which can ... BOOM!
 [License](https://github.com/Nightonke/BoomMenu#license)  
 
 # Gradle and Maven
-Just add the "compile 'com.nightonke:BoomMenu:1.0.6'" in your build.gradle of your module.  
+Just add the "compile 'com.nightonke:BoomMenu:1.0.7'" in your build.gradle of your module.  
 ```
 dependencies {
     ...
-    compile 'com.nightonke:boommenu:1.0.6'
+    compile 'com.nightonke:boommenu:1.0.7'
     ...
 }
 ```
@@ -71,7 +72,7 @@ Or maven:
 <dependency>
   <groupId>com.nightonke</groupId>
   <artifactId>boommenu</artifactId>
-  <version>1.0.6</version>
+  <version>1.0.7</version>
   <type>pom</type>
 </dependency>
 ```
@@ -82,10 +83,10 @@ Or maven:
 
 # Demo
 You can check most of the options that you can set when using boom menu button in this demo. When you read the code of the demo, don't be afraid of the length of the code in MainActivity.class. Most of codes are for the logic of the RadioGroups.  
-![Boom V1.0.6](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.6.png)  
+![Boom V1.0.7](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.7.png)  
 Or by link:  
-[Boom V1.0.6 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.6.apk?raw=true)  
-[Boom V1.0.6 in Fir](http://fir.im/tv85)  
+[Boom V1.0.7 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.7.apk?raw=true)  
+[Boom V1.0.7 in Fir](http://fir.im/tv85)  
 
 # Usage
 
@@ -309,6 +310,55 @@ You can set the width of lines in share icon with ```setShareLineWidth(float wid
 
 For more information, please check [ShareActivity.class](https://github.com/Nightonke/BoomMenu/blob/master/app/src/main/java/com/nightonke/boommenusample/ShareActivity.java)
 
+### Use with Builder
+
+Thanks @demolot to remind me of using Builder. Now you can use Builder to initialize the BMB more convenient.
+```
+@Override
+public void onWindowFocusChanged(boolean hasFocus) {
+    super.onWindowFocusChanged(hasFocus);
+
+    // this is an example to show how to use the builder
+    new BoomMenuButton.Builder()
+            // set all sub buttons with subButtons method
+            //.subButtons(subButtonDrawables, subButtonColors, subButtonTexts)
+            // or add each sub button with addSubButton method
+            .addSubButton(this, R.drawable.boom, subButtonColors[0], "BoomMenuButton")
+            .addSubButton(this, R.drawable.java, subButtonColors[1], "View source code")
+            .addSubButton(this, R.drawable.github, subButtonColors[2], "Follow me")
+            .frames(80)
+            .duration(800)
+            .delay(100)
+            .showOrder(OrderType.RANDOM)
+            .hideOrder(OrderType.RANDOM)
+            .button(ButtonType.HAM)
+            .boom(BoomType.PARABOLA_2)
+            .place(PlaceType.HAM_3_1)
+            .showMoveEase(EaseType.EaseOutBack)
+            .hideMoveEase(EaseType.EaseOutCirc)
+            .showScaleEase(EaseType.EaseOutBack)
+            .hideScaleType(EaseType.EaseOutCirc)
+            .rotateDegree(720)
+            .showRotateEase(EaseType.EaseOutBack)
+            .hideRotateType(EaseType.Linear)
+            .autoDismiss(true)
+            .cancelable(true)
+            .dim(DimType.DIM_6)
+            .clickEffect(ClickEffectType.RIPPLE)
+            .boomButtonShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+            .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
+            .subButtonTextColor(Color.BLACK)
+            .onBoomButtonBlick(null)
+            .animator(null)
+            .onSubButtonClick(null)
+            // this only work when the place type is SHARE_X_X
+            .shareStyle(0, 0, 0)
+            .init(boomMenuButton);
+}
+```
+
+For more information, please check [BuilderActivity.class](https://github.com/Nightonke/BoomMenu/blob/master/app/src/main/java/com/nightonke/boommenusample/BuilderActivity.java)
+
 ### Hamburger Button and Circle Button
 There are 2 types of sub buttons in BMB(boom menu button). Hamburger and circle. You can use ```ButtonType.HAM``` and ```ButtonType.CIRCLE``` to initialize the BMB. 
 
@@ -477,10 +527,14 @@ Now the BMB can be used in list.
 Share style.
 ### 1.0.6
 Setters for share style.
+### 1.0.7
+Thanks @hisham2007 to remind me of the RTL bug. Now BMB is able to support RTL mode.  
+Thanks @demolot to remind me use the Builder to init the BMB. For more information, please check [Use with BMB](https://github.com/Nightonke/BoomMenu#use-with-builder).
 
 # Todo
 1. Particle effects are coming soon.
 2. ~~Make BMB ready for using in listview~~.  
+3. Blur background.
 
 # License
 
