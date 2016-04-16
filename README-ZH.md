@@ -32,8 +32,8 @@ BoomMenu可以让你的菜单按钮 ... 瞬间爆炸！
 2. [Use in Action Bar](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#use-in-action-bar)
 3. [Use in Floating Action Button](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#use-in-floating-action-button)
 4. [Use in List](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#use-in-list)
-5. [Use in Share Style](https://github.com/Nightonke/BoomMenu#use-in-share-style)
-6. [Use with Builder](https://github.com/Nightonke/BoomMenu#use-with-builder)
+5. [Use in Share Style](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#use-in-share-style)
+6. [Use with Builder](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#use-with-builder)
 4. [Hamburger Button and Circle Button](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#hamburger-button-and-circle-button)
 5. [Number of Sub Buttons](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#number-of-sub-buttons)
 6. [Boom Types](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#boom-types)
@@ -531,7 +531,7 @@ BMB已经可以在列表中使用。
 分享风格按钮相关设置。
 ### 1.0.7
 感谢 @hisham2007 发现的RTL模式下的bug。现在BMB已经可以正常支持RTL模式。  
-感谢 @demolot 提醒我用Builder来初始化BMB。更多信息，请查看[Use with BMB](https://github.com/Nightonke/BoomMenu#use-with-builder)。
+感谢 @demolot 提醒我用Builder来初始化BMB。更多信息，请查看[Use with BMB](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#use-with-builder)。
 
 # Todo
 1. 粒子效果。
