@@ -49,6 +49,12 @@ public class BoomMenuButton extends FrameLayout
         CircleButton.OnCircleButtonClickListener,
         HamButton.OnHamButtonClickListener {
 
+    // This param is used to optimizize the memory used.
+    // When this param is set to true,
+    // all the sub buttons will be created when needed
+    // and will not be stored.
+    public static final boolean MEMORY_OPTIMIZATION = true;
+
     public static final int MIN_CIRCLE_BUTTON_NUMBER = 1;
     public static final int MAX_CIRCLE_BUTTON_NUMBER = 9;
     public static final int MIN_HAM_BUTTON_NUMBER = 1;
@@ -264,7 +270,7 @@ public class BoomMenuButton extends FrameLayout
             // create buttons
             buttonNum = drawables.length;
 
-            if (isInList) {
+            if (isInList || MEMORY_OPTIMIZATION) {
                 // store the drawables, THEN we will build the buttons when create them
                 this.drawables = drawables;
                 this.colors = colors;
@@ -293,7 +299,7 @@ public class BoomMenuButton extends FrameLayout
             // create buttons
             buttonNum = drawables.length;
 
-            if (isInList) {
+            if (isInList || MEMORY_OPTIMIZATION) {
                 // store the drawables, THEN we will build the buttons when create them
                 this.drawables = drawables;
                 this.colors = colors;
@@ -427,7 +433,7 @@ public class BoomMenuButton extends FrameLayout
      */
     private void shoot() {
         // create the buttons
-        if (isInList) {
+        if (isInList || MEMORY_OPTIMIZATION) {
             if (buttonType.equals(ButtonType.CIRCLE)) {
                 for (int i = 0; i < buttonNum; i++) {
                     circleButtons[i] = new CircleButton(mContext);
@@ -1141,7 +1147,7 @@ public class BoomMenuButton extends FrameLayout
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 dot.setVisibility(VISIBLE);
-                if (isInList) {
+                if (isInList || MEMORY_OPTIMIZATION) {
                     if (buttonType.equals(ButtonType.CIRCLE)) circleButtons[index] = null;
                     else if (buttonType.equals(ButtonType.HAM)) hamButtons[index] = null;
                 }
