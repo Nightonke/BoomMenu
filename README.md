@@ -59,11 +59,11 @@ Yes, this library is about a menu which can ... BOOM!
 [License](https://github.com/Nightonke/BoomMenu#license)  
 
 # Gradle and Maven
-Just add the "compile 'com.nightonke:BoomMenu:1.0.7'" in your build.gradle of your module.  
+Just add the "compile 'com.nightonke:BoomMenu:1.0.8'" in your build.gradle of your module.  
 ```
 dependencies {
     ...
-    compile 'com.nightonke:boommenu:1.0.7'
+    compile 'com.nightonke:boommenu:1.0.8'
     ...
 }
 ```
@@ -72,7 +72,7 @@ Or maven:
 <dependency>
   <groupId>com.nightonke</groupId>
   <artifactId>boommenu</artifactId>
-  <version>1.0.7</version>
+  <version>1.0.8</version>
   <type>pom</type>
 </dependency>
 ```
@@ -83,10 +83,10 @@ Or maven:
 
 # Demo
 You can check most of the options that you can set when using boom menu button in this demo. When you read the code of the demo, don't be afraid of the length of the code in MainActivity.class. Most of codes are for the logic of the RadioGroups.  
-![Boom V1.0.7](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.7.png)  
+![Boom V1.0.8](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.8.png)  
 Or by link:  
-[Boom V1.0.7 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.7.apk?raw=true)  
-[Boom V1.0.7 in Fir](http://fir.im/tv85)  
+[Boom V1.0.8 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.8.apk?raw=true)  
+[Boom V1.0.8 in Fir](http://fir.im/tv85)  
 
 # Usage
 
@@ -530,6 +530,8 @@ Setters for share style.
 ### 1.0.7
 Thanks @hisham2007 to remind me of the RTL bug. Now BMB is able to support RTL mode.  
 Thanks @demolot to remind me use the Builder to init the BMB. For more information, please check [Use with BMB](https://github.com/Nightonke/BoomMenu#use-with-builder).
+### 1.0.8
+Try to fix the memory optimization issue, but I'm not sure whether it works.
 
 # Todo
 1. Particle effects are coming soon.
