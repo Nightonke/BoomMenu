@@ -60,11 +60,11 @@ BoomMenu可以让你的菜单按钮 ... 瞬间爆炸！
 [License](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#license)  
 
 # Gradle and Maven
-添加 "compile 'com.nightonke:boommenu:1.0.8'" 到app模块中的build.gradle即可：  
+添加 "compile 'com.nightonke:boommenu:1.0.9'" 到app模块中的build.gradle即可：  
 ```
 dependencies {
     ...
-    compile 'com.nightonke:boommenu:1.0.8'
+    compile 'com.nightonke:boommenu:1.0.9'
     ...
 }
 ```
@@ -73,7 +73,7 @@ dependencies {
 <dependency>
   <groupId>com.nightonke</groupId>
   <artifactId>boommenu</artifactId>
-  <version>1.0.8</version>
+  <version>1.0.9</version>
   <type>pom</type>
 </dependency>
 ```
@@ -85,12 +85,12 @@ dependencies {
 # Demo
 你可以在这个demo中选择绝大部分的BoomMenuButton的选项来查看其不同的效果。当你查看demo的MainActivity的时候，不用担心里面过长的代码，很多代码都是为了处理RadioGroup的逻辑。   
 
-![Boom V1.0.8](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.8.png)  
+![Boom V1.0.9](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.9.png)  
 
 通过链接下载：  
 
-[Boom V1.0.8 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.8.apk?raw=true)  
-[Boom V1.0.8 in Fir](http://fir.im/tv85)  
+[Boom V1.0.9 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V1.0.9.apk?raw=true)  
+[Boom V1.0.9 in Fir](http://fir.im/tv85)  
 
 # Usage
 
@@ -535,6 +535,8 @@ BMB已经可以在列表中使用。
 感谢 @demolot 提醒我用Builder来初始化BMB。更多信息，请查看[Use with BMB](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#use-with-builder)。
 ### 1.0.8
 试图解决一下内存优化的issue，不知是否然并卵。
+### 1.0.8
+试图解决空指针的issue，不知是否然并卵。
 
 # Todo
 1. 粒子效果。
