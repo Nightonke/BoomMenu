@@ -535,7 +535,7 @@ BMB已经可以在列表中使用。
 感谢 @demolot 提醒我用Builder来初始化BMB。更多信息，请查看[Use with BMB](https://github.com/Nightonke/BoomMenu/blob/master/README-ZH.md#use-with-builder)。
 ### 1.0.8
 试图解决一下内存优化的issue，不知是否然并卵。
-### 1.0.8
+### 1.0.9
 试图解决空指针的issue，不知是否然并卵。
 
 # Todo
