@@ -693,15 +693,17 @@ public class BoomMenuButton extends FrameLayout
         float[] ys = new float[frames + 1];
         getShowXY(sl, el, xs, ys);
 
-        ObjectAnimator xAnimator = ObjectAnimator.ofFloat(view, "x", xs).setDuration(duration);
-        xAnimator.setStartDelay(delay * index);
-        xAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
-        xAnimator.start();
+        if (view != null) {
+            ObjectAnimator xAnimator = ObjectAnimator.ofFloat(view, "x", xs).setDuration(duration);
+            xAnimator.setStartDelay(delay * index);
+            xAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
+            xAnimator.start();
 
-        ObjectAnimator yAnimator = ObjectAnimator.ofFloat(view, "y", ys).setDuration(duration);
-        yAnimator.setStartDelay(delay * index);
-        yAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
-        yAnimator.start();
+            ObjectAnimator yAnimator = ObjectAnimator.ofFloat(view, "y", ys).setDuration(duration);
+            yAnimator.setStartDelay(delay * index);
+            yAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
+            yAnimator.start();
+        }
 
         // scale animation
         float scaleW = 0;
@@ -714,59 +716,67 @@ public class BoomMenuButton extends FrameLayout
             scaleH = barHeight * 1.0f / hamButtonHeight;
         }
 
-        view.setScaleX(scaleW);
-        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX",
-                scaleW,
-                1f).setDuration(duration);
-        scaleXAnimator.setStartDelay(delay * index);
-        scaleXAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showScaleEaseType));
-        scaleXAnimator.start();
+        if (view != null) {
+            view.setScaleX(scaleW);
+            ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX",
+                    scaleW,
+                    1f).setDuration(duration);
+            scaleXAnimator.setStartDelay(delay * index);
+            scaleXAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showScaleEaseType));
+            scaleXAnimator.start();
 
-        view.setScaleY(scaleH);
-        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY",
-                scaleH,
-                1f).setDuration(duration);
-        scaleYAnimator.setStartDelay(delay * index);
-        scaleYAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showScaleEaseType));
-        scaleYAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-                dot.setVisibility(INVISIBLE);
-            }
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                animationPlaying = false;
-            }
-        });
-        scaleYAnimator.start();
+            view.setScaleY(scaleH);
+            ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY",
+                    scaleH,
+                    1f).setDuration(duration);
+            scaleYAnimator.setStartDelay(delay * index);
+            scaleYAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showScaleEaseType));
+            scaleYAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    super.onAnimationStart(animation);
+                    dot.setVisibility(INVISIBLE);
+                }
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    animationPlaying = false;
+                }
+            });
+            scaleYAnimator.start();
+        }
 
         // alpha animation
         View view1 = null;
         View view2 = null;
-        if (button instanceof CircleButton) {
+        if (button != null && button instanceof CircleButton) {
             view1 = ((CircleButton) button).getImageView();
             view2 = ((CircleButton) button).getTextView();
-        } else if (button instanceof HamButton) {
+        } else if (button != null && button instanceof HamButton) {
             view1 = ((HamButton) button).getImageView();
             view2 = ((HamButton) button).getTextView();
         }
-        ObjectAnimator alphaAnimator1 = ObjectAnimator.ofFloat(view1, "alpha",
-                0f,
-                1f).setDuration(duration);
-        alphaAnimator1.setStartDelay(delay * index);
-        alphaAnimator1.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
-        alphaAnimator1.start();
-        ObjectAnimator alphaAnimator2 = ObjectAnimator.ofFloat(view2, "alpha",
-                0f,
-                1f).setDuration(duration);
-        alphaAnimator2.setStartDelay(delay * index);
-        alphaAnimator2.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
-        alphaAnimator2.start();
+
+        if (view1 != null) {
+            ObjectAnimator alphaAnimator1 = ObjectAnimator.ofFloat(view1, "alpha",
+                    0f,
+                    1f).setDuration(duration);
+            alphaAnimator1.setStartDelay(delay * index);
+            alphaAnimator1.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
+            alphaAnimator1.start();
+        }
+
+        if (view2 != null) {
+            ObjectAnimator alphaAnimator2 = ObjectAnimator.ofFloat(view2, "alpha",
+                    0f,
+                    1f).setDuration(duration);
+            alphaAnimator2.setStartDelay(delay * index);
+            alphaAnimator2.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
+            alphaAnimator2.start();
+        }
 
         // rotation animation
-        if (view instanceof CircleButton) {
+        if (view != null && view instanceof CircleButton) {
             ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(
                     ((CircleButton) view).getFrameLayout(), "rotation",
                     0,
@@ -1109,15 +1119,17 @@ public class BoomMenuButton extends FrameLayout
         float[] ys = new float[frames + 1];
         getHideXY(sl, el, xs, ys);
 
-        ObjectAnimator xAnimator = ObjectAnimator.ofFloat(button, "x", xs).setDuration(duration);
-        xAnimator.setStartDelay(index * delay);
-        xAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
-        xAnimator.start();
+        if (button != null) {
+            ObjectAnimator xAnimator = ObjectAnimator.ofFloat(button, "x", xs).setDuration(duration);
+            xAnimator.setStartDelay(index * delay);
+            xAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
+            xAnimator.start();
 
-        ObjectAnimator yAnimator = ObjectAnimator.ofFloat(button, "y", ys).setDuration(duration);
-        yAnimator.setStartDelay(index * delay);
-        yAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
-        yAnimator.start();
+            ObjectAnimator yAnimator = ObjectAnimator.ofFloat(button, "y", ys).setDuration(duration);
+            yAnimator.setStartDelay(index * delay);
+            yAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
+            yAnimator.start();
+        }
 
         // scale animation
         float scaleW = 0;
@@ -1130,56 +1142,64 @@ public class BoomMenuButton extends FrameLayout
             scaleH = barHeight * 1.0f / hamButtonHeight;
         }
 
-        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(button, "scaleX",
-                1f,
-                scaleW).setDuration(duration);
-        scaleXAnimator.setStartDelay(index * delay);
-        scaleXAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideScaleEaseType));
-        scaleXAnimator.start();
+        if (button != null) {
+            ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(button, "scaleX",
+                    1f,
+                    scaleW).setDuration(duration);
+            scaleXAnimator.setStartDelay(index * delay);
+            scaleXAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideScaleEaseType));
+            scaleXAnimator.start();
 
-        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(button, "scaleY",
-                1f,
-                scaleH).setDuration(duration);
-        scaleYAnimator.setStartDelay(index * delay);
-        scaleYAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideScaleEaseType));
-        scaleYAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                dot.setVisibility(VISIBLE);
-                if (isInList || MEMORY_OPTIMIZATION) {
-                    if (buttonType.equals(ButtonType.CIRCLE)) circleButtons[index] = null;
-                    else if (buttonType.equals(ButtonType.HAM)) hamButtons[index] = null;
+            ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(button, "scaleY",
+                    1f,
+                    scaleH).setDuration(duration);
+            scaleYAnimator.setStartDelay(index * delay);
+            scaleYAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideScaleEaseType));
+            scaleYAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    dot.setVisibility(VISIBLE);
+                    if (isInList || MEMORY_OPTIMIZATION) {
+                        if (buttonType.equals(ButtonType.CIRCLE)) circleButtons[index] = null;
+                        else if (buttonType.equals(ButtonType.HAM)) hamButtons[index] = null;
+                    }
                 }
-            }
-        });
-        scaleYAnimator.start();
+            });
+            scaleYAnimator.start();
+        }
 
         // alpha animation
         View view1 = null;
         View view2 = null;
-        if (button instanceof CircleButton) {
+        if (button != null && button instanceof CircleButton) {
             view1 = ((CircleButton) button).getImageView();
             view2 = ((CircleButton) button).getTextView();
-        } else if (button instanceof HamButton) {
+        } else if (button != null && button instanceof HamButton) {
             view1 = ((HamButton) button).getImageView();
             view2 = ((HamButton) button).getTextView();
         }
-        ObjectAnimator alphaAnimator1 = ObjectAnimator.ofFloat(view1, "alpha",
-                1f,
-                0f).setDuration(duration);
-        alphaAnimator1.setStartDelay(delay * index);
-        alphaAnimator1.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
-        alphaAnimator1.start();
-        ObjectAnimator alphaAnimator2 = ObjectAnimator.ofFloat(view2, "alpha",
-                1f,
-                0f).setDuration(duration);
-        alphaAnimator2.setStartDelay(delay * index);
-        alphaAnimator2.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
-        alphaAnimator2.start();
+
+        if (view1 != null) {
+            ObjectAnimator alphaAnimator1 = ObjectAnimator.ofFloat(view1, "alpha",
+                    1f,
+                    0f).setDuration(duration);
+            alphaAnimator1.setStartDelay(delay * index);
+            alphaAnimator1.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
+            alphaAnimator1.start();
+        }
+
+        if (view2 != null) {
+            ObjectAnimator alphaAnimator2 = ObjectAnimator.ofFloat(view2, "alpha",
+                    1f,
+                    0f).setDuration(duration);
+            alphaAnimator2.setStartDelay(delay * index);
+            alphaAnimator2.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
+            alphaAnimator2.start();
+        }
 
         // rotation animation
-        if (button instanceof CircleButton) {
+        if (button != null && button instanceof CircleButton) {
             ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(
                     ((CircleButton) button).getFrameLayout(), "rotation",
                     0,
