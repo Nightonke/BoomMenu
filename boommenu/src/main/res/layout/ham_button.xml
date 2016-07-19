@@ -40,7 +40,7 @@
                 android:layout_height="56dp"
                 android:layout_gravity="center_vertical|start"
                 tools:ignore="ContentDescription"
-                android:scaleType="fitXY"
+                android:scaleType="center"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
                 />

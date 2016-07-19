@@ -25,7 +25,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             tools:ignore="ContentDescription"
-            android:scaleType="fitXY"
+            android:scaleType="center"
             />
 
         <View
@@ -42,7 +42,7 @@
             android:layout_gravity="center"
             android:background="@drawable/circle_button"
             tools:ignore="ContentDescription"
-            android:scaleType="fitXY"
+            android:scaleType="center"
             />
 
         <TextView
