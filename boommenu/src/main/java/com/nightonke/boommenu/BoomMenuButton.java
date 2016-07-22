@@ -571,7 +571,7 @@ public class BoomMenuButton extends FrameLayout
                         dots[count].getLocationOnScreen(startLocations[count]);
                         startLocations[count][0] -= (buttonWidth - dots[count].getWidth()) / 2;
                         startLocations[count][1] -= (buttonWidth - dots[count].getHeight()) / 2;
-                        setShowAnimation(dots[count], circleButtons[count], originalLocations[i], startLocations[count], endLocations[count], i);
+                        setShowAnimation(dots[count], circleButtons[count], originalLocations[count], startLocations[count], endLocations[count], i);
 
                         count++;
                         if (count == buttonNum) break;
@@ -607,7 +607,7 @@ public class BoomMenuButton extends FrameLayout
                         bars[count].getLocationOnScreen(startLocations[count]);
                         startLocations[count][0] -= (hamButtonWidth - bars[count].getWidth()) / 2;
                         startLocations[count][1] -= (hamButtonHeight - bars[count].getHeight()) / 2;
-                        setShowAnimation(bars[count], hamButtons[count], originalLocations[i], startLocations[count], endLocations[count], i);
+                        setShowAnimation(bars[count], hamButtons[count], originalLocations[count], startLocations[count], endLocations[count], i);
 
                         count++;
                         if (count == buttonNum) break;
