@@ -66,6 +66,7 @@ public class BoomMenuButton extends FrameLayout
     private FrameLayout frameLayout;
     private View ripple;
 
+    private int[][] originalLocations = new int[MAX_CIRCLE_BUTTON_NUMBER][2];
     private int[][] startLocations = new int[MAX_CIRCLE_BUTTON_NUMBER][2];
     private int[][] endLocations = new int[MAX_CIRCLE_BUTTON_NUMBER][2];
 
@@ -119,13 +120,13 @@ public class BoomMenuButton extends FrameLayout
     // Default circle button width
     private int buttonWidth = (int) Util.getInstance().dp2px(88);
     // Default bar width
-    private int barWidth = (int) Util.getInstance().dp2px(50);
+    private int barWidth = (int) Util.getInstance().dp2px(36);
     // Default bar height
-    private int barHeight = (int) Util.getInstance().dp2px(8);
+    private int barHeight = (int) Util.getInstance().dp2px(6);
     // Default ham button width
     private int hamButtonWidth = 0;
     // Default ham button height
-    private int hamButtonHeight = (int) Util.getInstance().dp2px(66 + 4);
+    private int hamButtonHeight = (int) Util.getInstance().dp2px(80);
     // Boom button radius
     private int boomButtonRadius = (int) Util.getInstance().dp2px(56);
     // Movement ease
@@ -543,16 +544,19 @@ public class BoomMenuButton extends FrameLayout
             if (showOrderType.equals(OrderType.DEFAULT)) {
                 for (int i = 0; i < buttonNum; i++) {
                     dots[i].getLocationOnScreen(startLocations[i]);
+                    originalLocations[i] = startLocations[i];
+
                     startLocations[i][0] -= (buttonWidth - dots[i].getWidth()) / 2;
                     startLocations[i][1] -= (buttonWidth - dots[i].getHeight()) / 2;
-                    setShowAnimation(dots[i], circleButtons[i], startLocations[i], endLocations[i], i);
+
+                    setShowAnimation(dots[i], circleButtons[i], originalLocations[i], startLocations[i], endLocations[i], i);
                 }
             } else if (showOrderType.equals(OrderType.REVERSE)) {
                 for (int i = 0; i < buttonNum; i++) {
                     dots[i].getLocationOnScreen(startLocations[i]);
                     startLocations[i][0] -= (buttonWidth - dots[i].getWidth()) / 2;
                     startLocations[i][1] -= (buttonWidth - dots[i].getHeight()) / 2;
-                    setShowAnimation(dots[i], circleButtons[i], startLocations[i], endLocations[i], buttonNum - i - 1);
+                    setShowAnimation(dots[i], circleButtons[i], originalLocations[i], startLocations[i], endLocations[i], buttonNum - i - 1);
                 }
             } else if (showOrderType.equals(OrderType.RANDOM)) {
                 Random random = new Random();
@@ -567,7 +571,7 @@ public class BoomMenuButton extends FrameLayout
                         dots[count].getLocationOnScreen(startLocations[count]);
                         startLocations[count][0] -= (buttonWidth - dots[count].getWidth()) / 2;
                         startLocations[count][1] -= (buttonWidth - dots[count].getHeight()) / 2;
-                        setShowAnimation(dots[count], circleButtons[count], startLocations[count], endLocations[count], i);
+                        setShowAnimation(dots[count], circleButtons[count], originalLocations[i], startLocations[count], endLocations[count], i);
 
                         count++;
                         if (count == buttonNum) break;
@@ -581,14 +585,14 @@ public class BoomMenuButton extends FrameLayout
                     bars[i].getLocationOnScreen(startLocations[i]);
                     startLocations[i][0] -= (hamButtonWidth - bars[i].getWidth()) / 2;
                     startLocations[i][1] -= (hamButtonHeight - bars[i].getHeight()) / 2;
-                    setShowAnimation(bars[i], hamButtons[i], startLocations[i], endLocations[i], i);
+                    setShowAnimation(bars[i], hamButtons[i], originalLocations[i], startLocations[i], endLocations[i], i);
                 }
             } else if (showOrderType.equals(OrderType.REVERSE)) {
                 for (int i = 0; i < buttonNum; i++) {
                     bars[i].getLocationOnScreen(startLocations[i]);
                     startLocations[i][0] -= (hamButtonWidth - bars[i].getWidth()) / 2;
                     startLocations[i][1] -= (hamButtonHeight - bars[i].getHeight()) / 2;
-                    setShowAnimation(bars[i], hamButtons[i], startLocations[i], endLocations[i], buttonNum - i - 1);
+                    setShowAnimation(bars[i], hamButtons[i], originalLocations[i], startLocations[i], endLocations[i], buttonNum - i - 1);
                 }
             } else if (showOrderType.equals(OrderType.RANDOM)) {
                 Random random = new Random();
@@ -603,7 +607,7 @@ public class BoomMenuButton extends FrameLayout
                         bars[count].getLocationOnScreen(startLocations[count]);
                         startLocations[count][0] -= (hamButtonWidth - bars[count].getWidth()) / 2;
                         startLocations[count][1] -= (hamButtonHeight - bars[count].getHeight()) / 2;
-                        setShowAnimation(bars[count], hamButtons[count], startLocations[count], endLocations[count], i);
+                        setShowAnimation(bars[count], hamButtons[count], originalLocations[i], startLocations[count], endLocations[count], i);
 
                         count++;
                         if (count == buttonNum) break;
@@ -670,6 +674,7 @@ public class BoomMenuButton extends FrameLayout
         }
         lp.leftMargin = x;
         lp.topMargin = y;
+        view.setVisibility(View.INVISIBLE);
         animationLayout.addView(view, lp);
         return view;
     }
@@ -679,6 +684,7 @@ public class BoomMenuButton extends FrameLayout
      *
      * @param dot           The dot corresponding to the sub button.
      * @param button        The sub button.
+     * @param originalLocation original location of the dot.
      * @param startLocation Start location of the animation.
      * @param endLocation   End location of the animation.
      * @param index         Index of the sub button in the array.
@@ -686,12 +692,13 @@ public class BoomMenuButton extends FrameLayout
     public void setShowAnimation(
             final View dot,
             final View button,
+            int[] originalLocation,
             int[] startLocation,
             int[] endLocation,
             final int index) {
         button.bringToFront();
 
-        final View view = setViewLocationInAnimationLayout(button, startLocation);
+        final View view = setViewLocationInAnimationLayout(button, originalLocation);
 
         float[] sl = new float[2];
         float[] el = new float[2];
@@ -729,6 +736,7 @@ public class BoomMenuButton extends FrameLayout
 
         if (view != null) {
             view.setScaleX(scaleW);
+
             ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX",
                     scaleW,
                     1f).setDuration(duration);
@@ -747,6 +755,7 @@ public class BoomMenuButton extends FrameLayout
                 public void onAnimationStart(Animator animation) {
                     super.onAnimationStart(animation);
                     dot.setVisibility(INVISIBLE);
+                    view.setVisibility(View.VISIBLE);
                 }
 
                 @Override
