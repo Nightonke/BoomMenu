@@ -67,6 +67,7 @@ public class BoomMenuButton extends FrameLayout
     private FrameLayout frameLayout;
     private View ripple;
 
+    private int[][] originalLocations = new int[MAX_CIRCLE_BUTTON_NUMBER][2];
     private int[][] startLocations = new int[MAX_CIRCLE_BUTTON_NUMBER][2];
     private int[][] endLocations = new int[MAX_CIRCLE_BUTTON_NUMBER][2];
 
@@ -75,8 +76,8 @@ public class BoomMenuButton extends FrameLayout
 
     // Params about buttons
     private int buttonNum = 0;
-    private CircleButton[] circleButtons = new CircleButton[MAX_CIRCLE_BUTTON_NUMBER];
-    private HamButton[] hamButtons = new HamButton[MAX_HAM_BUTTON_NUMBER];
+    private CircleButton[] circleButtons = new CircleButton[MAX_CIRCLE_BUTTON_NUMBER];  // this Array reference cannot never be null as initialized
+    private HamButton[] hamButtons = new HamButton[MAX_HAM_BUTTON_NUMBER];   // this Array reference cannot never be null as initialized
     private Dot[] dots = new Dot[MAX_CIRCLE_BUTTON_NUMBER];
     private Bar[] bars = new Bar[MAX_HAM_BUTTON_NUMBER];
     private ShareLines shareLines = null;
@@ -114,21 +115,21 @@ public class BoomMenuButton extends FrameLayout
     // Place type
     private PlaceType placeType = null;
     // Default dot width
-    private int dotWidth = 10;
+    private int dotWidth = (int) Util.getInstance().dp2px(8);
     // Default dot width
-    private int dotHeight = 10;
+    private int dotHeight = (int) Util.getInstance().dp2px(8);
     // Default circle button width
-    private int buttonWidth = (int)Util.getInstance().dp2px(88);
+    private int buttonWidth = (int) Util.getInstance().dp2px(88);
     // Default bar width
-    private int barWidth = 50;
+    private int barWidth = (int) Util.getInstance().dp2px(36);
     // Default bar height
-    private int barHeight = 8;
+    private int barHeight = (int) Util.getInstance().dp2px(6);
     // Default ham button width
     private int hamButtonWidth = 0;
     // Default ham button height
-    private int hamButtonHeight = (int) Util.getInstance().dp2px(66 + 4);
+    private int hamButtonHeight = (int) Util.getInstance().dp2px(80);
     // Boom button radius
-    private int boomButtonRadius = (int)Util.getInstance().dp2px(56);
+    private int boomButtonRadius = (int) Util.getInstance().dp2px(56);
     // Movement ease
     private EaseType showMoveEaseType = EaseType.EaseOutBack;
     private EaseType hideMoveEaseType = EaseType.EaseOutCirc;
@@ -151,6 +152,8 @@ public class BoomMenuButton extends FrameLayout
     // Sub buttons offsets of shadow
     private float subButtonsXOffsetOfShadow = 0;
     private float subButtonsYOffsetOfShadow = 0;
+    private int subButtonTextColor = Color.WHITE;
+    private ImageView.ScaleType subButtonImageScaleType = ImageView.ScaleType.CENTER;
 
     private OnClickListener onClickListener = null;
     private AnimatorListener animatorListener = null;
@@ -183,7 +186,7 @@ public class BoomMenuButton extends FrameLayout
 
         if (isInActionBar || isInList) {
             LayoutInflater.from(context).inflate(R.layout.boom_menu_button_in_action_bar, this, true);
-            frameLayout = (FrameLayout)findViewById(R.id.frame_layout);
+            frameLayout = (FrameLayout) findViewById(R.id.frame_layout);
             frameLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -196,8 +199,8 @@ public class BoomMenuButton extends FrameLayout
             } else {
                 LayoutInflater.from(context).inflate(R.layout.boom_menu_button_below_lollipop, this, true);
             }
-            shadowLayout = (ShadowLayout)findViewById(R.id.shadow_layout);
-            frameLayout = (FrameLayout)findViewById(R.id.frame_layout);
+            shadowLayout = (ShadowLayout) findViewById(R.id.shadow_layout);
+            frameLayout = (FrameLayout) findViewById(R.id.frame_layout);
             ripple = findViewById(R.id.ripple);
 
             setRipple(clickEffectType);
@@ -215,26 +218,26 @@ public class BoomMenuButton extends FrameLayout
      * Notice that you should call this NOT in your onCreate method.
      * Because the width and height of boom menu button is 0.
      * Call this in:
-     *
+     * <p/>
      * (This method needs to be overrided in activity)
      * public void onWindowFocusChanged(boolean hasFocus) {
-     *     super.onWindowFocusChanged(hasFocus);
-     *     init(...);
+     * super.onWindowFocusChanged(hasFocus);
+     * init(...);
      * }
      *
-     * @param drawables The drawables of images of sub buttons. Can not be null.
-     * @param strings The texts of sub buttons, ok to be null.
-     * @param colors The colors of sub buttons, including pressed-state and normal-state.
-     * @param buttonType The button type.
-     * @param boomType The boom type.
-     * @param placeType The place type.
-     * @param showMoveEaseType Ease type to move the sub buttons when showing.
-     * @param showScaleEaseType Ease type to scale the sub buttons when showing.
+     * @param drawables          The drawables of images of sub buttons. Can not be null.
+     * @param strings            The texts of sub buttons, ok to be null.
+     * @param colors             The colors of sub buttons, including pressed-state and normal-state.
+     * @param buttonType         The button type.
+     * @param boomType           The boom type.
+     * @param placeType          The place type.
+     * @param showMoveEaseType   Ease type to move the sub buttons when showing.
+     * @param showScaleEaseType  Ease type to scale the sub buttons when showing.
      * @param showRotateEaseType Ease type to rotate the sub buttons when showing.
-     * @param hideMoveEaseType Ease type to move the sub buttons when dismissing.
-     * @param hideScaleEaseType Ease type to scale the sub buttons when dismissing.
+     * @param hideMoveEaseType   Ease type to move the sub buttons when dismissing.
+     * @param hideScaleEaseType  Ease type to scale the sub buttons when dismissing.
      * @param hideRotateEaseType Ease type to rotate the sub buttons when dismissing.
-     * @param rotateDegree Rotation degree.
+     * @param rotateDegree       Rotation degree.
      */
     public void init(
             Drawable[] drawables,
@@ -329,9 +332,9 @@ public class BoomMenuButton extends FrameLayout
     /**
      * Judge whether the input params to init boom menu button is incorrect.
      *
-     * @param drawables The drawables of the sub buttons.
-     * @param strings The texts of the sub buttons.
-     * @param colors The colors(including the pressed-state and normal-state) of the sub buttons.
+     * @param drawables  The drawables of the sub buttons.
+     * @param strings    The texts of the sub buttons.
+     * @param colors     The colors(including the pressed-state and normal-state) of the sub buttons.
      * @param buttonType The button type of the sub buttons.
      */
     private void errorJudge(
@@ -346,7 +349,7 @@ public class BoomMenuButton extends FrameLayout
             throw new RuntimeException("The button's colors are null!");
         }
         if (buttonType.equals(ButtonType.CIRCLE)) {
-            if (       !(
+            if (!(
                     MIN_CIRCLE_BUTTON_NUMBER <= drawables.length
                             && drawables.length <= MAX_CIRCLE_BUTTON_NUMBER)
                     || (strings != null
@@ -361,7 +364,7 @@ public class BoomMenuButton extends FrameLayout
                         MAX_CIRCLE_BUTTON_NUMBER + "]!");
             }
         } else if (buttonType.equals(ButtonType.HAM)) {
-            if ((      !(
+            if ((!(
                     MIN_HAM_BUTTON_NUMBER <= drawables.length
                             && drawables.length <= MAX_HAM_BUTTON_NUMBER))
                     || (strings != null
@@ -444,6 +447,10 @@ public class BoomMenuButton extends FrameLayout
                     circleButtons[i].setColor(colors[i][0], colors[i][1]);
                     circleButtons[i].setShadowDx(subButtonsXOffsetOfShadow);
                     circleButtons[i].setShadowDy(subButtonsYOffsetOfShadow);
+                    circleButtons[i].getTextView().setTextColor(subButtonTextColor);
+                    // TODO to find a way to apply multiple colors if set on setTextViewColor(int[] colors)
+                    circleButtons[i].getImageView().setScaleType(subButtonImageScaleType);
+                    circleButtons[i].setRipple(clickEffectType);
                 }
             } else if (buttonType.equals(ButtonType.HAM)) {
                 for (int i = 0; i < buttonNum; i++) {
@@ -454,6 +461,10 @@ public class BoomMenuButton extends FrameLayout
                     hamButtons[i].setColor(this.colors[i][0], this.colors[i][1]);
                     hamButtons[i].setShadowDx(subButtonsXOffsetOfShadow);
                     hamButtons[i].setShadowDy(subButtonsYOffsetOfShadow);
+                    hamButtons[i].getTextView().setTextColor(subButtonTextColor);
+                    // TODO to find a way to apply multiple colors if set on setTextViewColor(int[] colors)
+                    hamButtons[i].getImageView().setScaleType(subButtonImageScaleType);
+                    hamButtons[i].setRipple(clickEffectType);
                 }
             }
             setRipple(clickEffectType);
@@ -508,7 +519,8 @@ public class BoomMenuButton extends FrameLayout
         objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                if (animatorListener != null) animatorListener.showing(animation.getAnimatedFraction());
+                if (animatorListener != null)
+                    animatorListener.showing(animation.getAnimatedFraction());
             }
         });
         objectAnimator.start();
@@ -533,16 +545,19 @@ public class BoomMenuButton extends FrameLayout
             if (showOrderType.equals(OrderType.DEFAULT)) {
                 for (int i = 0; i < buttonNum; i++) {
                     dots[i].getLocationOnScreen(startLocations[i]);
+                    originalLocations[i] = startLocations[i];
+
                     startLocations[i][0] -= (buttonWidth - dots[i].getWidth()) / 2;
                     startLocations[i][1] -= (buttonWidth - dots[i].getHeight()) / 2;
-                    setShowAnimation(dots[i], circleButtons[i], startLocations[i], endLocations[i], i);
+
+                    setShowAnimation(dots[i], circleButtons[i], originalLocations[i], startLocations[i], endLocations[i], i);
                 }
             } else if (showOrderType.equals(OrderType.REVERSE)) {
                 for (int i = 0; i < buttonNum; i++) {
                     dots[i].getLocationOnScreen(startLocations[i]);
                     startLocations[i][0] -= (buttonWidth - dots[i].getWidth()) / 2;
                     startLocations[i][1] -= (buttonWidth - dots[i].getHeight()) / 2;
-                    setShowAnimation(dots[i], circleButtons[i], startLocations[i], endLocations[i], buttonNum - i - 1);
+                    setShowAnimation(dots[i], circleButtons[i], originalLocations[i], startLocations[i], endLocations[i], buttonNum - i - 1);
                 }
             } else if (showOrderType.equals(OrderType.RANDOM)) {
                 Random random = new Random();
@@ -557,7 +572,7 @@ public class BoomMenuButton extends FrameLayout
                         dots[count].getLocationOnScreen(startLocations[count]);
                         startLocations[count][0] -= (buttonWidth - dots[count].getWidth()) / 2;
                         startLocations[count][1] -= (buttonWidth - dots[count].getHeight()) / 2;
-                        setShowAnimation(dots[count], circleButtons[count], startLocations[count], endLocations[count], i);
+                        setShowAnimation(dots[count], circleButtons[count], originalLocations[count], startLocations[count], endLocations[count], i);
 
                         count++;
                         if (count == buttonNum) break;
@@ -571,14 +586,14 @@ public class BoomMenuButton extends FrameLayout
                     bars[i].getLocationOnScreen(startLocations[i]);
                     startLocations[i][0] -= (hamButtonWidth - bars[i].getWidth()) / 2;
                     startLocations[i][1] -= (hamButtonHeight - bars[i].getHeight()) / 2;
-                    setShowAnimation(bars[i], hamButtons[i], startLocations[i], endLocations[i], i);
+                    setShowAnimation(bars[i], hamButtons[i], originalLocations[i], startLocations[i], endLocations[i], i);
                 }
             } else if (showOrderType.equals(OrderType.REVERSE)) {
                 for (int i = 0; i < buttonNum; i++) {
                     bars[i].getLocationOnScreen(startLocations[i]);
                     startLocations[i][0] -= (hamButtonWidth - bars[i].getWidth()) / 2;
                     startLocations[i][1] -= (hamButtonHeight - bars[i].getHeight()) / 2;
-                    setShowAnimation(bars[i], hamButtons[i], startLocations[i], endLocations[i], buttonNum - i - 1);
+                    setShowAnimation(bars[i], hamButtons[i], originalLocations[i], startLocations[i], endLocations[i], buttonNum - i - 1);
                 }
             } else if (showOrderType.equals(OrderType.RANDOM)) {
                 Random random = new Random();
@@ -593,7 +608,7 @@ public class BoomMenuButton extends FrameLayout
                         bars[count].getLocationOnScreen(startLocations[count]);
                         startLocations[count][0] -= (hamButtonWidth - bars[count].getWidth()) / 2;
                         startLocations[count][1] -= (hamButtonHeight - bars[count].getHeight()) / 2;
-                        setShowAnimation(bars[count], hamButtons[count], startLocations[count], endLocations[count], i);
+                        setShowAnimation(bars[count], hamButtons[count], originalLocations[count], startLocations[count], endLocations[count], i);
 
                         count++;
                         if (count == buttonNum) break;
@@ -627,7 +642,7 @@ public class BoomMenuButton extends FrameLayout
      * @return The background layout.
      */
     private ViewGroup createAnimationLayout() {
-        ViewGroup rootView = (ViewGroup) ((Activity)mContext).getWindow().getDecorView();
+        ViewGroup rootView = (ViewGroup) ((Activity) mContext).getWindow().getDecorView();
         LinearLayout animLayout = new LinearLayout(mContext);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -641,7 +656,7 @@ public class BoomMenuButton extends FrameLayout
     /**
      * Put the sub button to the background layout.
      *
-     * @param view The sub button.
+     * @param view     The sub button.
      * @param location Location in background layout.
      * @return The sub button after set.
      */
@@ -660,6 +675,7 @@ public class BoomMenuButton extends FrameLayout
         }
         lp.leftMargin = x;
         lp.topMargin = y;
+        view.setVisibility(View.INVISIBLE);
         animationLayout.addView(view, lp);
         return view;
     }
@@ -667,21 +683,23 @@ public class BoomMenuButton extends FrameLayout
     /**
      * Set show animation of each sub button.
      *
-     * @param dot The dot corresponding to the sub button.
-     * @param button The sub button.
+     * @param dot           The dot corresponding to the sub button.
+     * @param button        The sub button.
+     * @param originalLocation original location of the dot.
      * @param startLocation Start location of the animation.
-     * @param endLocation End location of the animation.
-     * @param index Index of the sub button in the array.
+     * @param endLocation   End location of the animation.
+     * @param index         Index of the sub button in the array.
      */
     public void setShowAnimation(
             final View dot,
             final View button,
+            int[] originalLocation,
             int[] startLocation,
             int[] endLocation,
             final int index) {
         button.bringToFront();
 
-        final View view = setViewLocationInAnimationLayout(button, startLocation);
+        final View view = setViewLocationInAnimationLayout(button, originalLocation);
 
         float[] sl = new float[2];
         float[] el = new float[2];
@@ -719,6 +737,7 @@ public class BoomMenuButton extends FrameLayout
 
         if (view != null) {
             view.setScaleX(scaleW);
+
             ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX",
                     scaleW,
                     1f).setDuration(duration);
@@ -737,7 +756,9 @@ public class BoomMenuButton extends FrameLayout
                 public void onAnimationStart(Animator animation) {
                     super.onAnimationStart(animation);
                     dot.setVisibility(INVISIBLE);
+                    view.setVisibility(View.VISIBLE);
                 }
+
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
@@ -793,9 +814,9 @@ public class BoomMenuButton extends FrameLayout
      * Then calculate each points to be ready for the animation.
      *
      * @param startPoint Start point of the animation.
-     * @param endPoint End point of the animation.
-     * @param xs The values on the x axis.
-     * @param ys The values on the y axis.
+     * @param endPoint   End point of the animation.
+     * @param xs         The values on the x axis.
+     * @param ys         The values on the y axis.
      */
     private void getShowXY(float[] startPoint, float[] endPoint, float[] xs, float[] ys) {
         if (boomType.equals(BoomType.LINE)) {
@@ -909,9 +930,9 @@ public class BoomMenuButton extends FrameLayout
      * Then calculate each points to be ready for the animation.
      *
      * @param startPoint Start point of the animation.
-     * @param endPoint End point of the animation.
-     * @param xs The values on the x axis.
-     * @param ys The values on the y axis.
+     * @param endPoint   End point of the animation.
+     * @param xs         The values on the x axis.
+     * @param ys         The values on the y axis.
      */
     private void getHideXY(float[] startPoint, float[] endPoint, float[] xs, float[] ys) {
         if (boomType.equals(BoomType.LINE)) {
@@ -1095,11 +1116,11 @@ public class BoomMenuButton extends FrameLayout
     /**
      * Set hide animation of each sub button.
      *
-     * @param dot The dot corresponding to the sub button.
-     * @param button The sub button.
+     * @param dot           The dot corresponding to the sub button.
+     * @param button        The sub button.
      * @param startLocation Start location of the animation.
-     * @param endLocation End location of the animation.
-     * @param index Index of the sub button in the array.
+     * @param endLocation   End location of the animation.
+     * @param index         Index of the sub button in the array.
      */
     public void setHideAnimation(
             final View dot,
@@ -1228,6 +1249,7 @@ public class BoomMenuButton extends FrameLayout
                 if (animatorListener != null) animatorListener.toHide();
                 state = StateType.CLOSING;
             }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
@@ -1241,7 +1263,8 @@ public class BoomMenuButton extends FrameLayout
         objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                if (animatorListener != null) animatorListener.hiding(animation.getAnimatedFraction());
+                if (animatorListener != null)
+                    animatorListener.hiding(animation.getAnimatedFraction());
             }
         });
         objectAnimator.start();
@@ -1278,6 +1301,7 @@ public class BoomMenuButton extends FrameLayout
 
     /**
      * Set frames for animaitons.
+     *
      * @param frames
      */
     public void setFrames(int frames) {
@@ -1352,23 +1376,31 @@ public class BoomMenuButton extends FrameLayout
      */
     public ImageButton[] getImageButtons() {
         ImageButton[] imageButtons = new ImageButton[buttonNum];
-        for (int i = 0; i < buttonNum; i++) {
-            if (circleButtons[i] != null) imageButtons[i] = circleButtons[i].getImageButton();
+        if (isInList || MEMORY_OPTIMIZATION) {
+            // TODO to return a weak ImageButton[] instead of an empty ImageButton[] if it can be useful
+        } else {
+            for (int i = 0; i < buttonNum; i++) {
+                if (circleButtons[i] != null) imageButtons[i] = circleButtons[i].getImageButton();
+            }
         }
         return imageButtons;
     }
 
     /**
-     * @return The imageviews of ham buttons.
+     * @return The imageviews of sub buttons.
      */
     public ImageView[] getImageViews() {
         ImageView[] imageViews = new ImageView[buttonNum];
-        if (buttonType.equals(ButtonType.CIRCLE)) {
-            for (int i = 0; i < buttonNum; i++)
-                if (circleButtons[i] != null) imageViews[i] = circleButtons[i].getImageView();
-        } else if (buttonType.equals(ButtonType.HAM)) {
-            for (int i = 0; i < buttonNum; i++)
-                if (hamButtons[i] != null) imageViews[i] = hamButtons[i].getImageView();
+        if (isInList || MEMORY_OPTIMIZATION) {
+            // TODO to return a weak ImageView[] instead of an empty ImageView[] if it can be useful
+        } else {
+            if (buttonType.equals(ButtonType.CIRCLE)) {
+                for (int i = 0; i < buttonNum; i++)
+                    if (circleButtons[i] != null) imageViews[i] = circleButtons[i].getImageView();
+            } else if (buttonType.equals(ButtonType.HAM)) {
+                for (int i = 0; i < buttonNum; i++)
+                    if (hamButtons[i] != null) imageViews[i] = hamButtons[i].getImageView();
+            }
         }
         return imageViews;
     }
@@ -1378,12 +1410,16 @@ public class BoomMenuButton extends FrameLayout
      */
     public TextView[] getTextViews() {
         TextView[] textViews = new TextView[buttonNum];
-        if (buttonType.equals(ButtonType.CIRCLE)) {
-            for (int i = 0; i < buttonNum; i++)
-                if (circleButtons != null) textViews[i] = circleButtons[i].getTextView();
-        } else if (buttonType.equals(ButtonType.HAM)) {
-            for (int i = 0; i < buttonNum; i++)
-                if (hamButtons[i] != null) textViews[i] = hamButtons[i].getTextView();
+        if (isInList || MEMORY_OPTIMIZATION) {
+            // TODO to return a weak TextView[] instead of an empty TextView[] if it can be useful
+        } else {
+            if (buttonType.equals(ButtonType.CIRCLE)) {
+                for (int i = 0; i < buttonNum; i++)
+                    if (circleButtons[i] != null) textViews[i] = circleButtons[i].getTextView();
+            } else if (buttonType.equals(ButtonType.HAM)) {
+                for (int i = 0; i < buttonNum; i++)
+                    if (hamButtons[i] != null) textViews[i] = hamButtons[i].getTextView();
+            }
         }
         return textViews;
     }
@@ -1469,16 +1505,20 @@ public class BoomMenuButton extends FrameLayout
      */
     public void setClickEffectType(ClickEffectType clickEffectType) {
         setRipple(clickEffectType);
-        if (buttonType.equals(ButtonType.CIRCLE)) {
-            if (circleButtons != null) {
-                for (int i = 0; i < buttonNum; i++) {
-                    if (circleButtons[i] != null) circleButtons[i].setRipple(clickEffectType);
+        for (int i = 0; i < buttonNum; i++) {
+            if (buttonType.equals(ButtonType.CIRCLE)) {
+                if (circleButtons[i] != null) {
+                    circleButtons[i].setRipple(clickEffectType);
+                } else {
+                    // delaying apply on the fly in the shoot() function
+                    this.clickEffectType = clickEffectType;
                 }
-            }
-        } else if (buttonType.equals(ButtonType.HAM)) {
-            if (hamButtons != null) {
-                for (int i = 0; i < buttonNum; i++) {
-                    if (hamButtons[i] != null) hamButtons[i].setRipple(clickEffectType);
+            } else if (buttonType.equals(ButtonType.HAM)) {
+                if (hamButtons[i] != null) {
+                    hamButtons[i].setRipple(clickEffectType);
+                } else {
+                    // delaying apply on the fly in the shoot() function
+                    this.clickEffectType = clickEffectType;
                 }
             }
         }
@@ -1518,38 +1558,65 @@ public class BoomMenuButton extends FrameLayout
      * @param color
      */
     public void setTextViewColor(int color) {
-        if (buttonType.equals(ButtonType.CIRCLE)) {
-            if (circleButtons != null) {
-                for (int i = 0; i < buttonNum; i++) {
-                    if (circleButtons[i] != null) circleButtons[i].getTextView().setTextColor(color);
+        for (int i = 0; i < buttonNum; i++) {
+            if (buttonType.equals(ButtonType.CIRCLE)) {
+                if (circleButtons[i] != null) {
+                    circleButtons[i].getTextView().setTextColor(color);
+                } else {
+                    // delaying apply on the fly in the shoot() function
+                    subButtonTextColor = color;
                 }
-            }
-        } else if (buttonType.equals(ButtonType.HAM)) {
-            if (hamButtons != null) {
-                for (int i = 0; i < buttonNum; i++) {
-                    if (hamButtons[i] != null) hamButtons[i].getTextView().setTextColor(color);
+            } else if (buttonType.equals(ButtonType.HAM)) {
+                if (hamButtons[i] != null) {
+                    hamButtons[i].getTextView().setTextColor(color);
+                } else {
+                    // delaying apply on the fly in the shoot() function
+                    subButtonTextColor = color;
                 }
             }
         }
     }
 
     /**
-     * Set the color of all textviews in the sub buttons corresonding to the array.
+     * Set the color of all textviews in the sub buttons corresponding to the array.
      *
      * @param colors
      */
+    // TODO for now doesnt work if MEMORY OPTIMIZATION is true
     public void setTextViewColor(int[] colors) {
         int length = Math.min(buttonNum, colors.length);
         if (buttonType.equals(ButtonType.CIRCLE)) {
-            if (circleButtons != null) {
                 for (int i = 0; i < length; i++) {
-                    if (circleButtons[i] != null) circleButtons[i].getTextView().setTextColor(colors[i]);
+                    if (circleButtons[i] != null)
+                        circleButtons[i].getTextView().setTextColor(colors[i]);
                 }
-            }
         } else if (buttonType.equals(ButtonType.HAM)) {
-            if (hamButtons != null) {
                 for (int i = 0; i < length; i++) {
                     if (hamButtons[i] != null) hamButtons[i].getTextView().setTextColor(colors[i]);
+                }
+        }
+    }
+
+    /**
+     * Set the scaleType of all imageviews in the sub buttons.
+     *
+     * @param scaleType
+     */
+    public void setImageViewScaleType(ImageView.ScaleType scaleType) {
+        for (int i = 0; i < buttonNum; i++) {
+            if (buttonType.equals(ButtonType.CIRCLE)) {
+                if (circleButtons[i] != null) {
+                    circleButtons[i].getImageView().setScaleType(scaleType);
+                } else {
+                    // delaying apply on the fly in the shoot() function
+                    subButtonImageScaleType = scaleType;
+                }
+            } else if (buttonType.equals(ButtonType.HAM)) {
+                if (hamButtons[i] != null) {
+                    hamButtons[i].getImageView().setScaleType(scaleType);
+                } else {
+                    // delaying apply on the fly in the shoot() function
+                    subButtonImageScaleType = scaleType;
                 }
             }
         }
@@ -1565,7 +1632,6 @@ public class BoomMenuButton extends FrameLayout
     }
 
     /**
-     *
      * @return
      */
     public boolean isClosed() {
@@ -1573,7 +1639,6 @@ public class BoomMenuButton extends FrameLayout
     }
 
     /**
-     *
      * @return
      */
     public boolean isClosing() {
@@ -1581,7 +1646,6 @@ public class BoomMenuButton extends FrameLayout
     }
 
     /**
-     *
      * @return
      */
     public boolean isOpen() {
@@ -1589,7 +1653,6 @@ public class BoomMenuButton extends FrameLayout
     }
 
     /**
-     *
      * @return
      */
     public boolean isOpening() {
@@ -1644,10 +1707,15 @@ public class BoomMenuButton extends FrameLayout
      */
     public interface AnimatorListener {
         void toShow();
+
         void showing(float fraction);
+
         void showed();
+
         void toHide();
+
         void hiding(float fraction);
+
         void hided();
     }
 
@@ -1686,6 +1754,7 @@ public class BoomMenuButton extends FrameLayout
 
     /**
      * Set the width of the share icon lines
+     *
      * @param width
      */
     public void setShareLineWidth(float width) {
@@ -1694,6 +1763,7 @@ public class BoomMenuButton extends FrameLayout
 
     /**
      * Set the color of the share icon line 1
+     *
      * @param color
      */
     public void setShareLine1Color(int color) {
@@ -1702,6 +1772,7 @@ public class BoomMenuButton extends FrameLayout
 
     /**
      * Set the color of the share icon line 2
+     *
      * @param color
      */
     public void setShareLine2Color(int color) {
@@ -1759,6 +1830,7 @@ public class BoomMenuButton extends FrameLayout
         private float subButtonsXOffsetOfShadow = 0;
         private float subButtonsYOffsetOfShadow = 0;
         private int subButtonTextColor = Color.WHITE;
+        private ImageView.ScaleType subButtonImageScaleType = ImageView.ScaleType.CENTER;
 
         private OnClickListener onClickListener = null;
         private AnimatorListener animatorListener = null;
@@ -1801,12 +1873,12 @@ public class BoomMenuButton extends FrameLayout
             this.showOrderType = showOrderType;
             return this;
         }
-        
+
         public Builder hideOrder(OrderType hideOrderType) {
             this.hideOrderType = hideOrderType;
             return this;
         }
-        
+
         public Builder button(ButtonType buttonType) {
             this.buttonType = buttonType;
             return this;
@@ -1816,27 +1888,27 @@ public class BoomMenuButton extends FrameLayout
             this.boomType = boomType;
             return this;
         }
-        
+
         public Builder place(PlaceType placeType) {
             this.placeType = placeType;
             return this;
         }
-        
+
         public Builder showMoveEase(EaseType showMoveEaseType) {
             this.showMoveEaseType = showMoveEaseType;
             return this;
         }
-        
+
         public Builder hideMoveEase(EaseType hideMoveEaseType) {
             this.hideMoveEaseType = hideMoveEaseType;
             return this;
         }
-        
+
         public Builder showScaleEase(EaseType showScaleEaseType) {
             this.showScaleEaseType = showScaleEaseType;
             return this;
         }
-        
+
         public Builder hideScaleType(EaseType hideScaleEaseType) {
             this.hideScaleEaseType = hideScaleEaseType;
             return this;
@@ -1894,6 +1966,11 @@ public class BoomMenuButton extends FrameLayout
             return this;
         }
 
+        public Builder subButtonImageScaleType(ImageView.ScaleType subButtonImageScaleType) {
+            this.subButtonImageScaleType = subButtonImageScaleType;
+            return this;
+        }
+
         public Builder onBoomButtonBlick(OnClickListener onClickListener) {
             this.onClickListener = onClickListener;
             return this;
@@ -1918,6 +1995,7 @@ public class BoomMenuButton extends FrameLayout
 
         /**
          * Add a sub button with 3 params.
+         *
          * @param drawable
          * @param twoColors
          * @param string
@@ -1935,6 +2013,7 @@ public class BoomMenuButton extends FrameLayout
 
         /**
          * Add a sub button with 2 params.
+         *
          * @param drawable
          * @param twoColors
          * @return
@@ -1949,6 +2028,7 @@ public class BoomMenuButton extends FrameLayout
 
         /**
          * Add a sub button with 4 params.
+         *
          * @param context
          * @param drawable
          * @param twoColors
@@ -1967,6 +2047,7 @@ public class BoomMenuButton extends FrameLayout
 
         /**
          * Add a sub button with 3 params.
+         *
          * @param context
          * @param drawable
          * @param twoColors
@@ -2014,6 +2095,7 @@ public class BoomMenuButton extends FrameLayout
             boomMenuButton.setBoomButtonShadowOffset(boomButtonXOffsetOfShadow, boomButtonYOffsetOfShadow);
             boomMenuButton.setSubButtonShadowOffset(subButtonsXOffsetOfShadow, subButtonsYOffsetOfShadow);
             boomMenuButton.setTextViewColor(subButtonTextColor);
+            boomMenuButton.setImageViewScaleType(subButtonImageScaleType);
             boomMenuButton.setOnClickListener(onClickListener);
             boomMenuButton.setAnimatorListener(animatorListener);
             boomMenuButton.setOnSubButtonClickListener(onSubButtonClickListener);
