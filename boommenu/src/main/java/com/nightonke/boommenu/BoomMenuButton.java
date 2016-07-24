@@ -41,6 +41,7 @@ import java.util.Random;
 
 /**
  * Created by Weiping on 2016/3/19.
+ * Update it on 2016/7/25
  */
 
 @SuppressWarnings("JavaDoc")
