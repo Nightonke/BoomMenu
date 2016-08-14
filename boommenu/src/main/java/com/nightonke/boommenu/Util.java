@@ -25,14 +25,14 @@ import java.math.BigDecimal;
 public class Util {
 
     public int getScreenWidth(Context context) {
-        Display display = ((Activity)context).getWindowManager().getDefaultDisplay();
+        Display display = scanForActivity(context).getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         return size.x;
     }
 
     public int getScreenHeight(Context context) {
-        Display display = ((Activity)context).getWindowManager().getDefaultDisplay();
+        Display display = scanForActivity(context).getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         return size.y;
@@ -168,5 +168,16 @@ public class Util {
     }
 
     private Util() {
+    }
+    
+     private static Activity scanForActivity(Context cont) {
+        if (cont == null)
+            return null;
+        else if (cont instanceof Activity)
+            return (Activity)cont;
+        else if (cont instanceof ContextWrapper)
+            return scanForActivity(((ContextWrapper)cont).getBaseContext());
+
+        return null;
     }
 }
