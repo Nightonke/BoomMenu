@@ -1,9 +1,9 @@
 package com.nightonke.boommenusample;
 
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.Types.BoomType;
