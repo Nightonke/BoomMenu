@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -1300,6 +1301,16 @@ public class BoomMenuButton extends FrameLayout
     }
 
     /**
+     * Set dot width and height size.
+     *
+     * @param size
+     */
+    public void setDotSize(int size) {
+        this.dotWidth = size;
+        this.dotHeight = size;
+    }
+
+    /**
      * Set frames for animaitons.
      *
      * @param frames
@@ -1586,14 +1597,14 @@ public class BoomMenuButton extends FrameLayout
     public void setTextViewColor(int[] colors) {
         int length = Math.min(buttonNum, colors.length);
         if (buttonType.equals(ButtonType.CIRCLE)) {
-                for (int i = 0; i < length; i++) {
-                    if (circleButtons[i] != null)
-                        circleButtons[i].getTextView().setTextColor(colors[i]);
-                }
+            for (int i = 0; i < length; i++) {
+                if (circleButtons[i] != null)
+                    circleButtons[i].getTextView().setTextColor(colors[i]);
+            }
         } else if (buttonType.equals(ButtonType.HAM)) {
-                for (int i = 0; i < length; i++) {
-                    if (hamButtons[i] != null) hamButtons[i].getTextView().setTextColor(colors[i]);
-                }
+            for (int i = 0; i < length; i++) {
+                if (hamButtons[i] != null) hamButtons[i].getTextView().setTextColor(colors[i]);
+            }
         }
     }
 
@@ -1790,6 +1801,8 @@ public class BoomMenuButton extends FrameLayout
         private ArrayList<int[]> colors = null;
         private ArrayList<String> strings = null;
 
+        private int dotSize = (int) Util.getInstance().dp2px(8);
+
         private int frames = 80;
 
         private int duration = 800;
@@ -1851,6 +1864,11 @@ public class BoomMenuButton extends FrameLayout
             this.drawables = new ArrayList<>(Arrays.asList(drawables));
             this.colors = new ArrayList<>(Arrays.asList(colors));
             this.strings = new ArrayList<>(Arrays.asList(strings));
+            return this;
+        }
+
+        public Builder dotSise(int size) {
+            this.dotSize = size;
             return this;
         }
 
@@ -2083,6 +2101,7 @@ public class BoomMenuButton extends FrameLayout
                     hideScaleEaseType,
                     hideRotateEaseType,
                     rotateDegree);
+            boomMenuButton.setDotSize(dotSize);
             boomMenuButton.setFrames(frames);
             boomMenuButton.setDuration(duration);
             boomMenuButton.setDelay(delay);
@@ -2105,8 +2124,8 @@ public class BoomMenuButton extends FrameLayout
             return boomMenuButton;
         }
     }
-    
-     private static Activity scanForActivity(Context cont) {
+
+    private static Activity scanForActivity(Context cont) {
         if (cont == null)
             return null;
         else if (cont instanceof Activity)
