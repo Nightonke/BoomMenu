@@ -20,7 +20,8 @@
 ![List](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/show_list.gif?raw=true)
 ![Share](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/show_share.gif?raw=true)
 
-BoomMenu可以让你的菜单按钮 ... 瞬间爆炸！
+BoomMenu可以让你的菜单按钮 ... 瞬间爆炸！  
+想看看iOS版本吗？戳[我](https://github.com/Nightonke/VHBoomMenuButton)
 
 # 目录
 

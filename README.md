@@ -20,7 +20,8 @@ Why not try these:
 ![List](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/show_list.gif?raw=true)
 ![Share](https://github.com/Nightonke/BoomMenu/blob/master/Pictures/show_share.gif?raw=true)
 
-Yes, this library is about a menu which can ... BOOM!
+Yes, this library is about a menu which can ... BOOM!  
+Looking for iOS version? Check [here](https://github.com/Nightonke/VHBoomMenuButton)
 
 # Guide
 

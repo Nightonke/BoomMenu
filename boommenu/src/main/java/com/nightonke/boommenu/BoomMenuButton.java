@@ -642,7 +642,7 @@ public class BoomMenuButton extends FrameLayout
      * @return The background layout.
      */
     private ViewGroup createAnimationLayout() {
-        ViewGroup rootView = (ViewGroup) ((Activity) mContext).getWindow().getDecorView();
+        ViewGroup rootView = (ViewGroup) scanForActivity(mContext).getWindow().getDecorView();
         LinearLayout animLayout = new LinearLayout(mContext);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -2104,5 +2104,16 @@ public class BoomMenuButton extends FrameLayout
             boomMenuButton.setShareLine2Color(shareLine2Color);
             return boomMenuButton;
         }
+    }
+    
+     private static Activity scanForActivity(Context cont) {
+        if (cont == null)
+            return null;
+        else if (cont instanceof Activity)
+            return (Activity)cont;
+        else if (cont instanceof ContextWrapper)
+            return scanForActivity(((ContextWrapper)cont).getBaseContext());
+
+        return null;
     }
 }
