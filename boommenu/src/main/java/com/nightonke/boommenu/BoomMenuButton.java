@@ -1049,7 +1049,6 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
 
     /**
      * Whether use cache optimization to avoid multi-creating boom-buttons.
-     * // Todo can we use it in list?
      *
      * @param cacheOptimization cache optimization
      */

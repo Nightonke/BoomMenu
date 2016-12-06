@@ -232,7 +232,7 @@ public class HamButton extends BoomButton {
          * Whether the ham-button contains a sub text-view.
          *
          * @param containsSubText contains a sub text-view or not
-         * @return
+         * @return the builder
          */
         public Builder containsSubText(boolean containsSubText) {
             this.containsSubText = containsSubText;
