@@ -3,2117 +3,1793 @@ package com.nightonke.boommenu;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
+import android.graphics.Point;
+import android.graphics.drawable.RippleDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.nightonke.boommenu.Eases.EaseType;
-import com.nightonke.boommenu.Types.BoomType;
-import com.nightonke.boommenu.Types.ButtonType;
-import com.nightonke.boommenu.Types.ClickEffectType;
-import com.nightonke.boommenu.Types.DimType;
-import com.nightonke.boommenu.Types.OrderType;
-import com.nightonke.boommenu.Types.PlaceType;
-import com.nightonke.boommenu.Types.StateType;
+import com.nightonke.boommenu.Animation.AnimationManager;
+import com.nightonke.boommenu.Animation.BoomEnum;
+import com.nightonke.boommenu.Animation.Ease;
+import com.nightonke.boommenu.Animation.EaseEnum;
+import com.nightonke.boommenu.Animation.OrderEnum;
+import com.nightonke.boommenu.Animation.ShareLinesView;
+import com.nightonke.boommenu.BoomButtons.BoomButton;
+import com.nightonke.boommenu.BoomButtons.BoomButtonBuilder;
+import com.nightonke.boommenu.BoomButtons.ButtonPlaceAlignmentEnum;
+import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
+import com.nightonke.boommenu.BoomButtons.ButtonPlaceManager;
+import com.nightonke.boommenu.BoomButtons.HamButton;
+import com.nightonke.boommenu.BoomButtons.InnerOnBoomButtonClickListener;
+import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
+import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
+import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
+import com.nightonke.boommenu.Piece.BoomPiece;
+import com.nightonke.boommenu.Piece.PiecePlaceEnum;
+import com.nightonke.boommenu.Piece.PiecePlaceManager;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
 
 /**
- * Created by Weiping on 2016/3/19.
- * Update it on 2016/7/25
+ * Created by Weiping Huang at 14:33 on 16/11/6
+ * For Personal Open Source
+ * Contact me at 2584541288@qq.com or nightonke@outlook.com
+ * For more projects: https://github.com/Nightonke
  */
 
-@SuppressWarnings("JavaDoc")
-public class BoomMenuButton extends FrameLayout
-        implements
-        CircleButton.OnCircleButtonClickListener,
-        HamButton.OnHamButtonClickListener {
+public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClickListener {
 
-    // This param is used to optimizize the memory used.
-    // When this param is set to true,
-    // all the sub buttons will be created when needed
-    // and will not be stored.
-    public static final boolean MEMORY_OPTIMIZATION = true;
+    // Basic
+    private Context context;
+    private boolean needToLayout = true;
+    private boolean cacheOptimization = true;
+    private boolean boomInWholeScreen = true;
+    private boolean inList = false;
+    private boolean inFragment = false;
+    private Runnable listLayoutRunnable;
 
-    public static final int MIN_CIRCLE_BUTTON_NUMBER = 1;
-    public static final int MAX_CIRCLE_BUTTON_NUMBER = 9;
-    public static final int MIN_HAM_BUTTON_NUMBER = 1;
-    public static final int MAX_HAM_BUTTON_NUMBER = 4;
+    // Shadow
+    private boolean shadowEffect;
+    private int shadowOffsetX;
+    private int shadowOffsetY;
+    private int shadowRadius;
+    private int shadowColor;
 
-    private ViewGroup animationLayout = null;
+    // Button
+    private int buttonRadius;
+    private ButtonEnum buttonEnum = ButtonEnum.Unknown;
+    private boolean backgroundEffect;
+    private boolean rippleEffect;
+    private int normalColor;
+    private int highlightedColor;
+    private int unableColor;
+    private FrameLayout button;
 
-    private ShadowLayout shadowLayout;
-    private FrameLayout frameLayout;
-    private View ripple;
+    // Piece
+    private ArrayList<BoomPiece> pieces;
+    private ArrayList<Point> piecePositions;
+    private int dotRadius = 6;
+    private int hamWidth = 40;
+    private int hamHeight = 6;
+    private int pieceHorizontalMargin = 5;
+    private int pieceVerticalMargin = 5;
+    private int pieceInclinedMargin = (int) (5 * Math.sqrt(2));
+    private int shareLineLength = 35;
+    private int shareLine1Color = Color.WHITE;
+    private int shareLine2Color = Color.WHITE;
+    private int shareLineWidth = 3;
+    private ShareLinesView shareLinesView;
+    private PiecePlaceEnum piecePlaceEnum = PiecePlaceEnum.Unknown;
 
-    private int[][] originalLocations = new int[MAX_CIRCLE_BUTTON_NUMBER][2];
-    private int[][] startLocations = new int[MAX_CIRCLE_BUTTON_NUMBER][2];
-    private int[][] endLocations = new int[MAX_CIRCLE_BUTTON_NUMBER][2];
-
-    private boolean animationPlaying = false;
-    private StateType state = StateType.CLOSED;
-
-    // Params about buttons
-    private int buttonNum = 0;
-    private CircleButton[] circleButtons = new CircleButton[MAX_CIRCLE_BUTTON_NUMBER];  // this Array reference cannot never be null as initialized
-    private HamButton[] hamButtons = new HamButton[MAX_HAM_BUTTON_NUMBER];   // this Array reference cannot never be null as initialized
-    private Dot[] dots = new Dot[MAX_CIRCLE_BUTTON_NUMBER];
-    private Bar[] bars = new Bar[MAX_HAM_BUTTON_NUMBER];
-    private ShareLines shareLines = null;
-
-    // Store the drawables of buttons
-    private Drawable[] drawables = null;
-    // Store the colors of buttons
-    private int[][] colors = null;
-    // Store the strings of buttons
-    private String[] strings = null;
-
-    // Is in action bar
-    private boolean isInActionBar = false;
-    // Is in list item
-    private boolean isInList = false;
-    // Boom button color
-    private int boomButtonColor = 0;
-    // Boom button pressed color
-    private int boomButtonPressedColor = 0;
-
-    // Frames of animations
-    private int frames = 80;
-    // Duration of animations
-    private int duration = 800;
-    // Delay
-    private int delay = 100;
-    // Show order type
-    private OrderType showOrderType = OrderType.DEFAULT;
-    // Hide order type
-    private OrderType hideOrderType = OrderType.DEFAULT;
-    // Button type
-    private ButtonType buttonType = ButtonType.CIRCLE;
-    // Boom type
-    private BoomType boomType = BoomType.HORIZONTAL_THROW;
-    // Place type
-    private PlaceType placeType = null;
-    // Default dot width
-    private int dotWidth = (int) Util.getInstance().dp2px(8);
-    // Default dot width
-    private int dotHeight = (int) Util.getInstance().dp2px(8);
-    // Default circle button width
-    private int buttonWidth = (int) Util.getInstance().dp2px(88);
-    // Default bar width
-    private int barWidth = (int) Util.getInstance().dp2px(36);
-    // Default bar height
-    private int barHeight = (int) Util.getInstance().dp2px(6);
-    // Default ham button width
-    private int hamButtonWidth = 0;
-    // Default ham button height
-    private int hamButtonHeight = (int) Util.getInstance().dp2px(80);
-    // Boom button radius
-    private int boomButtonRadius = (int) Util.getInstance().dp2px(56);
-    // Movement ease
-    private EaseType showMoveEaseType = EaseType.EaseOutBack;
-    private EaseType hideMoveEaseType = EaseType.EaseOutCirc;
-    // Scale ease
-    private EaseType showScaleEaseType = EaseType.EaseOutBack;
-    private EaseType hideScaleEaseType = EaseType.EaseOutCirc;
-    // Whether rotate
-    private int rotateDegree = 720;
-    // Rotate ease
-    private EaseType showRotateEaseType = EaseType.EaseOutBack;
-    private EaseType hideRotateEaseType = EaseType.Linear;
-    // Auto dismiss
-    private boolean autoDismiss = true;
-    // Cancelable
+    // Animation
+    private int animatingViewNumber = 0;
+    private OnBoomListener onBoomListener;
+    private int dimColor = Color.parseColor("#55000000");
+    private long showDuration = 500;
+    private long showDelay = 100;
+    private long hideDuration = 500;
+    private long hideDelay = 100;
     private boolean cancelable = true;
-    // Dim value
-    private DimType dimType = DimType.DIM_6;
-    // Click effect
-    private ClickEffectType clickEffectType = ClickEffectType.RIPPLE;
-    // Sub buttons offsets of shadow
-    private float subButtonsXOffsetOfShadow = 0;
-    private float subButtonsYOffsetOfShadow = 0;
-    private int subButtonTextColor = Color.WHITE;
-    private ImageView.ScaleType subButtonImageScaleType = ImageView.ScaleType.CENTER;
+    private boolean autoHide = true;
+    private OrderEnum orderEnum = OrderEnum.RANDOM;
+    private int frames = 60;
+    private BoomEnum boomEnum = BoomEnum.HORIZONTAL_THROW_2;
+    private EaseEnum showMoveEaseEnum = EaseEnum.EaseOutBack;
+    private EaseEnum showScaleEaseEnum = EaseEnum.EaseOutBack;
+    private EaseEnum showRotateEaseEnum = EaseEnum.EaseOutBack;
+    private EaseEnum hideMoveEaseEnum = EaseEnum.EaseInBack;
+    private EaseEnum hideScaleEaseEnum = EaseEnum.EaseInBack;
+    private EaseEnum hideRotateEaseEnum = EaseEnum.EaseInBack;
+    private int rotateDegree = 720;
+    private BoomStateEnum boomStateEnum = BoomStateEnum.DidHide;
 
-    private OnClickListener onClickListener = null;
-    private AnimatorListener animatorListener = null;
-    private OnSubButtonClickListener onSubButtonClickListener = null;
+    // Background
+    private ViewGroup background;
 
-    private Context mContext;
+    // Boom Buttons
+    private ArrayList<BoomButton> boomButtons = new ArrayList<>();
+    private ArrayList<BoomButtonBuilder> boomButtonBuilders = new ArrayList<>();
+    private float simpleCircleButtonRadius;
+    private float textInsideCircleButtonRadius;
+    private float textOutsideCircleButtonWidth;
+    private float textOutsideCircleButtonHeight;
+    private float hamButtonWidth;
+    private float hamButtonHeight;
+    private ButtonPlaceEnum buttonPlaceEnum = ButtonPlaceEnum.Unknown;
+    private ButtonPlaceAlignmentEnum buttonPlaceAlignmentEnum
+            = ButtonPlaceAlignmentEnum.Center;
+    private float buttonHorizontalMargin;
+    private float buttonVerticalMargin;
+    private float buttonInclinedMargin;
+    private float buttonTopMargin;
+    private float buttonBottomMargin;
+    private float buttonLeftMargin;
+    private float buttonRightMargin;
+    private ArrayList<Point> startPositions;
+    private ArrayList<Point> endPositions;
+    private float bottomHamButtonTopMargin = -1f;
+
+    private void ___________________________1_Initialization() {}
+    //region Constructor and Initializer
 
     public BoomMenuButton(Context context) {
-        this(context, null);
+        super(context);
+        init(context, null);
     }
 
     public BoomMenuButton(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init(context, attrs);
+    }
 
-        mContext = context;
+    public BoomMenuButton(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context, attrs);
+    }
 
-        TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.BoomMenuButton, 0, 0);
-        if (attr != null) {
-            try {
-                isInActionBar = attr.getBoolean(R.styleable.BoomMenuButton_boom_inActionBar, false);
-                isInList = attr.getBoolean(R.styleable.BoomMenuButton_boom_inList, false);
-                boomButtonColor = attr.getColor(R.styleable.BoomMenuButton_boom_button_color,
-                        ContextCompat.getColor(mContext, R.color.default_boom_button_color));
-                boomButtonPressedColor = attr.getColor(R.styleable.BoomMenuButton_boom_button_pressed_color,
-                        ContextCompat.getColor(mContext, R.color.default_boom_button_color_pressed));
-            } finally {
-                attr.recycle();
-            }
+    private void init(Context context, AttributeSet attrs) {
+        this.context = context;
+
+        LayoutInflater.from(context).inflate(R.layout.bmb, this, true);
+        initAttrs(context, attrs);
+        initShadow();
+        initButton();
+        initListLayoutRunnable();
+    }
+
+    private void initAttrs(Context context, AttributeSet attrs) {
+        TypedArray typedArray = context.obtainStyledAttributes(
+                attrs, R.styleable.BoomMenuButton, 0, 0);
+        if (typedArray == null) return;
+        try {
+            // Basic
+            cacheOptimization = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_cacheOptimization, R.bool.default_bmb_cacheOptimization);
+            boomInWholeScreen = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_boomInWholeScreen, R.bool.default_bmb_boomInWholeScreen);
+            inList = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_inList, R.bool.default_bmb_inList);
+            inFragment = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_inFragment, R.bool.default_bmb_inFragment);
+
+            // Shadow
+            shadowEffect = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_shadowEffect, R.bool.default_bmb_shadow_effect);
+            shadowRadius = Util.getDimenSize(typedArray, R.styleable.BoomMenuButton_bmb_shadowRadius, R.dimen.default_bmb_shadow_radius);
+            shadowOffsetX = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_shadowX, R.dimen.default_bmb_shadow_offset_x);
+            shadowOffsetY = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_shadowY, R.dimen.default_bmb_shadow_offset_y);
+            shadowColor = Util.getColor(typedArray, R.styleable.BoomMenuButton_bmb_shadowColor, R.color.default_bmb_shadow_color);
+
+            // Button
+            buttonRadius = Util.getDimenSize(typedArray, R.styleable.BoomMenuButton_bmb_buttonRadius, R.dimen.default_bmb_button_radius);
+            buttonEnum = ButtonEnum.getEnum(Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_buttonEnum, R.integer.default_bmb_button_enum));
+            backgroundEffect = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_backgroundEffect, R.bool.default_bmb_background_effect);
+            rippleEffect = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_rippleEffect, R.bool.default_bmb_ripple_effect);
+            normalColor = Util.getColor(typedArray, R.styleable.BoomMenuButton_bmb_normalColor, R.color.default_bmb_normal_color);
+            highlightedColor = Util.getColor(typedArray, R.styleable.BoomMenuButton_bmb_highlightedColor, R.color.default_bmb_highlighted_color);
+            if (highlightedColor == Color.TRANSPARENT) highlightedColor = Util.getDarkerColor(normalColor);
+            unableColor = Util.getColor(typedArray, R.styleable.BoomMenuButton_bmb_unableColor, R.color.default_bmb_unable_color);
+            if (unableColor == Color.TRANSPARENT) unableColor = Util.getLighterColor(normalColor);
+
+            // Piece
+            dotRadius = Util.getDimenSize(typedArray, R.styleable.BoomMenuButton_bmb_dotRadius, R.dimen.default_bmb_dotRadius);
+            hamWidth = Util.getDimenSize(typedArray, R.styleable.BoomMenuButton_bmb_hamWidth, R.dimen.default_bmb_hamWidth);
+            hamHeight = Util.getDimenSize(typedArray, R.styleable.BoomMenuButton_bmb_hamHeight, R.dimen.default_bmb_hamHeight);
+            pieceHorizontalMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_pieceHorizontalMargin, R.dimen.default_bmb_pieceHorizontalMargin);
+            pieceVerticalMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_pieceVerticalMargin, R.dimen.default_bmb_pieceVerticalMargin);
+            pieceVerticalMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_pieceInclinedMargin, R.dimen.default_bmb_pieceInclinedMargin);
+            shareLineLength = Util.getDimenSize(typedArray, R.styleable.BoomMenuButton_bmb_sharedLineLength, R.dimen.default_bmb_sharedLineLength);
+            shareLine1Color = Util.getColor(typedArray, R.styleable.BoomMenuButton_bmb_shareLine1Color, R.color.default_bmb_shareLine1Color);
+            shareLine2Color = Util.getColor(typedArray, R.styleable.BoomMenuButton_bmb_shareLine2Color, R.color.default_bmb_shareLine2Color);
+            shareLineWidth = Util.getDimenSize(typedArray, R.styleable.BoomMenuButton_bmb_shareLineWidth, R.dimen.default_bmb_shareLineWidth);
+            piecePlaceEnum = PiecePlaceEnum.getEnum(Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_piecePlaceEnum, R.integer.default_bmb_pieceEnum));
+
+            // Animation
+            dimColor = Util.getColor(typedArray, R.styleable.BoomMenuButton_bmb_dimColor, R.color.default_bmb_dimColor);
+            showDuration = Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_showDuration, R.integer.default_bmb_showDuration);
+            showDelay = Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_showDelay, R.integer.default_bmb_showDelay);
+            hideDuration = Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_hideDuration, R.integer.default_bmb_hideDuration);
+            hideDelay = Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_hideDelay, R.integer.default_bmb_hideDelay);
+            cancelable = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_cancelable, R.bool.default_bmb_cancelable);
+            autoHide = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_autoHide, R.bool.default_bmb_autoHide);
+            orderEnum = OrderEnum.getEnum(Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_orderEnum, R.integer.default_bmb_orderEnum));
+            frames = Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_frames, R.integer.default_bmb_frames);
+            boomEnum = BoomEnum.getEnum(Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_boomEnum, R.integer.default_bmb_boomEnum));
+            showMoveEaseEnum = EaseEnum.getEnum(Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_showMoveEaseEnum, R.integer.default_bmb_showMoveEaseEnum));
+            showScaleEaseEnum = EaseEnum.getEnum(Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_showScaleEaseEnum, R.integer.default_bmb_showScaleEaseEnum));
+            showRotateEaseEnum = EaseEnum.getEnum(Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_showRotateEaseEnum, R.integer.default_bmb_showRotateEaseEnum));
+            hideMoveEaseEnum = EaseEnum.getEnum(Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_hideMoveEaseEnum, R.integer.default_bmb_hideMoveEaseEnum));
+            hideScaleEaseEnum = EaseEnum.getEnum(Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_hideScaleEaseEnum, R.integer.default_bmb_hideScaleEaseEnum));
+            hideRotateEaseEnum = EaseEnum.getEnum(Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_hideRotateEaseEnum, R.integer.default_bmb_hideRotateEaseEnum));
+            rotateDegree = Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_rotateDegree, R.integer.default_bmb_rotateDegree);
+
+            // Boom buttons
+            buttonPlaceEnum = ButtonPlaceEnum.getEnum(Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_buttonPlaceEnum, R.integer.default_bmb_buttonPlaceEnum));
+            buttonPlaceAlignmentEnum = ButtonPlaceAlignmentEnum.getEnum(Util.getInt(typedArray, R.styleable.BoomMenuButton_bmb_buttonPlaceAlignmentEnum, R.integer.default_bmb_buttonPlaceAlignmentEnum));
+            buttonHorizontalMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_buttonHorizontalMargin, R.dimen.default_bmb_buttonHorizontalMargin);
+            buttonVerticalMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_buttonVerticalMargin, R.dimen.default_bmb_buttonVerticalMargin);
+            buttonInclinedMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_buttonInclinedMargin, R.dimen.default_bmb_buttonInclinedMargin);
+            buttonTopMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_buttonTopMargin, R.dimen.default_bmb_buttonTopMargin);
+            buttonBottomMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_buttonBottomMargin, R.dimen.default_bmb_buttonBottomMargin);
+            buttonLeftMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_buttonLeftMargin, R.dimen.default_bmb_buttonLeftMargin);
+            buttonRightMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_buttonRightMargin, R.dimen.default_bmb_buttonRightMargin);
+            bottomHamButtonTopMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_bottomHamButtonTopMargin, R.dimen.default_bmb_bottomHamButtonTopMargin);
+        } finally {
+            typedArray.recycle();
         }
+    }
 
-        if (isInActionBar || isInList) {
-            LayoutInflater.from(context).inflate(R.layout.boom_menu_button_in_action_bar, this, true);
-            frameLayout = (FrameLayout) findViewById(R.id.frame_layout);
-            frameLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    shoot();
-                }
-            });
+    private void initShadow() {
+        BMBShadow shadow = (BMBShadow) findViewById(R.id.shadow);
+        if (shadowEffect && backgroundEffect && !inList) {
+            shadow.setShadowOffsetX(shadowOffsetX);
+            shadow.setShadowOffsetY(shadowOffsetY);
+            shadow.setShadowColor(shadowColor);
+            shadow.setShadowRadius(shadowRadius);
+            shadow.setShadowCornerRadius(shadowRadius + buttonRadius);
         } else {
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                LayoutInflater.from(context).inflate(R.layout.boom_menu_button, this, true);
+            shadow.clearShadow();
+        }
+    }
+
+    private void initButton() {
+        button = (FrameLayout) findViewById(R.id.button);
+        LayoutParams params = (LayoutParams) button.getLayoutParams();
+        params.width = buttonRadius * 2;
+        params.height = buttonRadius * 2;
+        button.setLayoutParams(params);
+        button.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boom();
+            }
+        });
+
+        if (backgroundEffect && !inList) {
+            if (rippleEffect && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                RippleDrawable rippleDrawable = new RippleDrawable(
+                        ColorStateList.valueOf(highlightedColor),
+                        Util.getOvalDrawable(button, normalColor),
+                        null);
+                Util.setDrawable(button, rippleDrawable);
             } else {
-                LayoutInflater.from(context).inflate(R.layout.boom_menu_button_below_lollipop, this, true);
+                StateListDrawable stateListDrawable = Util.getOvalStateListDrawable(
+                        button,
+                        buttonRadius,
+                        normalColor,
+                        highlightedColor,
+                        unableColor);
+                Util.setDrawable(button, stateListDrawable);
             }
-            shadowLayout = (ShadowLayout) findViewById(R.id.shadow_layout);
-            frameLayout = (FrameLayout) findViewById(R.id.frame_layout);
-            ripple = findViewById(R.id.ripple);
-
-            setRipple(clickEffectType);
-            setBoomButtonBackgroundColor(boomButtonPressedColor, boomButtonColor);
         }
-
-        hamButtonWidth = (int) (Util.getInstance().getScreenWidth(getContext()) * 8 / 9
-                + Util.getInstance().dp2px(4));
-
-        setWillNotDraw(false);
     }
 
-    /**
-     * Init the boom menu button.
-     * Notice that you should call this NOT in your onCreate method.
-     * Because the width and height of boom menu button is 0.
-     * Call this in:
-     * <p/>
-     * (This method needs to be overrided in activity)
-     * public void onWindowFocusChanged(boolean hasFocus) {
-     * super.onWindowFocusChanged(hasFocus);
-     * init(...);
-     * }
-     *
-     * @param drawables          The drawables of images of sub buttons. Can not be null.
-     * @param strings            The texts of sub buttons, ok to be null.
-     * @param colors             The colors of sub buttons, including pressed-state and normal-state.
-     * @param buttonType         The button type.
-     * @param boomType           The boom type.
-     * @param placeType          The place type.
-     * @param showMoveEaseType   Ease type to move the sub buttons when showing.
-     * @param showScaleEaseType  Ease type to scale the sub buttons when showing.
-     * @param showRotateEaseType Ease type to rotate the sub buttons when showing.
-     * @param hideMoveEaseType   Ease type to move the sub buttons when dismissing.
-     * @param hideScaleEaseType  Ease type to scale the sub buttons when dismissing.
-     * @param hideRotateEaseType Ease type to rotate the sub buttons when dismissing.
-     * @param rotateDegree       Rotation degree.
-     */
-    public void init(
-            Drawable[] drawables,
-            String[] strings,
-            int[][] colors,
-            ButtonType buttonType,
-            BoomType boomType,
-            PlaceType placeType,
-            EaseType showMoveEaseType,
-            EaseType showScaleEaseType,
-            EaseType showRotateEaseType,
-            EaseType hideMoveEaseType,
-            EaseType hideScaleEaseType,
-            EaseType hideRotateEaseType,
-            Integer rotateDegree) {
+    private void initListLayoutRunnable() {
+        if (listLayoutRunnable == null) {
+            listLayoutRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    doLayoutJobs();
+                }
+            };
+        }
+    }
 
-        // judge
-        errorJudge(drawables, strings, colors, buttonType);
+    //endregion
 
-        this.buttonType = buttonType;
-        this.boomType = boomType;
-        if (placeType == null) throw new RuntimeException("Place type is null!");
-        else this.placeType = placeType;
-        if (showMoveEaseType != null) this.showMoveEaseType = showMoveEaseType;
-        if (showScaleEaseType != null) this.showScaleEaseType = showScaleEaseType;
-        if (showRotateEaseType != null) this.showRotateEaseType = showRotateEaseType;
-        if (hideMoveEaseType != null) this.hideMoveEaseType = hideMoveEaseType;
-        if (hideScaleEaseType != null) this.hideScaleEaseType = hideScaleEaseType;
-        if (hideRotateEaseType != null) this.hideRotateEaseType = hideRotateEaseType;
-        if (rotateDegree != null) this.rotateDegree = rotateDegree;
+    private void ___________________________2_Place_Pieces() {}
+    //region Place Pieces
 
-        if (buttonType.equals(ButtonType.CIRCLE)) {
-            // circle buttons
-            // create buttons
-            buttonNum = drawables.length;
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
 
-            if (isInList || MEMORY_OPTIMIZATION) {
-                // store the drawables, THEN we will build the buttons when create them
-                this.drawables = drawables;
-                this.colors = colors;
-                this.strings = strings;
+        if (needToLayout) {
+            if (inList) {
+                initListLayoutRunnable();
+                post(listLayoutRunnable);
             } else {
-                for (int i = 0; i < buttonNum; i++) {
-                    circleButtons[i] = new CircleButton(mContext);
-                    circleButtons[i].setOnCircleButtonClickListener(this, i);
-                    circleButtons[i].setDrawable(drawables[i]);
-                    if (strings != null) circleButtons[i].setText(strings[i]);
-                    circleButtons[i].setColor(colors[i][0], colors[i][1]);
+                doLayoutJobs();
+            }
+        }
+        needToLayout = false;
+    }
+
+    private void doLayoutJobs() {
+        removePieces();
+        createPieces();
+        placeShareLinesView();
+        placePieces();
+        placePiecesAtPositions();
+        // We have to calculate the start positions again when BMB is used in list-view.
+        // So we don't need to calculate them here.
+        if (!inList && !inFragment) calculateStartPositions();
+        setShareLinesViewData();
+    }
+
+    private void removePieces() {
+        button.removeAllViews();
+        if (pieces != null) pieces.clear();
+    }
+
+    private void createPieces() {
+        ExceptionManager.judge(piecePlaceEnum, buttonPlaceEnum, boomButtonBuilders);
+        calculatePiecePositions();
+        int pieceNumber = pieceNumber();
+        pieces = new ArrayList<>(pieceNumber);
+        for (int i = 0; i < pieceNumber; i++) {
+            BoomPiece piece = PiecePlaceManager.createPiece(
+                    context,
+                    piecePlaceEnum,
+                    boomButtonBuilders.get(i).pieceColor());
+            pieces.add(piece);
+        }
+    }
+
+    private void placePieces() {
+        ArrayList<Integer> indexes;
+        if (piecePlaceEnum == PiecePlaceEnum.Share)
+            indexes = AnimationManager.getOrderIndex(OrderEnum.DEFAULT, pieces.size());
+        else
+            indexes = AnimationManager.getOrderIndex(orderEnum, pieces.size());
+        // Reverse to keep the former pieces are above than the latter(z-axis)
+        // So the early-animating pieces are above than the later ones
+        for (int i = indexes.size() - 1; i >= 0; i--) button.addView(pieces.get(indexes.get(i)));
+    }
+
+    private void placePiecesAtPositions() {
+        int pieceNumber = pieceNumber();
+        int w, h;
+        switch (piecePlaceEnum) {
+            case DOT_1:
+            case DOT_2_1:
+            case DOT_2_2:
+            case DOT_3_1:
+            case DOT_3_2:
+            case DOT_3_3:
+            case DOT_3_4:
+            case DOT_4_1:
+            case DOT_4_2:
+            case DOT_5_1:
+            case DOT_5_2:
+            case DOT_5_3:
+            case DOT_5_4:
+            case DOT_6_1:
+            case DOT_6_2:
+            case DOT_6_3:
+            case DOT_6_4:
+            case DOT_6_5:
+            case DOT_6_6:
+            case DOT_7_1:
+            case DOT_7_2:
+            case DOT_7_3:
+            case DOT_7_4:
+            case DOT_7_5:
+            case DOT_7_6:
+            case DOT_8_1:
+            case DOT_8_2:
+            case DOT_8_3:
+            case DOT_8_4:
+            case DOT_8_5:
+            case DOT_8_6:
+            case DOT_8_7:
+            case DOT_9_1:
+            case DOT_9_2:
+            case DOT_9_3:
+            case Share:
+                w = 2 * dotRadius;
+                h = 2 * dotRadius;
+                break;
+            case HAM_1:
+            case HAM_2:
+            case HAM_3:
+            case HAM_4:
+            case HAM_5:
+            case HAM_6:
+                w = hamWidth;
+                h = hamHeight;
+                break;
+            default:
+                throw new RuntimeException("Unknown piece-place-enum!");
+        }
+        for (int i = 0; i < pieceNumber; i++) pieces.get(i).place(piecePositions.get(i).x, piecePositions.get(i).y, w, h);
+    }
+
+    private void calculatePiecePositions() {
+        ExceptionManager.judge(buttonEnum);
+        ExceptionManager.judge(piecePlaceEnum);
+        switch (buttonEnum) {
+            case SimpleCircle:
+            case TextInsideCircle:
+            case TextOutsideCircle:
+                if (piecePlaceEnum == PiecePlaceEnum.Share) {
+                    piecePositions = PiecePlaceManager.getShareDotPositions(
+                            new Point(button.getWidth(), button.getHeight()),
+                            dotRadius,
+                            boomButtonBuilders.size(),
+                            shareLineLength);
+                } else {
+                    piecePositions = PiecePlaceManager.getDotPositions(
+                            piecePlaceEnum,
+                            new Point(button.getWidth(), button.getHeight()),
+                            dotRadius,
+                            pieceHorizontalMargin,
+                            pieceVerticalMargin,
+                            pieceInclinedMargin);
                 }
-            }
-
-            // create dots
-            for (int i = 0; i < buttonNum; i++) {
-                dots[i] = new Dot(mContext);
-                dots[i].setColor(colors[i][1]);
-            }
-
-            // place dots according to the number of them and the place type
-            placeDots();
-        } else if (buttonType.equals(ButtonType.HAM)) {
-            // hamburger button
-            hamButtonWidth = Util.getInstance().getScreenWidth(getContext()) * 8 / 9;
-            // create buttons
-            buttonNum = drawables.length;
-
-            if (isInList || MEMORY_OPTIMIZATION) {
-                // store the drawables, THEN we will build the buttons when create them
-                this.drawables = drawables;
-                this.colors = colors;
-                this.strings = strings;
-            } else {
-                for (int i = 0; i < buttonNum; i++) {
-                    hamButtons[i] = new HamButton(mContext);
-                    hamButtons[i].setOnHamButtonClickListener(this, i);
-                    hamButtons[i].setDrawable(drawables[i]);
-                    if (strings != null) hamButtons[i].setText(strings[i]);
-                    hamButtons[i].setColor(colors[i][0], colors[i][1]);
-                }
-            }
-
-            // create bars
-            for (int i = 0; i < buttonNum; i++) {
-                bars[i] = new Bar(mContext);
-                bars[i].setColor(colors[i][1]);
-            }
-
-            // place bars according to the number of them and the place type
-            placeBars();
+                break;
+            case Ham:
+                piecePositions = PiecePlaceManager.getHamPositions(
+                        piecePlaceEnum,
+                        new Point(button.getWidth(), button.getHeight()),
+                        hamWidth,
+                        hamHeight,
+                        pieceVerticalMargin);
+                break;
+            case Unknown:
+                throw new RuntimeException("The button-enum is unknown!");
         }
     }
 
+    //endregion
+
+    private void ___________________________3_Animation() {}
+    //region Animation
+
     /**
-     * Judge whether the input params to init boom menu button is incorrect.
-     *
-     * @param drawables  The drawables of the sub buttons.
-     * @param strings    The texts of the sub buttons.
-     * @param colors     The colors(including the pressed-state and normal-state) of the sub buttons.
-     * @param buttonType The button type of the sub buttons.
+     * Boom the BMB!
      */
-    private void errorJudge(
-            Drawable[] drawables,
-            String[] strings,
-            int[][] colors,
-            ButtonType buttonType) {
-        if (drawables == null) {
-            throw new RuntimeException("The button's drawables are null!");
-        }
-        if (colors == null) {
-            throw new RuntimeException("The button's colors are null!");
-        }
-        if (buttonType.equals(ButtonType.CIRCLE)) {
-            if (!(
-                    MIN_CIRCLE_BUTTON_NUMBER <= drawables.length
-                            && drawables.length <= MAX_CIRCLE_BUTTON_NUMBER)
-                    || (strings != null
-                    && !(
-                    MIN_CIRCLE_BUTTON_NUMBER <= strings.length
-                            && strings.length <= MAX_CIRCLE_BUTTON_NUMBER))
-                    || !(
-                    MIN_CIRCLE_BUTTON_NUMBER <= colors.length
-                            && colors.length <= MAX_CIRCLE_BUTTON_NUMBER)) {
-                throw new RuntimeException("The circle type button's length must be in [" +
-                        MIN_CIRCLE_BUTTON_NUMBER + ", " +
-                        MAX_CIRCLE_BUTTON_NUMBER + "]!");
-            }
-        } else if (buttonType.equals(ButtonType.HAM)) {
-            if ((!(
-                    MIN_HAM_BUTTON_NUMBER <= drawables.length
-                            && drawables.length <= MAX_HAM_BUTTON_NUMBER))
-                    || (strings != null
-                    && !(
-                    MIN_HAM_BUTTON_NUMBER <= strings.length
-                            && strings.length <= MAX_HAM_BUTTON_NUMBER))
-                    || !(
-                    MIN_HAM_BUTTON_NUMBER <= colors.length
-                            && colors.length <= MAX_HAM_BUTTON_NUMBER)) {
-                throw new RuntimeException("The ham type button's length must be in [" +
-                        MIN_HAM_BUTTON_NUMBER + ", " +
-                        MAX_HAM_BUTTON_NUMBER + "]!");
-            }
-        }
+    public void boom() {
+        if (isAnimating() || boomStateEnum != BoomStateEnum.DidHide) return;
+        boomStateEnum = BoomStateEnum.WillShow;
+        if (onBoomListener != null) onBoomListener.onBoomWillShow();
+        // We have to calculate the start positions again when BMB is used in list-view
+        // or in fragment.
+        if (inList || inFragment) calculateStartPositions();
+        createButtons();
+        dimBackground(false);
+        ExceptionManager.judge(boomEnum);
+        startShowAnimations(false);
     }
 
     /**
-     * Place all dots to the boom menu botton.
+     * Re-boom the BMB!
      */
-    @SuppressWarnings("SuspiciousNameCombination")
-    private void placeDots() {
-        frameLayout.removeAllViews();
-        FrameLayout.LayoutParams[] ps = PlaceParamsFactory.getDotParams(
-                placeType,
-                frameLayout.getWidth(),
-                frameLayout.getHeight(),
-                dotWidth,
-                dotHeight
-        );
-
-        if (placeType.SHARE_3_1.v <= placeType.v && placeType.v <= PlaceType.SHARE_9_2.v) {
-            shareLines = new ShareLines(mContext);
-            float[][] locations = new float[3][2];
-            locations[0][0] = ps[0].leftMargin + dotWidth / 2;
-            locations[0][1] = ps[0].topMargin + dotHeight / 2;
-            locations[1][0] = ps[1].leftMargin + dotWidth / 2;
-            locations[1][1] = ps[1].topMargin + dotHeight / 2;
-            locations[2][0] = ps[2].leftMargin + dotWidth / 2;
-            locations[2][1] = ps[2].topMargin + dotHeight / 2;
-            shareLines.setLocations(locations);
-            shareLines.setOffset(1);
-
-            FrameLayout.LayoutParams p
-                    = new FrameLayout.LayoutParams(frameLayout.getWidth(), frameLayout.getHeight());
-            frameLayout.addView(shareLines, p);
-        }
-
-        for (int i = 0; i < buttonNum; i++) {
-            frameLayout.addView(dots[i], ps[i]);
-        }
+    public void reboom() {
+        if (isAnimating() || boomStateEnum != BoomStateEnum.DidShow) return;
+        boomStateEnum = BoomStateEnum.WillHide;
+        if (onBoomListener != null) onBoomListener.onBoomWillHide();
+        lightBackground(false);
+        startHideAnimations(false);
     }
 
     /**
-     * Place all bars to the boom menu botton.
+     * Boom the BMB with duration 0!
      */
-    private void placeBars() {
-        frameLayout.removeAllViews();
-        FrameLayout.LayoutParams[] ps = PlaceParamsFactory.getBarParams(
-                placeType,
-                frameLayout.getWidth(),
-                frameLayout.getHeight(),
-                barWidth,
-                barHeight
-        );
-        for (int i = 0; i < ps.length; i++) frameLayout.addView(bars[i], ps[i]);
+    public void boomImmediately() {
+        if (isAnimating() || boomStateEnum != BoomStateEnum.DidHide) return;
+        boomStateEnum = BoomStateEnum.WillShow;
+        if (onBoomListener != null) onBoomListener.onBoomWillShow();
+        // We have to calculate the start positions again when BMB is used in list-view
+        // or in fragment.
+        if (inList || inFragment) calculateStartPositions();
+        createButtons();
+        dimBackground(true);
+        ExceptionManager.judge(boomEnum);
+        startShowAnimations(true);
     }
 
     /**
-     * When the boom menu button is clicked.
+     * Re-boom the BMB with duration 0!
      */
-    private void shoot() {
-        // create the buttons
-        if (isInList || MEMORY_OPTIMIZATION) {
-            if (buttonType.equals(ButtonType.CIRCLE)) {
-                for (int i = 0; i < buttonNum; i++) {
-                    circleButtons[i] = new CircleButton(mContext);
-                    circleButtons[i].setOnCircleButtonClickListener(this, i);
-                    circleButtons[i].setDrawable(drawables[i]);
-                    if (strings != null) circleButtons[i].setText(strings[i]);
-                    circleButtons[i].setColor(colors[i][0], colors[i][1]);
-                    circleButtons[i].setShadowDx(subButtonsXOffsetOfShadow);
-                    circleButtons[i].setShadowDy(subButtonsYOffsetOfShadow);
-                    circleButtons[i].getTextView().setTextColor(subButtonTextColor);
-                    // TODO to find a way to apply multiple colors if set on setTextViewColor(int[] colors)
-                    circleButtons[i].getImageView().setScaleType(subButtonImageScaleType);
-                    circleButtons[i].setRipple(clickEffectType);
-                }
-            } else if (buttonType.equals(ButtonType.HAM)) {
-                for (int i = 0; i < buttonNum; i++) {
-                    hamButtons[i] = new HamButton(mContext);
-                    hamButtons[i].setOnHamButtonClickListener(this, i);
-                    hamButtons[i].setDrawable(this.drawables[i]);
-                    if (this.strings != null) hamButtons[i].setText(this.strings[i]);
-                    hamButtons[i].setColor(this.colors[i][0], this.colors[i][1]);
-                    hamButtons[i].setShadowDx(subButtonsXOffsetOfShadow);
-                    hamButtons[i].setShadowDy(subButtonsYOffsetOfShadow);
-                    hamButtons[i].getTextView().setTextColor(subButtonTextColor);
-                    // TODO to find a way to apply multiple colors if set on setTextViewColor(int[] colors)
-                    hamButtons[i].getImageView().setScaleType(subButtonImageScaleType);
-                    hamButtons[i].setRipple(clickEffectType);
-                }
-            }
-            setRipple(clickEffectType);
+    public void reboomImmediately() {
+        if (isAnimating() || boomStateEnum != BoomStateEnum.DidShow) return;
+        boomStateEnum = BoomStateEnum.WillHide;
+        if (onBoomListener != null) onBoomListener.onBoomWillHide();
+        lightBackground(true);
+        startHideAnimations(true);
+    }
+
+    private void dimBackground(boolean immediately) {
+        createBackground();
+        Util.setVisibility(VISIBLE, background);
+        AnimationManager.animate(
+                background,
+                "backgroundColor",
+                0,
+                immediately ? 1 : showDuration + showDelay * (pieces.size() - 1),
+                new ArgbEvaluator(),
+                new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        boomStateEnum = BoomStateEnum.DidShow;
+                        if (onBoomListener != null) onBoomListener.onBoomDidShow();
+                    }
+                },
+                Color.TRANSPARENT,
+                dimColor);
+        if (piecePlaceEnum == PiecePlaceEnum.Share) {
+            AnimationManager.animate(
+                    shareLinesView,
+                    "showProcess",
+                    0,
+                    immediately ? 1 : showDuration + showDelay * (pieces.size() - 1),
+                    new Ease(EaseEnum.Linear),
+                    0f, 1f);
         }
-
-        // listener
-        if (onClickListener != null) onClickListener.onClick();
-        // wait for the before animations finished
-        if (animationPlaying) return;
-        animationPlaying = true;
-        // dim the animation layout
-        dimAnimationLayout();
-        // start all animations
-        startShowAnimations();
     }
 
-    /**
-     * Dim the background layout.
-     */
-    private void dimAnimationLayout() {
-        if (animationLayout == null) {
-            animationLayout = createAnimationLayout();
-            animationLayout.setOnClickListener(new View.OnClickListener() {
+    private void lightBackground(boolean immediately) {
+        createBackground();
+        AnimationManager.animate(
+                background,
+                "backgroundColor",
+                0,
+                immediately ? 1 : hideDuration + hideDelay * (pieces.size() - 1),
+                new ArgbEvaluator(),
+                new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        boomStateEnum = BoomStateEnum.DidHide;
+                        if (onBoomListener != null) onBoomListener.onBoomDidHide();
+                        clearViewsAndValues();
+                    }
+                },
+                dimColor,
+                Color.TRANSPARENT);
+        if (piecePlaceEnum == PiecePlaceEnum.Share) {
+            AnimationManager.animate(
+                    shareLinesView,
+                    "hideProcess",
+                    0,
+                    immediately ? 1 : hideDuration + hideDelay * (pieces.size() - 1),
+                    new Ease(EaseEnum.Linear),
+                    0f, 1f);
+        }
+    }
+
+    private void startShowAnimations(boolean immediately) {
+        if (background != null) background.removeAllViews();
+        calculateEndPositions();
+        ArrayList<Integer> indexes;
+        if (piecePlaceEnum == PiecePlaceEnum.Share)
+            indexes = AnimationManager.getOrderIndex(OrderEnum.DEFAULT, pieces.size());
+        else
+            indexes = AnimationManager.getOrderIndex(orderEnum, pieces.size());
+        // Reverse to keep the former boom-buttons are above than the latter(z-axis)
+        // So the early-animating boom-buttons are above than the later ones
+        for (int i = indexes.size() - 1; i >= 0; i--) {
+            int index = indexes.get(i);
+            BoomButton boomButton = boomButtons.get(index);
+            Point startPosition = new Point(
+                    (int) (startPositions.get(index).x - boomButton.centerPoint.x),
+                    (int) (startPositions.get(index).y - boomButton.centerPoint.y));
+            putBoomButtonInBackground(boomButton, startPosition);
+            startEachShowAnimation(
+                    pieces.get(index),
+                    boomButton,
+                    startPosition,
+                    new Point(endPositions.get(index)),
+                    i,
+                    immediately);
+        }
+    }
+
+    private void startHideAnimations(boolean immediately) {
+        ArrayList<Integer> indexes;
+        if (piecePlaceEnum == PiecePlaceEnum.Share)
+            indexes = AnimationManager.getOrderIndex(OrderEnum.REVERSE, pieces.size());
+        else
+            indexes = AnimationManager.getOrderIndex(orderEnum, pieces.size());
+        for (Integer index : indexes) boomButtons.get(index).bringToFront();
+        for (int i = 0; i < indexes.size(); i++) {
+            int index = indexes.get(i);
+            BoomButton boomButton = boomButtons.get(index);
+            Point startPosition = new Point(
+                    (int) (startPositions.get(index).x - boomButton.centerPoint.x),
+                    (int) (startPositions.get(index).y - boomButton.centerPoint.y));
+            startEachHideAnimation(
+                    pieces.get(index),
+                    boomButton,
+                    new Point(endPositions.get(index)),
+                    startPosition,
+                    i,
+                    immediately);
+        }
+    }
+
+    private void startEachShowAnimation(final BoomPiece piece,
+                                        final BoomButton boomButton,
+                                        Point startPosition,
+                                        Point endPosition,
+                                        int delayFactor,
+                                        boolean immediately) {
+        animatingViewNumber++;
+        float[] xs = new float[frames + 1];
+        float[] ys = new float[frames + 1];
+        float scaleX = piece.getWidth() * 1.0f / boomButton.contentWidth();
+        float scaleY = piece.getHeight() * 1.0f / boomButton.contentHeight();
+        long delay = immediately ? 1 : showDelay * delayFactor;
+        long duration = immediately ? 1 : showDuration;
+        boomButton.setSelfScaleAnchorPoints();
+        boomButton.setScaleX(scaleX);
+        boomButton.setScaleY(scaleY);
+        AnimationManager.calculateShowXY(
+                boomEnum,
+                new Point(
+                        background.getLayoutParams().width,
+                        background.getLayoutParams().height),
+                frames, startPosition, endPosition, xs, ys);
+        AnimationManager.animate(boomButton, "x", delay, duration, new Ease(showMoveEaseEnum), xs);
+        AnimationManager.animate(boomButton, "y", delay, duration, new Ease(showMoveEaseEnum), ys);
+        AnimationManager.rotate(boomButton, delay, duration, new Ease(showRotateEaseEnum), 0, rotateDegree);
+        AnimationManager.animate("alpha", delay, duration, new float[]{0, 1}, new Ease(EaseEnum.Linear), boomButton.goneViews());
+        AnimationManager.animate(boomButton, "scaleX", delay, duration, new Ease(showScaleEaseEnum), scaleX, 1);
+        AnimationManager.animate(boomButton, "scaleY", delay, duration, new Ease(showScaleEaseEnum),
+                new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        Util.setVisibility(INVISIBLE, piece);
+                        Util.setVisibility(VISIBLE, boomButton);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        animatingViewNumber--;
+                    }
+                }, scaleY, 1);
+    }
+
+    private void startEachHideAnimation(final BoomPiece piece,
+                                        final BoomButton boomButton,
+                                        Point startPosition,
+                                        Point endPosition,
+                                        final int delayFactor,
+                                        boolean immediately) {
+        animatingViewNumber++;
+        float[] xs = new float[frames + 1];
+        float[] ys = new float[frames + 1];
+        float scaleX = piece.getWidth() * 1.0f / boomButton.contentWidth();
+        float scaleY = piece.getHeight() * 1.0f / boomButton.contentHeight();
+        long delay = immediately ? 1 : hideDelay * delayFactor;
+        long duration = immediately ? 1 : hideDuration;
+        AnimationManager.calculateHideXY(
+                boomEnum,
+                new Point(
+                        background.getLayoutParams().width,
+                        background.getLayoutParams().height),
+                frames, startPosition, endPosition, xs, ys);
+        AnimationManager.animate(boomButton, "x", delay, duration, new Ease(hideMoveEaseEnum), xs);
+        AnimationManager.animate(boomButton, "y", delay, duration, new Ease(hideMoveEaseEnum), ys);
+        AnimationManager.rotate(boomButton, delay, duration, new Ease(hideRotateEaseEnum), 0, rotateDegree);
+        AnimationManager.animate("alpha", delay, duration, new float[]{1, 0}, new Ease(EaseEnum.Linear), boomButton.goneViews());
+        AnimationManager.animate(boomButton, "scaleX", delay, duration, new Ease(hideScaleEaseEnum), 1, scaleX);
+        AnimationManager.animate(boomButton, "scaleY", delay, duration, new Ease(hideScaleEaseEnum),
+                new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        Util.setVisibility(VISIBLE, piece);
+                        Util.setVisibility(INVISIBLE, boomButton);
+                        boomButton.cleanListener();
+                        animatingViewNumber--;
+                    }
+                }, 1, scaleY);
+    }
+
+    //endregion
+
+    private void ___________________________4_Support_Methods() {}
+    //region Support Methods
+
+    private void createBackground() {
+        if (background == null) {
+            ViewGroup rootView = getParentView();
+            background = new FrameLayout(context);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                    rootView.getWidth(),
+                    rootView.getHeight());
+            background.setLayoutParams(params);
+            background.setBackgroundColor(Color.TRANSPARENT);
+            background.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (animationPlaying) return;
-                    if (cancelable) startHideAnimations();
+                    onBackgroundClicked();
                 }
             });
-        }
-        animationLayout.setVisibility(VISIBLE);
-        ObjectAnimator objectAnimator = ObjectAnimator.ofInt(animationLayout, "backgroundColor",
-                DimType.DIM_0.value,
-                dimType.value)
-                .setDuration(duration + delay * (buttonNum - 1));
-        objectAnimator.setEvaluator(new ArgbEvaluator());
-        objectAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-                if (animatorListener != null) animatorListener.toShow();
-                state = StateType.OPENING;
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                if (animatorListener != null) animatorListener.showed();
-                state = StateType.OPEN;
-            }
-        });
-        objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                if (animatorListener != null)
-                    animatorListener.showing(animation.getAnimatedFraction());
-            }
-        });
-        objectAnimator.start();
-
-        // share lines animation
-        if (placeType.SHARE_3_1.v <= placeType.v && placeType.v <= PlaceType.SHARE_9_2.v) {
-            ObjectAnimator shareLinesAnimator = ObjectAnimator.ofFloat(shareLines, "offset",
-                    1f,
-                    0f).setDuration(duration + delay * (buttonNum - 1));
-            shareLinesAnimator.setStartDelay(0);
-            shareLinesAnimator.start();
+            rootView.addView(background);
         }
     }
 
-    /**
-     * Start all animations about showing the boom menu button.
-     */
-    private void startShowAnimations() {
-        if (animationLayout != null) animationLayout.removeAllViews();
-        if (buttonType.equals(ButtonType.CIRCLE)) {
-            getEndLocations();
-            if (showOrderType.equals(OrderType.DEFAULT)) {
-                for (int i = 0; i < buttonNum; i++) {
-                    dots[i].getLocationOnScreen(startLocations[i]);
-                    originalLocations[i] = startLocations[i];
-
-                    startLocations[i][0] -= (buttonWidth - dots[i].getWidth()) / 2;
-                    startLocations[i][1] -= (buttonWidth - dots[i].getHeight()) / 2;
-
-                    setShowAnimation(dots[i], circleButtons[i], originalLocations[i], startLocations[i], endLocations[i], i);
-                }
-            } else if (showOrderType.equals(OrderType.REVERSE)) {
-                for (int i = 0; i < buttonNum; i++) {
-                    dots[i].getLocationOnScreen(startLocations[i]);
-                    startLocations[i][0] -= (buttonWidth - dots[i].getWidth()) / 2;
-                    startLocations[i][1] -= (buttonWidth - dots[i].getHeight()) / 2;
-                    setShowAnimation(dots[i], circleButtons[i], originalLocations[i], startLocations[i], endLocations[i], buttonNum - i - 1);
-                }
-            } else if (showOrderType.equals(OrderType.RANDOM)) {
-                Random random = new Random();
-                boolean[] used = new boolean[buttonNum];
-                for (int i = 0; i < buttonNum; i++) used[i] = false;
-                int count = 0;
-                while (true) {
-                    int i = random.nextInt(buttonNum);
-                    if (!used[i]) {
-                        used[i] = true;
-
-                        dots[count].getLocationOnScreen(startLocations[count]);
-                        startLocations[count][0] -= (buttonWidth - dots[count].getWidth()) / 2;
-                        startLocations[count][1] -= (buttonWidth - dots[count].getHeight()) / 2;
-                        setShowAnimation(dots[count], circleButtons[count], originalLocations[count], startLocations[count], endLocations[count], i);
-
-                        count++;
-                        if (count == buttonNum) break;
-                    }
-                }
-            }
-        } else if (buttonType.equals(ButtonType.HAM)) {
-            getEndLocations();
-            if (showOrderType.equals(OrderType.DEFAULT)) {
-                for (int i = 0; i < buttonNum; i++) {
-                    bars[i].getLocationOnScreen(startLocations[i]);
-                    startLocations[i][0] -= (hamButtonWidth - bars[i].getWidth()) / 2;
-                    startLocations[i][1] -= (hamButtonHeight - bars[i].getHeight()) / 2;
-                    setShowAnimation(bars[i], hamButtons[i], originalLocations[i], startLocations[i], endLocations[i], i);
-                }
-            } else if (showOrderType.equals(OrderType.REVERSE)) {
-                for (int i = 0; i < buttonNum; i++) {
-                    bars[i].getLocationOnScreen(startLocations[i]);
-                    startLocations[i][0] -= (hamButtonWidth - bars[i].getWidth()) / 2;
-                    startLocations[i][1] -= (hamButtonHeight - bars[i].getHeight()) / 2;
-                    setShowAnimation(bars[i], hamButtons[i], originalLocations[i], startLocations[i], endLocations[i], buttonNum - i - 1);
-                }
-            } else if (showOrderType.equals(OrderType.RANDOM)) {
-                Random random = new Random();
-                boolean[] used = new boolean[buttonNum];
-                for (int i = 0; i < buttonNum; i++) used[i] = false;
-                int count = 0;
-                while (true) {
-                    int i = random.nextInt(buttonNum);
-                    if (!used[i]) {
-                        used[i] = true;
-
-                        bars[count].getLocationOnScreen(startLocations[count]);
-                        startLocations[count][0] -= (hamButtonWidth - bars[count].getWidth()) / 2;
-                        startLocations[count][1] -= (hamButtonHeight - bars[count].getHeight()) / 2;
-                        setShowAnimation(bars[count], hamButtons[count], originalLocations[count], startLocations[count], endLocations[count], i);
-
-                        count++;
-                        if (count == buttonNum) break;
-                    }
-                }
-            }
-        }
-
-    }
-
-    /**
-     * Get end location of all sub buttons.
-     */
-    private void getEndLocations() {
-        int width = Util.getInstance().getScreenWidth(mContext);
-        int height = Util.getInstance().getScreenHeight(mContext);
-        if (buttonType.equals(ButtonType.CIRCLE)) {
-            endLocations = EndLocationsFactory.getEndLocations(
-                    placeType, width, height, buttonWidth, buttonWidth);
-        } else if (buttonType.equals(ButtonType.HAM)) {
-            endLocations = EndLocationsFactory.getEndLocations(
-                    placeType, width, height, hamButtonWidth, hamButtonHeight);
+    private ViewGroup getParentView() {
+        if (boomInWholeScreen) {
+            return (ViewGroup) ((Activity) context).getWindow().getDecorView();
+        } else {
+            return (ViewGroup) getParent();
         }
     }
 
+    private void clearBackground() {
+        Util.setVisibility(GONE, background);
+        if (!cacheOptimization || inList || inFragment) {
+            background.removeAllViews();
+            ((ViewGroup)background.getParent()).removeView(background);
+            background = null;
+        }
+    }
+
+    private void createButtons() {
+        boomButtons = new ArrayList<>(pieces.size());
+        int buttonNumber = pieces.size();
+        ExceptionManager.judge(piecePlaceEnum, buttonPlaceEnum, boomButtonBuilders);
+        switch (buttonEnum) {
+            case SimpleCircle:
+                for (int i = 0; i < buttonNumber; i++) {
+                    SimpleCircleButton.Builder builder =
+                            (SimpleCircleButton.Builder) boomButtonBuilders.get(i);
+                    builder.innerListener(this).index(i);
+                    boomButtons.add(builder.build(context));
+                    simpleCircleButtonRadius = builder.getButtonRadius();
+                }
+                break;
+            case TextInsideCircle:
+                for (int i = 0; i < buttonNumber; i++) {
+                    TextInsideCircleButton.Builder builder =
+                            (TextInsideCircleButton.Builder) boomButtonBuilders.get(i);
+                    builder.innerListener(this).index(i);
+                    boomButtons.add(builder.build(context));
+                    textInsideCircleButtonRadius = builder.getButtonRadius();
+                }
+                break;
+            case TextOutsideCircle:
+                for (int i = 0; i < buttonNumber; i++) {
+                    TextOutsideCircleButton.Builder builder =
+                            (TextOutsideCircleButton.Builder) boomButtonBuilders.get(i);
+                    builder.innerListener(this).index(i);
+                    boomButtons.add(builder.build(context));
+                    textOutsideCircleButtonWidth = builder.getButtonContentWidth();
+                    textOutsideCircleButtonHeight = builder.getButtonContentHeight();
+                }
+                break;
+            case Ham:
+                for (int i = 0; i < buttonNumber; i++) {
+                    HamButton.Builder builder =
+                            (HamButton.Builder) boomButtonBuilders.get(i);
+                    builder.innerListener(this).index(i);
+                    boomButtons.add(builder.build(context));
+                    hamButtonWidth = builder.getButtonWidth();
+                    hamButtonHeight = builder.getButtonHeight();
+                }
+                break;
+        }
+    }
+
+    private void onBackgroundClicked() {
+        if (isAnimating()) return;
+        if (onBoomListener != null) onBoomListener.onBackgroundClick();
+        if (cancelable) reboom();
+    }
+
+    private boolean isAnimating() {
+        return animatingViewNumber != 0;
+    }
+
+    private void calculateStartPositions() {
+        int pieceNumber = pieceNumber();
+        startPositions = new ArrayList<>(pieceNumber);
+        ViewGroup rootView = getParentView();
+        int[] rootViewLocation = new int[2];
+        rootView.getLocationOnScreen(rootViewLocation);
+        for (int i = 0; i < pieces.size(); i++) {
+            Point pieceCenterInRootView = new Point();
+            int[] buttonLocation = new int[2];
+            button.getLocationOnScreen(buttonLocation);
+            pieceCenterInRootView.x = buttonLocation[0] + piecePositions.get(i).x
+                    - rootViewLocation[0] + pieces.get(i).getLayoutParams().width / 2;
+            pieceCenterInRootView.y = buttonLocation[1] + piecePositions.get(i).y
+                    - rootViewLocation[1] + pieces.get(i).getLayoutParams().height / 2;
+            startPositions.add(pieceCenterInRootView);
+        }
+    }
+
+    private void calculateEndPositions() {
+        ExceptionManager.judge(buttonEnum);
+        switch (buttonEnum) {
+            case SimpleCircle:
+                endPositions = ButtonPlaceManager.getCircleButtonPositions(
+                        buttonPlaceEnum,
+                        buttonPlaceAlignmentEnum,
+                        new Point(
+                                background.getLayoutParams().width,
+                                background.getLayoutParams().height),
+                        simpleCircleButtonRadius,
+                        boomButtonBuilders.size(),
+                        buttonHorizontalMargin,
+                        buttonVerticalMargin,
+                        buttonInclinedMargin,
+                        buttonTopMargin,
+                        buttonBottomMargin,
+                        buttonLeftMargin,
+                        buttonRightMargin);
+                break;
+            case TextInsideCircle:
+                endPositions = ButtonPlaceManager.getCircleButtonPositions(
+                        buttonPlaceEnum,
+                        buttonPlaceAlignmentEnum,
+                        new Point(
+                                background.getLayoutParams().width,
+                                background.getLayoutParams().height),
+                        textInsideCircleButtonRadius,
+                        boomButtonBuilders.size(),
+                        buttonHorizontalMargin,
+                        buttonVerticalMargin,
+                        buttonInclinedMargin,
+                        buttonTopMargin,
+                        buttonBottomMargin,
+                        buttonLeftMargin,
+                        buttonRightMargin);
+                break;
+            case TextOutsideCircle:
+                endPositions = ButtonPlaceManager.getCircleButtonPositions(
+                        buttonPlaceEnum,
+                        buttonPlaceAlignmentEnum,
+                        new Point(
+                                background.getLayoutParams().width,
+                                background.getLayoutParams().height),
+                        textOutsideCircleButtonWidth,
+                        textOutsideCircleButtonHeight,
+                        boomButtonBuilders.size(),
+                        buttonHorizontalMargin,
+                        buttonVerticalMargin,
+                        buttonInclinedMargin,
+                        buttonTopMargin,
+                        buttonBottomMargin,
+                        buttonLeftMargin,
+                        buttonRightMargin);
+                break;
+            case Ham:
+                endPositions = ButtonPlaceManager.getHamButtonPositions(
+                        buttonPlaceEnum,
+                        buttonPlaceAlignmentEnum,
+                        new Point(
+                                background.getLayoutParams().width,
+                                background.getLayoutParams().height),
+                        hamButtonWidth,
+                        hamButtonHeight,
+                        boomButtonBuilders.size(),
+                        buttonHorizontalMargin,
+                        buttonVerticalMargin,
+                        buttonTopMargin,
+                        buttonBottomMargin,
+                        buttonLeftMargin,
+                        buttonRightMargin,
+                        bottomHamButtonTopMargin);
+                break;
+        }
+        for (int i = 0; i < boomButtons.size(); i++) {
+            endPositions.get(i).x -= boomButtons.get(i).centerPoint.x;
+            endPositions.get(i).y -= boomButtons.get(i).centerPoint.y;
+        }
+    }
+
+    private BoomButton putBoomButtonInBackground(BoomButton boomButton, Point position) {
+        createBackground();
+        boomButton.place(
+                position.x,
+                position.y,
+                boomButton.trueWidth(),
+                boomButton.trueHeight());
+        boomButton.setVisibility(INVISIBLE);
+        background.addView(boomButton);
+        return boomButton;
+    }
+
+    private void clearViewsAndValues() {
+        clearBackground();
+        if (!cacheOptimization || inList || inFragment) {
+            endPositions.clear();
+            endPositions = null;
+            boomButtons.clear();
+            boomButtons = new ArrayList<>();
+        }
+    }
+
+    private void toLayout() {
+        if (needToLayout) return;
+        needToLayout = true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (!isInLayout()) requestLayout();
+        } else {
+            requestLayout();
+        }
+    }
+
+    private int pieceNumber() {
+        if (piecePlaceEnum == PiecePlaceEnum.Share) return boomButtonBuilders.size();
+        else return piecePlaceEnum.pieceNumber();
+    }
+
+    //endregion
+
+    @Override
+    public void onButtonClick(int index, BoomButton boomButton) {
+        if (isAnimating()) return;
+        if (onBoomListener != null) onBoomListener.onClicked(index, boomButton);
+        if (autoHide) reboom();
+    }
+
+    private void placeShareLinesView() {
+        if (piecePlaceEnum == PiecePlaceEnum.Share) {
+            shareLinesView = new ShareLinesView(context);
+            shareLinesView.setLine1Color(shareLine1Color);
+            shareLinesView.setLine2Color(shareLine2Color);
+            shareLinesView.setLineWidth(shareLineWidth);
+            button.addView(shareLinesView);
+            shareLinesView.place(0, 0, button.getWidth(), button.getHeight());
+        }
+    }
+
+    private void setShareLinesViewData() {
+        if (piecePlaceEnum == PiecePlaceEnum.Share) {
+            shareLinesView.setData(
+                    piecePositions,
+                    dotRadius,
+                    showDuration,
+                    showDelay,
+                    hideDuration,
+                    hideDelay);
+        }
+    }
+
+    private void ___________________________5_Builders() {}
+
+    //region Builders
+
     /**
-     * Create the background layout as a "canvas" of all animations and sub buttons.
-     * Notice that we don't need to call this every time, we can set the visibility
-     * of the background layout to hide it.
+     * Add a builder to bmb, notice that @needToLayout will be called.
      *
-     * @return The background layout.
+     * @param builder builder
      */
-    private ViewGroup createAnimationLayout() {
-        ViewGroup rootView = (ViewGroup) scanForActivity(mContext).getWindow().getDecorView();
-        LinearLayout animLayout = new LinearLayout(mContext);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        animLayout.setLayoutParams(layoutParams);
-        animLayout.setBackgroundResource(android.R.color.transparent);
-        rootView.addView(animLayout);
-        return animLayout;
+    public void addBuilder(BoomButtonBuilder builder) {
+        boomButtonBuilders.add(builder);
+        toLayout();
     }
 
     /**
-     * Put the sub button to the background layout.
+     * Set a builder at index, notice that @needToLayout will be called.
      *
-     * @param view     The sub button.
-     * @param location Location in background layout.
-     * @return The sub button after set.
+     * @param index index
+     * @param builder builder
      */
-    private View setViewLocationInAnimationLayout(final View view, int[] location) {
-        int x = location[0];
-        int y = location[1];
-        LinearLayout.LayoutParams lp = null;
-        if (buttonType.equals(ButtonType.CIRCLE)) {
-            lp = new LinearLayout.LayoutParams(
-                    buttonWidth,
-                    buttonWidth);
-        } else if (buttonType.equals(ButtonType.HAM)) {
-            lp = new LinearLayout.LayoutParams(
-                    hamButtonWidth,
-                    hamButtonHeight);
-        }
-        lp.leftMargin = x;
-        lp.topMargin = y;
-        view.setVisibility(View.INVISIBLE);
-        animationLayout.addView(view, lp);
-        return view;
+    public void setBuilder(int index, BoomButtonBuilder builder) {
+        boomButtonBuilders.set(index, builder);
+        toLayout();
+    }
+
+    public void setBuilders(ArrayList<BoomButtonBuilder> builders) {
+        boomButtonBuilders = builders;
+        toLayout();
     }
 
     /**
-     * Set show animation of each sub button.
+     * Remove a builder, notice that @needToLayout will be called.
      *
-     * @param dot           The dot corresponding to the sub button.
-     * @param button        The sub button.
-     * @param originalLocation original location of the dot.
-     * @param startLocation Start location of the animation.
-     * @param endLocation   End location of the animation.
-     * @param index         Index of the sub button in the array.
+     * @param builder builder
      */
-    public void setShowAnimation(
-            final View dot,
-            final View button,
-            int[] originalLocation,
-            int[] startLocation,
-            int[] endLocation,
-            final int index) {
-        button.bringToFront();
-
-        final View view = setViewLocationInAnimationLayout(button, originalLocation);
-
-        float[] sl = new float[2];
-        float[] el = new float[2];
-        sl[0] = startLocation[0] * 1.0f;
-        sl[1] = startLocation[1] * 1.0f;
-        el[0] = endLocation[0] * 1.0f;
-        el[1] = endLocation[1] * 1.0f;
-
-        float[] xs = new float[frames + 1];
-        float[] ys = new float[frames + 1];
-        getShowXY(sl, el, xs, ys);
-
-        if (view != null) {
-            ObjectAnimator xAnimator = ObjectAnimator.ofFloat(view, "x", xs).setDuration(duration);
-            xAnimator.setStartDelay(delay * index);
-            xAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
-            xAnimator.start();
-
-            ObjectAnimator yAnimator = ObjectAnimator.ofFloat(view, "y", ys).setDuration(duration);
-            yAnimator.setStartDelay(delay * index);
-            yAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
-            yAnimator.start();
-        }
-
-        // scale animation
-        float scaleW = 0;
-        float scaleH = 0;
-        if (buttonType.equals(ButtonType.CIRCLE)) {
-            scaleW = dotWidth * 1.0f / buttonWidth;
-            scaleH = dotWidth * 1.0f / buttonWidth;
-        } else if (buttonType.equals(ButtonType.HAM)) {
-            scaleW = barWidth * 1.0f / hamButtonWidth;
-            scaleH = barHeight * 1.0f / hamButtonHeight;
-        }
-
-        if (view != null) {
-            view.setScaleX(scaleW);
-
-            ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(view, "scaleX",
-                    scaleW,
-                    1f).setDuration(duration);
-            scaleXAnimator.setStartDelay(delay * index);
-            scaleXAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showScaleEaseType));
-            scaleXAnimator.start();
-
-            view.setScaleY(scaleH);
-            ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(view, "scaleY",
-                    scaleH,
-                    1f).setDuration(duration);
-            scaleYAnimator.setStartDelay(delay * index);
-            scaleYAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showScaleEaseType));
-            scaleYAnimator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    super.onAnimationStart(animation);
-                    dot.setVisibility(INVISIBLE);
-                    view.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    animationPlaying = false;
-                }
-            });
-            scaleYAnimator.start();
-        }
-
-        // alpha animation
-        View view1 = null;
-        View view2 = null;
-        if (button != null && button instanceof CircleButton) {
-            view1 = ((CircleButton) button).getImageView();
-            view2 = ((CircleButton) button).getTextView();
-        } else if (button != null && button instanceof HamButton) {
-            view1 = ((HamButton) button).getImageView();
-            view2 = ((HamButton) button).getTextView();
-        }
-
-        if (view1 != null) {
-            ObjectAnimator alphaAnimator1 = ObjectAnimator.ofFloat(view1, "alpha",
-                    0f,
-                    1f).setDuration(duration);
-            alphaAnimator1.setStartDelay(delay * index);
-            alphaAnimator1.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
-            alphaAnimator1.start();
-        }
-
-        if (view2 != null) {
-            ObjectAnimator alphaAnimator2 = ObjectAnimator.ofFloat(view2, "alpha",
-                    0f,
-                    1f).setDuration(duration);
-            alphaAnimator2.setStartDelay(delay * index);
-            alphaAnimator2.setInterpolator(InterpolatorFactory.getInterpolator(showMoveEaseType));
-            alphaAnimator2.start();
-        }
-
-        // rotation animation
-        if (view != null && view instanceof CircleButton) {
-            ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(
-                    ((CircleButton) view).getFrameLayout(), "rotation",
-                    0,
-                    rotateDegree).setDuration(duration);
-            rotateAnimator.setStartDelay(delay * index);
-            rotateAnimator.setInterpolator(InterpolatorFactory.getInterpolator(showRotateEaseType));
-            rotateAnimator.start();
-        }
+    public void removeBuilder(BoomButtonBuilder builder) {
+        boomButtonBuilders.remove(builder);
+        toLayout();
     }
 
     /**
-     * Get the function of the road of the animation of showing.
-     * Then calculate each points to be ready for the animation.
+     * Remove a builder at index, notice that @needToLayout will be called.
      *
-     * @param startPoint Start point of the animation.
-     * @param endPoint   End point of the animation.
-     * @param xs         The values on the x axis.
-     * @param ys         The values on the y axis.
+     * @param index index
      */
-    private void getShowXY(float[] startPoint, float[] endPoint, float[] xs, float[] ys) {
-        if (boomType.equals(BoomType.LINE)) {
-            float x1 = startPoint[0];
-            float y1 = startPoint[1];
-            float x2 = endPoint[0];
-            float y2 = endPoint[1];
-            float k = (y2 - y1) / (x2 - x1);
-            float b = y1 - x1 * k;
-
-            float per = 1f / frames;
-            float xx = endPoint[0] - startPoint[0];
-            for (int i = 0; i <= frames; i++) {
-                float offset = i * per;
-                xs[i] = startPoint[0] + offset * xx;
-                ys[i] = k * xs[i] + b;
-            }
-        } else if (boomType.equals(BoomType.PARABOLA)) {
-            float x1 = startPoint[0];
-            float y1 = startPoint[1];
-            float x2 = endPoint[0];
-            float y2 = endPoint[1];
-            float x3 = (startPoint[0] + endPoint[0]) / 2;
-            float y3 = Math.min(startPoint[1], endPoint[1]) / 2;
-            float a, b, c;
-
-            a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
-                    / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
-            b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
-            c = y1 - (x1 * x1) * a - x1 * b;
-
-            float per = 1f / frames;
-            float xx = endPoint[0] - startPoint[0];
-            for (int i = 0; i <= frames; i++) {
-                float offset = i * per;
-                xs[i] = startPoint[0] + offset * xx;
-                ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
-            }
-        } else if (boomType.equals(BoomType.HORIZONTAL_THROW)) {
-            float x1 = startPoint[0];
-            float y1 = startPoint[1];
-            float x3 = endPoint[0];
-            float y3 = endPoint[1];
-            float x2 = x3 * 2 - x1;
-            float y2 = y1;
-
-            float a, b, c;
-
-            a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
-                    / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
-            b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
-            c = y1 - (x1 * x1) * a - x1 * b;
-
-            float per = 1f / frames;
-            float xx = x3 - x1;
-            for (int i = 0; i <= frames; i++) {
-                float offset = i * per;
-                xs[i] = x1 + offset * xx;
-                ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
-            }
-        } else if (boomType.equals(BoomType.PARABOLA_2)) {
-            float x1 = startPoint[0];
-            float y1 = startPoint[1];
-            float x2 = endPoint[0];
-            float y2 = endPoint[1];
-            float x3 = (startPoint[0] + endPoint[0]) / 2;
-            float y3 = (Util.getInstance().getScreenHeight(mContext)
-                    - Math.max(startPoint[1], endPoint[1])) / 2
-                    + Math.max(startPoint[1], endPoint[1]);
-            float a, b, c;
-
-            a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
-                    / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
-            b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
-            c = y1 - (x1 * x1) * a - x1 * b;
-
-            float per = 1f / frames;
-            float xx = x2 - x1;
-            for (int i = 0; i <= frames; i++) {
-                float offset = i * per;
-                xs[i] = x1 + offset * xx;
-                ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
-            }
-        } else if (boomType.equals(BoomType.HORIZONTAL_THROW_2)) {
-            float x1 = endPoint[0];
-            float y1 = endPoint[1];
-            float x3 = startPoint[0];
-            float y3 = startPoint[1];
-            float x2 = x3 * 2 - x1;
-            float y2 = y1;
-
-            float a, b, c;
-
-            a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
-                    / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
-            b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
-            c = y1 - (x1 * x1) * a - x1 * b;
-
-            float per = 1f / frames;
-            float xx = endPoint[0] - startPoint[0];
-            for (int i = 0; i <= frames; i++) {
-                float offset = i * per;
-                xs[i] = startPoint[0] + offset * xx;
-                ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
-            }
-        }
+    public void removeBuilder(int index) {
+        boomButtonBuilders.remove(index);
+        toLayout();
     }
 
     /**
-     * Get the function of the road of the animation of dismissing.
-     * Then calculate each points to be ready for the animation.
+     * Remove all builders, notice that @needToLayout will NOT be called.
+     */
+    public void clearBuilders() {
+        boomButtonBuilders.clear();
+    }
+
+    /**
+     * Get the array of builders.
      *
-     * @param startPoint Start point of the animation.
-     * @param endPoint   End point of the animation.
-     * @param xs         The values on the x axis.
-     * @param ys         The values on the y axis.
+     * @return array of builders
      */
-    private void getHideXY(float[] startPoint, float[] endPoint, float[] xs, float[] ys) {
-        if (boomType.equals(BoomType.LINE)) {
-            float x1 = startPoint[0];
-            float y1 = startPoint[1];
-            float x2 = endPoint[0];
-            float y2 = endPoint[1];
-            float k = (y2 - y1) / (x2 - x1);
-            float b = y1 - x1 * k;
+    public ArrayList<BoomButtonBuilder> getBuilders() {
+        return boomButtonBuilders;
+    }
 
-            float per = 1f / frames;
-            float xx = endPoint[0] - startPoint[0];
-            for (int i = 0; i <= frames; i++) {
-                float offset = i * per;
-                xs[i] = startPoint[0] + offset * xx;
-                ys[i] = k * xs[i] + b;
-            }
-        } else if (boomType.equals(BoomType.PARABOLA)) {
-            float x1 = startPoint[0];
-            float y1 = startPoint[1];
-            float x2 = endPoint[0];
-            float y2 = endPoint[1];
-            float x3 = (startPoint[0] + endPoint[0]) / 2;
-            float y3 = Math.min(startPoint[1], endPoint[1]) / 2;
-            float a, b, c;
+    //endregion
 
-            a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
-                    / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
-            b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
-            c = y1 - (x1 * x1) * a - x1 * b;
+    private void ___________________________6_Getters_and_Setters() {}
 
-            float per = 1f / frames;
-            float xx = endPoint[0] - startPoint[0];
-            for (int i = 0; i <= frames; i++) {
-                float offset = i * per;
-                xs[i] = startPoint[0] + offset * xx;
-                ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
-            }
-        } else if (boomType.equals(BoomType.HORIZONTAL_THROW)) {
-            float x1 = endPoint[0];
-            float y1 = endPoint[1];
-            float x3 = startPoint[0];
-            float y3 = startPoint[1];
-            float x2 = x3 * 2 - x1;
-            float y2 = y1;
+    //region Getter and Setter
 
-            float a, b, c;
 
-            a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
-                    / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
-            b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
-            c = y1 - (x1 * x1) * a - x1 * b;
-
-            float per = 1f / frames;
-            float xx = endPoint[0] - startPoint[0];
-            for (int i = 0; i <= frames; i++) {
-                float offset = i * per;
-                xs[i] = startPoint[0] + offset * xx;
-                ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
-            }
-        } else if (boomType.equals(BoomType.PARABOLA_2)) {
-            float x1 = startPoint[0];
-            float y1 = startPoint[1];
-            float x2 = endPoint[0];
-            float y2 = endPoint[1];
-            float x3 = (startPoint[0] + endPoint[0]) / 2;
-            float y3 = (Util.getInstance().getScreenHeight(mContext)
-                    - Math.max(startPoint[1], endPoint[1])) / 2
-                    + Math.max(startPoint[1], endPoint[1]);
-            float a, b, c;
-
-            a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
-                    / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
-            b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
-            c = y1 - (x1 * x1) * a - x1 * b;
-
-            float per = 1f / frames;
-            float xx = x2 - x1;
-            for (int i = 0; i <= frames; i++) {
-                float offset = i * per;
-                xs[i] = x1 + offset * xx;
-                ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
-            }
-        } else if (boomType.equals(BoomType.HORIZONTAL_THROW_2)) {
-            float x1 = startPoint[0];
-            float y1 = startPoint[1];
-            float x3 = endPoint[0];
-            float y3 = endPoint[1];
-            float x2 = x3 * 2 - x1;
-            float y2 = y1;
-
-            float a, b, c;
-
-            a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2))
-                    / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
-            b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
-            c = y1 - (x1 * x1) * a - x1 * b;
-
-            float per = 1f / frames;
-            float xx = endPoint[0] - startPoint[0];
-            for (int i = 0; i <= frames; i++) {
-                float offset = i * per;
-                xs[i] = startPoint[0] + offset * xx;
-                ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
-            }
-        }
-
+    public boolean isCacheOptimization() {
+        return cacheOptimization;
     }
 
     /**
-     * Start all animations about dismissing.
-     */
-    private void startHideAnimations() {
-        animationPlaying = true;
-        lightAnimationLayout();
-        if (buttonType.equals(ButtonType.CIRCLE)) {
-            if (hideOrderType.equals(OrderType.DEFAULT)) {
-                for (int i = 0; i < buttonNum; i++) {
-                    setHideAnimation(dots[i], circleButtons[i], endLocations[i], startLocations[i], i);
-                }
-            } else if (hideOrderType.equals(OrderType.REVERSE)) {
-                for (int i = 0; i < buttonNum; i++) {
-                    setHideAnimation(dots[i], circleButtons[i], endLocations[i], startLocations[i], buttonNum - i - 1);
-                }
-            } else if (hideOrderType.equals(OrderType.RANDOM)) {
-                Random random = new Random();
-                boolean[] used = new boolean[buttonNum];
-                for (int i = 0; i < buttonNum; i++) used[i] = false;
-                int count = 0;
-                while (true) {
-                    int i = random.nextInt(buttonNum);
-                    if (!used[i]) {
-                        used[i] = true;
-
-                        setHideAnimation(
-                                dots[count],
-                                circleButtons[count],
-                                endLocations[count],
-                                startLocations[count],
-                                i);
-
-                        count++;
-                        if (count == buttonNum) break;
-                    }
-                }
-            }
-        } else if (buttonType.equals(ButtonType.HAM)) {
-            if (hideOrderType.equals(OrderType.DEFAULT)) {
-                for (int i = 0; i < buttonNum; i++) {
-                    setHideAnimation(bars[i], hamButtons[i], endLocations[i], startLocations[i], i);
-                }
-            } else if (hideOrderType.equals(OrderType.REVERSE)) {
-                for (int i = 0; i < buttonNum; i++) {
-                    setHideAnimation(bars[i], hamButtons[i], endLocations[i], startLocations[i], buttonNum - i - 1);
-                }
-            } else if (hideOrderType.equals(OrderType.RANDOM)) {
-                Random random = new Random();
-                boolean[] used = new boolean[buttonNum];
-                for (int i = 0; i < buttonNum; i++) used[i] = false;
-                int count = 0;
-                while (true) {
-                    int i = random.nextInt(buttonNum);
-                    if (!used[i]) {
-                        used[i] = true;
-
-                        setHideAnimation(
-                                bars[count],
-                                hamButtons[count],
-                                endLocations[count],
-                                startLocations[count],
-                                i);
-
-                        count++;
-                        if (count == buttonNum) break;
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Set hide animation of each sub button.
+     * Whether use cache optimization to avoid multi-creating boom-buttons.
+     * // Todo can we use it in list?
      *
-     * @param dot           The dot corresponding to the sub button.
-     * @param button        The sub button.
-     * @param startLocation Start location of the animation.
-     * @param endLocation   End location of the animation.
-     * @param index         Index of the sub button in the array.
+     * @param cacheOptimization cache optimization
      */
-    public void setHideAnimation(
-            final View dot,
-            final View button,
-            int[] startLocation,
-            int[] endLocation,
-            final int index) {
+    public void setCacheOptimization(boolean cacheOptimization) {
+        this.cacheOptimization = cacheOptimization;
+    }
 
-        // position animation
-        float[] sl = new float[2];
-        float[] el = new float[2];
-        sl[0] = startLocation[0] * 1.0f;
-        sl[1] = startLocation[1] * 1.0f;
-        el[0] = endLocation[0] * 1.0f;
-        el[1] = endLocation[1] * 1.0f;
-
-        float[] xs = new float[frames + 1];
-        float[] ys = new float[frames + 1];
-        getHideXY(sl, el, xs, ys);
-
-        if (button != null) {
-            ObjectAnimator xAnimator = ObjectAnimator.ofFloat(button, "x", xs).setDuration(duration);
-            xAnimator.setStartDelay(index * delay);
-            xAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
-            xAnimator.start();
-
-            ObjectAnimator yAnimator = ObjectAnimator.ofFloat(button, "y", ys).setDuration(duration);
-            yAnimator.setStartDelay(index * delay);
-            yAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
-            yAnimator.start();
-        }
-
-        // scale animation
-        float scaleW = 0;
-        float scaleH = 0;
-        if (buttonType.equals(ButtonType.CIRCLE)) {
-            scaleW = dotWidth * 1.0f / buttonWidth;
-            scaleH = dotWidth * 1.0f / buttonWidth;
-        } else if (buttonType.equals(ButtonType.HAM)) {
-            scaleW = barWidth * 1.0f / hamButtonWidth;
-            scaleH = barHeight * 1.0f / hamButtonHeight;
-        }
-
-        if (button != null) {
-            ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(button, "scaleX",
-                    1f,
-                    scaleW).setDuration(duration);
-            scaleXAnimator.setStartDelay(index * delay);
-            scaleXAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideScaleEaseType));
-            scaleXAnimator.start();
-
-            ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(button, "scaleY",
-                    1f,
-                    scaleH).setDuration(duration);
-            scaleYAnimator.setStartDelay(index * delay);
-            scaleYAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideScaleEaseType));
-            scaleYAnimator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    dot.setVisibility(VISIBLE);
-                    if (isInList || MEMORY_OPTIMIZATION) {
-                        if (buttonType.equals(ButtonType.CIRCLE)) circleButtons[index] = null;
-                        else if (buttonType.equals(ButtonType.HAM)) hamButtons[index] = null;
-                    }
-                }
-            });
-            scaleYAnimator.start();
-        }
-
-        // alpha animation
-        View view1 = null;
-        View view2 = null;
-        if (button != null && button instanceof CircleButton) {
-            view1 = ((CircleButton) button).getImageView();
-            view2 = ((CircleButton) button).getTextView();
-        } else if (button != null && button instanceof HamButton) {
-            view1 = ((HamButton) button).getImageView();
-            view2 = ((HamButton) button).getTextView();
-        }
-
-        if (view1 != null) {
-            ObjectAnimator alphaAnimator1 = ObjectAnimator.ofFloat(view1, "alpha",
-                    1f,
-                    0f).setDuration(duration);
-            alphaAnimator1.setStartDelay(delay * index);
-            alphaAnimator1.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
-            alphaAnimator1.start();
-        }
-
-        if (view2 != null) {
-            ObjectAnimator alphaAnimator2 = ObjectAnimator.ofFloat(view2, "alpha",
-                    1f,
-                    0f).setDuration(duration);
-            alphaAnimator2.setStartDelay(delay * index);
-            alphaAnimator2.setInterpolator(InterpolatorFactory.getInterpolator(hideMoveEaseType));
-            alphaAnimator2.start();
-        }
-
-        // rotation animation
-        if (button != null && button instanceof CircleButton) {
-            ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(
-                    ((CircleButton) button).getFrameLayout(), "rotation",
-                    0,
-                    -rotateDegree).setDuration(duration);
-            rotateAnimator.setStartDelay(index * delay);
-            rotateAnimator.setInterpolator(InterpolatorFactory.getInterpolator(hideRotateEaseType));
-            rotateAnimator.start();
-        }
-
+    public boolean isBoomInWholeScreen() {
+        return boomInWholeScreen;
     }
 
     /**
-     * Light the background, used when the boom menu button is to dismiss.
-     */
-    public void lightAnimationLayout() {
-        ObjectAnimator objectAnimator = ObjectAnimator.ofInt(animationLayout, "backgroundColor",
-                dimType.value,
-                DimType.DIM_0.value)
-                .setDuration(duration + delay * (buttonNum - 1));
-        objectAnimator.setEvaluator(new ArgbEvaluator());
-        objectAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-                if (animatorListener != null) animatorListener.toHide();
-                state = StateType.CLOSING;
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                animationLayout.removeAllViews();
-                animationLayout.setVisibility(GONE);
-                animationPlaying = false;
-                if (animatorListener != null) animatorListener.hided();
-                state = StateType.CLOSED;
-            }
-        });
-        objectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                if (animatorListener != null)
-                    animatorListener.hiding(animation.getAnimatedFraction());
-            }
-        });
-        objectAnimator.start();
-
-        // share lines animation
-        if (placeType.SHARE_3_1.v <= placeType.v && placeType.v <= PlaceType.SHARE_9_2.v) {
-            ObjectAnimator shareLinesAnimator = ObjectAnimator.ofFloat(shareLines, "offset",
-                    0f,
-                    1f).setDuration(duration + delay * (buttonNum - 1));
-            shareLinesAnimator.setStartDelay(0);
-            shareLinesAnimator.start();
-        }
-    }
-
-    /**
-     * Set auto dismiss. If the boom menu button is auto dismiss, user can click one
-     * of the sub buttons to dismiss the boom menu botton.
+     * Whether the BMB should boom in the whole screen.
+     * If this value is false, then BMB will boom its boom-buttons to its parent-view.
      *
-     * @param autoDismiss
+     * @param boomInWholeScreen boom in the whole screen
      */
-    public void setAutoDismiss(boolean autoDismiss) {
-        this.autoDismiss = autoDismiss;
+    public void setBoomInWholeScreen(boolean boomInWholeScreen) {
+        this.boomInWholeScreen = boomInWholeScreen;
+    }
+
+    public boolean isInList() {
+        return inList;
     }
 
     /**
-     * Set cancelable. If the boom menu button is cancelable, user can click
-     * the background to dismiss it.
+     * When BMB is used in list-view, it must be setInList(true).
      *
-     * @param cancelable
+     * @param inList use BMB in list-view
+     */
+    public void setInList(boolean inList) {
+        this.inList = inList;
+    }
+
+    public boolean isInFragment() {
+        return inFragment;
+    }
+
+    /**
+     * When BMB is used in fragment, it must be setInFragment(true).
+     *
+     * @param inFragment use BMB in fragment
+     */
+    public void setInFragment(boolean inFragment) {
+        this.inFragment = inFragment;
+    }
+
+    public boolean isShadowEffect() {
+        return shadowEffect;
+    }
+
+    /**
+     * Whether BMB should have a shadow-effect.
+     * Notice that when you set @backgroundEffect to false, this value will set to false too.
+     *
+     * @param shadowEffect shadow-effect
+     */
+    public void setShadowEffect(boolean shadowEffect) {
+        this.shadowEffect = shadowEffect;
+    }
+
+    public int getShadowOffsetX() {
+        return shadowOffsetX;
+    }
+
+    /**
+     * Set the BMB's shadow offset in the x-axis.
+     *
+     * @param shadowOffsetX x-axis shadow offset
+     */
+    public void setShadowOffsetX(int shadowOffsetX) {
+        this.shadowOffsetX = shadowOffsetX;
+    }
+
+    public int getShadowOffsetY() {
+        return shadowOffsetY;
+    }
+
+    /**
+     * Set the BMB's shadow offset in the y-axis.
+     *
+     * @param shadowOffsetY y-axis shadow offset
+     */
+    public void setShadowOffsetY(int shadowOffsetY) {
+        this.shadowOffsetY = shadowOffsetY;
+    }
+
+    public int getShadowRadius() {
+        return shadowRadius;
+    }
+
+    /**
+     * Set the shadow-radius of BMB, please notice that the "radius" here means the extra
+     * radius of BMB.
+     * For example, if the radius of BMB is 30dp and the shadow-radius is 5dp, then the
+     * radius of shadow-circle behind the BMB if 35dp.
+     *
+     * @param shadowRadius extra shadow radius
+     */
+    public void setShadowRadius(int shadowRadius) {
+        this.shadowRadius = shadowRadius;
+    }
+
+    public int getShadowColor() {
+        return shadowColor;
+    }
+
+    /**
+     * Set the color of shadow.
+     *
+     * @param shadowColor color of shadow
+     */
+    public void setShadowColor(int shadowColor) {
+        this.shadowColor = shadowColor;
+    }
+
+    public int getButtonRadius() {
+        return buttonRadius;
+    }
+
+    /**
+     * Set the radius of BMB, if you use this method to set the size of BMB,
+     * then you should set the width and height of BMB in .xml file to "wrap-content".
+     *
+     * @param buttonRadius radius of BMB
+     */
+    public void setButtonRadius(int buttonRadius) {
+        this.buttonRadius = buttonRadius;
+    }
+
+    public ButtonEnum getButtonEnum() {
+        return buttonEnum;
+    }
+
+    /**
+     * Set the button-enum for bmb, notice that @requestLayout() and @clearBuilders() will
+     * be called.
+     *
+     * @param buttonEnum button-enum
+     */
+    public void setButtonEnum(ButtonEnum buttonEnum) {
+        this.buttonEnum = buttonEnum;
+        toLayout();
+        clearBuilders();
+    }
+
+    public boolean isBackgroundEffect() {
+        return backgroundEffect;
+    }
+
+    /**
+     * Whether the BMB should have a background effect. Use this when you don't want the
+     * circle background of BMB.
+     * It can be useful when you want to use BMB in actionbar of in list-view.
+     * Please notice that, when BMB does not have a background effect, it does not
+     * have shadow effect, either.
+     *
+     * @param backgroundEffect background effect
+     */
+    public void setBackgroundEffect(boolean backgroundEffect) {
+        this.backgroundEffect = backgroundEffect;
+    }
+
+    public boolean isRippleEffect() {
+        return rippleEffect;
+    }
+
+    /**
+     * Whether the BMB should have a ripple-effect.
+     * The ripple effect is disable below LOLLIPOP.
+     *
+     * @param rippleEffect ripple effect
+     */
+    public void setRippleEffect(boolean rippleEffect) {
+        this.rippleEffect = rippleEffect;
+    }
+
+    public int getNormalColor() {
+        return normalColor;
+    }
+
+    /**
+     * Set the color of BMB at normal-state.
+     *
+     * @param normalColor the color of BMB at normal-state
+     */
+    public void setNormalColor(int normalColor) {
+        this.normalColor = normalColor;
+    }
+
+    public int getHighlightedColor() {
+        return highlightedColor;
+    }
+
+    /**
+     * Set the color of BMB at highlighted-state.
+     *
+     * @param highlightedColor the color of BMB at highlighted-state
+     */
+    public void setHighlightedColor(int highlightedColor) {
+        this.highlightedColor = highlightedColor;
+    }
+
+    public int getUnableColor() {
+        return unableColor;
+    }
+
+    /**
+     * Set the color of BMB at unable-state.
+     *
+     * @param unableColor the color of BMB at unable-state
+     */
+    public void setUnableColor(int unableColor) {
+        this.unableColor = unableColor;
+    }
+
+    public int getDotRadius() {
+        return dotRadius;
+    }
+
+    /**
+     * Set the radius of dots in BMB.
+     *
+     * @param dotRadius radius of dot
+     */
+    public void setDotRadius(int dotRadius) {
+        this.dotRadius = dotRadius;
+    }
+
+    public int getHamWidth() {
+        return hamWidth;
+    }
+
+    /**
+     * Set the width of hams in BMB.
+     *
+     * @param hamWidth width of ham
+     */
+    public void setHamWidth(int hamWidth) {
+        this.hamWidth = hamWidth;
+    }
+
+    public int getHamHeight() {
+        return hamHeight;
+    }
+
+    /**
+     * Set the height of hams in BMB.
+     *
+     * @param hamHeight height of ham
+     */
+    public void setHamHeight(int hamHeight) {
+        this.hamHeight = hamHeight;
+    }
+
+    public int getPieceHorizontalMargin() {
+        return pieceHorizontalMargin;
+    }
+
+    /**
+     * Set the horizontal margin between pieces(dots, blocks or hams) in BMB.
+     *
+     * @param pieceHorizontalMargin horizontal margin between pieces
+     */
+    public void setPieceHorizontalMargin(int pieceHorizontalMargin) {
+        this.pieceHorizontalMargin = pieceHorizontalMargin;
+    }
+
+    public int getPieceVerticalMargin() {
+        return pieceVerticalMargin;
+    }
+
+    /**
+     * Set the vertical margin between pieces(dots, blocks or hams) in BMB.
+     *
+     * @param pieceVerticalMargin vertical margin between pieces
+     */
+    public void setPieceVerticalMargin(int pieceVerticalMargin) {
+        this.pieceVerticalMargin = pieceVerticalMargin;
+    }
+
+    public int getPieceInclinedMargin() {
+        return pieceInclinedMargin;
+    }
+
+    /**
+     * Set the inclined margin between pieces(dots, blocks or hams) in BMB.
+     *
+     * @param pieceInclinedMargin inclined margin between pieces
+     */
+    public void setPieceInclinedMargin(int pieceInclinedMargin) {
+        this.pieceInclinedMargin = pieceInclinedMargin;
+    }
+
+    public int getShareLineLength() {
+        return shareLineLength;
+    }
+
+    /**
+     * Set the length of share-lines in BMB, only works when piece-place-enum is Share.
+     *
+     * @param shareLineLength length of share-lines, in pixel
+     */
+    public void setShareLineLength(int shareLineLength) {
+        this.shareLineLength = shareLineLength;
+    }
+
+    public int getShareLine1Color() {
+        return shareLine1Color;
+    }
+
+    /**
+     * Set the color of share-line 1(the above), only works when piece-place-enum is Share.
+     *
+     * @param shareLine1Color color of share-line 1
+     */
+    public void setShareLine1Color(int shareLine1Color) {
+        this.shareLine1Color = shareLine1Color;
+    }
+
+    public int getShareLine2Color() {
+        return shareLine2Color;
+    }
+
+    /**
+     * Set the color of share-line 2(the below), only works when piece-place-enum is Share.
+     *
+     * @param shareLine2Color color of share-line 2
+     */
+    public void setShareLine2Color(int shareLine2Color) {
+        this.shareLine2Color = shareLine2Color;
+    }
+
+    public int getShareLineWidth() {
+        return shareLineWidth;
+    }
+
+    /**
+     * Set the width of share-lines in BMB, only works when piece-place-enum is Share.
+     *
+     * @param shareLineWidth width of share-lines, in pixel
+     */
+    public void setShareLineWidth(int shareLineWidth) {
+        this.shareLineWidth = shareLineWidth;
+    }
+
+    public PiecePlaceEnum getPiecePlaceEnum() {
+        return piecePlaceEnum;
+    }
+
+    public ButtonPlaceEnum getButtonPlaceEnum() {
+        return buttonPlaceEnum;
+    }
+
+    /**
+     * Set the piece-place-enum, notice that @requestLayout() will be called.
+     *
+     * @param piecePlaceEnum piece-place-enum
+     */
+    public void setPiecePlaceEnum(PiecePlaceEnum piecePlaceEnum) {
+        this.piecePlaceEnum = piecePlaceEnum;
+        toLayout();
+    }
+
+    public OnBoomListener getOnBoomListener() {
+        return onBoomListener;
+    }
+
+    /**
+     * Set the @OnBoomListener of BMB.
+     *
+     * @param onBoomListener OnBoomListener
+     */
+    public void setOnBoomListener(OnBoomListener onBoomListener) {
+        this.onBoomListener = onBoomListener;
+    }
+
+    public int getDimColor() {
+        return dimColor;
+    }
+
+    /**
+     * Set the dim-color of the background when the BMB booms.
+     *
+     * @param dimColor dim-color of background
+     */
+    public void setDimColor(int dimColor) {
+        this.dimColor = dimColor;
+    }
+
+    public long getShowDuration() {
+        return showDuration;
+    }
+
+    /**
+     * Set the duration of every boom-button when booming.
+     * Notice that this is not the total duration of the boom animation.
+     * For example, if there are 5 boom-buttons, delay of boom animation is 100ms
+     * and duration of every boom animation is 1000ms. Then the total duration of
+     * all boom animations is 1000ms + 4 * 100ms = 1400ms.
+     *
+     * @param showDuration duration of every boom-button when booming
+     */
+    public void setShowDuration(long showDuration) {
+        this.showDuration = showDuration;
+        setShareLinesViewData();
+    }
+
+    public long getShowDelay() {
+        return showDelay;
+    }
+
+    /**
+     * Delay of every boom-button.
+     *
+     * @param showDelay delay of every boom-button
+     */
+    public void setShowDelay(long showDelay) {
+        this.showDelay = showDelay;
+        setShareLinesViewData();
+    }
+
+    public long getHideDuration() {
+        return hideDuration;
+    }
+    
+    /**
+     * Set the duration of every boom-button when re-booming.
+     * Notice that this is not the total duration of the re-boom animation.
+     * For example, if there are 5 boom-buttons, delay of re-boom animation is 100ms
+     * and duration of every re-boom animation is 1000ms. Then the total duration of
+     * all re-boom animations is 1000ms + 4 * 100ms = 1400ms.
+     *
+     * @param hideDuration duration of every boom-button when booming
+     */
+    public void setHideDuration(long hideDuration) {
+        this.hideDuration = hideDuration;
+        setShareLinesViewData();
+    }
+
+    public long getHideDelay() {
+        return hideDelay;
+    }
+
+    /**
+     * Delay of every boom-button.
+     *
+     * @param hideDelay delay of every boom-button
+     */
+    public void setHideDelay(long hideDelay) {
+        this.hideDelay = hideDelay;
+        setShareLinesViewData();
+    }
+
+    public boolean isCancelable() {
+        return cancelable;
+    }
+
+    /**
+     * Whether the BMB is cancelable. If the BMB is cancelable, then when after the boom
+     * animation of booming, you can re-boom BMB by clicking the background.
+     *
+     * @param cancelable whether the BMB is cancelable
      */
     public void setCancelable(boolean cancelable) {
         this.cancelable = cancelable;
     }
 
+    public boolean isAutoHide() {
+        return autoHide;
+    }
+
     /**
-     * Set frames for animaitons.
+     * Whether the BMB is auto-hide. If the BMB is auto-hide, then when after the boom
+     * animation of booming, you can click one of the boom-buttons to re-boom BMB.
      *
-     * @param frames
+     * @param autoHide whether the BMB is auto-hide
+     */
+    public void setAutoHide(boolean autoHide) {
+        this.autoHide = autoHide;
+    }
+
+    public OrderEnum getOrderEnum() {
+        return orderEnum;
+    }
+
+    /**
+     * Set the order-enum for BMB.
+     *
+     * @param orderEnum order-enum
+     */
+    public void setOrderEnum(OrderEnum orderEnum) {
+        this.orderEnum = orderEnum;
+    }
+
+    public int getFrames() {
+        return frames;
+    }
+
+    /**
+     * Set the animation-frames for every boom-button animation. The higher, the animations
+     * more continue.
+     *
+     * @param frames frames for every boom-button animation
      */
     public void setFrames(int frames) {
         this.frames = frames;
     }
 
-    /**
-     * Set animation duration.
-     *
-     * @param duration
-     */
-    public void setDuration(int duration) {
-        this.duration = duration;
+    public BoomEnum getBoomEnum() {
+        return boomEnum;
     }
 
     /**
-     * Set start delay.
+     * Set the boom-enum for BMB.
      *
-     * @param delay
+     * @param boomEnum boom-enum
      */
-    public void setDelay(int delay) {
-        this.delay = delay;
+    public void setBoomEnum(BoomEnum boomEnum) {
+        this.boomEnum = boomEnum;
+    }
+
+    public EaseEnum getShowMoveEaseEnum() {
+        return showMoveEaseEnum;
     }
 
     /**
-     * Set rotate degrees.
+     * Set the ease type of movement when every boom-button is booming.
      *
-     * @param rotateDegree
+     * @param showMoveEaseEnum ease type of movement when booming
+     */
+    public void setShowMoveEaseEnum(EaseEnum showMoveEaseEnum) {
+        this.showMoveEaseEnum = showMoveEaseEnum;
+    }
+
+    public EaseEnum getShowScaleEaseEnum() {
+        return showScaleEaseEnum;
+    }
+
+    /**
+     * Set the ease type of scale-animation when every boom-button is booming.
+     *
+     * @param showScaleEaseEnum ease type of scale-animation when booming
+     */
+    public void setShowScaleEaseEnum(EaseEnum showScaleEaseEnum) {
+        this.showScaleEaseEnum = showScaleEaseEnum;
+    }
+
+    public EaseEnum getShowRotateEaseEnum() {
+        return showRotateEaseEnum;
+    }
+
+    /**
+     * Set the ease type of rotate-animation when every boom-button is booming.
+     *
+     * @param showRotateEaseEnum ease type of rotate-animation when booming
+     */
+    public void setShowRotateEaseEnum(EaseEnum showRotateEaseEnum) {
+        this.showRotateEaseEnum = showRotateEaseEnum;
+    }
+
+    public EaseEnum getHideMoveEaseEnum() {
+        return hideMoveEaseEnum;
+    }
+
+    /**
+     * Set the ease type of movement when every boom-button is re-booming.
+     *
+     * @param hideMoveEaseEnum ease type of movement when re-booming
+     */
+    public void setHideMoveEaseEnum(EaseEnum hideMoveEaseEnum) {
+        this.hideMoveEaseEnum = hideMoveEaseEnum;
+    }
+
+    public EaseEnum getHideScaleEaseEnum() {
+        return hideScaleEaseEnum;
+    }
+
+    /**
+     * Set the ease type of scale-animation when every boom-button is re-booming.
+     *
+     * @param hideScaleEaseEnum ease type of scale-animation when re-booming
+     */
+    public void setHideScaleEaseEnum(EaseEnum hideScaleEaseEnum) {
+        this.hideScaleEaseEnum = hideScaleEaseEnum;
+    }
+
+    public EaseEnum getHideRotateEaseEnum() {
+        return hideRotateEaseEnum;
+    }
+
+    /**
+     * Set the ease type of rotate-animation when every boom-button is re-booming.
+     *
+     * @param hideRotateEaseEnum ease type of rotate-animation when re-booming
+     */
+    public void setHideRotateEaseEnum(EaseEnum hideRotateEaseEnum) {
+        this.hideRotateEaseEnum = hideRotateEaseEnum;
+    }
+
+    public int getRotateDegree() {
+        return rotateDegree;
+    }
+
+    /**
+     * Set the rotate degree of rotate-animation of every boom-button.
+     *
+     * @param rotateDegree rotate degree
      */
     public void setRotateDegree(int rotateDegree) {
         this.rotateDegree = rotateDegree;
     }
 
     /**
-     * Set show order type.
+     * Set the button-place-enum.
      *
-     * @param showOrderType
+     * @param buttonPlaceEnum button-place-enum
      */
-    public void setShowOrderType(OrderType showOrderType) {
-        this.showOrderType = showOrderType;
+    public void setButtonPlaceEnum(ButtonPlaceEnum buttonPlaceEnum) {
+        this.buttonPlaceEnum = buttonPlaceEnum;
+    }
+
+    public ButtonPlaceAlignmentEnum getButtonPlaceAlignmentEnum() {
+        return buttonPlaceAlignmentEnum;
     }
 
     /**
-     * Set hide order type.
+     * Set the button-place-alignment-enum.
      *
-     * @param hideOrderType
+     * @param buttonPlaceAlignmentEnum button-place-alignment-enum
      */
-    public void setHideOrderType(OrderType hideOrderType) {
-        this.hideOrderType = hideOrderType;
+    public void setButtonPlaceAlignmentEnum(ButtonPlaceAlignmentEnum buttonPlaceAlignmentEnum) {
+        this.buttonPlaceAlignmentEnum = buttonPlaceAlignmentEnum;
+    }
+
+    public float getButtonHorizontalMargin() {
+        return buttonHorizontalMargin;
     }
 
     /**
-     * Set OnClickListener.
+     * Set the horizontal-margin between buttons.
      *
-     * @param onClickListener
+     * @param buttonHorizontalMargin horizontal-margin
      */
-    public void setOnClickListener(OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
+    public void setButtonHorizontalMargin(float buttonHorizontalMargin) {
+        this.buttonHorizontalMargin = buttonHorizontalMargin;
+    }
+
+    public float getButtonVerticalMargin() {
+        return buttonVerticalMargin;
     }
 
     /**
-     * Set AnimatorListener.
+     * Set the vertical-margin between buttons.
      *
-     * @param animatorListener
+     * @param buttonVerticalMargin vertical-margin
      */
-    public void setAnimatorListener(AnimatorListener animatorListener) {
-        this.animatorListener = animatorListener;
+    public void setButtonVerticalMargin(float buttonVerticalMargin) {
+        this.buttonVerticalMargin = buttonVerticalMargin;
+    }
+
+    public float getButtonInclinedMargin() {
+        return buttonInclinedMargin;
     }
 
     /**
-     * @return The imagebuttons of sub buttons.
-     */
-    public ImageButton[] getImageButtons() {
-        ImageButton[] imageButtons = new ImageButton[buttonNum];
-        if (isInList || MEMORY_OPTIMIZATION) {
-            // TODO to return a weak ImageButton[] instead of an empty ImageButton[] if it can be useful
-        } else {
-            for (int i = 0; i < buttonNum; i++) {
-                if (circleButtons[i] != null) imageButtons[i] = circleButtons[i].getImageButton();
-            }
-        }
-        return imageButtons;
-    }
-
-    /**
-     * @return The imageviews of sub buttons.
-     */
-    public ImageView[] getImageViews() {
-        ImageView[] imageViews = new ImageView[buttonNum];
-        if (isInList || MEMORY_OPTIMIZATION) {
-            // TODO to return a weak ImageView[] instead of an empty ImageView[] if it can be useful
-        } else {
-            if (buttonType.equals(ButtonType.CIRCLE)) {
-                for (int i = 0; i < buttonNum; i++)
-                    if (circleButtons[i] != null) imageViews[i] = circleButtons[i].getImageView();
-            } else if (buttonType.equals(ButtonType.HAM)) {
-                for (int i = 0; i < buttonNum; i++)
-                    if (hamButtons[i] != null) imageViews[i] = hamButtons[i].getImageView();
-            }
-        }
-        return imageViews;
-    }
-
-    /**
-     * @return The textviews of sub buttons.
-     */
-    public TextView[] getTextViews() {
-        TextView[] textViews = new TextView[buttonNum];
-        if (isInList || MEMORY_OPTIMIZATION) {
-            // TODO to return a weak TextView[] instead of an empty TextView[] if it can be useful
-        } else {
-            if (buttonType.equals(ButtonType.CIRCLE)) {
-                for (int i = 0; i < buttonNum; i++)
-                    if (circleButtons[i] != null) textViews[i] = circleButtons[i].getTextView();
-            } else if (buttonType.equals(ButtonType.HAM)) {
-                for (int i = 0; i < buttonNum; i++)
-                    if (hamButtons[i] != null) textViews[i] = hamButtons[i].getTextView();
-            }
-        }
-        return textViews;
-    }
-
-    /**
-     * Set OnSubButtonClickListener.
+     * Set the inclined-margin between buttons.
      *
-     * @param onSubButtonClickListener
+     * @param buttonInclinedMargin Inclined-margin
      */
-    public void setOnSubButtonClickListener(OnSubButtonClickListener onSubButtonClickListener) {
-        this.onSubButtonClickListener = onSubButtonClickListener;
+    public void setButtonInclinedMargin(float buttonInclinedMargin) {
+        this.buttonInclinedMargin = buttonInclinedMargin;
+    }
+
+    public float getButtonTopMargin() {
+        return buttonTopMargin;
     }
 
     /**
-     * Set the color of pressed-state or normal-state of boom menu button.
+     * Set the top-alignment margin between screen and buttons.
      *
-     * @param pressedColor
-     * @param normalColor
+     * @param buttonTopMargin Top-alignment margin
      */
-    public void setBoomButtonBackgroundColor(int pressedColor, int normalColor) {
-        Util.getInstance().setCircleButtonStateListDrawable(
-                frameLayout, boomButtonRadius, pressedColor, normalColor);
+    public void setButtonTopMargin(float buttonTopMargin) {
+        this.buttonTopMargin = buttonTopMargin;
+    }
+
+    public float getButtonBottomMargin() {
+        return buttonBottomMargin;
     }
 
     /**
-     * Set the offset of the shadow layouts of sub buttons.
-     * If xOffset is 0 and yOffset is 0, then the shadow layout is at the center.
+     * Set the bottom-alignment margin between screen and buttons.
      *
-     * @param xOffset In pixels.
-     * @param yOffset In pixels.
+     * @param buttonBottomMargin Bottom-alignment margin
      */
-    public void setSubButtonShadowOffset(float xOffset, float yOffset) {
-        for (int i = 0; i < buttonNum; i++) {
-            if (buttonType.equals(ButtonType.CIRCLE)) {
-                if (circleButtons[i] != null) {
-                    circleButtons[i].setShadowDx(xOffset);
-                    circleButtons[i].setShadowDy(yOffset);
-                } else {
-                    subButtonsXOffsetOfShadow = xOffset;
-                    subButtonsYOffsetOfShadow = xOffset;
-                }
-            } else if (buttonType.equals(ButtonType.HAM)) {
-                if (hamButtons[i] != null) {
-                    hamButtons[i].setShadowDx(xOffset);
-                    hamButtons[i].setShadowDy(yOffset);
-                } else {
-                    subButtonsXOffsetOfShadow = xOffset;
-                    subButtonsYOffsetOfShadow = xOffset;
-                }
-            }
-        }
+    public void setButtonBottomMargin(float buttonBottomMargin) {
+        this.buttonBottomMargin = buttonBottomMargin;
+    }
+
+    public float getButtonLeftMargin() {
+        return buttonLeftMargin;
     }
 
     /**
-     * Set the offset of the shadow layouts of boom menu button.
-     * If xOffset is 0 and yOffset is 0, then the shadow layout is at the center.
+     * Set the left-alignment margin between screen and buttons.
      *
-     * @param xOffset In pixels.
-     * @param yOffset In pixels.
+     * @param buttonLeftMargin Left-alignment margin
      */
-    public void setBoomButtonShadowOffset(float xOffset, float yOffset) {
-        if (shadowLayout != null) {
-            shadowLayout.setmDx(xOffset);
-            shadowLayout.setmDy(yOffset);
-        }
+    public void setButtonLeftMargin(float buttonLeftMargin) {
+        this.buttonLeftMargin = buttonLeftMargin;
+    }
+
+    public float getButtonRightMargin() {
+        return buttonRightMargin;
     }
 
     /**
-     * Set the dim type.
-     * Dim_0 for no dim.
-     * Max is Dim_9.
+     * Set the right-alignment margin between screen and buttons.
      *
-     * @param dimType
+     * @param buttonRightMargin Right-alignment margin
      */
-    public void setDimType(DimType dimType) {
-        this.dimType = dimType;
+    public void setButtonRightMargin(float buttonRightMargin) {
+        this.buttonRightMargin = buttonRightMargin;
+    }
+
+    public float getBottomHamButtonTopMargin() {
+        return bottomHamButtonTopMargin;
     }
 
     /**
-     * Set the click effect.
+     * Set the top-margin of bottom ham-boom-button. This method is used when the bottom
+     * ham-boom-button has different meaning compared with others. For example, the bottom
+     * ham-boom-button maybe used as a "cancel" selection.
      *
-     * @param clickEffectType
+     * @param bottomHamButtonTopMargin top-margin of bottom ham-boom-button
      */
-    public void setClickEffectType(ClickEffectType clickEffectType) {
-        setRipple(clickEffectType);
-        for (int i = 0; i < buttonNum; i++) {
-            if (buttonType.equals(ButtonType.CIRCLE)) {
-                if (circleButtons[i] != null) {
-                    circleButtons[i].setRipple(clickEffectType);
-                } else {
-                    // delaying apply on the fly in the shoot() function
-                    this.clickEffectType = clickEffectType;
-                }
-            } else if (buttonType.equals(ButtonType.HAM)) {
-                if (hamButtons[i] != null) {
-                    hamButtons[i].setRipple(clickEffectType);
-                } else {
-                    // delaying apply on the fly in the shoot() function
-                    this.clickEffectType = clickEffectType;
-                }
-            }
-        }
+    public void setBottomHamButtonTopMargin(float bottomHamButtonTopMargin) {
+        this.bottomHamButtonTopMargin = bottomHamButtonTopMargin;
     }
 
-    /**
-     * Set the click effect of the boom button.
-     *
-     * @param clickEffectType
-     */
-    private void setRipple(ClickEffectType clickEffectType) {
-        this.clickEffectType = clickEffectType;
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-                && clickEffectType.equals(ClickEffectType.RIPPLE)
-                && ripple != null) {
-            ripple.setVisibility(VISIBLE);
-            ripple.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    shoot();
-                }
-            });
-        } else {
-            if (ripple != null) ripple.setVisibility(GONE);
-            frameLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    shoot();
-                }
-            });
-        }
-    }
-
-    /**
-     * Set the color of all textviews in the sub buttons.
-     *
-     * @param color
-     */
-    public void setTextViewColor(int color) {
-        for (int i = 0; i < buttonNum; i++) {
-            if (buttonType.equals(ButtonType.CIRCLE)) {
-                if (circleButtons[i] != null) {
-                    circleButtons[i].getTextView().setTextColor(color);
-                } else {
-                    // delaying apply on the fly in the shoot() function
-                    subButtonTextColor = color;
-                }
-            } else if (buttonType.equals(ButtonType.HAM)) {
-                if (hamButtons[i] != null) {
-                    hamButtons[i].getTextView().setTextColor(color);
-                } else {
-                    // delaying apply on the fly in the shoot() function
-                    subButtonTextColor = color;
-                }
-            }
-        }
-    }
-
-    /**
-     * Set the color of all textviews in the sub buttons corresponding to the array.
-     *
-     * @param colors
-     */
-    // TODO for now doesnt work if MEMORY OPTIMIZATION is true
-    public void setTextViewColor(int[] colors) {
-        int length = Math.min(buttonNum, colors.length);
-        if (buttonType.equals(ButtonType.CIRCLE)) {
-                for (int i = 0; i < length; i++) {
-                    if (circleButtons[i] != null)
-                        circleButtons[i].getTextView().setTextColor(colors[i]);
-                }
-        } else if (buttonType.equals(ButtonType.HAM)) {
-                for (int i = 0; i < length; i++) {
-                    if (hamButtons[i] != null) hamButtons[i].getTextView().setTextColor(colors[i]);
-                }
-        }
-    }
-
-    /**
-     * Set the scaleType of all imageviews in the sub buttons.
-     *
-     * @param scaleType
-     */
-    public void setImageViewScaleType(ImageView.ScaleType scaleType) {
-        for (int i = 0; i < buttonNum; i++) {
-            if (buttonType.equals(ButtonType.CIRCLE)) {
-                if (circleButtons[i] != null) {
-                    circleButtons[i].getImageView().setScaleType(scaleType);
-                } else {
-                    // delaying apply on the fly in the shoot() function
-                    subButtonImageScaleType = scaleType;
-                }
-            } else if (buttonType.equals(ButtonType.HAM)) {
-                if (hamButtons[i] != null) {
-                    hamButtons[i].getImageView().setScaleType(scaleType);
-                } else {
-                    // delaying apply on the fly in the shoot() function
-                    subButtonImageScaleType = scaleType;
-                }
-            }
-        }
-    }
-
-    /**
-     * Set the boom type of boom button.
-     *
-     * @param boomType
-     */
-    public void setBoomType(BoomType boomType) {
-        this.boomType = boomType;
-    }
-
-    /**
-     * @return
-     */
-    public boolean isClosed() {
-        return state.equals(StateType.CLOSED);
-    }
-
-    /**
-     * @return
-     */
-    public boolean isClosing() {
-        return state.equals(StateType.CLOSING);
-    }
-
-    /**
-     * @return
-     */
-    public boolean isOpen() {
-        return state.equals(StateType.OPEN);
-    }
-
-    /**
-     * @return
-     */
-    public boolean isOpening() {
-        return state.equals(StateType.OPENING);
-    }
-
-    public void setShowMoveEaseType(EaseType showMoveEaseType) {
-        this.showMoveEaseType = showMoveEaseType;
-    }
-
-    public void setShowScaleEaseType(EaseType showScaleEaseType) {
-        this.showScaleEaseType = showScaleEaseType;
-    }
-
-    public void setShowRotateEaseType(EaseType showRotateEaseType) {
-        this.showRotateEaseType = showRotateEaseType;
-    }
-
-    public void setHideMoveEaseType(EaseType hideMoveEaseType) {
-        this.hideMoveEaseType = hideMoveEaseType;
-    }
-
-    public void setHideScaleEaseType(EaseType hideScaleEaseType) {
-        this.hideScaleEaseType = hideScaleEaseType;
-    }
-
-    public void setHideRotateEaseType(EaseType hideRotateEaseType) {
-        this.hideRotateEaseType = hideRotateEaseType;
-    }
-
-    /**
-     * Get the click event from CircleButton or HamButton
-     *
-     * @param index
-     */
-    @Override
-    public void onClick(int index) {
-        if (!state.equals(StateType.OPEN)) return;
-        if (onSubButtonClickListener != null) onSubButtonClickListener.onClick(index);
-        if (autoDismiss && !animationPlaying) startHideAnimations();
-    }
-
-    /**
-     * This interface tells when the boom menu button is clicked.
-     */
-    public interface OnClickListener {
-        void onClick();
-    }
-
-    /**
-     * Animation listener.
-     */
-    public interface AnimatorListener {
-        void toShow();
-
-        void showing(float fraction);
-
-        void showed();
-
-        void toHide();
-
-        void hiding(float fraction);
-
-        void hided();
-    }
-
-    /**
-     * This interface return which button is clicked.
-     */
-    public interface OnSubButtonClickListener {
-        void onClick(int buttonIndex);
-    }
-
-    /**
-     * If the boom menu button is open, dismiss it.
-     *
-     * @return True if dismiss, false if can not dismiss.
-     */
-    public boolean dismiss() {
-        if (state == StateType.OPEN) {
-            startHideAnimations();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * If the boom menu button is closed, open it.
-     *
-     * @return True if open, false if can not open.
-     */
-    public boolean boom() {
-        if (state == StateType.CLOSED) {
-            shoot();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Set the width of the share icon lines
-     *
-     * @param width
-     */
-    public void setShareLineWidth(float width) {
-        if (shareLines != null) shareLines.setLineWidth(width);
-    }
-
-    /**
-     * Set the color of the share icon line 1
-     *
-     * @param color
-     */
-    public void setShareLine1Color(int color) {
-        if (shareLines != null) shareLines.setLine1Color(color);
-    }
-
-    /**
-     * Set the color of the share icon line 2
-     *
-     * @param color
-     */
-    public void setShareLine2Color(int color) {
-        if (shareLines != null) shareLines.setLine2Color(color);
-    }
-
-    /**
-     * Builder
-     * Fuck this... That's so long...
-     */
-    public static class Builder {
-
-        // required parameters
-        private ArrayList<Drawable> drawables = null;
-        private ArrayList<int[]> colors = null;
-        private ArrayList<String> strings = null;
-
-        private int frames = 80;
-
-        private int duration = 800;
-
-        private int delay = 100;
-
-        private OrderType showOrderType = OrderType.DEFAULT;
-
-        private OrderType hideOrderType = OrderType.DEFAULT;
-
-        private ButtonType buttonType = ButtonType.CIRCLE;
-
-        private BoomType boomType = BoomType.HORIZONTAL_THROW;
-
-        private PlaceType placeType = null;
-
-        private EaseType showMoveEaseType = EaseType.EaseOutBack;
-        private EaseType hideMoveEaseType = EaseType.EaseOutCirc;
-
-        private EaseType showScaleEaseType = EaseType.EaseOutBack;
-        private EaseType hideScaleEaseType = EaseType.EaseOutCirc;
-
-        private int rotateDegree = 720;
-        private EaseType showRotateEaseType = EaseType.EaseOutBack;
-        private EaseType hideRotateEaseType = EaseType.Linear;
-
-        private boolean autoDismiss = true;
-
-        private boolean cancelable = true;
-
-        private DimType dimType = DimType.DIM_6;
-
-        private ClickEffectType clickEffectType = ClickEffectType.RIPPLE;
-
-        private float boomButtonXOffsetOfShadow = 0;
-        private float boomButtonYOffsetOfShadow = 0;
-
-        private float subButtonsXOffsetOfShadow = 0;
-        private float subButtonsYOffsetOfShadow = 0;
-        private int subButtonTextColor = Color.WHITE;
-        private ImageView.ScaleType subButtonImageScaleType = ImageView.ScaleType.CENTER;
-
-        private OnClickListener onClickListener = null;
-        private AnimatorListener animatorListener = null;
-        private OnSubButtonClickListener onSubButtonClickListener = null;
-
-        private float shareLineWidth = 3f;
-        private int shareLine1Color = Color.WHITE;
-        private int shareLine2Color = Color.WHITE;
-
-        public Builder subButtons(ArrayList<Drawable> drawables, ArrayList<int[]> colors, ArrayList<String> strings) {
-            this.drawables = drawables;
-            this.colors = colors;
-            this.strings = strings;
-            return this;
-        }
-
-        public Builder subButtons(Drawable[] drawables, int[][] colors, String[] strings) {
-            this.drawables = new ArrayList<>(Arrays.asList(drawables));
-            this.colors = new ArrayList<>(Arrays.asList(colors));
-            this.strings = new ArrayList<>(Arrays.asList(strings));
-            return this;
-        }
-
-        public Builder frames(int frames) {
-            this.frames = frames;
-            return this;
-        }
-
-        public Builder duration(int duration) {
-            this.duration = duration;
-            return this;
-        }
-
-        public Builder delay(int delay) {
-            this.delay = delay;
-            return this;
-        }
-
-        public Builder showOrder(OrderType showOrderType) {
-            this.showOrderType = showOrderType;
-            return this;
-        }
-
-        public Builder hideOrder(OrderType hideOrderType) {
-            this.hideOrderType = hideOrderType;
-            return this;
-        }
-
-        public Builder button(ButtonType buttonType) {
-            this.buttonType = buttonType;
-            return this;
-        }
-
-        public Builder boom(BoomType boomType) {
-            this.boomType = boomType;
-            return this;
-        }
-
-        public Builder place(PlaceType placeType) {
-            this.placeType = placeType;
-            return this;
-        }
-
-        public Builder showMoveEase(EaseType showMoveEaseType) {
-            this.showMoveEaseType = showMoveEaseType;
-            return this;
-        }
-
-        public Builder hideMoveEase(EaseType hideMoveEaseType) {
-            this.hideMoveEaseType = hideMoveEaseType;
-            return this;
-        }
-
-        public Builder showScaleEase(EaseType showScaleEaseType) {
-            this.showScaleEaseType = showScaleEaseType;
-            return this;
-        }
-
-        public Builder hideScaleType(EaseType hideScaleEaseType) {
-            this.hideScaleEaseType = hideScaleEaseType;
-            return this;
-        }
-
-        public Builder rotateDegree(int rotateDegree) {
-            this.rotateDegree = rotateDegree;
-            return this;
-        }
-
-        public Builder showRotateEase(EaseType showRotateEaseType) {
-            this.showRotateEaseType = showRotateEaseType;
-            return this;
-        }
-
-        public Builder hideRotateType(EaseType hideRotateEaseType) {
-            this.hideRotateEaseType = hideRotateEaseType;
-            return this;
-        }
-
-        public Builder autoDismiss(boolean autoDismiss) {
-            this.autoDismiss = autoDismiss;
-            return this;
-        }
-
-        public Builder cancelable(boolean cancelable) {
-            this.cancelable = cancelable;
-            return this;
-        }
-
-        public Builder dim(DimType dimType) {
-            this.dimType = dimType;
-            return this;
-        }
-
-        public Builder clickEffect(ClickEffectType clickEffectType) {
-            this.clickEffectType = clickEffectType;
-            return this;
-        }
-
-        public Builder boomButtonShadow(float boomButtonXOffsetOfShadow, float boomButtonYOffsetOfShadow) {
-            this.boomButtonXOffsetOfShadow = boomButtonXOffsetOfShadow;
-            this.boomButtonYOffsetOfShadow = boomButtonYOffsetOfShadow;
-            return this;
-        }
-
-        public Builder subButtonsShadow(float subButtonsXOffsetOfShadow, float subButtonsYOffsetOfShadow) {
-            this.subButtonsXOffsetOfShadow = subButtonsXOffsetOfShadow;
-            this.subButtonsYOffsetOfShadow = subButtonsYOffsetOfShadow;
-            return this;
-        }
-
-        public Builder subButtonTextColor(int subButtonTextColor) {
-            this.subButtonTextColor = subButtonTextColor;
-            return this;
-        }
-
-        public Builder subButtonImageScaleType(ImageView.ScaleType subButtonImageScaleType) {
-            this.subButtonImageScaleType = subButtonImageScaleType;
-            return this;
-        }
-
-        public Builder onBoomButtonBlick(OnClickListener onClickListener) {
-            this.onClickListener = onClickListener;
-            return this;
-        }
-
-        public Builder animator(AnimatorListener animatorListener) {
-            this.animatorListener = animatorListener;
-            return this;
-        }
-
-        public Builder onSubButtonClick(OnSubButtonClickListener onSubButtonClickListener) {
-            this.onSubButtonClickListener = onSubButtonClickListener;
-            return this;
-        }
-
-        public Builder shareStyle(float shareLineWidth, int shareLine1Color, int shareLine2Color) {
-            this.shareLineWidth = shareLineWidth;
-            this.shareLine1Color = shareLine1Color;
-            this.shareLine2Color = shareLine2Color;
-            return this;
-        }
-
-        /**
-         * Add a sub button with 3 params.
-         *
-         * @param drawable
-         * @param twoColors
-         * @param string
-         * @return
-         */
-        public Builder addSubButton(Drawable drawable, int[] twoColors, String string) {
-            if (drawables == null) drawables = new ArrayList<>();
-            drawables.add(drawable);
-            if (colors == null) colors = new ArrayList<>();
-            colors.add(twoColors);
-            if (strings == null) strings = new ArrayList<>();
-            strings.add(string);
-            return this;
-        }
-
-        /**
-         * Add a sub button with 2 params.
-         *
-         * @param drawable
-         * @param twoColors
-         * @return
-         */
-        public Builder addSubButton(Drawable drawable, int[] twoColors) {
-            if (drawables == null) drawables = new ArrayList<>();
-            drawables.add(drawable);
-            if (colors == null) colors = new ArrayList<>();
-            colors.add(twoColors);
-            return this;
-        }
-
-        /**
-         * Add a sub button with 4 params.
-         *
-         * @param context
-         * @param drawable
-         * @param twoColors
-         * @param string
-         * @return
-         */
-        public Builder addSubButton(Context context, int drawable, int[] twoColors, String string) {
-            if (drawables == null) drawables = new ArrayList<>();
-            drawables.add(ContextCompat.getDrawable(context, drawable));
-            if (colors == null) colors = new ArrayList<>();
-            colors.add(twoColors);
-            if (strings == null) strings = new ArrayList<>();
-            strings.add(string);
-            return this;
-        }
-
-        /**
-         * Add a sub button with 3 params.
-         *
-         * @param context
-         * @param drawable
-         * @param twoColors
-         * @return
-         */
-        public Builder addSubButton(Context context, int drawable, int[] twoColors) {
-            if (drawables == null) drawables = new ArrayList<>();
-            drawables.add(ContextCompat.getDrawable(context, drawable));
-            if (colors == null) colors = new ArrayList<>();
-            colors.add(twoColors);
-            return this;
-        }
-
-        public BoomMenuButton init(BoomMenuButton boomMenuButton) {
-            if (boomMenuButton == null) throw new RuntimeException("BMB is null!");
-            Drawable[] drawablesInArray = new Drawable[drawables.size()];
-            for (int i = 0; i < drawables.size(); i++) drawablesInArray[i] = drawables.get(i);
-            String[] stringsInArray = new String[strings.size()];
-            for (int i = 0; i < strings.size(); i++) stringsInArray[i] = strings.get(i);
-            int[][] colorsInArray = new int[colors.size()][2];
-            for (int i = 0; i < colors.size(); i++) colorsInArray[i] = colors.get(i);
-            boomMenuButton.init(
-                    drawablesInArray,
-                    stringsInArray,
-                    colorsInArray,
-                    buttonType,
-                    boomType,
-                    placeType,
-                    showMoveEaseType,
-                    showScaleEaseType,
-                    showRotateEaseType,
-                    hideMoveEaseType,
-                    hideScaleEaseType,
-                    hideRotateEaseType,
-                    rotateDegree);
-            boomMenuButton.setFrames(frames);
-            boomMenuButton.setDuration(duration);
-            boomMenuButton.setDelay(delay);
-            boomMenuButton.setShowOrderType(showOrderType);
-            boomMenuButton.setHideOrderType(hideOrderType);
-            boomMenuButton.setAutoDismiss(autoDismiss);
-            boomMenuButton.setCancelable(cancelable);
-            boomMenuButton.setDimType(dimType);
-            boomMenuButton.setClickEffectType(clickEffectType);
-            boomMenuButton.setBoomButtonShadowOffset(boomButtonXOffsetOfShadow, boomButtonYOffsetOfShadow);
-            boomMenuButton.setSubButtonShadowOffset(subButtonsXOffsetOfShadow, subButtonsYOffsetOfShadow);
-            boomMenuButton.setTextViewColor(subButtonTextColor);
-            boomMenuButton.setImageViewScaleType(subButtonImageScaleType);
-            boomMenuButton.setOnClickListener(onClickListener);
-            boomMenuButton.setAnimatorListener(animatorListener);
-            boomMenuButton.setOnSubButtonClickListener(onSubButtonClickListener);
-            boomMenuButton.setShareLineWidth(shareLineWidth);
-            boomMenuButton.setShareLine1Color(shareLine1Color);
-            boomMenuButton.setShareLine2Color(shareLine2Color);
-            return boomMenuButton;
-        }
-    }
-    
-     private static Activity scanForActivity(Context cont) {
-        if (cont == null)
-            return null;
-        else if (cont instanceof Activity)
-            return (Activity)cont;
-        else if (cont instanceof ContextWrapper)
-            return scanForActivity(((ContextWrapper)cont).getBaseContext());
-
-        return null;
-    }
+    //endregion
 }

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Basic-->
+    <bool name="default_bmb_cacheOptimization">true</bool>
+    <bool name="default_bmb_boomInWholeScreen">true</bool>
+    <bool name="default_bmb_inList">false</bool>
+    <bool name="default_bmb_inFragment">false</bool>
+
+    <!--Shadow-->
+    <bool name="default_bmb_shadow_effect">true</bool>
+    <color name="default_bmb_shadow_color">#88757575</color>
+    <dimen name="default_bmb_shadow_radius">8dp</dimen>
+    <dimen name="default_bmb_shadow_offset_x">0dp</dimen>
+    <dimen name="default_bmb_shadow_offset_y">3dp</dimen>
+
+    <!--Button-->
+    <dimen name="default_bmb_button_radius">28dp</dimen>
+    <integer name="default_bmb_button_enum">-1</integer>
+    <bool name="default_bmb_background_effect">true</bool>
+    <bool name="default_bmb_ripple_effect">true</bool>
+    <color name="default_bmb_normal_color">#FF4081</color>
+    <color name="default_bmb_highlighted_color">#00000000</color>
+    <color name="default_bmb_unable_color">#00000000</color>
+
+    <!--Piece-->
+    <dimen name="default_bmb_dotRadius">6px</dimen>
+    <dimen name="default_bmb_hamWidth">40px</dimen>
+    <dimen name="default_bmb_hamHeight">6px</dimen>
+    <dimen name="default_bmb_pieceHorizontalMargin">5px</dimen>
+    <dimen name="default_bmb_pieceVerticalMargin">5px</dimen>
+    <dimen name="default_bmb_pieceInclinedMargin">7.071067811865475px</dimen>
+    <integer name="default_bmb_pieceEnum">-1</integer>
+    <dimen name="default_bmb_sharedLineLength">35px</dimen>
+    <color name="default_bmb_shareLine1Color">#ffffffff</color>
+    <color name="default_bmb_shareLine2Color">#ffffffff</color>
+    <dimen name="default_bmb_shareLineWidth">3px</dimen>
+
+    <!--Animation-->
+    <color name="default_bmb_dimColor">#55000000</color>
+    <integer name="default_bmb_showDuration">500</integer>
+    <integer name="default_bmb_showDelay">100</integer>
+    <integer name="default_bmb_hideDuration">500</integer>
+    <integer name="default_bmb_hideDelay">100</integer>
+    <bool name="default_bmb_cancelable">true</bool>
+    <bool name="default_bmb_autoHide">true</bool>
+    <integer name="default_bmb_orderEnum">2</integer>
+    <integer name="default_bmb_frames">60</integer>
+    <integer name="default_bmb_boomEnum">6</integer>
+    <integer name="default_bmb_showMoveEaseEnum">22</integer>
+    <integer name="default_bmb_showScaleEaseEnum">22</integer>
+    <integer name="default_bmb_showRotateEaseEnum">22</integer>
+    <integer name="default_bmb_hideMoveEaseEnum">21</integer>
+    <integer name="default_bmb_hideScaleEaseEnum">21</integer>
+    <integer name="default_bmb_hideRotateEaseEnum">21</integer>
+    <integer name="default_bmb_rotateDegree">720</integer>
+
+    <!--Boom Button-->
+    <integer name="default_bmb_buttonPlaceEnum">-1</integer>
+    <integer name="default_bmb_buttonPlaceAlignmentEnum">0</integer>
+    <dimen name="default_bmb_buttonHorizontalMargin">20dp</dimen>
+    <dimen name="default_bmb_buttonVerticalMargin">25dp</dimen>
+    <dimen name="default_bmb_buttonInclinedMargin">20dp</dimen>
+    <dimen name="default_bmb_buttonTopMargin">30dp</dimen>
+    <dimen name="default_bmb_buttonBottomMargin">30dp</dimen>
+    <dimen name="default_bmb_buttonLeftMargin">30dp</dimen>
+    <dimen name="default_bmb_buttonRightMargin">30dp</dimen>
+    <dimen name="default_bmb_bottomHamButtonTopMargin">-1dp</dimen>
+
+    <!--Simple Circle Button-->
+    <dimen name="default_bmb_simple_circle_width">80dp</dimen>
+    <dimen name="default_bmb_simple_circle_height">80dp</dimen>
+
+    <!--Text Inside Circle Button-->
+    <dimen name="default_bmb_text_inside_circle_width">80dp</dimen>
+    <dimen name="default_bmb_text_inside_circle_height">80dp</dimen>
+
+    <!--Text Outside Circle Button-->
+    <dimen name="default_bmb_text_outside_circle_width">80dp</dimen>
+    <dimen name="default_bmb_text_outside_circle_height">80dp</dimen>
+
+    <!--Ham Button-->
+    <dimen name="default_bmb_ham_button_width">300dp</dimen>
+    <dimen name="default_bmb_ham_button_height">60dp</dimen>
+
+</resources>

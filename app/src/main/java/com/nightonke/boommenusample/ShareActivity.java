@@ -1,135 +1,65 @@
 package com.nightonke.boommenusample;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.ViewGroup;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.nightonke.boommenu.BoomMenuButton;
-import com.nightonke.boommenu.Types.BoomType;
-import com.nightonke.boommenu.Types.ButtonType;
-import com.nightonke.boommenu.Types.PlaceType;
-import com.nightonke.boommenu.Util;
-
-import java.util.Random;
 
 public class ShareActivity extends AppCompatActivity {
 
-    private boolean init = false;
-    private BoomMenuButton boomMenuButton;
-    
-    private SeekBar buttonNumberSeek;
-    private TextView buttonNumberText;
-    
-    private RadioGroup placeTypeGroup;
-    private RadioButton[] placeTypeButtons;
-    private int[] SharePlaceTypes = new int[]{1, 2, 4, 2, 4, 6, 4, 3, 2};
+    private BoomMenuButton bmb1;
+    private BoomMenuButton bmb2;
+    private BoomMenuButton bmb3;
 
-    private SeekBar shareLineWidthSeek;
-    private TextView shareLineWidthText;
+    private TextView showDelaySeekText;
+    private TextView showDurationSeekText;
+    private TextView hideDelaySeekText;
+    private TextView hideDurationSeekText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
 
-        initViews();
+        initBmb(bmb1 = (BoomMenuButton)findViewById(R.id.bmb1));
+        initBmb(bmb2 = (BoomMenuButton)findViewById(R.id.bmb2));
+        initBmb(bmb3 = (BoomMenuButton)findViewById(R.id.bmb3));
+
+        bmb1.setShareLineLength(45);
+        bmb1.setShareLineWidth(5);
+        bmb1.setDotRadius(12);
+
+        bmb3.setShareLine1Color(Color.BLACK);
+        bmb3.setShareLine2Color(Color.BLACK);
+
+        initShowDelaySeek();
+        initShowDurationSeek();
+        initHideDelaySeek();
+        initHideDurationSeek();
     }
 
-    /**
-     * Init the boom menu button.
-     * Notice that you should call this NOT in your onCreate method.
-     * Because the width and height of boom menu button is 0.
-     * Call this in:
-     *
-     * @Override
-     * public void onWindowFocusChanged(boolean hasFocus) {
-     *     super.onWindowFocusChanged(hasFocus);
-     *     init(...);
-     * }
-     *
-     */
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-
-        // Use a param to record whether the boom button has been initialized
-        // Because we don't need to init it again when onResume()
-        if (init) return;
-        init = true;
-
-        initBoom();
+    private BoomMenuButton initBmb(BoomMenuButton bmb) {
+        assert bmb != null;
+        for (int i = 0; i < bmb.getButtonPlaceEnum().buttonNumber(); i++)
+            bmb.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());
+        return bmb;
     }
 
-    private void initBoom() {
-        int number = buttonNumberSeek.getProgress() + 3;
-
-        Drawable[] drawables = new Drawable[number];
-        int[] drawablesResource = new int[]{
-                R.drawable.mark,
-                R.drawable.refresh,
-                R.drawable.copy,
-                R.drawable.heart,
-                R.drawable.info,
-                R.drawable.like,
-                R.drawable.record,
-                R.drawable.search,
-                R.drawable.settings
-        };
-        for (int i = 0; i < number; i++)
-            drawables[i] = ContextCompat.getDrawable(this, drawablesResource[i]);
-
-        String[] STRINGS = new String[]{
-                "Mark",
-                "Refresh",
-                "Copy",
-                "Heart",
-                "Info",
-                "Like",
-                "Record",
-                "Search",
-                "Settings"
-        };
-        String[] strings = new String[number];
-        for (int i = 0; i < number; i++)
-            strings[i] = STRINGS[i];
-
-        int[][] colors = new int[number][2];
-        for (int i = 0; i < number; i++) {
-            colors[i][1] = getRandomColor();
-            colors[i][0] = Util.getInstance().getPressedColor(colors[i][1]);
-        }
-
-        // Now with Builder, you can init BMB more convenient
-        new BoomMenuButton.Builder()
-                .subButtons(drawables, colors, strings)
-                .button(ButtonType.CIRCLE)
-                .boom(BoomType.HORIZONTAL_THROW_2)
-                .place(getPlaceType())
-                .boomButtonShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
-                .subButtonsShadow(Util.getInstance().dp2px(2), Util.getInstance().dp2px(2))
-                .shareStyle(3f, getRandomColor(), getRandomColor())
-                .init(boomMenuButton);
-    }
-    
-    private void initViews() {
-        boomMenuButton = (BoomMenuButton)findViewById(R.id.boom);
-
-        buttonNumberSeek = (SeekBar)findViewById(R.id.button_number_seek);
-        buttonNumberSeek.setMax(6);
-        buttonNumberSeek.setProgress(0);
-        buttonNumberSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+    private void initShowDelaySeek() {
+        SeekBar showDelaySeekBar = (SeekBar) findViewById(R.id.show_delay_seek);
+        assert showDelaySeekBar != null;
+        showDelaySeekBar.setMax(1000);
+        showDelaySeekBar.setProgress((int) bmb1.getShowDelay());
+        showDelaySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                buttonNumberText.setText((progress + 3) + " Button(s)");
-                setPlaceRadioButton(progress + 3);
-                initBoom();
+                showDelaySeekText.setText("Show delay = " + seekBar.getProgress() + " ms");
+                bmb1.setShowDelay(progress);
+                bmb2.setShowDelay(progress);
+                bmb3.setShowDelay(progress);
             }
 
             @Override
@@ -142,26 +72,22 @@ public class ShareActivity extends AppCompatActivity {
 
             }
         });
-        buttonNumberText = (TextView)findViewById(R.id.button_number_text);
-        buttonNumberText.setText("3 Button(s)");
+        showDelaySeekText = (TextView)findViewById(R.id.show_delay_text);
+        showDelaySeekText.setText("Show delay = " + showDelaySeekBar.getProgress() + " ms");
+    }
 
-        placeTypeGroup = (RadioGroup)findViewById(R.id.group_place_type);
-        placeTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                initBoom();
-            }
-        });
-        setPlaceRadioButton(3);
-
-        shareLineWidthSeek = (SeekBar)findViewById(R.id.share_line_width_seek);
-        shareLineWidthSeek.setMax(100);
-        shareLineWidthSeek.setProgress(50);
-        shareLineWidthSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+    private void initShowDurationSeek() {
+        SeekBar showDurationSeekBar = (SeekBar) findViewById(R.id.show_duration_seek);
+        assert showDurationSeekBar != null;
+        showDurationSeekBar.setMax(1000);
+        showDurationSeekBar.setProgress((int) bmb1.getShowDuration());
+        showDurationSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                shareLineWidthText.setText("Width: " + Util.getInstance().round(progress * 6f / 100, 1));
-                boomMenuButton.setShareLineWidth(shareLineWidthSeek.getProgress() * 6f / 100);
+                showDurationSeekText.setText("Show duration = " + seekBar.getProgress() + " ms");
+                bmb1.setShowDuration(progress);
+                bmb2.setShowDuration(progress);
+                bmb3.setShowDuration(progress);
             }
 
             @Override
@@ -174,116 +100,63 @@ public class ShareActivity extends AppCompatActivity {
 
             }
         });
-        shareLineWidthText = (TextView)findViewById(R.id.share_line_width_text);
-        shareLineWidthText.setText("Width: 3.0");
+        showDurationSeekText = (TextView)findViewById(R.id.show_duration_text);
+        showDurationSeekText.setText("Show duration = " + showDurationSeekBar.getProgress() + " ms");
     }
 
-    private void setPlaceRadioButton(int index) {
-        placeTypeGroup.removeAllViews();
-        int length = SharePlaceTypes[index - 1];
-        placeTypeButtons = new RadioButton[length];
-        for (int i = 0; i < length; i++) {
-            placeTypeButtons[i] = new RadioButton(this);
-            placeTypeButtons[i].setText("SHARE_" + index + "_" + (i + 1));
-            placeTypeButtons[i].setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
-            placeTypeGroup.addView(placeTypeButtons[i]);
-        }
-        placeTypeButtons[0].setChecked(true);
+    private void initHideDelaySeek() {
+        SeekBar hideDelaySeekBar = (SeekBar) findViewById(R.id.hide_delay_seek);
+        assert hideDelaySeekBar != null;
+        hideDelaySeekBar.setMax(1000);
+        hideDelaySeekBar.setProgress((int) bmb1.getHideDelay());
+        hideDelaySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                hideDelaySeekText.setText("Hide delay = " + seekBar.getProgress() + " ms");
+                bmb1.setHideDelay(progress);
+                bmb2.setHideDelay(progress);
+                bmb3.setHideDelay(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        hideDelaySeekText = (TextView)findViewById(R.id.hide_delay_text);
+        hideDelaySeekText.setText("Hide delay = " + hideDelaySeekBar.getProgress() + " ms");
     }
 
-    private PlaceType getPlaceType() {
-        if (buttonNumberSeek.getProgress() == 0) {
-            if (placeTypeButtons[0].isChecked()) {
-                return PlaceType.SHARE_3_1;
-            } else if (placeTypeButtons[1].isChecked()) {
-                return PlaceType.SHARE_3_2;
-            } else if (placeTypeButtons[2].isChecked()) {
-                return PlaceType.SHARE_3_3;
-            } else if (placeTypeButtons[3].isChecked()) {
-                return PlaceType.SHARE_3_4;
+    private void initHideDurationSeek() {
+        SeekBar hideDurationSeekBar = (SeekBar) findViewById(R.id.hide_duration_seek);
+        assert hideDurationSeekBar != null;
+        hideDurationSeekBar.setMax(1000);
+        hideDurationSeekBar.setProgress((int) bmb1.getHideDuration());
+        hideDurationSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                hideDurationSeekText.setText("Hide duration = " + seekBar.getProgress() + " ms");
+                bmb1.setHideDuration(progress);
+                bmb2.setHideDuration(progress);
+                bmb3.setHideDuration(progress);
             }
-        } else if (buttonNumberSeek.getProgress() == 1) {
-            if (placeTypeButtons[0].isChecked()) {
-                return PlaceType.SHARE_4_1;
-            } else if (placeTypeButtons[1].isChecked()) {
-                return PlaceType.SHARE_4_2;
-            }
-        } else if (buttonNumberSeek.getProgress() == 2) {
-            if (placeTypeButtons[0].isChecked()) {
-                return PlaceType.SHARE_5_1;
-            } else if (placeTypeButtons[1].isChecked()) {
-                return PlaceType.SHARE_5_2;
-            } else if (placeTypeButtons[2].isChecked()) {
-                return PlaceType.SHARE_5_3;
-            } else if (placeTypeButtons[3].isChecked()) {
-                return PlaceType.SHARE_5_4;
-            }
-        } else if (buttonNumberSeek.getProgress() == 3) {
-            if (placeTypeButtons[0].isChecked()) {
-                return PlaceType.SHARE_6_1;
-            } else if (placeTypeButtons[1].isChecked()) {
-                return PlaceType.SHARE_6_2;
-            } else if (placeTypeButtons[2].isChecked()) {
-                return PlaceType.SHARE_6_3;
-            } else if (placeTypeButtons[3].isChecked()) {
-                return PlaceType.SHARE_6_4;
-            } else if (placeTypeButtons[4].isChecked()) {
-                return PlaceType.SHARE_6_5;
-            } else if (placeTypeButtons[5].isChecked()) {
-                return PlaceType.SHARE_6_6;
-            }
-        } else if (buttonNumberSeek.getProgress() == 4) {
-            if (placeTypeButtons[0].isChecked()) {
-                return PlaceType.SHARE_7_1;
-            } else if (placeTypeButtons[1].isChecked()) {
-                return PlaceType.SHARE_7_2;
-            } else if (placeTypeButtons[2].isChecked()) {
-                return PlaceType.SHARE_7_3;
-            } else if (placeTypeButtons[3].isChecked()) {
-                return PlaceType.SHARE_7_4;
-            }
-        } else if (buttonNumberSeek.getProgress() == 5) {
-            if (placeTypeButtons[0].isChecked()) {
-                return PlaceType.SHARE_8_1;
-            } else if (placeTypeButtons[1].isChecked()) {
-                return PlaceType.SHARE_8_2;
-            } else if (placeTypeButtons[2].isChecked()) {
-                return PlaceType.SHARE_8_3;
-            }
-        } else if (buttonNumberSeek.getProgress() == 6) {
-            if (placeTypeButtons[0].isChecked()) {
-                return PlaceType.SHARE_9_1;
-            } else if (placeTypeButtons[1].isChecked()) {
-                return PlaceType.SHARE_9_2;
-            }
-        }
-        return PlaceType.SHARE_3_1;
-    }
-    
-    private String[] Colors = {
-            "#F44336",
-            "#E91E63",
-            "#9C27B0",
-            "#2196F3",
-            "#03A9F4",
-            "#00BCD4",
-            "#009688",
-            "#4CAF50",
-            "#8BC34A",
-            "#CDDC39",
-            "#FFEB3B",
-            "#FFC107",
-            "#FF9800",
-            "#FF5722",
-            "#795548",
-            "#9E9E9E",
-            "#607D8B"};
 
-    public int getRandomColor() {
-        Random random = new Random();
-        int p = random.nextInt(Colors.length);
-        return Color.parseColor(Colors[p]);
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        hideDurationSeekText = (TextView)findViewById(R.id.hide_duration_text);
+        hideDurationSeekText.setText("Hide duration = " + hideDurationSeekBar.getProgress() + " ms");
     }
 }

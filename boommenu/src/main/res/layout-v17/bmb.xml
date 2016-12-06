@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.nightonke.boommenu.BMBShadow
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/shadow"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?android:actionBarItemBackground"
+        android:clickable="true" 
+        android:layoutDirection="ltr"/>
+
+</com.nightonke.boommenu.BMBShadow>

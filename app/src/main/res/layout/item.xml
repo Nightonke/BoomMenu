@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/text_view"
+        android:id="@+id/text"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_weight="1"
@@ -16,17 +16,32 @@
         />
 
     <com.nightonke.boommenu.BoomMenuButton
-        android:id="@+id/boom_circle"
-        android:layout_width="56dp"
-        android:layout_height="match_parent"
-        app:boom_inList="true"
-        />
+        android:id="@+id/bmb1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:bmb_buttonEnum="simpleCircle"
+        app:bmb_piecePlaceEnum="piecePlace_dot_9_1"
+        app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
+        app:bmb_inList="true"/>
 
     <com.nightonke.boommenu.BoomMenuButton
-        android:id="@+id/boom_ham"
-        android:layout_width="56dp"
-        android:layout_height="match_parent"
-        app:boom_inList="true"
-        />
+        android:id="@+id/bmb2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:bmb_buttonEnum="ham"
+        app:bmb_piecePlaceEnum="piecePlace_ham_3"
+        app:bmb_buttonPlaceEnum="buttonPlace_ham_3 "
+        app:bmb_inList="true"/>
+
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/bmb3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:bmb_buttonEnum="simpleCircle"
+        app:bmb_piecePlaceEnum="piecePlace_share"
+        app:bmb_buttonPlaceEnum="buttonPlace_sc_6_1"
+        app:bmb_shareLine1Color="@android:color/holo_blue_light"
+        app:bmb_shareLine2Color="@android:color/holo_orange_light"
+        app:bmb_inList="true"/>
 
 </LinearLayout>

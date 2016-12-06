@@ -1,46 +1,35 @@
 <resources>
-    <string name="app_name">BoomMenu</string>
+    <string name="app_name">BoomMenuButton</string>
 
-    <string name="button_type">Button Type</string>
-    <string name="circle_button">Circle Button</string>
-    <string name="hamburger_button">Hamburger Button</string>
-
-    <string name="button_number">Button Number</string>
-
-    <string name="boom_type">Boom Type</string>
-
-    <string name="place_type">Place Type</string>
-
-    <string name="animation_duration">Animation Duration</string>
-    <string name="animation_start_delay">Animation Start Delay</string>
-    <string name="animation_rotation_degree">Animation Rotation Degree</string>
-    <string name="auto_dismiss">Auto Dismiss</string>
-
-    <string name="show_order_type">Show Order</string>
-    <string name="show_order_type_default">Default</string>
-    <string name="show_order_type_reverse">Reverse</string>
-    <string name="show_order_type_random">Random</string>
-
-    <string name="hide_order_type">Hide Order</string>
-    <string name="hide_order_type_default">Default</string>
-    <string name="hide_order_type_reverse">Reverse</string>
-    <string name="hide_order_type_random">Random</string>
-
-    <string name="animation_listener">Animation Listener</string>
-
-    <string name="click_effect">Click Effect</string>
-    <string name="click_effect_ripple">Ripple</string>
-    <string name="click_effect_normal">Normal</string>
-
-    <string name="examples">Examples</string>
-    <string name="easy_example">Easy Example</string>
-    <string name="list_view_example">ListView Example</string>
+    <string name="simple_circle_button_example">Simple Circle Button Example</string>
+    <string name="button_place_alignment_example">Button Place Alignment Example</string>
+    <string name="text_inside_circle_button_example">Text Inside Circle Button Example</string>
+    <string name="text_outside_circle_button_example">Text Outside Circle Button Example</string>
+    <string name="ham_button_example">Ham Button Example</string>
+    <string name="boom_example">Boom Example</string>
+    <string name="order_example">Order Example</string>
+    <string name="actionbar_example">ActionBar Example</string>
+    <string name="ease_example">Ease Example</string>
+    <string name="listener_example">Listener Example</string>
+    <string name="control_example">Control Example</string>
     <string name="share_example">Share Example</string>
-    <string name="builder_example">Builder Example</string>
+    <string name="list_example">List Example</string>
+    <string name="recycler_view_example">Recycler View Example</string>
+    <string name="fragment_example">Fragment Example</string>
 
-    <string name="easy_example_text">This is an easy use of BoomMenuButton.</string>
-    <string name="share_example_text">This is a share example of BoomMenuButton.</string>
+    <string name="text_inside_circle_button_text_normal">Text Inside Circle Button(Normal)</string>
+    <string name="text_inside_circle_button_text_highlighted">Text Inside Circle Button(Highlighted)</string>
+    <string name="text_inside_circle_button_text_unable">Text Inside Circle Button(Unable)</string>
 
-    <string name="share_line_width">Line Width</string>
+    <string name="text_outside_circle_button_text_normal">Text Outside Circle Button(Normal)</string>
+    <string name="text_outside_circle_button_text_highlighted">Text Outside Circle Button(Highlighted)</string>
+    <string name="text_outside_circle_button_text_unable">Text Outside Circle Button(Unable)</string>
+
+    <string name="text_ham_button_text_normal">Ham Button Text(Normal)</string>
+    <string name="text_ham_button_text_highlighted">Ham Button Text(Highlighted)</string>
+    <string name="text_ham_button_text_unable">Ham Button Text(Unable)</string>
+    <string name="text_ham_button_sub_text_normal">Ham Button Sub Text(Normal)</string>
+    <string name="text_ham_button_sub_text_highlighted">Ham Button Sub Text(Highlighted)</string>
+    <string name="text_ham_button_sub_text_unable">Ham Button Sub Text(Unable)</string>
 
 </resources>

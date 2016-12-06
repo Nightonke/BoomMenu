@@ -1,19 +1,382 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="ShadowLayout">
-        <attr name="sl_cornerRadius" format="dimension"/>
-        <attr name="sl_shadowRadius" format="dimension"/>
-        <attr name="sl_shadowColor" format="color"/>
-        <attr name="sl_dx" format="dimension"/>
-        <attr name="sl_dy" format="dimension"/>
-    </declare-styleable>
-
     <declare-styleable name="BoomMenuButton">
-        <attr name="boom_inActionBar" format="boolean"/>
-        <attr name="boom_inList" format="boolean"/>
-        <attr name="boom_button_color" format="color"/>
-        <attr name="boom_button_pressed_color" format="color"/>
+        <!--Basic-->
+        <attr name="bmb_cacheOptimization" format="boolean|reference"/>
+        <attr name="bmb_boomInWholeScreen" format="boolean|reference"/>
+        <attr name="bmb_inList" format="boolean|reference"/>
+        <attr name="bmb_inFragment" format="boolean|reference"/>
+
+        <!--Shadow-->
+        <attr name="bmb_shadowEffect" format="boolean|reference"/>
+        <attr name="bmb_shadowRadius" format="dimension|reference"/>
+        <attr name="bmb_shadowColor" format="color|reference"/>
+        <attr name="bmb_shadowX" format="dimension|reference"/>
+        <attr name="bmb_shadowY" format="dimension|reference"/>
+
+        <!--Button-->
+        <attr name="bmb_buttonRadius" format="dimension|reference"/>
+        <attr name="bmb_buttonEnum" format="enum|reference">
+            <enum name="simpleCircle" value="0"/>
+            <enum name="textInsideCircle" value="1"/>
+            <enum name="textOutsideCircle" value="2"/>
+            <enum name="ham" value="3"/>
+        </attr>
+        <attr name="bmb_backgroundEffect" format="boolean|reference"/>
+        <attr name="bmb_rippleEffect" format="boolean|reference"/>
+        <attr name="bmb_normalColor" format="color|reference"/>
+        <attr name="bmb_highlightedColor" format="color|reference"/>
+        <attr name="bmb_unableColor" format="color|reference"/>
+        
+        <!--Piece-->
+        <attr name="bmb_dotRadius" format="dimension|reference"/>
+        <attr name="bmb_hamWidth" format="dimension|reference"/>
+        <attr name="bmb_hamHeight" format="dimension|reference"/>
+        <attr name="bmb_pieceHorizontalMargin" format="dimension|reference"/>
+        <attr name="bmb_pieceVerticalMargin" format="dimension|reference"/>
+        <attr name="bmb_pieceInclinedMargin" format="dimension|reference"/>
+        <attr name="bmb_piecePlaceEnum" format="enum|reference">
+            <enum name="piecePlace_dot_1" value="0"/>
+            <enum name="piecePlace_dot_2_1" value="1"/>
+            <enum name="piecePlace_dot_2_2" value="2"/>
+            <enum name="piecePlace_dot_3_1" value="3"/>
+            <enum name="piecePlace_dot_3_2" value="4"/>
+            <enum name="piecePlace_dot_3_3" value="5"/>
+            <enum name="piecePlace_dot_3_4" value="6"/>
+            <enum name="piecePlace_dot_4_1" value="7"/>
+            <enum name="piecePlace_dot_4_2" value="8"/>
+            <enum name="piecePlace_dot_5_1" value="9"/>
+            <enum name="piecePlace_dot_5_2" value="10"/>
+            <enum name="piecePlace_dot_5_3" value="11"/>
+            <enum name="piecePlace_dot_5_4" value="12"/>
+            <enum name="piecePlace_dot_6_1" value="13"/>
+            <enum name="piecePlace_dot_6_2" value="14"/>
+            <enum name="piecePlace_dot_6_3" value="15"/>
+            <enum name="piecePlace_dot_6_4" value="16"/>
+            <enum name="piecePlace_dot_6_5" value="17"/>
+            <enum name="piecePlace_dot_6_6" value="18"/>
+            <enum name="piecePlace_dot_7_1" value="19"/>
+            <enum name="piecePlace_dot_7_2" value="20"/>
+            <enum name="piecePlace_dot_7_3" value="21"/>
+            <enum name="piecePlace_dot_7_4" value="22"/>
+            <enum name="piecePlace_dot_7_5" value="23"/>
+            <enum name="piecePlace_dot_7_6" value="24"/>
+            <enum name="piecePlace_dot_8_1" value="25"/>
+            <enum name="piecePlace_dot_8_2" value="26"/>
+            <enum name="piecePlace_dot_8_3" value="27"/>
+            <enum name="piecePlace_dot_8_4" value="28"/>
+            <enum name="piecePlace_dot_8_5" value="29"/>
+            <enum name="piecePlace_dot_8_6" value="30"/>
+            <enum name="piecePlace_dot_8_7" value="31"/>
+            <enum name="piecePlace_dot_9_1" value="32"/>
+            <enum name="piecePlace_dot_9_2" value="33"/>
+            <enum name="piecePlace_dot_9_3" value="34"/>
+
+            <enum name="piecePlace_ham_1" value="35"/>
+            <enum name="piecePlace_ham_2" value="36"/>
+            <enum name="piecePlace_ham_3" value="37"/>
+            <enum name="piecePlace_ham_4" value="38"/>
+            <enum name="piecePlace_ham_5" value="39"/>
+            <enum name="piecePlace_ham_6" value="40"/>
+
+            <enum name="piecePlace_share" value="41"/>
+        </attr>
+        <attr name="bmb_sharedLineLength" format="dimension|reference"/>
+        <attr name="bmb_shareLine1Color" format="color|reference"/>
+        <attr name="bmb_shareLine2Color" format="color|reference"/>
+        <attr name="bmb_shareLineWidth" format="dimension|reference"/>
+
+        <!--Animation-->
+        <attr name="bmb_dimColor" format="color|reference"/>
+        <attr name="bmb_showDuration" format="integer|reference"/>
+        <attr name="bmb_showDelay" format="integer|reference"/>
+        <attr name="bmb_hideDuration" format="integer|reference"/>
+        <attr name="bmb_hideDelay" format="integer|reference"/>
+        <attr name="bmb_cancelable" format="boolean|reference"/>
+        <attr name="bmb_autoHide" format="boolean|reference"/>
+        <attr name="bmb_orderEnum" format="enum|reference">
+            <enum name="orderDefault" value="0"/>
+            <enum name="orderReverse" value="1"/>
+            <enum name="orderRandom" value="2"/>
+        </attr>
+        <attr name="bmb_frames" format="integer|reference"/>
+        <attr name="bmb_boomEnum" format="enum|reference">
+            <enum name="boomLine" value="0"/>
+            <enum name="boomParabola_1" value="1"/>
+            <enum name="boomParabola_2" value="2"/>
+            <enum name="boomParabola_3" value="3"/>
+            <enum name="boomParabola_4" value="4"/>
+            <enum name="boomHorizontalThrow_1" value="5"/>
+            <enum name="boomHorizontalThrow_2" value="6"/>
+            <enum name="boomRandom" value="7"/>
+        </attr>
+        <attr name="bmb_showMoveEaseEnum" format="enum|reference">
+            <enum name="inSine" value="0"/>
+            <enum name="outSine" value="1"/>
+            <enum name="inOutSine" value="2"/>
+            <enum name="inQuad" value="3"/>
+            <enum name="outQuad" value="4"/>
+            <enum name="inOutQuad" value="5"/>
+            <enum name="inCubic" value="6"/>
+            <enum name="outCubic" value="7"/>
+            <enum name="inOutCubic" value="8"/>
+            <enum name="inQuart" value="9"/>
+            <enum name="outQuart" value="10"/>
+            <enum name="inOutQuart" value="11"/>
+            <enum name="inQuint" value="12"/>
+            <enum name="outQuint" value="13"/>
+            <enum name="inOutQuint" value="14"/>
+            <enum name="inExpo" value="15"/>
+            <enum name="outExpo" value="16"/>
+            <enum name="inOutExpo" value="17"/>
+            <enum name="inCirc" value="18"/>
+            <enum name="outCirc" value="19"/>
+            <enum name="inOutCirc" value="20"/>
+            <enum name="inBack" value="21"/>
+            <enum name="outBack" value="22"/>
+            <enum name="inOutBack" value="23"/>
+            <enum name="inElastic" value="24"/>
+            <enum name="outElastic" value="25"/>
+            <enum name="inOutElastic" value="26"/>
+            <enum name="inBounce" value="27"/>
+            <enum name="outBounce" value="28"/>
+            <enum name="inOutBounce" value="29"/>
+            <enum name="linear" value="30"/>
+        </attr>
+        <attr name="bmb_showScaleEaseEnum" format="enum|reference">
+            <enum name="inSine" value="0"/>
+            <enum name="outSine" value="1"/>
+            <enum name="inOutSine" value="2"/>
+            <enum name="inQuad" value="3"/>
+            <enum name="outQuad" value="4"/>
+            <enum name="inOutQuad" value="5"/>
+            <enum name="inCubic" value="6"/>
+            <enum name="outCubic" value="7"/>
+            <enum name="inOutCubic" value="8"/>
+            <enum name="inQuart" value="9"/>
+            <enum name="outQuart" value="10"/>
+            <enum name="inOutQuart" value="11"/>
+            <enum name="inQuint" value="12"/>
+            <enum name="outQuint" value="13"/>
+            <enum name="inOutQuint" value="14"/>
+            <enum name="inExpo" value="15"/>
+            <enum name="outExpo" value="16"/>
+            <enum name="inOutExpo" value="17"/>
+            <enum name="inCirc" value="18"/>
+            <enum name="outCirc" value="19"/>
+            <enum name="inOutCirc" value="20"/>
+            <enum name="inBack" value="21"/>
+            <enum name="outBack" value="22"/>
+            <enum name="inOutBack" value="23"/>
+            <enum name="inElastic" value="24"/>
+            <enum name="outElastic" value="25"/>
+            <enum name="inOutElastic" value="26"/>
+            <enum name="inBounce" value="27"/>
+            <enum name="outBounce" value="28"/>
+            <enum name="inOutBounce" value="29"/>
+            <enum name="linear" value="30"/>
+        </attr>
+        <attr name="bmb_showRotateEaseEnum" format="enum|reference">
+            <enum name="inSine" value="0"/>
+            <enum name="outSine" value="1"/>
+            <enum name="inOutSine" value="2"/>
+            <enum name="inQuad" value="3"/>
+            <enum name="outQuad" value="4"/>
+            <enum name="inOutQuad" value="5"/>
+            <enum name="inCubic" value="6"/>
+            <enum name="outCubic" value="7"/>
+            <enum name="inOutCubic" value="8"/>
+            <enum name="inQuart" value="9"/>
+            <enum name="outQuart" value="10"/>
+            <enum name="inOutQuart" value="11"/>
+            <enum name="inQuint" value="12"/>
+            <enum name="outQuint" value="13"/>
+            <enum name="inOutQuint" value="14"/>
+            <enum name="inExpo" value="15"/>
+            <enum name="outExpo" value="16"/>
+            <enum name="inOutExpo" value="17"/>
+            <enum name="inCirc" value="18"/>
+            <enum name="outCirc" value="19"/>
+            <enum name="inOutCirc" value="20"/>
+            <enum name="inBack" value="21"/>
+            <enum name="outBack" value="22"/>
+            <enum name="inOutBack" value="23"/>
+            <enum name="inElastic" value="24"/>
+            <enum name="outElastic" value="25"/>
+            <enum name="inOutElastic" value="26"/>
+            <enum name="inBounce" value="27"/>
+            <enum name="outBounce" value="28"/>
+            <enum name="inOutBounce" value="29"/>
+            <enum name="linear" value="30"/>
+        </attr>
+        <attr name="bmb_hideMoveEaseEnum" format="enum|reference">
+            <enum name="inSine" value="0"/>
+            <enum name="outSine" value="1"/>
+            <enum name="inOutSine" value="2"/>
+            <enum name="inQuad" value="3"/>
+            <enum name="outQuad" value="4"/>
+            <enum name="inOutQuad" value="5"/>
+            <enum name="inCubic" value="6"/>
+            <enum name="outCubic" value="7"/>
+            <enum name="inOutCubic" value="8"/>
+            <enum name="inQuart" value="9"/>
+            <enum name="outQuart" value="10"/>
+            <enum name="inOutQuart" value="11"/>
+            <enum name="inQuint" value="12"/>
+            <enum name="outQuint" value="13"/>
+            <enum name="inOutQuint" value="14"/>
+            <enum name="inExpo" value="15"/>
+            <enum name="outExpo" value="16"/>
+            <enum name="inOutExpo" value="17"/>
+            <enum name="inCirc" value="18"/>
+            <enum name="outCirc" value="19"/>
+            <enum name="inOutCirc" value="20"/>
+            <enum name="inBack" value="21"/>
+            <enum name="outBack" value="22"/>
+            <enum name="inOutBack" value="23"/>
+            <enum name="inElastic" value="24"/>
+            <enum name="outElastic" value="25"/>
+            <enum name="inOutElastic" value="26"/>
+            <enum name="inBounce" value="27"/>
+            <enum name="outBounce" value="28"/>
+            <enum name="inOutBounce" value="29"/>
+            <enum name="linear" value="30"/>
+        </attr>
+        <attr name="bmb_hideScaleEaseEnum" format="enum|reference">
+            <enum name="inSine" value="0"/>
+            <enum name="outSine" value="1"/>
+            <enum name="inOutSine" value="2"/>
+            <enum name="inQuad" value="3"/>
+            <enum name="outQuad" value="4"/>
+            <enum name="inOutQuad" value="5"/>
+            <enum name="inCubic" value="6"/>
+            <enum name="outCubic" value="7"/>
+            <enum name="inOutCubic" value="8"/>
+            <enum name="inQuart" value="9"/>
+            <enum name="outQuart" value="10"/>
+            <enum name="inOutQuart" value="11"/>
+            <enum name="inQuint" value="12"/>
+            <enum name="outQuint" value="13"/>
+            <enum name="inOutQuint" value="14"/>
+            <enum name="inExpo" value="15"/>
+            <enum name="outExpo" value="16"/>
+            <enum name="inOutExpo" value="17"/>
+            <enum name="inCirc" value="18"/>
+            <enum name="outCirc" value="19"/>
+            <enum name="inOutCirc" value="20"/>
+            <enum name="inBack" value="21"/>
+            <enum name="outBack" value="22"/>
+            <enum name="inOutBack" value="23"/>
+            <enum name="inElastic" value="24"/>
+            <enum name="outElastic" value="25"/>
+            <enum name="inOutElastic" value="26"/>
+            <enum name="inBounce" value="27"/>
+            <enum name="outBounce" value="28"/>
+            <enum name="inOutBounce" value="29"/>
+            <enum name="linear" value="30"/>
+        </attr>
+        <attr name="bmb_hideRotateEaseEnum" format="enum|reference">
+            <enum name="inSine" value="0"/>
+            <enum name="outSine" value="1"/>
+            <enum name="inOutSine" value="2"/>
+            <enum name="inQuad" value="3"/>
+            <enum name="outQuad" value="4"/>
+            <enum name="inOutQuad" value="5"/>
+            <enum name="inCubic" value="6"/>
+            <enum name="outCubic" value="7"/>
+            <enum name="inOutCubic" value="8"/>
+            <enum name="inQuart" value="9"/>
+            <enum name="outQuart" value="10"/>
+            <enum name="inOutQuart" value="11"/>
+            <enum name="inQuint" value="12"/>
+            <enum name="outQuint" value="13"/>
+            <enum name="inOutQuint" value="14"/>
+            <enum name="inExpo" value="15"/>
+            <enum name="outExpo" value="16"/>
+            <enum name="inOutExpo" value="17"/>
+            <enum name="inCirc" value="18"/>
+            <enum name="outCirc" value="19"/>
+            <enum name="inOutCirc" value="20"/>
+            <enum name="inBack" value="21"/>
+            <enum name="outBack" value="22"/>
+            <enum name="inOutBack" value="23"/>
+            <enum name="inElastic" value="24"/>
+            <enum name="outElastic" value="25"/>
+            <enum name="inOutElastic" value="26"/>
+            <enum name="inBounce" value="27"/>
+            <enum name="outBounce" value="28"/>
+            <enum name="inOutBounce" value="29"/>
+            <enum name="linear" value="30"/>
+        </attr>
+        <attr name="bmb_rotateDegree" format="integer|reference"/>
+
+        <!--Boom Buttons-->
+        <attr name="bmb_buttonPlaceEnum" format="enum|reference">
+            <enum name="buttonPlace_sc_1" value="0"/>
+            <enum name="buttonPlace_sc_2_1" value="1"/>
+            <enum name="buttonPlace_sc_2_2" value="2"/>
+            <enum name="buttonPlace_sc_3_1" value="3"/>
+            <enum name="buttonPlace_sc_3_2" value="4"/>
+            <enum name="buttonPlace_sc_3_3" value="5"/>
+            <enum name="buttonPlace_sc_3_4" value="6"/>
+            <enum name="buttonPlace_sc_4_1" value="7"/>
+            <enum name="buttonPlace_sc_4_2" value="8"/>
+            <enum name="buttonPlace_sc_5_1" value="9"/>
+            <enum name="buttonPlace_sc_5_2" value="10"/>
+            <enum name="buttonPlace_sc_5_3" value="11"/>
+            <enum name="buttonPlace_sc_5_4" value="12"/>
+            <enum name="buttonPlace_sc_6_1" value="13"/>
+            <enum name="buttonPlace_sc_6_2" value="14"/>
+            <enum name="buttonPlace_sc_6_3" value="15"/>
+            <enum name="buttonPlace_sc_6_4" value="16"/>
+            <enum name="buttonPlace_sc_6_5" value="17"/>
+            <enum name="buttonPlace_sc_6_6" value="18"/>
+            <enum name="buttonPlace_sc_7_1" value="19"/>
+            <enum name="buttonPlace_sc_7_2" value="20"/>
+            <enum name="buttonPlace_sc_7_3" value="21"/>
+            <enum name="buttonPlace_sc_7_4" value="22"/>
+            <enum name="buttonPlace_sc_7_5" value="23"/>
+            <enum name="buttonPlace_sc_7_6" value="24"/>
+            <enum name="buttonPlace_sc_8_1" value="25"/>
+            <enum name="buttonPlace_sc_8_2" value="26"/>
+            <enum name="buttonPlace_sc_8_3" value="27"/>
+            <enum name="buttonPlace_sc_8_4" value="28"/>
+            <enum name="buttonPlace_sc_8_5" value="29"/>
+            <enum name="buttonPlace_sc_8_6" value="30"/>
+            <enum name="buttonPlace_sc_8_7" value="31"/>
+            <enum name="buttonPlace_sc_9_1" value="32"/>
+            <enum name="buttonPlace_sc_9_2" value="33"/>
+            <enum name="buttonPlace_sc_9_3" value="34"/>
+            <enum name="buttonPlace_ham_1 " value="35"/>
+            <enum name="buttonPlace_ham_2 " value="36"/>
+            <enum name="buttonPlace_ham_3 " value="37"/>
+            <enum name="buttonPlace_ham_4 " value="38"/>
+            <enum name="buttonPlace_ham_5 " value="39"/>
+            <enum name="buttonPlace_ham_6 " value="40"/>
+            <enum name="buttonPlace_horizontal" value="41"/>
+            <enum name="buttonPlace_vertical" value="42"/>
+        </attr>
+        <attr name="bmb_buttonPlaceAlignmentEnum" format="enum|reference">
+            <enum name="buttonPlaceAlignment_center" value="0"/>
+            <enum name="buttonPlaceAlignment_top" value="1"/>
+            <enum name="buttonPlaceAlignment_bottom" value="2"/>
+            <enum name="buttonPlaceAlignment_left" value="3"/>
+            <enum name="buttonPlaceAlignment_right" value="4"/>
+            <enum name="buttonPlaceAlignment_tl" value="5"/>
+            <enum name="buttonPlaceAlignment_tr" value="6"/>
+            <enum name="buttonPlaceAlignment_bl" value="7"/>
+            <enum name="buttonPlaceAlignment_br" value="8"/>
+        </attr>
+        <attr name="bmb_buttonHorizontalMargin" format="dimension|reference"/>
+        <attr name="bmb_buttonVerticalMargin" format="dimension|reference"/>
+        <attr name="bmb_buttonInclinedMargin" format="dimension|reference"/>
+        <attr name="bmb_buttonTopMargin" format="dimension|reference"/>
+        <attr name="bmb_buttonBottomMargin" format="dimension|reference"/>
+        <attr name="bmb_buttonLeftMargin" format="dimension|reference"/>
+        <attr name="bmb_buttonRightMargin" format="dimension|reference"/>
+        <attr name="bmb_bottomHamButtonTopMargin" format="dimension|reference"/>
+
     </declare-styleable>
 
 </resources>

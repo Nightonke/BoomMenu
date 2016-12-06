@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.nightonke.boommenusample.BMBFragment">
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="40sp"
+        android:gravity="center"/>
+
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/bmb1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="20dp"
+        app:bmb_normalColor="@android:color/holo_blue_bright"
+        app:bmb_highlightedColor="@android:color/holo_blue_dark"
+        app:bmb_buttonEnum="simpleCircle"
+        app:bmb_piecePlaceEnum="piecePlace_dot_9_1"
+        app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
+        app:bmb_inFragment="true"
+        />
+
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/bmb2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        app:bmb_normalColor="@android:color/holo_orange_light"
+        app:bmb_highlightedColor="@android:color/holo_orange_dark"
+        app:bmb_buttonEnum="simpleCircle"
+        app:bmb_piecePlaceEnum="piecePlace_dot_9_1"
+        app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
+        app:bmb_boomInWholeScreen="false"
+        app:bmb_inFragment="true"
+        />
+
+</RelativeLayout>

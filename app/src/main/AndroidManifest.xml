@@ -3,7 +3,6 @@
     package="com.nightonke.boommenusample">
 
     <application
-        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,10 +15,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EasyUseActivity" />
         <activity android:name=".ListViewActivity" />
+        <activity android:name=".SimpleCircleButtonActivity" />
+        <activity android:name=".ButtonPlaceAlignmentActivity" />
+        <activity android:name=".TextInsideCircleButtonActivity" />
+        <activity android:name=".TextOutsideCircleButtonActivity" />
+        <activity android:name=".BoomExampleActivity" />
+        <activity android:name=".OrderExampleActivity" />
+        <activity android:name=".HamButtonActivity" />
+        <activity android:name=".ActionBarActivity" />
+        <activity android:name=".EaseActivity" />
+        <activity android:name=".ListenerActivity" />
+        <activity android:name=".ControlActivity" />
         <activity android:name=".ShareActivity" />
-        <activity android:name=".BuilderActivity"></activity>
+        <activity android:name=".FragmentActivity" />
+        <activity android:name=".RecyclerViewActivity"></activity>
     </application>
 
 </manifest>
