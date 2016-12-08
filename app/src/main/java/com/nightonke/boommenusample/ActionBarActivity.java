@@ -39,13 +39,13 @@ public class ActionBarActivity extends AppCompatActivity {
         leftBmb.setButtonEnum(ButtonEnum.TextOutsideCircle);
         leftBmb.setPiecePlaceEnum(PiecePlaceEnum.DOT_9_1);
         leftBmb.setButtonPlaceEnum(ButtonPlaceEnum.SC_9_1);
-        for (int i = 0; i < leftBmb.getButtonPlaceEnum().buttonNumber(); i++)
+        for (int i = 0; i < leftBmb.getPiecePlaceEnum().pieceNumber(); i++)
             leftBmb.addBuilder(BuilderManager.getTextOutsideCircleButtonBuilder());
 
         rightBmb.setButtonEnum(ButtonEnum.Ham);
         rightBmb.setPiecePlaceEnum(PiecePlaceEnum.HAM_4);
         rightBmb.setButtonPlaceEnum(ButtonPlaceEnum.HAM_4);
-        for (int i = 0; i < rightBmb.getButtonPlaceEnum().buttonNumber(); i++)
+        for (int i = 0; i < rightBmb.getPiecePlaceEnum().pieceNumber(); i++)
             rightBmb.addBuilder(BuilderManager.getHamButtonBuilder());
     }
 }

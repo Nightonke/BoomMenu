@@ -22,11 +22,11 @@ public class BMBFragment extends Fragment {
         text.setText(String.valueOf(position));
 
         BoomMenuButton bmb1 = (BoomMenuButton) fragment.findViewById(R.id.bmb1);
-        for (int i = 0; i < bmb1.getButtonPlaceEnum().buttonNumber(); i++)
+        for (int i = 0; i < bmb1.getPiecePlaceEnum().pieceNumber(); i++)
             bmb1.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());
 
         BoomMenuButton bmb2 = (BoomMenuButton) fragment.findViewById(R.id.bmb2);
-        for (int i = 0; i < bmb2.getButtonPlaceEnum().buttonNumber(); i++)
+        for (int i = 0; i < bmb2.getPiecePlaceEnum().pieceNumber(); i++)
             bmb2.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());
 
         return fragment;

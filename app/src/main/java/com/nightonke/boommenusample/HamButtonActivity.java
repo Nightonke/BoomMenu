@@ -42,7 +42,7 @@ public class HamButtonActivity extends AppCompatActivity {
                 bmb.setPiecePlaceEnum((PiecePlaceEnum) piecesAndButtons.get(position).first);
                 bmb.setButtonPlaceEnum((ButtonPlaceEnum) piecesAndButtons.get(position).second);
                 bmb.clearBuilders();
-                for (int i = 0; i < bmb.getButtonPlaceEnum().buttonNumber(); i++)
+                for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++)
                     bmb.addBuilder(BuilderManager.getHamButtonBuilder());
             }
         });
@@ -60,6 +60,7 @@ public class HamButtonActivity extends AppCompatActivity {
                     piecesAndButtons.add(new Pair<>(piecePlaceEnum, buttonPlaceEnum));
                     data.add(piecePlaceEnum + " " + buttonPlaceEnum);
                     if (piecePlaceEnum.getValue() < PiecePlaceEnum.HAM_1.getValue()
+                            || piecePlaceEnum == PiecePlaceEnum.Share
                             || buttonPlaceEnum.getValue() < ButtonPlaceEnum.HAM_1.getValue()) {
                         piecesAndButtons.remove(piecesAndButtons.size() - 1);
                         data.remove(data.size() - 1);

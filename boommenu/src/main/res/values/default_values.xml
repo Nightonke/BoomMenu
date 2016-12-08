@@ -24,12 +24,12 @@
     <color name="default_bmb_unable_color">#00000000</color>
 
     <!--Piece-->
-    <dimen name="default_bmb_dotRadius">6px</dimen>
+    <dimen name="default_bmb_dotRadius">10px</dimen>
     <dimen name="default_bmb_hamWidth">40px</dimen>
     <dimen name="default_bmb_hamHeight">6px</dimen>
-    <dimen name="default_bmb_pieceHorizontalMargin">5px</dimen>
-    <dimen name="default_bmb_pieceVerticalMargin">5px</dimen>
-    <dimen name="default_bmb_pieceInclinedMargin">7.071067811865475px</dimen>
+    <dimen name="default_bmb_pieceHorizontalMargin">10px</dimen>
+    <dimen name="default_bmb_pieceVerticalMargin">10px</dimen>
+    <dimen name="default_bmb_pieceInclinedMargin">14px</dimen>
     <integer name="default_bmb_pieceEnum">-1</integer>
     <dimen name="default_bmb_sharedLineLength">35px</dimen>
     <color name="default_bmb_shareLine1Color">#ffffffff</color>

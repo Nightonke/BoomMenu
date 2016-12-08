@@ -26,7 +26,7 @@ public class EaseActivity extends AppCompatActivity {
     private BoomMenuButton initBmb(int res) {
         BoomMenuButton bmb = (BoomMenuButton) findViewById(res);
         assert bmb != null;
-        for (int i = 0; i < bmb.getButtonPlaceEnum().buttonNumber(); i++)
+        for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++)
             bmb.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());
         return bmb;
     }

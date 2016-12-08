@@ -72,11 +72,11 @@ public class ListViewActivity extends AppCompatActivity {
             viewHolder.text.setText("No. " + position);
 
             viewHolder.bmb1.clearBuilders();
-            for (int i = 0; i < viewHolder.bmb1.getButtonPlaceEnum().buttonNumber(); i++)
+            for (int i = 0; i < viewHolder.bmb1.getPiecePlaceEnum().pieceNumber(); i++)
                 viewHolder.bmb1.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());
 
             viewHolder.bmb2.clearBuilders();
-            for (int i = 0; i < viewHolder.bmb2.getButtonPlaceEnum().buttonNumber(); i++)
+            for (int i = 0; i < viewHolder.bmb2.getPiecePlaceEnum().pieceNumber(); i++)
                 viewHolder.bmb2.addBuilder(BuilderManager.getHamButtonBuilder());
 
             viewHolder.bmb3.clearBuilders();

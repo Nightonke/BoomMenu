@@ -52,10 +52,10 @@ public abstract class BoomButton extends FrameLayout {
 
     // Shadow
     protected boolean shadowEffect = true;
-    protected int shadowOffsetX;
-    protected int shadowOffsetY;
-    protected int shadowRadius;
-    protected int shadowCornerRadius;
+    protected int shadowOffsetX = 0;
+    protected int shadowOffsetY = 0;
+    protected int shadowRadius = 0;
+    protected int shadowCornerRadius = 0;
     protected int shadowColor;
     protected BMBShadow shadow;
 
@@ -137,11 +137,13 @@ public abstract class BoomButton extends FrameLayout {
         containsSubText = builder.containsSubText;
 
         shadowEffect = builder.shadowEffect;
-        shadowOffsetX = builder.shadowOffsetX;
-        shadowOffsetY = builder.shadowOffsetY;
-        shadowRadius = builder.shadowRadius;
-        shadowCornerRadius = builder.shadowCornerRadius;
-        shadowColor = builder.shadowColor;
+        if (shadowEffect) {
+            shadowOffsetX = builder.shadowOffsetX;
+            shadowOffsetY = builder.shadowOffsetY;
+            shadowRadius = builder.shadowRadius;
+            shadowCornerRadius = builder.shadowCornerRadius;
+            shadowColor = builder.shadowColor;
+        }
 
         normalImageRes = builder.normalImageRes;
         highlightedImageRes = builder.highlightedImageRes;
@@ -360,7 +362,7 @@ public abstract class BoomButton extends FrameLayout {
             @Override
             public void onClick(View v) {
                 if (listener != null) listener.onButtonClick(index, BoomButton.this);
-                if (onBMClickListener != null) onBMClickListener.onBoomButtonClick();
+                if (onBMClickListener != null) onBMClickListener.onBoomButtonClick(index);
             }
         });
 
@@ -419,7 +421,7 @@ public abstract class BoomButton extends FrameLayout {
             @Override
             public void onClick(View v) {
                 if (listener != null) listener.onButtonClick(index, BoomButton.this);
-                if (onBMClickListener != null) onBMClickListener.onBoomButtonClick();
+                if (onBMClickListener != null) onBMClickListener.onBoomButtonClick(index);
             }
         });
 
@@ -545,6 +547,12 @@ public abstract class BoomButton extends FrameLayout {
 
     private void setSubText(String string) {
         if (string != null && subText != null && !string.equals(subText.getText())) subText.setText(string);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        unable = !enabled;
     }
 
     public void cleanListener() {

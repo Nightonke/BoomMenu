@@ -99,4 +99,8 @@ public abstract class BoomButtonBuilder {
     public int pieceColor() {
         return unable ? unableColor : normalColor;
     }
+
+    public void setUnable(boolean unable) {
+        this.unable = unable;
+    }
 }

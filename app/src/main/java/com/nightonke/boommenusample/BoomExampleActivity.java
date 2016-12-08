@@ -30,7 +30,7 @@ public class BoomExampleActivity extends AppCompatActivity {
         bmb.setButtonEnum(ButtonEnum.SimpleCircle);
         bmb.setPiecePlaceEnum(PiecePlaceEnum.DOT_9_1);
         bmb.setButtonPlaceEnum(ButtonPlaceEnum.SC_9_1);
-        for (int i = 0; i < bmb.getButtonPlaceEnum().buttonNumber(); i++)
+        for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++)
             bmb.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());
 
         ListView listView = (ListView) findViewById(R.id.list_view);

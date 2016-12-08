@@ -17,7 +17,7 @@ public class ControlActivity extends AppCompatActivity implements View.OnClickLi
 
         bmb = (BoomMenuButton) findViewById(R.id.bmb);
         assert bmb != null;
-        for (int i = 0; i < bmb.getButtonPlaceEnum().buttonNumber(); i++)
+        for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++)
             bmb.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());
 
         findViewById(R.id.boom).setOnClickListener(this);

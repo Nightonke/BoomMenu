@@ -42,7 +42,7 @@ public class TextOutsideCircleButtonActivity extends AppCompatActivity {
                 bmb.setPiecePlaceEnum((PiecePlaceEnum) piecesAndButtons.get(position).first);
                 bmb.setButtonPlaceEnum((ButtonPlaceEnum) piecesAndButtons.get(position).second);
                 bmb.clearBuilders();
-                for (int i = 0; i < bmb.getButtonPlaceEnum().buttonNumber(); i++)
+                for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++)
                     bmb.addBuilder(BuilderManager.getTextOutsideCircleButtonBuilder());
             }
         });
@@ -65,6 +65,7 @@ public class TextOutsideCircleButtonActivity extends AppCompatActivity {
                             || piecePlaceEnum == PiecePlaceEnum.HAM_4
                             || piecePlaceEnum == PiecePlaceEnum.HAM_5
                             || piecePlaceEnum == PiecePlaceEnum.HAM_6
+                            || piecePlaceEnum == PiecePlaceEnum.Share
                             || buttonPlaceEnum == ButtonPlaceEnum.HAM_1
                             || buttonPlaceEnum == ButtonPlaceEnum.HAM_2
                             || buttonPlaceEnum == ButtonPlaceEnum.HAM_3

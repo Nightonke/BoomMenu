@@ -970,7 +970,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
         }
     }
 
-    private void ___________________________5_Builders() {}
+    private void ___________________________5_Builders_and_Buttons() {}
 
     //region Builders
 
@@ -1018,6 +1018,22 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     public void removeBuilder(int index) {
         boomButtonBuilders.remove(index);
         toLayout();
+    }
+
+    /**
+     * Set enable attribute of the boom-button at index.
+     *
+     * @param index index of the boom-button
+     * @param enable whether the boom-button should be enable
+     */
+    public void setEnable(int index, boolean enable) {
+        if (index < 0) return;
+        if (boomButtonBuilders != null && index < boomButtonBuilders.size()) {
+            boomButtonBuilders.get(index).setUnable(!enable);
+        }
+        if (boomButtons != null && index < boomButtons.size()) {
+            boomButtons.get(index).setEnabled(enable);
+        }
     }
 
     /**

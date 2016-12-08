@@ -31,11 +31,11 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewH
         holder.text.setText("No. " + position);
 
         holder.bmb1.clearBuilders();
-        for (int i = 0; i < holder.bmb1.getButtonPlaceEnum().buttonNumber(); i++)
+        for (int i = 0; i < holder.bmb1.getPiecePlaceEnum().pieceNumber(); i++)
             holder.bmb1.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());
 
         holder.bmb2.clearBuilders();
-        for (int i = 0; i < holder.bmb2.getButtonPlaceEnum().buttonNumber(); i++)
+        for (int i = 0; i < holder.bmb2.getPiecePlaceEnum().pieceNumber(); i++)
             holder.bmb2.addBuilder(BuilderManager.getHamButtonBuilder());
 
         holder.bmb3.clearBuilders();

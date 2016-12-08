@@ -4,11 +4,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.BoomButtons.BoomButton;
 import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
+import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.ButtonEnum;
 import com.nightonke.boommenu.OnBoomListener;
 import com.nightonke.boommenu.OnBoomListenerAdapter;
@@ -33,7 +33,7 @@ public class ListenerActivity extends AppCompatActivity {
         bmb.setButtonEnum(ButtonEnum.SimpleCircle);
         bmb.setPiecePlaceEnum(PiecePlaceEnum.DOT_6_3);
         bmb.setButtonPlaceEnum(ButtonPlaceEnum.SC_6_3);
-        for (int i = 0; i < bmb.getButtonPlaceEnum().buttonNumber(); i++) addBuilder(i);
+        for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) addBuilder();
 
         // Use OnBoomListenerAdapter to listen part of methods
         bmb.setOnBoomListener(new OnBoomListenerAdapter() {
@@ -79,12 +79,12 @@ public class ListenerActivity extends AppCompatActivity {
         });
     }
 
-    private void addBuilder(final int index) {
+    private void addBuilder() {
         bmb.addBuilder(new SimpleCircleButton.Builder()
                 .normalImageRes(BuilderManager.getImageResource())
                 .listener(new OnBMClickListener() {
                     @Override
-                    public void onBoomButtonClick() {
+                    public void onBoomButtonClick(int index) {
                         textViewForButton.setText("No." + index + " boom-button is clicked!");
                     }
                 }));

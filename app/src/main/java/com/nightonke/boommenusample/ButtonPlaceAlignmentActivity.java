@@ -38,7 +38,7 @@ public class ButtonPlaceAlignmentActivity extends AppCompatActivity {
         bmb.setButtonEnum(ButtonEnum.SimpleCircle);
         bmb.setPiecePlaceEnum(PiecePlaceEnum.DOT_4_1);
         bmb.setButtonPlaceEnum(ButtonPlaceEnum.SC_4_1);
-        for (int i = 0; i < bmb.getButtonPlaceEnum().buttonNumber(); i++)
+        for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++)
             bmb.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());
 
         ListView listView = (ListView) findViewById(R.id.list_view);

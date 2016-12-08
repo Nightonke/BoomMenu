@@ -11,7 +11,9 @@ public interface OnBMClickListener {
 
     /**
      * When the boom-button is click
+     *
+     * @param index the index of boom-button
      */
-    void onBoomButtonClick();
+    void onBoomButtonClick(int index);
 
 }

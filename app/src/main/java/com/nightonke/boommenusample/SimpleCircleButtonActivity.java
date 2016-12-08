@@ -1,5 +1,7 @@
 package com.nightonke.boommenusample;
 
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
@@ -7,14 +9,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
+import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
 import com.nightonke.boommenu.ButtonEnum;
 import com.nightonke.boommenu.Piece.PiecePlaceEnum;
+import com.nightonke.boommenu.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.nightonke.boommenusample.BuilderManager.getImageResource;
 
 public class SimpleCircleButtonActivity extends AppCompatActivity {
 
@@ -42,7 +50,7 @@ public class SimpleCircleButtonActivity extends AppCompatActivity {
                 bmb.setPiecePlaceEnum((PiecePlaceEnum) piecesAndButtons.get(position).first);
                 bmb.setButtonPlaceEnum((ButtonPlaceEnum) piecesAndButtons.get(position).second);
                 bmb.clearBuilders();
-                for (int i = 0; i < bmb.getButtonPlaceEnum().buttonNumber(); i++)
+                for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++)
                     bmb.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());
             }
         });
@@ -65,6 +73,7 @@ public class SimpleCircleButtonActivity extends AppCompatActivity {
                             || piecePlaceEnum == PiecePlaceEnum.HAM_4
                             || piecePlaceEnum == PiecePlaceEnum.HAM_5
                             || piecePlaceEnum == PiecePlaceEnum.HAM_6
+                            || piecePlaceEnum == PiecePlaceEnum.Share
                             || buttonPlaceEnum == ButtonPlaceEnum.HAM_1
                             || buttonPlaceEnum == ButtonPlaceEnum.HAM_2
                             || buttonPlaceEnum == ButtonPlaceEnum.HAM_3
