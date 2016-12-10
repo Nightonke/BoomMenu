@@ -15,8 +15,6 @@ import com.nightonke.boommenu.Util;
 
 import java.util.ArrayList;
 
-import static android.R.attr.gravity;
-
 /**
  * Created by Weiping Huang at 13:13 on 16/11/27
  * For Personal Open Source

@@ -12,8 +12,6 @@ import android.widget.TextView;
 
 import com.nightonke.boommenu.BoomMenuButton;
 
-import static com.nightonke.boommenusample.BuilderManager.getSimpleCircleButtonBuilder;
-
 public class ListViewActivity extends AppCompatActivity {
 
     @Override
