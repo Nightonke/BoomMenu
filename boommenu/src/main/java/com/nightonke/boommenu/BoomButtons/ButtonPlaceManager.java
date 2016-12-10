@@ -425,21 +425,21 @@ public class ButtonPlaceManager {
             case Horizontal:
                 if (buttonNumber % 2 == 0) {
                     for (int i = half - 1; i >= 0; i--) positions.add(point(-w / 2 - hm / 2 - i * (w + hm), 0));
-                    for (int i = 0; i < h; i++) positions.add(point(w / 2  + hm / 2 + i * (w + hm), 0));
+                    for (int i = 0; i < half; i++) positions.add(point(w / 2  + hm / 2 + i * (w + hm), 0));
                 } else {
                     for (int i = half - 1; i >= 0; i--) positions.add(point(-w - hm - i * (w + hm), 0));
                     positions.add(point(0, 0));
-                    for (int i = 0; i < h; i++) positions.add(point(w + hm + i * (w + hm), 0));
+                    for (int i = 0; i < half; i++) positions.add(point(w + hm + i * (w + hm), 0));
                 }
                 break;
             case Vertical:
                 if (buttonNumber % 2 == 0) {
                     for (int i = half - 1; i >= 0; i--) positions.add(point(0, -h / 2 - vm / 2 - i * (h + vm)));
-                    for (int i = 0; i < h; i++) positions.add(point(0, h / 2 + vm / 2 + i * (h + vm)));
+                    for (int i = 0; i < half; i++) positions.add(point(0, h / 2 + vm / 2 + i * (h + vm)));
                 } else {
                     for (int i = half - 1; i >= 0; i--) positions.add(point(0, -h - vm - i * (h + vm)));
                     positions.add(point(0, 0));
-                    for (int i = 0; i < h; i++) positions.add(point(0, h + vm + i * (h + vm)));
+                    for (int i = 0; i < half; i++) positions.add(point(0, h + vm + i * (h + vm)));
                 }
                 break;
             case SC_1:
@@ -797,13 +797,13 @@ public class ButtonPlaceManager {
                 if (buttonNumber % 2 == 0) {
                     for (int i = half - 1; i >= 0; i--)
                         positions.add(point(-w / 2 - hm / 2 - i * (w + hm), 0));
-                    for (int i = 0; i < h; i++)
+                    for (int i = 0; i < half; i++)
                         positions.add(point(w / 2 + hm / 2 + i * (w + hm), 0));
                 } else {
                     for (int i = half - 1; i >= 0; i--)
                         positions.add(point(-w - hm - i * (w + hm), 0));
                     positions.add(point(0, 0));
-                    for (int i = 0; i < h; i++) positions.add(point(w + hm + i * (w + hm), 0));
+                    for (int i = 0; i < half; i++) positions.add(point(w + hm + i * (w + hm), 0));
                 }
                 break;
             case Vertical:

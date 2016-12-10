@@ -33,7 +33,6 @@ public class TextOutsideCircleButtonActivity extends AppCompatActivity {
         bmb.setPiecePlaceEnum(PiecePlaceEnum.DOT_1);
         bmb.setButtonPlaceEnum(ButtonPlaceEnum.SC_1);
         bmb.addBuilder(BuilderManager.getTextOutsideCircleButtonBuilder());
-        bmb.setButtonPlaceAlignmentEnum(ButtonPlaceAlignmentEnum.Right);
 
         ListView listView = (ListView) findViewById(R.id.list_view);
         assert listView != null;
