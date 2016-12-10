@@ -72,7 +72,7 @@ public abstract class BoomButtonBuilder {
     int subNormalTextColor = Color.WHITE;
     int subHighlightedTextColor = Color.WHITE;
     int subUnableTextColor = Color.WHITE;
-    Rect subTextRect = new Rect(Util.dp2px(70), Util.dp2px(35), Util.dp2px(280), Util.dp2px(45));
+    Rect subTextRect = new Rect(Util.dp2px(70), Util.dp2px(35), Util.dp2px(280), Util.dp2px(55));
     Rect subTextPadding = new Rect(0, 0, 0, 0);
     Typeface subTypeface = null;
     int subMaxLines = 1;

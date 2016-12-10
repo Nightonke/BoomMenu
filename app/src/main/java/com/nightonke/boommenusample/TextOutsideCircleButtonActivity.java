@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.nightonke.boommenu.BoomButtons.ButtonPlaceAlignmentEnum;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
 import com.nightonke.boommenu.ButtonEnum;
@@ -32,6 +33,7 @@ public class TextOutsideCircleButtonActivity extends AppCompatActivity {
         bmb.setPiecePlaceEnum(PiecePlaceEnum.DOT_1);
         bmb.setButtonPlaceEnum(ButtonPlaceEnum.SC_1);
         bmb.addBuilder(BuilderManager.getTextOutsideCircleButtonBuilder());
+        bmb.setButtonPlaceAlignmentEnum(ButtonPlaceAlignmentEnum.Right);
 
         ListView listView = (ListView) findViewById(R.id.list_view);
         assert listView != null;
