@@ -407,7 +407,7 @@ public class TextOutsideCircleButton extends BoomButton {
         }
 
         /**
-         * Set the text resource when boom-button is at highlighted-state.
+         * Set the text when boom-button is at highlighted-state.
          *
          * @param highlightedText text
          * @return the builder
@@ -418,7 +418,7 @@ public class TextOutsideCircleButton extends BoomButton {
         }
 
         /**
-         * Set the text resource when boom-button is at unable-state.
+         * Set the text when boom-button is at unable-state.
          *
          * @param unableText text
          * @return the builder
