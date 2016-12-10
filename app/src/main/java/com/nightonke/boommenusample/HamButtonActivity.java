@@ -33,7 +33,6 @@ public class HamButtonActivity extends AppCompatActivity {
         bmb.setPiecePlaceEnum(PiecePlaceEnum.HAM_1);
         bmb.setButtonPlaceEnum(ButtonPlaceEnum.HAM_1);
         bmb.addBuilder(BuilderManager.getHamButtonBuilder());
-        bmb.setButtonPlaceAlignmentEnum(ButtonPlaceAlignmentEnum.BL);
 
         ListView listView = (ListView) findViewById(R.id.list_view);
         assert listView != null;
