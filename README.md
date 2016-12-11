@@ -1,6 +1,6 @@
 # BoomMenu 
 [![Developer](https://img.shields.io/badge/Developer-Nightonke-red.svg)](https://github.com/Nightonke)
-[![Demo](https://img.shields.io/badge/Demo-Download-orange.svg)]()
+[![Demo](https://img.shields.io/badge/Demo-Download-orange.svg)](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V2.0.0.apk?raw=true)
 [![Download](https://api.bintray.com/packages/nightonke/maven/boommenu/images/download.svg)](https://bintray.com/nightonke/maven/boommenu)
 [![Lisense](https://img.shields.io/badge/License-Apache%202-lightgrey.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
@@ -102,3 +102,13 @@ If you still wanna use version 1.0.9 or below, you can find the README below:
 
 But I strongly suggest you to use the newest version.
 
+##What I'm Doing
+[![WoWoViewPager](https://img.shields.io/badge/%20WoWoViewPager%20-%20Android%20Library%20-brightgreen.svg)](https://github.com/Nightonke/WoWoViewPager)  
+[![BoomMenuButton-Android](https://img.shields.io/badge/%20BoomMenuButton%20-%20Android%20%20Library%20-green.svg)](https://github.com/Nightonke/BoomMenu)  
+[![CoCoin](https://img.shields.io/badge/%20CoCoin%20-%20Android%20App%20-yellowgreen.svg)](https://github.com/Nightonke/CoCoin)  
+[![BlurLockView](https://img.shields.io/badge/%20BlurLockView%20-%20Android%20Library%20-yellowgreen.svg)](https://github.com/Nightonke/BlurLockView)  
+[![LeeCo](https://img.shields.io/badge/%20LeeCo%20-%20Android%20App%20-yellow.svg)](https://github.com/Nightonke/LeeCo)  
+[![GithubWidget](https://img.shields.io/badge/%20GithubWidget%20-%20Android%20App%20-orange.svg)](https://github.com/Nightonke/GithubWidget)  
+[![JellyToggleButton](https://img.shields.io/badge/%20JellyToggleButton%20-%20Android%20Library%20-red.svg)](https://github.com/Nightonke/JellyToggleButton)  
+[![FaceOffToggleButton](https://img.shields.io/badge/%20FaceOffToggleButton%20-%20Android%20Library%20-lightgrey.svg)](https://github.com/Nightonke/FaceOffToggleButton)  
+[![BoomMenuButton-iOS](https://img.shields.io/badge/%20BoomMenuButton%20-%20iOS%20Library%20-blue.svg)](https://github.com/Nightonke/VHBoomMenuButton)  
