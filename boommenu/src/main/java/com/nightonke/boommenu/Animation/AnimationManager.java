@@ -61,22 +61,6 @@ public class AnimationManager {
                                          long delay,
                                          long duration,
                                          TimeInterpolator interpolator,
-                                         int... values) {
-        return animate(
-                target,
-                property,
-                delay,
-                duration,
-                interpolator,
-                null,
-                values);
-    }
-
-    public static ObjectAnimator animate(Object target,
-                                         String property,
-                                         long delay,
-                                         long duration,
-                                         TimeInterpolator interpolator,
                                          float... values) {
         return animate(
                 target,
