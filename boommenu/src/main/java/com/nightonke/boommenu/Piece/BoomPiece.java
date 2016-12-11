@@ -14,6 +14,8 @@ import android.widget.FrameLayout;
 
 public abstract class BoomPiece extends View {
 
+    private boolean requestLayoutNotFinish = false;
+
     public BoomPiece(Context context) {
         super(context);
     }
@@ -31,5 +33,18 @@ public abstract class BoomPiece extends View {
             layoutParams.height = height;
             setLayoutParams(layoutParams);
         }
+    }
+
+    @Override
+    public void requestLayout() {
+        if (requestLayoutNotFinish) return;
+        requestLayoutNotFinish = true;
+        super.requestLayout();
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        requestLayoutNotFinish = false;
     }
 }

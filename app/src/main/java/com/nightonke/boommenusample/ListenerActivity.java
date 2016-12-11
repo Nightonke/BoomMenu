@@ -49,7 +49,7 @@ public class ListenerActivity extends AppCompatActivity {
             @Override
             public void onClicked(int index, BoomButton boomButton) {
                 // If you have implement listeners for boom-buttons in builders,
-                // then you should add any listener here for duplicate callbacks.
+                // then you shouldn't add any listener here for duplicate callbacks.
             }
 
             @Override

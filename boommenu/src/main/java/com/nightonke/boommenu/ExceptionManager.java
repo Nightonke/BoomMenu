@@ -35,6 +35,11 @@ class ExceptionManager {
             throw new RuntimeException("Unknown boom-enum!");
     }
 
+    static void judge(ButtonEnum buttonEnum, PiecePlaceEnum piecePlaceEnum) {
+        if (piecePlaceEnum == PiecePlaceEnum.Share && buttonEnum == ButtonEnum.Ham)
+            throw new RuntimeException("Share style BMB is not support ham-boom-buttons");
+    }
+
     static void judge(PiecePlaceEnum piecePlaceEnum,
                       ButtonPlaceEnum buttonPlaceEnum,
                       ArrayList<BoomButtonBuilder> builders) {

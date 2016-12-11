@@ -30,22 +30,6 @@ public class AnimationManager {
                                          long duration,
                                          TimeInterpolator interpolator,
                                          AnimatorListenerAdapter listenerAdapter,
-                                         int... values) {
-        ObjectAnimator animator = ObjectAnimator.ofInt(target, property, values);
-        animator.setStartDelay(delay);
-        animator.setDuration(duration);
-        if (interpolator != null) animator.setInterpolator(interpolator);
-        if (listenerAdapter != null) animator.addListener(listenerAdapter);
-        animator.start();
-        return animator;
-    }
-
-    public static ObjectAnimator animate(Object target,
-                                         String property,
-                                         long delay,
-                                         long duration,
-                                         TimeInterpolator interpolator,
-                                         AnimatorListenerAdapter listenerAdapter,
                                          float... values) {
         ObjectAnimator animator = ObjectAnimator.ofFloat(target, property, values);
         animator.setStartDelay(delay);
@@ -70,24 +54,6 @@ public class AnimationManager {
                 interpolator,
                 null,
                 values);
-    }
-
-    public static void animate(String property,
-                               long delay,
-                               long duration,
-                               int[] values,
-                               TimeInterpolator interpolator,
-                               Object... targets) {
-        for (Object target : targets) {
-            animate(
-                    target,
-                    property,
-                    delay,
-                    duration,
-                    interpolator,
-                    null,
-                    values);
-        }
     }
 
     public static void animate(String property,

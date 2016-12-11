@@ -40,6 +40,8 @@ import com.nightonke.boommenu.Piece.PiecePlaceManager;
 
 import java.util.ArrayList;
 
+import static com.nightonke.boommenu.R.id.shadow;
+
 /**
  * Created by Weiping Huang at 14:33 on 16/11/6
  * For Personal Open Source
@@ -47,7 +49,7 @@ import java.util.ArrayList;
  * For more projects: https://github.com/Nightonke
  */
 
-public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClickListener {
+public class BoomMenuButton extends BMBFrameLayout implements InnerOnBoomButtonClickListener {
 
     // Basic
     private Context context;
@@ -64,6 +66,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     private int shadowOffsetY;
     private int shadowRadius;
     private int shadowColor;
+    private BMBShadow shadow;
 
     // Button
     private int buttonRadius;
@@ -73,7 +76,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     private int normalColor;
     private int highlightedColor;
     private int unableColor;
-    private FrameLayout button;
+    private BMBFrameLayout button;
 
     // Piece
     private ArrayList<BoomPiece> pieces;
@@ -181,8 +184,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
             // Shadow
             shadowEffect = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_shadowEffect, R.bool.default_bmb_shadow_effect);
             shadowRadius = Util.getDimenSize(typedArray, R.styleable.BoomMenuButton_bmb_shadowRadius, R.dimen.default_bmb_shadow_radius);
-            shadowOffsetX = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_shadowX, R.dimen.default_bmb_shadow_offset_x);
-            shadowOffsetY = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_shadowY, R.dimen.default_bmb_shadow_offset_y);
+            shadowOffsetX = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_shadowOffsetX, R.dimen.default_bmb_shadow_offset_x);
+            shadowOffsetY = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_shadowOffsetY, R.dimen.default_bmb_shadow_offset_y);
             shadowColor = Util.getColor(typedArray, R.styleable.BoomMenuButton_bmb_shadowColor, R.color.default_bmb_shadow_color);
 
             // Button
@@ -245,7 +248,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     }
 
     private void initShadow() {
-        BMBShadow shadow = (BMBShadow) findViewById(R.id.shadow);
+        if (shadow == null) shadow = (BMBShadow) findViewById(R.id.shadow);
         if (shadowEffect && backgroundEffect && !inList) {
             shadow.setShadowOffsetX(shadowOffsetX);
             shadow.setShadowOffsetY(shadowOffsetY);
@@ -258,11 +261,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     }
 
     private void initButton() {
-        button = (FrameLayout) findViewById(R.id.button);
-        LayoutParams params = (LayoutParams) button.getLayoutParams();
-        params.width = buttonRadius * 2;
-        params.height = buttonRadius * 2;
-        button.setLayoutParams(params);
+        if (button == null) button = (BMBFrameLayout) findViewById(R.id.button);
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -270,6 +269,18 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
             }
         });
 
+        setButtonSize();
+        setButtonBackground();
+    }
+
+    private void setButtonSize() {
+        LayoutParams params = (LayoutParams) button.getLayoutParams();
+        params.width = buttonRadius * 2;
+        params.height = buttonRadius * 2;
+        button.setLayoutParams(params);
+    }
+
+    private void setButtonBackground() {
         if (backgroundEffect && !inList) {
             if (rippleEffect && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 RippleDrawable rippleDrawable = new RippleDrawable(
@@ -286,6 +297,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
                         unableColor);
                 Util.setDrawable(button, stateListDrawable);
             }
+        } else {
+            Util.setDrawable(button, null);
         }
     }
 
@@ -338,6 +351,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     }
 
     private void createPieces() {
+        ExceptionManager.judge(buttonEnum, piecePlaceEnum);
         ExceptionManager.judge(piecePlaceEnum, buttonPlaceEnum, boomButtonBuilders);
         calculatePiecePositions();
         int pieceNumber = pieceNumber();
@@ -750,6 +764,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     private void createButtons() {
         boomButtons = new ArrayList<>(pieces.size());
         int buttonNumber = pieces.size();
+        ExceptionManager.judge(buttonEnum, piecePlaceEnum);
         ExceptionManager.judge(piecePlaceEnum, buttonPlaceEnum, boomButtonBuilders);
         switch (buttonEnum) {
             case SimpleCircle:
@@ -1020,6 +1035,13 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
         toLayout();
     }
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        button.setEnabled(enabled);
+        setButtonBackground();
+    }
+
     /**
      * Set enable attribute of the boom-button at index.
      *
@@ -1124,6 +1146,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setShadowEffect(boolean shadowEffect) {
         this.shadowEffect = shadowEffect;
+        initShadow();
     }
 
     public int getShadowOffsetX() {
@@ -1137,6 +1160,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setShadowOffsetX(int shadowOffsetX) {
         this.shadowOffsetX = shadowOffsetX;
+        initShadow();
     }
 
     public int getShadowOffsetY() {
@@ -1150,6 +1174,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setShadowOffsetY(int shadowOffsetY) {
         this.shadowOffsetY = shadowOffsetY;
+        initShadow();
     }
 
     public int getShadowRadius() {
@@ -1166,6 +1191,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setShadowRadius(int shadowRadius) {
         this.shadowRadius = shadowRadius;
+        initShadow();
     }
 
     public int getShadowColor() {
@@ -1179,6 +1205,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setShadowColor(int shadowColor) {
         this.shadowColor = shadowColor;
+        initShadow();
     }
 
     public int getButtonRadius() {
@@ -1193,6 +1220,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setButtonRadius(int buttonRadius) {
         this.buttonRadius = buttonRadius;
+        initButton();
+        toLayout();
     }
 
     public ButtonEnum getButtonEnum() {
@@ -1226,6 +1255,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setBackgroundEffect(boolean backgroundEffect) {
         this.backgroundEffect = backgroundEffect;
+        setButtonBackground();
+        toLayout();
     }
 
     public boolean isRippleEffect() {
@@ -1240,6 +1271,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setRippleEffect(boolean rippleEffect) {
         this.rippleEffect = rippleEffect;
+        setButtonBackground();
+        toLayout();
     }
 
     public int getNormalColor() {
@@ -1253,6 +1286,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setNormalColor(int normalColor) {
         this.normalColor = normalColor;
+        setButtonBackground();
+        toLayout();
     }
 
     public int getHighlightedColor() {
@@ -1266,6 +1301,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setHighlightedColor(int highlightedColor) {
         this.highlightedColor = highlightedColor;
+        setButtonBackground();
+        toLayout();
     }
 
     public int getUnableColor() {
@@ -1279,6 +1316,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setUnableColor(int unableColor) {
         this.unableColor = unableColor;
+        setButtonBackground();
+        toLayout();
     }
 
     public int getDotRadius() {
@@ -1292,6 +1331,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setDotRadius(int dotRadius) {
         this.dotRadius = dotRadius;
+        toLayout();
     }
 
     public int getHamWidth() {
@@ -1305,6 +1345,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setHamWidth(int hamWidth) {
         this.hamWidth = hamWidth;
+        toLayout();
     }
 
     public int getHamHeight() {
@@ -1318,6 +1359,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setHamHeight(int hamHeight) {
         this.hamHeight = hamHeight;
+        toLayout();
     }
 
     public int getPieceHorizontalMargin() {
@@ -1331,6 +1373,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setPieceHorizontalMargin(int pieceHorizontalMargin) {
         this.pieceHorizontalMargin = pieceHorizontalMargin;
+        toLayout();
     }
 
     public int getPieceVerticalMargin() {
@@ -1344,6 +1387,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setPieceVerticalMargin(int pieceVerticalMargin) {
         this.pieceVerticalMargin = pieceVerticalMargin;
+        toLayout();
     }
 
     public int getPieceInclinedMargin() {
@@ -1357,6 +1401,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setPieceInclinedMargin(int pieceInclinedMargin) {
         this.pieceInclinedMargin = pieceInclinedMargin;
+        toLayout();
     }
 
     public int getShareLineLength() {

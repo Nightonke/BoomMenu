@@ -81,7 +81,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        app:bmb_buttonEnum="simpleCircle"
+        app:bmb_buttonEnum="textInsideCircle"
         app:bmb_piecePlaceEnum="piecePlace_share"
         app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
         />
@@ -94,7 +94,7 @@
         android:layout_centerInParent="true"
         app:bmb_normalColor="@android:color/holo_blue_bright"
         app:bmb_highlightedColor="@android:color/holo_blue_dark"
-        app:bmb_buttonEnum="simpleCircle"
+        app:bmb_buttonEnum="textInsideCircle"
         app:bmb_piecePlaceEnum="piecePlace_share"
         app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
         />
@@ -108,7 +108,7 @@
         android:layout_alignParentEnd="true"
         app:bmb_normalColor="@android:color/holo_orange_light"
         app:bmb_highlightedColor="@android:color/holo_orange_dark"
-        app:bmb_buttonEnum="simpleCircle"
+        app:bmb_buttonEnum="textInsideCircle"
         app:bmb_piecePlaceEnum="piecePlace_share"
         app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
         />

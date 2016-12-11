@@ -12,8 +12,8 @@
         <attr name="bmb_shadowEffect" format="boolean|reference"/>
         <attr name="bmb_shadowRadius" format="dimension|reference"/>
         <attr name="bmb_shadowColor" format="color|reference"/>
-        <attr name="bmb_shadowX" format="dimension|reference"/>
-        <attr name="bmb_shadowY" format="dimension|reference"/>
+        <attr name="bmb_shadowOffsetX" format="dimension|reference"/>
+        <attr name="bmb_shadowOffsetY" format="dimension|reference"/>
 
         <!--Button-->
         <attr name="bmb_buttonRadius" format="dimension|reference"/>

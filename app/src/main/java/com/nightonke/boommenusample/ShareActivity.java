@@ -44,7 +44,7 @@ public class ShareActivity extends AppCompatActivity {
     private BoomMenuButton initBmb(BoomMenuButton bmb) {
         assert bmb != null;
         for (int i = 0; i < bmb.getButtonPlaceEnum().buttonNumber(); i++)
-            bmb.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());
+            bmb.addBuilder(BuilderManager.getTextInsideCircleButtonBuilder());
         return bmb;
     }
 
