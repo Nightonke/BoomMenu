@@ -8,8 +8,8 @@ android {
         applicationId "com.nightonke.boommenusample"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0.9"
+        versionCode 2000
+        versionName "2.0.0"
     }
     buildTypes {
         release {
