@@ -58,7 +58,7 @@ Add text outside circle buttons with a text and image outside for each to BMB.
 Add ham buttons with with a title, subtitle and image inside for each to BMB.  
 <img src="https://github.com/Nightonke/BoomMenu/raw/master/Pictures/BoomButton/HamButton.png" width="600">
 6. [Share Style](https://github.com/Nightonke/BoomMenu/wiki/Share-Style)  
-Make a share-style BMB(the last gif above).
+Make a share-style BMB.
 7. [Button Place Alignments](https://github.com/Nightonke/BoomMenu/wiki/Button-Place-Alignments)  
 Place all the buttons to anywhere on screen.  
 <img src="https://github.com/Nightonke/BoomMenu/blob/master/Pictures/button-place-alignment-enum/button-place-alignment-1.png" width="200">
