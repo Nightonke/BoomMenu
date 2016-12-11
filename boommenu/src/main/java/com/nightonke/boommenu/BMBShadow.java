@@ -26,7 +26,6 @@ public class BMBShadow extends FrameLayout {
     private int shadowRadius;
     private int shadowCornerRadius;
     private int shadowColor;
-    private boolean requestLayoutNotFinish = false;
 
     public BMBShadow(Context context) {
         super(context);
@@ -47,13 +46,6 @@ public class BMBShadow extends FrameLayout {
     }
 
     @Override
-    public void requestLayout() {
-        if (requestLayoutNotFinish) return;
-        requestLayoutNotFinish = true;
-        super.requestLayout();
-    }
-
-    @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         if(w > 0 && h > 0) {
@@ -65,7 +57,6 @@ public class BMBShadow extends FrameLayout {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         createShadow();
-        requestLayoutNotFinish = false;
     }
 
     private void createShadow() {

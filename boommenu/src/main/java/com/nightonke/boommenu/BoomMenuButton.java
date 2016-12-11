@@ -40,8 +40,6 @@ import com.nightonke.boommenu.Piece.PiecePlaceManager;
 
 import java.util.ArrayList;
 
-import static com.nightonke.boommenu.R.id.shadow;
-
 /**
  * Created by Weiping Huang at 14:33 on 16/11/6
  * For Personal Open Source
@@ -49,7 +47,7 @@ import static com.nightonke.boommenu.R.id.shadow;
  * For more projects: https://github.com/Nightonke
  */
 
-public class BoomMenuButton extends BMBFrameLayout implements InnerOnBoomButtonClickListener {
+public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClickListener {
 
     // Basic
     private Context context;
@@ -76,7 +74,7 @@ public class BoomMenuButton extends BMBFrameLayout implements InnerOnBoomButtonC
     private int normalColor;
     private int highlightedColor;
     private int unableColor;
-    private BMBFrameLayout button;
+    private FrameLayout button;
 
     // Piece
     private ArrayList<BoomPiece> pieces;
@@ -261,7 +259,7 @@ public class BoomMenuButton extends BMBFrameLayout implements InnerOnBoomButtonC
     }
 
     private void initButton() {
-        if (button == null) button = (BMBFrameLayout) findViewById(R.id.button);
+        if (button == null) button = (FrameLayout) findViewById(R.id.button);
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
