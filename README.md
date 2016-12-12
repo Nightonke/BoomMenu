@@ -21,22 +21,22 @@ And now the BMB-Android 2.0.0 comes.
 
 ##Gradle & Maven
 ```
-compile 'com.nightonke:boommenu:2.0.0'
+compile 'com.nightonke:boommenu:2.0.1'
 ```
 ```
 <dependency>
   <groupId>com.nightonke</groupId>
   <artifactId>boommenu</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
   <type>pom</type>
 </dependency>
 ```
 
 ##Demo
-<img src="https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V2.0.0.png" width="200">  
+<img src="https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu.png" width="200">  
 Or by link:  
-[Boom V2.0.0 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V2.0.0.apk?raw=true)  
-[Boom V2.0.0 in Fir](http://fir.im/tv85)  
+[Boom V2.0.1 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V2.0.1.apk?raw=true)  
+[Boom V2.0.1 in Fir](http://fir.im/tv85)  
 
 ##Wiki
 Check the [wiki](https://github.com/Nightonke/BoomMenu/wiki) to use BMB.
@@ -88,6 +88,8 @@ Example for use BMB in fragment.
 How to change the size or margins of dots on BMB?
 17. [Cache Optimization & Boom Area](https://github.com/Nightonke/BoomMenu/wiki/Cache-Optimization-&-Boom-Area)  
 What if I want BMB to boom in just its parent-view?
+1. [Version History](https://github.com/Nightonke/BoomMenu/wiki/Version-History)  
+What's more for every version?  
 18. [Structure for BMB](https://github.com/Nightonke/BoomMenu/wiki/Structure-for-BMB)  
 Structure for BMB when I designed it, for sharing and communicating.
 
