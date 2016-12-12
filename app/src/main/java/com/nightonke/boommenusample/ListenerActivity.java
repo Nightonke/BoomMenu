@@ -2,6 +2,7 @@ package com.nightonke.boommenusample;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.nightonke.boommenu.BoomButtons.BoomButton;
@@ -59,21 +60,25 @@ public class ListenerActivity extends AppCompatActivity {
 
             @Override
             public void onBoomWillHide() {
+                Log.d("BMB", "onBoomWillHide: " + bmb.isBoomed() + " " + bmb.isReBoomed());
                 textViewForAnimation.setText("Will RE-BOOM!!!");
             }
 
             @Override
             public void onBoomDidHide() {
+                Log.d("BMB", "onBoomDidHide: " + bmb.isBoomed() + " " + bmb.isReBoomed());
                 textViewForAnimation.setText("Did RE-BOOM!!!");
             }
 
             @Override
             public void onBoomWillShow() {
+                Log.d("BMB", "onBoomWillShow: " + bmb.isBoomed() + " " + bmb.isReBoomed());
                 textViewForAnimation.setText("Will BOOM!!!");
             }
 
             @Override
             public void onBoomDidShow() {
+                Log.d("BMB", "onBoomDidShow: " + bmb.isBoomed() + " " + bmb.isReBoomed());
                 textViewForAnimation.setText("Did BOOM!!!");
             }
         });

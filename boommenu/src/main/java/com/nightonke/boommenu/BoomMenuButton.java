@@ -247,7 +247,9 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
 
     private void initShadow() {
         if (shadow == null) shadow = (BMBShadow) findViewById(R.id.shadow);
-        if (shadowEffect && backgroundEffect && !inList) {
+        boolean hasShadow = shadowEffect && backgroundEffect && !inList;
+        shadow.setShadowEffect(hasShadow);
+        if (hasShadow) {
             shadow.setShadowOffsetX(shadowOffsetX);
             shadow.setShadowOffsetY(shadowOffsetY);
             shadow.setShadowColor(shadowColor);
@@ -296,7 +298,11 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
                 Util.setDrawable(button, stateListDrawable);
             }
         } else {
-            Util.setDrawable(button, null);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Util.setDrawable(button, Util.getSystemDrawable(context, android.R.attr.selectableItemBackgroundBorderless));
+            } else {
+                Util.setDrawable(button, Util.getSystemDrawable(context, android.R.attr.selectableItemBackground));
+            }
         }
     }
 
@@ -738,6 +744,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
                     onBackgroundClicked();
                 }
             });
+            background.setMotionEventSplittingEnabled(false);
             rootView.addView(background);
         }
     }
@@ -1483,6 +1490,24 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setOnBoomListener(OnBoomListener onBoomListener) {
         this.onBoomListener = onBoomListener;
+    }
+
+    /**
+     * Whether the BMB has finished booming.
+     *
+     * @return whether the BMB has finished booming
+     */
+    public boolean isBoomed() {
+        return boomStateEnum == BoomStateEnum.DidShow;
+    }
+
+    /**
+     * Whether the BMB has finished ReBooming.
+     *
+     * @return whether the BMB has finished ReBooming
+     */
+    public boolean isReBoomed() {
+        return boomStateEnum == BoomStateEnum.DidHide;
     }
 
     public int getDimColor() {

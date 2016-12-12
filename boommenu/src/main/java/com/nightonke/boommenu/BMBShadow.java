@@ -21,6 +21,7 @@ import android.widget.FrameLayout;
 
 public class BMBShadow extends FrameLayout {
 
+    private boolean shadowEffect = true;
     private int shadowOffsetX;
     private int shadowOffsetY;
     private int shadowRadius;
@@ -60,13 +61,17 @@ public class BMBShadow extends FrameLayout {
     }
 
     private void createShadow() {
-        Bitmap shadowBitmap = createShadowBitmap();
-        BitmapDrawable shadowDrawable = new BitmapDrawable(getResources(), shadowBitmap);
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) {
-            //noinspection deprecation
-            setBackgroundDrawable(shadowDrawable);
+        if (shadowEffect) {
+            Bitmap shadowBitmap = createShadowBitmap();
+            BitmapDrawable shadowDrawable = new BitmapDrawable(getResources(), shadowBitmap);
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) {
+                //noinspection deprecation
+                setBackgroundDrawable(shadowDrawable);
+            } else {
+                setBackground(shadowDrawable);
+            }
         } else {
-            setBackground(shadowDrawable);
+            clearShadow();
         }
     }
 
@@ -113,10 +118,11 @@ public class BMBShadow extends FrameLayout {
         this.shadowColor = shadowColor;
     }
 
+    public void setShadowEffect(boolean shadowEffect) {
+        this.shadowEffect = shadowEffect;
+    }
+
     public void clearShadow() {
-        shadowOffsetX = 0;
-        shadowOffsetY = 0;
-        shadowRadius = 0;
-        shadowColor = Color.TRANSPARENT;
+        Util.setDrawable(this, null);
     }
 }

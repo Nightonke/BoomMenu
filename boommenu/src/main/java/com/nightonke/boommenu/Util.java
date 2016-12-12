@@ -1,6 +1,5 @@
 package com.nightonke.boommenu;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -18,7 +17,6 @@ import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.StateSet;
-import android.view.Display;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -33,20 +31,6 @@ import java.util.Random;
  */
 
 public class Util {
-
-    public int screenHeight(Context context) {
-        Display display = ((Activity)context).getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        return size.y;
-    }
-
-    public int screenWidth(Context context) {
-        Display display = ((Activity)context).getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        return size.x;
-    }
 
     static void setVisibility(int visibility, View... views) {
         for (View view : views) if (view != null) view.setVisibility(visibility);
@@ -82,6 +66,14 @@ public class Util {
 
     public static int getColor(TypedArray typedArray, int id) {
         return getColor(typedArray, id, null);
+    }
+
+    public static Drawable getSystemDrawable(Context context, int id) {
+        int[] attrs = new int[] { id };
+        TypedArray ta = context.obtainStyledAttributes(attrs);
+        Drawable drawable = ta.getDrawable(0);
+        ta.recycle();
+        return drawable;
     }
 
     public static Drawable getDrawable(View view, int id, Resources.Theme theme) {
