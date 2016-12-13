@@ -24,12 +24,12 @@ public class ListViewActivity extends AppCompatActivity {
         listView.setAdapter(new MyAdapter());
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BoomMenuButton bmb = (BoomMenuButton)view.findViewById(R.id.bmb1);
-                bmb.boom();
-            }
-        });
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        BoomMenuButton bmb = (BoomMenuButton) view.findViewById(R.id.bmb1);
+                        bmb.boom();
+                    }
+                });
     }
 
     static class MyAdapter extends BaseAdapter {

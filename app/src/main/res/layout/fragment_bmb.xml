@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textSize="40sp"
-        android:gravity="center"/>
+        android:gravity="center" />
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb1"
@@ -24,8 +24,7 @@
         app:bmb_buttonEnum="simpleCircle"
         app:bmb_piecePlaceEnum="piecePlace_dot_9_1"
         app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
-        app:bmb_inFragment="true"
-        />
+        app:bmb_inFragment="true" />
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb2"
@@ -43,7 +42,6 @@
         app:bmb_piecePlaceEnum="piecePlace_dot_9_1"
         app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
         app:bmb_boomInWholeScreen="false"
-        app:bmb_inFragment="true"
-        />
+        app:bmb_inFragment="true" />
 
 </RelativeLayout>

@@ -31,7 +31,7 @@ public class ActionBarActivity extends AppCompatActivity {
         mTitleTextView.setText(R.string.app_name);
         mActionBar.setCustomView(actionBar);
         mActionBar.setDisplayShowCustomEnabled(true);
-        ((Toolbar) actionBar.getParent()).setContentInsetsAbsolute(0,0);
+        ((Toolbar) actionBar.getParent()).setContentInsetsAbsolute(0, 0);
 
         BoomMenuButton leftBmb = (BoomMenuButton) actionBar.findViewById(R.id.action_bar_left_bmb);
         BoomMenuButton rightBmb = (BoomMenuButton) actionBar.findViewById(R.id.action_bar_right_bmb);

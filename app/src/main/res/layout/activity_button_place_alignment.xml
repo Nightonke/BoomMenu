@@ -19,63 +19,55 @@
             android:id="@+id/top_margin_seek"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="0"
-            />
+            android:progress="0" />
 
         <TextView
             android:id="@+id/top_margin_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|end"
-            />
+            android:gravity="center_vertical|end" />
 
         <SeekBar
             android:id="@+id/bottom_margin_seek"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="0"
-            />
+            android:progress="0" />
 
         <TextView
             android:id="@+id/bottom_margin_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|end"
-            />
+            android:gravity="center_vertical|end" />
 
         <SeekBar
             android:id="@+id/left_margin_seek"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="0"
-            />
+            android:progress="0" />
 
         <TextView
             android:id="@+id/left_margin_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|end"
-            />
+            android:gravity="center_vertical|end" />
 
         <SeekBar
             android:id="@+id/right_margin_seek"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="0"
-            />
+            android:progress="0" />
 
         <TextView
             android:id="@+id/right_margin_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|end"
-            />
+            android:gravity="center_vertical|end" />
 
         <ListView
             android:id="@+id/list_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
     </LinearLayout>
 
@@ -86,7 +78,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        />
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

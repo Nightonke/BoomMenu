@@ -20,57 +20,49 @@
             android:id="@+id/show_delay_seek"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="0"
-            />
+            android:progress="0" />
 
         <TextView
             android:id="@+id/show_delay_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|end"
-            />
+            android:gravity="center_vertical|end" />
 
         <SeekBar
             android:id="@+id/show_duration_seek"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="0"
-            />
+            android:progress="0" />
 
         <TextView
             android:id="@+id/show_duration_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|end"
-            />
+            android:gravity="center_vertical|end" />
 
         <SeekBar
             android:id="@+id/hide_delay_seek"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="0"
-            />
+            android:progress="0" />
 
         <TextView
             android:id="@+id/hide_delay_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|end"
-            />
+            android:gravity="center_vertical|end" />
 
         <SeekBar
             android:id="@+id/hide_duration_seek"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="0"
-            />
+            android:progress="0" />
 
         <TextView
             android:id="@+id/hide_duration_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|end"
-            />
+            android:gravity="center_vertical|end" />
 
     </LinearLayout>
 
@@ -83,8 +75,7 @@
         android:layout_alignParentStart="true"
         app:bmb_buttonEnum="textInsideCircle"
         app:bmb_piecePlaceEnum="piecePlace_share"
-        app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
-        />
+        app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1" />
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb2"
@@ -96,8 +87,7 @@
         app:bmb_highlightedColor="@android:color/holo_blue_dark"
         app:bmb_buttonEnum="textInsideCircle"
         app:bmb_piecePlaceEnum="piecePlace_share"
-        app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
-        />
+        app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1" />
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb3"
@@ -110,7 +100,6 @@
         app:bmb_highlightedColor="@android:color/holo_orange_dark"
         app:bmb_buttonEnum="textInsideCircle"
         app:bmb_piecePlaceEnum="piecePlace_share"
-        app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
-        />
+        app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1" />
 
 </RelativeLayout>

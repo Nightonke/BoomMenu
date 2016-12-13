@@ -79,7 +79,7 @@ public class ButtonPlaceAlignmentActivity extends AppCompatActivity {
 
             }
         });
-        topMarginSeekText = (TextView)findViewById(R.id.top_margin_text);
+        topMarginSeekText = (TextView) findViewById(R.id.top_margin_text);
         topMarginSeekText.setText("Top margin = " + topMarginSeekBar.getProgress() + " pixel(s)");
     }
 
@@ -105,7 +105,7 @@ public class ButtonPlaceAlignmentActivity extends AppCompatActivity {
 
             }
         });
-        bottomMarginSeekText = (TextView)findViewById(R.id.bottom_margin_text);
+        bottomMarginSeekText = (TextView) findViewById(R.id.bottom_margin_text);
         bottomMarginSeekText.setText("Bottom margin = " + bottomMarginSeekBar.getProgress() + " pixel(s)");
     }
 
@@ -131,7 +131,7 @@ public class ButtonPlaceAlignmentActivity extends AppCompatActivity {
 
             }
         });
-        leftMarginSeekText = (TextView)findViewById(R.id.left_margin_text);
+        leftMarginSeekText = (TextView) findViewById(R.id.left_margin_text);
         leftMarginSeekText.setText("Left margin = " + leftMarginSeekBar.getProgress() + " pixel(s)");
     }
 
@@ -157,7 +157,7 @@ public class ButtonPlaceAlignmentActivity extends AppCompatActivity {
 
             }
         });
-        rightMarginSeekText = (TextView)findViewById(R.id.right_margin_text);
+        rightMarginSeekText = (TextView) findViewById(R.id.right_margin_text);
         rightMarginSeekText.setText("Right margin = " + rightMarginSeekBar.getProgress() + " pixel(s)");
     }
 

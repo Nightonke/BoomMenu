@@ -46,7 +46,8 @@ public class OrderExampleActivity extends AppCompatActivity {
 
     private List<String> getData() {
         List<String> data = new ArrayList<>();
-        for (int i = 0; i < OrderEnum.values().length - 1; i++) data.add(OrderEnum.values()[i] + "");
+        for (int i = 0; i < OrderEnum.values().length - 1; i++)
+            data.add(OrderEnum.values()[i] + "");
         return data;
     }
 }

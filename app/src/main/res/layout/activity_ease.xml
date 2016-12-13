@@ -22,8 +22,7 @@
         app:bmb_piecePlaceEnum="piecePlace_dot_9_1"
         app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
         app:bmb_showDuration="1000"
-        app:bmb_hideDuration="500"
-        />
+        app:bmb_hideDuration="500" />
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb2"
@@ -41,8 +40,7 @@
         app:bmb_showRotateEaseEnum="outExpo"
         app:bmb_hideMoveEaseEnum="inExpo"
         app:bmb_hideScaleEaseEnum="inExpo"
-        app:bmb_hideRotateEaseEnum="inExpo"
-        />
+        app:bmb_hideRotateEaseEnum="inExpo" />
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb3"
@@ -61,8 +59,7 @@
         app:bmb_showRotateEaseEnum="outBounce"
         app:bmb_hideMoveEaseEnum="outBounce"
         app:bmb_hideScaleEaseEnum="outBounce"
-        app:bmb_hideRotateEaseEnum="outBounce"
-        />
+        app:bmb_hideRotateEaseEnum="outBounce" />
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb4"
@@ -83,8 +80,7 @@
         app:bmb_hideScaleEaseEnum="inElastic"
         app:bmb_hideRotateEaseEnum="inElastic"
         app:bmb_showDelay="0"
-        app:bmb_hideDelay="0"
-        />
+        app:bmb_hideDelay="0" />
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb5"
@@ -103,8 +99,7 @@
         app:bmb_showRotateEaseEnum="inSine"
         app:bmb_hideMoveEaseEnum="inSine"
         app:bmb_hideScaleEaseEnum="inSine"
-        app:bmb_hideRotateEaseEnum="inSine"
-        />
+        app:bmb_hideRotateEaseEnum="inSine" />
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb6"
@@ -122,8 +117,7 @@
         app:bmb_showRotateEaseEnum="inCirc"
         app:bmb_hideMoveEaseEnum="inCirc"
         app:bmb_hideScaleEaseEnum="inCirc"
-        app:bmb_hideRotateEaseEnum="inCirc"
-        />
+        app:bmb_hideRotateEaseEnum="inCirc" />
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb7"
@@ -142,8 +136,7 @@
         app:bmb_showRotateEaseEnum="outCirc"
         app:bmb_hideMoveEaseEnum="outCirc"
         app:bmb_hideScaleEaseEnum="outCirc"
-        app:bmb_hideRotateEaseEnum="outCirc"
-        />
+        app:bmb_hideRotateEaseEnum="outCirc" />
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb8"
@@ -163,8 +156,7 @@
         app:bmb_hideMoveEaseEnum="inBack"
         app:bmb_hideScaleEaseEnum="inBack"
         app:bmb_hideRotateEaseEnum="inBack"
-        app:bmb_orderEnum="orderDefault"
-        />
+        app:bmb_orderEnum="orderDefault" />
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb9"
@@ -181,7 +173,6 @@
         app:bmb_hideScaleEaseEnum="inOutQuad"
         app:bmb_hideRotateEaseEnum="inOutQuad"
         app:bmb_showDelay="0"
-        app:bmb_hideDelay="0"
-        />
+        app:bmb_hideDelay="0" />
 
 </RelativeLayout>

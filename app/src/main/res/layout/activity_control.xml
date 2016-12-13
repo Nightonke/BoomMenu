@@ -16,25 +16,25 @@
         android:id="@+id/boom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="BOOM!"/>
+        android:text="BOOM!" />
 
     <Button
         android:id="@+id/reboom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Re-BOOM!"/>
+        android:text="Re-BOOM!" />
 
     <Button
         android:id="@+id/boom_immediately"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="BOOM immediately!"/>
+        android:text="BOOM immediately!" />
 
     <Button
         android:id="@+id/reboom_immediately"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Re-BOOM immediately!"/>
+        android:text="Re-BOOM immediately!" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -49,8 +49,7 @@
             app:bmb_buttonEnum="simpleCircle"
             app:bmb_piecePlaceEnum="piecePlace_dot_9_1"
             app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
-            app:bmb_boomInWholeScreen="false"
-            />
+            app:bmb_boomInWholeScreen="false" />
 
     </FrameLayout>
 
