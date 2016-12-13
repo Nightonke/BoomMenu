@@ -176,7 +176,7 @@ public class HamButton extends BoomButton {
         public Builder() {
             imageRect = new Rect(0, 0, Util.dp2px(60), Util.dp2px(60));
             textRect = new Rect(Util.dp2px(70), Util.dp2px(10), Util.dp2px(280), Util.dp2px(40));
-            textGravity = Gravity.START|Gravity.CENTER_VERTICAL;
+            textGravity = Gravity.START | Gravity.CENTER_VERTICAL;
             textSize = 15;
         }
 

@@ -23,12 +23,12 @@ final class Dot extends BoomPiece {
     @Override
     public void init(int color) {
         Drawable backgroundDrawable = Util.getDrawable(this, R.drawable.piece_dot, null);
-        ((GradientDrawable)backgroundDrawable).setColor(color);
+        ((GradientDrawable) backgroundDrawable).setColor(color);
         Util.setDrawable(this, backgroundDrawable);
     }
 
     @Override
     public void setColor(int color) {
-        ((GradientDrawable)getBackground()).setColor(color);
+        ((GradientDrawable) getBackground()).setColor(color);
     }
 }

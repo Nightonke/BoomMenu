@@ -5,21 +5,20 @@ package com.nightonke.boommenu.Animation;
  * For Personal Open Source
  * Contact me at 2584541288@qq.com or nightonke@outlook.com
  * For more projects: https://github.com/Nightonke
- *
  */
 
 public enum BoomEnum {
 
-    LINE              (0),
-    PARABOLA_1        (1),
-    PARABOLA_2        (2),
-    PARABOLA_3        (3),
-    PARABOLA_4        (4),
+    LINE(0),
+    PARABOLA_1(1),
+    PARABOLA_2(2),
+    PARABOLA_3(3),
+    PARABOLA_4(4),
     HORIZONTAL_THROW_1(5),
     HORIZONTAL_THROW_2(6),
-    RANDOM            (7),
+    RANDOM(7),
 
-    Unknown           (-1);
+    Unknown(-1);
 
     private final int value;
 

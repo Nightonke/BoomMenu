@@ -14,7 +14,7 @@ public class OnBoomListenerAdapter implements OnBoomListener {
     /**
      * When one of the boom-button is clicked.
      *
-     * @param index index of the clicked boom-button
+     * @param index      index of the clicked boom-button
      * @param boomButton the clicked boom-button
      */
     @Override

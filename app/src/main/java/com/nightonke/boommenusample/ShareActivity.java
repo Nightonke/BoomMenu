@@ -24,9 +24,9 @@ public class ShareActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
 
-        initBmb(bmb1 = (BoomMenuButton)findViewById(R.id.bmb1));
-        initBmb(bmb2 = (BoomMenuButton)findViewById(R.id.bmb2));
-        initBmb(bmb3 = (BoomMenuButton)findViewById(R.id.bmb3));
+        initBmb(bmb1 = (BoomMenuButton) findViewById(R.id.bmb1));
+        initBmb(bmb2 = (BoomMenuButton) findViewById(R.id.bmb2));
+        initBmb(bmb3 = (BoomMenuButton) findViewById(R.id.bmb3));
 
         bmb1.setShareLineLength(45);
         bmb1.setShareLineWidth(5);
@@ -72,7 +72,7 @@ public class ShareActivity extends AppCompatActivity {
 
             }
         });
-        showDelaySeekText = (TextView)findViewById(R.id.show_delay_text);
+        showDelaySeekText = (TextView) findViewById(R.id.show_delay_text);
         showDelaySeekText.setText("Show delay = " + showDelaySeekBar.getProgress() + " ms");
     }
 
@@ -100,7 +100,7 @@ public class ShareActivity extends AppCompatActivity {
 
             }
         });
-        showDurationSeekText = (TextView)findViewById(R.id.show_duration_text);
+        showDurationSeekText = (TextView) findViewById(R.id.show_duration_text);
         showDurationSeekText.setText("Show duration = " + showDurationSeekBar.getProgress() + " ms");
     }
 
@@ -128,7 +128,7 @@ public class ShareActivity extends AppCompatActivity {
 
             }
         });
-        hideDelaySeekText = (TextView)findViewById(R.id.hide_delay_text);
+        hideDelaySeekText = (TextView) findViewById(R.id.hide_delay_text);
         hideDelaySeekText.setText("Hide delay = " + hideDelaySeekBar.getProgress() + " ms");
     }
 
@@ -156,7 +156,7 @@ public class ShareActivity extends AppCompatActivity {
 
             }
         });
-        hideDurationSeekText = (TextView)findViewById(R.id.hide_duration_text);
+        hideDurationSeekText = (TextView) findViewById(R.id.hide_duration_text);
         hideDurationSeekText.setText("Hide duration = " + hideDurationSeekBar.getProgress() + " ms");
     }
 }

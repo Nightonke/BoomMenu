@@ -9,7 +9,7 @@ package com.nightonke.boommenu.BoomButtons;
 
 public enum ButtonPlaceEnum {
 
-    SC_1  (0),
+    SC_1(0),
     SC_2_1(1),
     SC_2_2(2),
     SC_3_1(3),
@@ -44,12 +44,12 @@ public enum ButtonPlaceEnum {
     SC_9_1(32),
     SC_9_2(33),
     SC_9_3(34),
-    HAM_1 (35),
-    HAM_2 (36),
-    HAM_3 (37),
-    HAM_4 (38),
-    HAM_5 (39),
-    HAM_6 (40),
+    HAM_1(35),
+    HAM_2(36),
+    HAM_3(37),
+    HAM_4(38),
+    HAM_5(39),
+    HAM_6(40),
 
     Horizontal(Integer.MAX_VALUE - 1),
     Vertical(Integer.MAX_VALUE),

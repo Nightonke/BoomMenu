@@ -658,7 +658,8 @@ public class TextOutsideCircleButton extends BoomButton {
          */
         public int getButtonContentHeight() {
             int height = buttonRadius * 2;
-            if (textRect != null) height = Math.max(height, textRect.bottom - shadowOffsetY - shadowRadius);
+            if (textRect != null)
+                height = Math.max(height, textRect.bottom - shadowOffsetY - shadowRadius);
             return height;
         }
 

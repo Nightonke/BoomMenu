@@ -76,7 +76,7 @@ public abstract class BoomButtonBuilder {
     Rect subTextPadding = new Rect(0, 0, 0, 0);
     Typeface subTypeface = null;
     int subMaxLines = 1;
-    int subTextGravity = Gravity.START|Gravity.CENTER_VERTICAL;
+    int subTextGravity = Gravity.START | Gravity.CENTER_VERTICAL;
     TextUtils.TruncateAt subEllipsize = TextUtils.TruncateAt.MARQUEE;
     int subTextSize = 10;
 

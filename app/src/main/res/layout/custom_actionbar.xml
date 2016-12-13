@@ -9,7 +9,7 @@
         android:id="@+id/action_bar_left_bmb"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        app:bmb_backgroundEffect="false"/>
+        app:bmb_backgroundEffect="false" />
 
     <TextView
         android:id="@+id/title_text"
@@ -20,8 +20,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#fff"
         android:layout_toRightOf="@+id/action_bar_left_bmb"
-        android:layout_toEndOf="@+id/action_bar_left_bmb"
-        />
+        android:layout_toEndOf="@+id/action_bar_left_bmb" />
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/action_bar_right_bmb"
@@ -30,6 +29,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         app:bmb_backgroundEffect="false"
-        app:bmb_boomEnum="boomParabola_2"/>
+        app:bmb_boomEnum="boomParabola_2" />
 
 </RelativeLayout>

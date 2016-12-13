@@ -85,9 +85,9 @@ public class ShareLinesView extends View {
         animationShowTotalDuration = animationShowDelay3;
 
         animationHideDelay1 = (pieceNumbers[2] - 1) * hideDelay + hideDuration;
-        animationHideDuration1 = (pieceNumbers[2]) * hideDelay  + hideDuration;
+        animationHideDuration1 = (pieceNumbers[2]) * hideDelay + hideDuration;
         animationHideDelay2 = hideDelay * (pieceNumbers[2] - 1 + pieceNumbers[1]) + hideDuration;
-        animationHideDuration2 = (pieceNumbers[2] + pieceNumbers[1]) * hideDelay  + hideDuration;
+        animationHideDuration2 = (pieceNumbers[2] + pieceNumbers[1]) * hideDelay + hideDuration;
         animationHideDelay3 = hideDelay * (pieceNumbers[2] - 1 + pieceNumbers[1] + pieceNumbers[0]) + hideDuration;
         animationHideTotalDuration = animationHideDelay3;
     }
@@ -96,12 +96,12 @@ public class ShareLinesView extends View {
         long current = (long) (process * animationShowTotalDuration);
         if (animationShowDelay1 < current && current <= animationShowDuration1) {
             processForLine1 = (animationShowDuration1 - current)
-                    / (float)(animationShowDuration1 - animationShowDelay1);
+                    / (float) (animationShowDuration1 - animationShowDelay1);
         } else if (animationShowDuration1 < current && current <= animationShowDelay2) {
             processForLine1 = 0;
         } else if (animationShowDelay2 < current && current <= animationShowDuration2) {
             processForLine2 = (animationShowDuration2 - current)
-                    / (float)(animationShowDuration2 - animationShowDelay2);
+                    / (float) (animationShowDuration2 - animationShowDelay2);
         } else if (animationShowDuration2 <= current) {
             processForLine1 = 0;
             processForLine2 = 0;
@@ -113,12 +113,12 @@ public class ShareLinesView extends View {
         long current = (long) (process * animationHideTotalDuration);
         if (animationHideDelay1 < current && current <= animationHideDuration1) {
             processForLine2 = 1 - (animationHideDuration1 - current)
-                    / (float)(animationHideDuration1 - animationHideDelay1);
+                    / (float) (animationHideDuration1 - animationHideDelay1);
         } else if (animationHideDuration1 < current && current <= animationHideDelay2) {
             processForLine2 = 1;
         } else if (animationHideDelay2 < current && current <= animationHideDuration2) {
             processForLine1 = 1 - (animationHideDuration2 - current)
-                    / (float)(animationHideDuration2 - animationHideDelay2);
+                    / (float) (animationHideDuration2 - animationHideDelay2);
         } else if (animationHideDuration2 <= current) {
             processForLine1 = 1;
             processForLine2 = 1;

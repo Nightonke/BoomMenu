@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/text_for_animation"
@@ -25,7 +25,7 @@
         android:layout_below="@+id/text_for_button"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb"
@@ -33,7 +33,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        />
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

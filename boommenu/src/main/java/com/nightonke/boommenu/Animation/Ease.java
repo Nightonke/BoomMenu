@@ -12,7 +12,6 @@ import static java.lang.Math.sin;
  * For Personal Open Source
  * Contact me at 2584541288@qq.com or nightonke@outlook.com
  * For more projects: https://github.com/Nightonke
- *
  */
 
 public class Ease implements TimeInterpolator {
@@ -197,22 +196,15 @@ public class Ease implements TimeInterpolator {
         float b = 0;
         float c = 1;
         float d = 1;
-        if ((offset /= d) < (1 / 2.75))
-        {
+        if ((offset /= d) < (1 / 2.75)) {
             return c * (7.5625f * offset * offset) + b;
-        }
-        else if (offset < (2 / 2.75))
-        {
+        } else if (offset < (2 / 2.75)) {
             offset -= (1.5 / 2.75);
             return c * (7.5625f * offset * offset + 0.75f) + b;
-        }
-        else if (offset < (2.5 / 2.75))
-        {
+        } else if (offset < (2.5 / 2.75)) {
             offset -= (2.25 / 2.75);
             return c * (7.5625f * offset * offset + 0.9375f) + b;
-        }
-        else
-        {
+        } else {
             offset -= 2.625 / 2.75;
             return c * (7.5625f * offset * offset + 0.984375f) + b;
         }
@@ -261,8 +253,8 @@ public class Ease implements TimeInterpolator {
         float p = d * 0.3f;
         float s = p / 4;
         offset -= 1;
-        return - (c * (float)pow(2, 10 * offset)
-                * (float)sin((offset * d - s) * (2 * (float)PI) / p)) + b;
+        return -(c * (float) pow(2, 10 * offset)
+                * (float) sin((offset * d - s) * (2 * (float) PI) / p)) + b;
     }
 
     private float getEaseOutElasticOffset(float offset) {
@@ -277,8 +269,8 @@ public class Ease implements TimeInterpolator {
         }
         float p = d * 0.3f;
         float s = p / 4;
-        return (c * (float)pow(2, -10 * offset)
-                * (float)sin((offset * d - s) * (2 * (float)PI) / p) + c + b);
+        return (c * (float) pow(2, -10 * offset)
+                * (float) sin((offset * d - s) * (2 * (float) PI) / p) + c + b);
     }
 
     private float getEaseInOutElasticOffset(float offset) {
@@ -295,12 +287,12 @@ public class Ease implements TimeInterpolator {
         float s = p / 4;
         if (offset < 1) {
             offset -= 1;
-            return -0.5f * (c * (float)pow(2, 10 * offset)
-                    * (float)sin((offset * d - s) * (2 * (float)PI) / p)) + b;
+            return -0.5f * (c * (float) pow(2, 10 * offset)
+                    * (float) sin((offset * d - s) * (2 * (float) PI) / p)) + b;
         } else {
             offset -= 1;
-            return c * (float)pow(2, -10 * offset)
-                    * (float)sin((offset * d - s) * (2 * (float)PI) / p) * 0.5f + c + b;
+            return c * (float) pow(2, -10 * offset)
+                    * (float) sin((offset * d - s) * (2 * (float) PI) / p) * 0.5f + c + b;
         }
     }
 }
