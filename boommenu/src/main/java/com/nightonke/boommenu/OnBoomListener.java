@@ -14,7 +14,7 @@ public interface OnBoomListener {
     /**
      * When one of the boom-button is clicked.
      *
-     * @param index index of the clicked boom-button
+     * @param index      index of the clicked boom-button
      * @param boomButton the clicked boom-button
      */
     void onClicked(int index, BoomButton boomButton);

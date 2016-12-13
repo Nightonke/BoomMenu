@@ -140,7 +140,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     private ArrayList<Point> endPositions;
     private float bottomHamButtonTopMargin = -1f;
 
-    private void ___________________________1_Initialization() {}
+    private void ___________________________1_Initialization() {
+    }
     //region Constructor and Initializer
 
     public BoomMenuButton(Context context) {
@@ -193,7 +194,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
             rippleEffect = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_rippleEffect, R.bool.default_bmb_ripple_effect);
             normalColor = Util.getColor(typedArray, R.styleable.BoomMenuButton_bmb_normalColor, R.color.default_bmb_normal_color);
             highlightedColor = Util.getColor(typedArray, R.styleable.BoomMenuButton_bmb_highlightedColor, R.color.default_bmb_highlighted_color);
-            if (highlightedColor == Color.TRANSPARENT) highlightedColor = Util.getDarkerColor(normalColor);
+            if (highlightedColor == Color.TRANSPARENT)
+                highlightedColor = Util.getDarkerColor(normalColor);
             unableColor = Util.getColor(typedArray, R.styleable.BoomMenuButton_bmb_unableColor, R.color.default_bmb_unable_color);
             if (unableColor == Color.TRANSPARENT) unableColor = Util.getLighterColor(normalColor);
 
@@ -319,7 +321,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
 
     //endregion
 
-    private void ___________________________2_Place_Pieces() {}
+    private void ___________________________2_Place_Pieces() {
+    }
     //region Place Pieces
 
     @Override
@@ -435,7 +438,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
             default:
                 throw new RuntimeException("Unknown piece-place-enum!");
         }
-        for (int i = 0; i < pieceNumber; i++) pieces.get(i).place(piecePositions.get(i).x, piecePositions.get(i).y, w, h);
+        for (int i = 0; i < pieceNumber; i++)
+            pieces.get(i).place(piecePositions.get(i).x, piecePositions.get(i).y, w, h);
     }
 
     private void calculatePiecePositions() {
@@ -476,7 +480,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
 
     //endregion
 
-    private void ___________________________3_Animation() {}
+    private void ___________________________3_Animation() {
+    }
     //region Animation
 
     /**
@@ -726,7 +731,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
 
     //endregion
 
-    private void ___________________________4_Support_Methods() {}
+    private void ___________________________4_Support_Methods() {
+    }
     //region Support Methods
 
     private void createBackground() {
@@ -761,7 +767,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
         Util.setVisibility(GONE, background);
         if (!cacheOptimization || inList || inFragment) {
             background.removeAllViews();
-            ((ViewGroup)background.getParent()).removeView(background);
+            ((ViewGroup) background.getParent()).removeView(background);
             background = null;
         }
     }
@@ -990,7 +996,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
         }
     }
 
-    private void ___________________________5_Builders_and_Buttons() {}
+    private void ___________________________5_Builders_and_Buttons() {
+    }
 
     //region Builders
 
@@ -1007,7 +1014,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     /**
      * Set a builder at index, notice that @needToLayout will be called.
      *
-     * @param index index
+     * @param index   index
      * @param builder builder
      */
     public void setBuilder(int index, BoomButtonBuilder builder) {
@@ -1050,7 +1057,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     /**
      * Set enable attribute of the boom-button at index.
      *
-     * @param index index of the boom-button
+     * @param index  index of the boom-button
      * @param enable whether the boom-button should be enable
      */
     public void setEnable(int index, boolean enable) {
@@ -1081,7 +1088,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
 
     //endregion
 
-    private void ___________________________6_Getters_and_Setters() {}
+    private void ___________________________6_Getters_and_Setters() {
+    }
 
     //region Getter and Setter
 
@@ -1558,7 +1566,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     public long getHideDuration() {
         return hideDuration;
     }
-    
+
     /**
      * Set the duration of every boom-button when re-booming.
      * Notice that this is not the total duration of the re-boom animation.

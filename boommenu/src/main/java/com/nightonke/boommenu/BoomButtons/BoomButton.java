@@ -546,7 +546,8 @@ public abstract class BoomButton extends FrameLayout {
     }
 
     private void setSubText(String string) {
-        if (string != null && subText != null && !string.equals(subText.getText())) subText.setText(string);
+        if (string != null && subText != null && !string.equals(subText.getText()))
+            subText.setText(string);
     }
 
     @Override
@@ -560,14 +561,24 @@ public abstract class BoomButton extends FrameLayout {
     }
 
     public abstract ArrayList<View> goneViews();
+
     public abstract ArrayList<View> rotateViews();
+
     public abstract int trueWidth();
+
     public abstract int trueHeight();
+
     public abstract int contentWidth();
+
     public abstract int contentHeight();
+
     public abstract void toPress();
+
     public abstract void toNormal();
+
     public abstract void setRotateAnchorPoints();
+
     public abstract void setSelfScaleAnchorPoints();
+
     public PointF centerPoint;
 }

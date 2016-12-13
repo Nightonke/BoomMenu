@@ -27,7 +27,6 @@ import java.util.Random;
  * For Personal Open Source
  * Contact me at 2584541288@qq.com or nightonke@outlook.com
  * For more projects: https://github.com/Nightonke
- *
  */
 
 public class Util {
@@ -36,7 +35,7 @@ public class Util {
         for (View view : views) if (view != null) view.setVisibility(visibility);
     }
 
-    public static int dp2px(float dp){
+    public static int dp2px(float dp) {
         DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
         float px = dp * (metrics.densityDpi / 160f);
         return Math.round(px);
@@ -69,7 +68,7 @@ public class Util {
     }
 
     public static Drawable getSystemDrawable(Context context, int id) {
-        int[] attrs = new int[] { id };
+        int[] attrs = new int[]{id};
         TypedArray ta = context.obtainStyledAttributes(attrs);
         Drawable drawable = ta.getDrawable(0);
         ta.recycle();
@@ -240,7 +239,7 @@ public class Util {
         return Color.HSVToColor(hsv);
     }
 
-    private static int[] colors = new int[] {
+    private static int[] colors = new int[]{
             Color.parseColor("#F44336"),
             Color.parseColor("#E91E63"),
             Color.parseColor("#9C27B0"),
@@ -277,7 +276,7 @@ public class Util {
 
     public static boolean pointInView(PointF point, View view) {
         return view.getLeft() <= point.x && point.x <= view.getRight() &&
-               view.getTop() <= point.y && point.y <= view.getBottom();
+                view.getTop() <= point.y && point.y <= view.getBottom();
     }
 
     private static Util ourInstance = new Util();

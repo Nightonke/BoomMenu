@@ -8,16 +8,16 @@ package com.nightonke.boommenu.Piece;
  */
 public enum PiecePlaceEnum {
 
-    DOT_1  ( 0),
-    DOT_2_1( 1),
-    DOT_2_2( 2),
-    DOT_3_1( 3),
-    DOT_3_2( 4),
-    DOT_3_3( 5),
-    DOT_3_4( 6),
-    DOT_4_1( 7),
-    DOT_4_2( 8),
-    DOT_5_1( 9),
+    DOT_1(0),
+    DOT_2_1(1),
+    DOT_2_2(2),
+    DOT_3_1(3),
+    DOT_3_2(4),
+    DOT_3_3(5),
+    DOT_3_4(6),
+    DOT_4_1(7),
+    DOT_4_2(8),
+    DOT_5_1(9),
     DOT_5_2(10),
     DOT_5_3(11),
     DOT_5_4(12),
@@ -44,14 +44,14 @@ public enum PiecePlaceEnum {
     DOT_9_2(33),
     DOT_9_3(34),
 
-    HAM_1  (35),
-    HAM_2  (36),
-    HAM_3  (37),
-    HAM_4  (38),
-    HAM_5  (39),
-    HAM_6  (40),
+    HAM_1(35),
+    HAM_2(36),
+    HAM_3(37),
+    HAM_4(38),
+    HAM_5(39),
+    HAM_6(40),
 
-    Share  (99999),
+    Share(99999),
 
     Unknown(-1);
 

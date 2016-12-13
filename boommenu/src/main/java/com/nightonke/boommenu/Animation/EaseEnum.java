@@ -5,7 +5,6 @@ package com.nightonke.boommenu.Animation;
  * For Personal Open Source
  * Contact me at 2584541288@qq.com or nightonke@outlook.com
  * For more projects: https://github.com/Nightonke
- *
  */
 
 public enum EaseEnum {

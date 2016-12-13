@@ -36,22 +36,30 @@ public class ButtonPlaceManager {
         switch (placeEnum) {
             case Horizontal:
                 if (buttonNumber % 2 == 0) {
-                    for (int i = h - 1; i >= 0; i--) positions.add(point(-r - hm / 2 - i * (2 * r + hm), 0));
-                    for (int i = 0; i < h; i++) positions.add(point(r + hm / 2 + i * (2 * r + hm), 0));
+                    for (int i = h - 1; i >= 0; i--)
+                        positions.add(point(-r - hm / 2 - i * (2 * r + hm), 0));
+                    for (int i = 0; i < h; i++)
+                        positions.add(point(r + hm / 2 + i * (2 * r + hm), 0));
                 } else {
-                    for (int i = h - 1; i >= 0; i--) positions.add(point(-2 * r - hm - i * (2 * r + hm), 0));
+                    for (int i = h - 1; i >= 0; i--)
+                        positions.add(point(-2 * r - hm - i * (2 * r + hm), 0));
                     positions.add(point(0, 0));
-                    for (int i = 0; i < h; i++) positions.add(point(2 * r + hm + i * (2 * r + hm), 0));
+                    for (int i = 0; i < h; i++)
+                        positions.add(point(2 * r + hm + i * (2 * r + hm), 0));
                 }
                 break;
             case Vertical:
                 if (buttonNumber % 2 == 0) {
-                    for (int i = h - 1; i >= 0; i--) positions.add(point(0, -r - vm / 2 - i * (2 * r + vm)));
-                    for (int i = 0; i < h; i++) positions.add(point(0, r + vm / 2 + i * (2 * r + vm)));
+                    for (int i = h - 1; i >= 0; i--)
+                        positions.add(point(0, -r - vm / 2 - i * (2 * r + vm)));
+                    for (int i = 0; i < h; i++)
+                        positions.add(point(0, r + vm / 2 + i * (2 * r + vm)));
                 } else {
-                    for (int i = h - 1; i >= 0; i--) positions.add(point(0, -2 * r - vm - i * (2 * r + vm)));
+                    for (int i = h - 1; i >= 0; i--)
+                        positions.add(point(0, -2 * r - vm - i * (2 * r + vm)));
                     positions.add(point(0, 0));
-                    for (int i = 0; i < h; i++) positions.add(point(0, 2 * r + vm + i * (2 * r + vm)));
+                    for (int i = 0; i < h; i++)
+                        positions.add(point(0, 2 * r + vm + i * (2 * r + vm)));
                 }
                 break;
             case SC_1:
@@ -167,7 +175,7 @@ public class ButtonPlaceManager {
                 positions.add(point(-2 * b, 0));
                 break;
             case SC_6_4:
-                b  = hm / 2 + r;
+                b = hm / 2 + r;
                 c = (float) (b / (Math.sqrt(3) / 2));
                 a = c / 2;
                 positions.add(point(0, -2 * b));
@@ -424,20 +432,26 @@ public class ButtonPlaceManager {
         switch (placeEnum) {
             case Horizontal:
                 if (buttonNumber % 2 == 0) {
-                    for (int i = half - 1; i >= 0; i--) positions.add(point(-w / 2 - hm / 2 - i * (w + hm), 0));
-                    for (int i = 0; i < half; i++) positions.add(point(w / 2  + hm / 2 + i * (w + hm), 0));
+                    for (int i = half - 1; i >= 0; i--)
+                        positions.add(point(-w / 2 - hm / 2 - i * (w + hm), 0));
+                    for (int i = 0; i < half; i++)
+                        positions.add(point(w / 2 + hm / 2 + i * (w + hm), 0));
                 } else {
-                    for (int i = half - 1; i >= 0; i--) positions.add(point(-w - hm - i * (w + hm), 0));
+                    for (int i = half - 1; i >= 0; i--)
+                        positions.add(point(-w - hm - i * (w + hm), 0));
                     positions.add(point(0, 0));
                     for (int i = 0; i < half; i++) positions.add(point(w + hm + i * (w + hm), 0));
                 }
                 break;
             case Vertical:
                 if (buttonNumber % 2 == 0) {
-                    for (int i = half - 1; i >= 0; i--) positions.add(point(0, -h / 2 - vm / 2 - i * (h + vm)));
-                    for (int i = 0; i < half; i++) positions.add(point(0, h / 2 + vm / 2 + i * (h + vm)));
+                    for (int i = half - 1; i >= 0; i--)
+                        positions.add(point(0, -h / 2 - vm / 2 - i * (h + vm)));
+                    for (int i = 0; i < half; i++)
+                        positions.add(point(0, h / 2 + vm / 2 + i * (h + vm)));
                 } else {
-                    for (int i = half - 1; i >= 0; i--) positions.add(point(0, -h - vm - i * (h + vm)));
+                    for (int i = half - 1; i >= 0; i--)
+                        positions.add(point(0, -h - vm - i * (h + vm)));
                     positions.add(point(0, 0));
                     for (int i = 0; i < half; i++) positions.add(point(0, h + vm + i * (h + vm)));
                 }
@@ -814,10 +828,13 @@ public class ButtonPlaceManager {
             case HAM_5:
             case HAM_6:
                 if (buttonNumber % 2 == 0) {
-                    for (int i = half - 1; i >= 0; i--) positions.add(point(0, -h / 2 - vm / 2 - i * (h + vm)));
-                    for (int i = 0; i < half; i++) positions.add(point(0, h / 2 + vm / 2 + i * (h + vm)));
+                    for (int i = half - 1; i >= 0; i--)
+                        positions.add(point(0, -h / 2 - vm / 2 - i * (h + vm)));
+                    for (int i = 0; i < half; i++)
+                        positions.add(point(0, h / 2 + vm / 2 + i * (h + vm)));
                 } else {
-                    for (int i = half - 1; i >= 0; i--) positions.add(point(0, -h - vm - i * (h + vm)));
+                    for (int i = half - 1; i >= 0; i--)
+                        positions.add(point(0, -h - vm - i * (h + vm)));
                     positions.add(point(0, 0));
                     for (int i = 0; i < half; i++) positions.add(point(0, h + vm + i * (h + vm)));
                 }
