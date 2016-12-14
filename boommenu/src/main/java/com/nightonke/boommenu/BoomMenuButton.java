@@ -22,8 +22,10 @@ import com.nightonke.boommenu.Animation.AnimationManager;
 import com.nightonke.boommenu.Animation.BoomEnum;
 import com.nightonke.boommenu.Animation.Ease;
 import com.nightonke.boommenu.Animation.EaseEnum;
+import com.nightonke.boommenu.Animation.HideRgbEvaluator;
 import com.nightonke.boommenu.Animation.OrderEnum;
 import com.nightonke.boommenu.Animation.ShareLinesView;
+import com.nightonke.boommenu.Animation.ShowRgbEvaluator;
 import com.nightonke.boommenu.BoomButtons.BoomButton;
 import com.nightonke.boommenu.BoomButtons.BoomButtonBuilder;
 import com.nightonke.boommenu.BoomButtons.ButtonPlaceAlignmentEnum;
@@ -47,7 +49,10 @@ import java.util.ArrayList;
  * For more projects: https://github.com/Nightonke
  */
 
+@SuppressWarnings("unused")
 public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClickListener {
+
+    protected static final String TAG = "BoomMenuButton";
 
     // Basic
     private Context context;
@@ -289,7 +294,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
                         null);
                 Util.setDrawable(button, rippleDrawable);
             } else {
-                StateListDrawable stateListDrawable = Util.getOvalStateListDrawable(
+                StateListDrawable stateListDrawable = Util.getOvalStateListBitmapDrawable(
                         button,
                         buttonRadius,
                         normalColor,
@@ -558,7 +563,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
                     "showProcess",
                     0,
                     immediately ? 1 : showDuration + showDelay * (pieces.size() - 1),
-                    new Ease(EaseEnum.Linear),
+                    Ease.getInstance(EaseEnum.Linear),
                     0f, 1f);
         }
     }
@@ -588,7 +593,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
                     "hideProcess",
                     0,
                     immediately ? 1 : hideDuration + hideDelay * (pieces.size() - 1),
-                    new Ease(EaseEnum.Linear),
+                    Ease.getInstance(EaseEnum.Linear),
                     0f, 1f);
         }
     }
@@ -659,29 +664,34 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
         boomButton.setSelfScaleAnchorPoints();
         boomButton.setScaleX(scaleX);
         boomButton.setScaleY(scaleY);
+        boomButton.setClickable(false);
         AnimationManager.calculateShowXY(
                 boomEnum,
                 new Point(
                         background.getLayoutParams().width,
                         background.getLayoutParams().height),
                 frames, startPosition, endPosition, xs, ys);
-        AnimationManager.animate(boomButton, "x", delay, duration, new Ease(showMoveEaseEnum), xs);
-        AnimationManager.animate(boomButton, "y", delay, duration, new Ease(showMoveEaseEnum), ys);
-        AnimationManager.rotate(boomButton, delay, duration, new Ease(showRotateEaseEnum), 0, rotateDegree);
-        AnimationManager.animate("alpha", delay, duration, new float[]{0, 1}, new Ease(EaseEnum.Linear), boomButton.goneViews());
-        AnimationManager.animate(boomButton, "scaleX", delay, duration, new Ease(showScaleEaseEnum), scaleX, 1);
-        AnimationManager.animate(boomButton, "scaleY", delay, duration, new Ease(showScaleEaseEnum),
+        if (boomButton.isNeededColorAnimation()) AnimationManager.animate(boomButton, "buttonColor", delay, duration, ShowRgbEvaluator.getInstance(), boomButton.pieceColor(), boomButton.buttonColor());
+        AnimationManager.animate(boomButton, "x", delay, duration, Ease.getInstance(showMoveEaseEnum), xs);
+        AnimationManager.animate(boomButton, "y", delay, duration, Ease.getInstance(showMoveEaseEnum), ys);
+        AnimationManager.rotate(boomButton, delay, duration, Ease.getInstance(showRotateEaseEnum), 0, rotateDegree);
+        AnimationManager.animate("alpha", delay, duration, new float[]{0, 1}, Ease.getInstance(EaseEnum.Linear), boomButton.goneViews());
+        AnimationManager.animate(boomButton, "scaleX", delay, duration, Ease.getInstance(showScaleEaseEnum), scaleX, 1);
+        AnimationManager.animate(boomButton, "scaleY", delay, duration, Ease.getInstance(showScaleEaseEnum),
                 new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationStart(Animator animation) {
                         super.onAnimationStart(animation);
                         Util.setVisibility(INVISIBLE, piece);
                         Util.setVisibility(VISIBLE, boomButton);
+                        boomButton.willShow();
                     }
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
+                        boomButton.setClickable(true);
+                        boomButton.didShow();
                         animatingViewNumber--;
                     }
                 }, scaleY, 1);
@@ -700,24 +710,33 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
         float scaleY = piece.getHeight() * 1.0f / boomButton.contentHeight();
         long delay = immediately ? 1 : hideDelay * delayFactor;
         long duration = immediately ? 1 : hideDuration;
+        boomButton.setClickable(false);
         AnimationManager.calculateHideXY(
                 boomEnum,
                 new Point(
                         background.getLayoutParams().width,
                         background.getLayoutParams().height),
                 frames, startPosition, endPosition, xs, ys);
-        AnimationManager.animate(boomButton, "x", delay, duration, new Ease(hideMoveEaseEnum), xs);
-        AnimationManager.animate(boomButton, "y", delay, duration, new Ease(hideMoveEaseEnum), ys);
-        AnimationManager.rotate(boomButton, delay, duration, new Ease(hideRotateEaseEnum), 0, rotateDegree);
-        AnimationManager.animate("alpha", delay, duration, new float[]{1, 0}, new Ease(EaseEnum.Linear), boomButton.goneViews());
-        AnimationManager.animate(boomButton, "scaleX", delay, duration, new Ease(hideScaleEaseEnum), 1, scaleX);
-        AnimationManager.animate(boomButton, "scaleY", delay, duration, new Ease(hideScaleEaseEnum),
+        if (boomButton.isNeededColorAnimation()) AnimationManager.animate(boomButton, "buttonColor", delay, duration, HideRgbEvaluator.getInstance(), boomButton.buttonColor(), boomButton.pieceColor());
+        AnimationManager.animate(boomButton, "x", delay, duration, Ease.getInstance(hideMoveEaseEnum), xs);
+        AnimationManager.animate(boomButton, "y", delay, duration, Ease.getInstance(hideMoveEaseEnum), ys);
+        AnimationManager.rotate(boomButton, delay, duration, Ease.getInstance(hideRotateEaseEnum), 0, rotateDegree);
+        AnimationManager.animate("alpha", delay, duration, new float[]{1, 0}, Ease.getInstance(EaseEnum.Linear), boomButton.goneViews());
+        AnimationManager.animate(boomButton, "scaleX", delay, duration, Ease.getInstance(hideScaleEaseEnum), 1, scaleX);
+        AnimationManager.animate(boomButton, "scaleY", delay, duration, Ease.getInstance(hideScaleEaseEnum),
                 new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        boomButton.willHide();
+                    }
+
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         Util.setVisibility(VISIBLE, piece);
                         Util.setVisibility(INVISIBLE, boomButton);
+                        boomButton.didHide();
                         boomButton.cleanListener();
                         animatingViewNumber--;
                     }
@@ -751,7 +770,12 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
 
     private ViewGroup getParentView() {
         if (boomInWholeScreen) {
-            return (ViewGroup) ((Activity) context).getWindow().getDecorView();
+            Activity activity = Util.scanForActivity(context);
+            if (activity == null) {
+                return (ViewGroup) getParent();
+            } else {
+                return (ViewGroup) activity.getWindow().getDecorView();
+            }
         } else {
             return (ViewGroup) getParent();
         }

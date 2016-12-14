@@ -7,9 +7,11 @@
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/action_bar_left_bmb"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        app:bmb_backgroundEffect="false"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:bmb_backgroundEffect="false"
+        app:bmb_showDuration="2000"
+        app:bmb_hideDuration="2000"/>
 
     <TextView
         android:id="@+id/title_text"
@@ -30,6 +32,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         app:bmb_backgroundEffect="false"
-        app:bmb_boomEnum="boomParabola_2"/>
+        app:bmb_boomEnum="boomParabola_2"
+        app:bmb_showDuration="2000"
+        app:bmb_hideDuration="2000"/>
 
 </RelativeLayout>

@@ -26,6 +26,9 @@ public abstract class BoomButtonBuilder {
     boolean rotateText = true;
     boolean containsSubText = true;
 
+    // piece
+    Integer pieceColor = null;
+
     // Shadow
     boolean shadowEffect = true;
     int shadowOffsetX = Util.dp2px(0);
@@ -97,7 +100,8 @@ public abstract class BoomButtonBuilder {
     int buttonCornerRadius = Util.dp2px(5);
 
     public int pieceColor() {
-        return unable ? unableColor : normalColor;
+        if (pieceColor == null) return unable ? unableColor : normalColor;
+        else return pieceColor;
     }
 
     public void setUnable(boolean unable) {

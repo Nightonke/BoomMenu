@@ -368,6 +368,17 @@ public class SimpleCircleButton extends BoomButton {
         }
 
         /**
+         * The color of boom-button when it is just a piece.
+         *
+         * @param pieceColor color of piece
+         * @return the builder
+         */
+        public Builder pieceColor(int pieceColor) {
+            this.pieceColor = pieceColor;
+            return this;
+        }
+
+        /**
          * Whether the boom-button is unable, default value is false.
          *
          * @param unable the unable

@@ -1,5 +1,6 @@
 package com.nightonke.boommenu.BoomButtons;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Point;
@@ -7,6 +8,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
@@ -49,6 +51,9 @@ public abstract class BoomButton extends FrameLayout {
     protected boolean rotateImage;
     protected boolean rotateText;
     protected boolean containsSubText;  // for ham button
+
+    // piece
+    protected Integer pieceColor = null;
 
     // Shadow
     protected boolean shadowEffect = true;
@@ -117,6 +122,10 @@ public abstract class BoomButton extends FrameLayout {
     protected int highlightedColor;
     protected int unableColor;
     protected boolean unable = false;
+    protected boolean rippleEffectWorks = true;
+    protected RippleDrawable rippleDrawable;
+    protected StateListDrawable nonRippleBitmapDrawable;
+    protected GradientDrawable nonRippleGradientDrawable;
 
     // Views
     protected ViewGroup layout;
@@ -135,6 +144,8 @@ public abstract class BoomButton extends FrameLayout {
         rotateImage = builder.rotateImage;
         rotateText = builder.rotateText;
         containsSubText = builder.containsSubText;
+
+        pieceColor = builder.pieceColor;
 
         shadowEffect = builder.shadowEffect;
         if (shadowEffect) {
@@ -197,6 +208,7 @@ public abstract class BoomButton extends FrameLayout {
         buttonWidth = builder.buttonWidth;
         buttonHeight = builder.buttonHeight;
         buttonCornerRadius = builder.buttonCornerRadius;
+        rippleEffectWorks = rippleEffect && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
 
         // for text-outside-circle-button
         textTopMargin = builder.textTopMargin;
@@ -351,6 +363,30 @@ public abstract class BoomButton extends FrameLayout {
         parent.addView(subText, params);
     }
 
+    @SuppressLint("NewApi")
+    protected void initCircleButtonDrawable() {
+        if (rippleEffectWorks) {
+            rippleDrawable = new RippleDrawable(
+                    ColorStateList.valueOf(highlightedColor),
+                    Util.getOvalDrawable(button, unable ? unableColor : normalColor),
+                    null);
+        } else {
+            nonRippleBitmapDrawable = Util.getOvalStateListBitmapDrawable(
+                    button,
+                    buttonRadius,
+                    normalColor,
+                    highlightedColor,
+                    unableColor);
+            if (isNeededColorAnimation()) {
+                // Then we need to create 2 drawables to perform the color-transaction effect.
+                // Because gradient-drawable is able to change the color,
+                // but not able to perform a click-effect.
+                nonRippleGradientDrawable = Util.getOvalDrawable(button, unable ? unableColor : normalColor);
+            }
+        }
+    }
+
+    @SuppressLint("NewApi")
     protected void initCircleButton() {
         button = (FrameLayout) findViewById(R.id.button);
         LayoutParams params = (LayoutParams) button.getLayoutParams();
@@ -366,21 +402,10 @@ public abstract class BoomButton extends FrameLayout {
             }
         });
 
-        if (rippleEffect && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            RippleDrawable rippleDrawable = new RippleDrawable(
-                    ColorStateList.valueOf(highlightedColor),
-                    Util.getOvalDrawable(button, unable ? unableColor : normalColor),
-                    null);
-            Util.setDrawable(button, rippleDrawable);
-        } else {
-            StateListDrawable stateListDrawable = Util.getOvalStateListDrawable(
-                    button,
-                    buttonRadius,
-                    normalColor,
-                    highlightedColor,
-                    unableColor);
-            Util.setDrawable(button, stateListDrawable);
-        }
+        initCircleButtonDrawable();
+        if (rippleEffectWorks) Util.setDrawable(button, rippleDrawable);
+        else Util.setDrawable(button, nonRippleBitmapDrawable);
+
         button.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -410,6 +435,32 @@ public abstract class BoomButton extends FrameLayout {
         });
     }
 
+    @SuppressLint("NewApi")
+    protected void initHamButtonDrawable() {
+        if (rippleEffectWorks) {
+            rippleDrawable = new RippleDrawable(
+                    ColorStateList.valueOf(highlightedColor),
+                    Util.getRectangleDrawable(button, buttonCornerRadius, unable ? unableColor : normalColor),
+                    null);
+        } else {
+            nonRippleBitmapDrawable = Util.getRectangleStateListBitmapDrawable(
+                    button,
+                    buttonWidth,
+                    buttonHeight,
+                    buttonCornerRadius,
+                    normalColor,
+                    highlightedColor,
+                    unableColor);
+            if (isNeededColorAnimation()) {
+                // Then we need to create 2 drawables to perform the color-transaction effect.
+                // Because gradient-drawable is able to change the color,
+                // but not able to perform a click-effect.
+                nonRippleGradientDrawable = Util.getRectangleDrawable(button, buttonCornerRadius, unable ? unableColor : normalColor);
+            }
+        }
+    }
+
+    @SuppressLint("NewApi")
     protected void initHamButton() {
         button = (FrameLayout) findViewById(R.id.button);
         LayoutParams params = (LayoutParams) button.getLayoutParams();
@@ -425,23 +476,10 @@ public abstract class BoomButton extends FrameLayout {
             }
         });
 
-        if (rippleEffect && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            RippleDrawable rippleDrawable = new RippleDrawable(
-                    ColorStateList.valueOf(highlightedColor),
-                    Util.getRectangleDrawable(button, buttonCornerRadius, unable ? unableColor : normalColor),
-                    null);
-            Util.setDrawable(button, rippleDrawable);
-        } else {
-            StateListDrawable stateListDrawable = Util.getRectangleStateListDrawable(
-                    button,
-                    buttonWidth,
-                    buttonHeight,
-                    buttonCornerRadius,
-                    normalColor,
-                    highlightedColor,
-                    unableColor);
-            Util.setDrawable(button, stateListDrawable);
-        }
+        initHamButtonDrawable();
+        if (rippleEffect) Util.setDrawable(button, rippleDrawable);
+        else Util.setDrawable(button, nonRippleBitmapDrawable);
+
         button.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -519,8 +557,10 @@ public abstract class BoomButton extends FrameLayout {
         else if (subHighlightedTextRes != -1) setSubText(subHighlightedTextRes);
         else if (subHighlightedText != null) setSubText(subHighlightedText);
 
-        if (unable) subText.setTextColor(subUnableTextColor);
-        else subText.setTextColor(subHighlightedTextColor);
+        if (subText != null) {
+            if (unable) subText.setTextColor(subUnableTextColor);
+            else subText.setTextColor(subHighlightedTextColor);
+        }
     }
 
     protected void toNormalSubText() {
@@ -529,8 +569,10 @@ public abstract class BoomButton extends FrameLayout {
         else if (subNormalTextRes != -1) setSubText(subNormalTextRes);
         else if (subNormalText != null) setSubText(subNormalText);
 
-        if (unable) subText.setTextColor(subUnableTextColor);
-        else subText.setTextColor(subNormalTextColor);
+        if (subText != null) {
+            if (unable) subText.setTextColor(subUnableTextColor);
+            else subText.setTextColor(subNormalTextColor);
+        }
     }
 
     private void setText(int stringRes) {
@@ -549,6 +591,22 @@ public abstract class BoomButton extends FrameLayout {
         if (string != null && subText != null && !string.equals(subText.getText())) subText.setText(string);
     }
 
+    public int pieceColor() {
+        if (pieceColor == null) return unable ? unableColor : normalColor;
+        else return pieceColor;
+    }
+
+    public int buttonColor() {
+        if (unable) return unableColor;
+        else return normalColor;
+    }
+
+    public boolean isNeededColorAnimation() {
+        if (pieceColor == null) return false;
+        if (unable) return pieceColor.compareTo(unableColor) != 0;
+        else return pieceColor.compareTo(normalColor) != 0;
+    }
+
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -559,14 +617,47 @@ public abstract class BoomButton extends FrameLayout {
         listener = null;
     }
 
+    public void willShow() {
+        if (!rippleEffectWorks && isNeededColorAnimation())
+            Util.setDrawable(button, nonRippleGradientDrawable);
+    }
+
+    public void didShow() {
+        if (!rippleEffectWorks && isNeededColorAnimation())
+            Util.setDrawable(button, nonRippleBitmapDrawable);
+    }
+
+    public void willHide() {
+        if (!rippleEffectWorks && isNeededColorAnimation())
+            Util.setDrawable(button, nonRippleGradientDrawable);
+    }
+
+    public void didHide() {
+
+    }
+
+    protected void setButtonColor(int color) {
+        if (rippleEffectWorks) {
+            if (rippleDrawable != null) ((GradientDrawable)rippleDrawable.getDrawable(0)).setColor(color);
+        } else {
+            if (nonRippleGradientDrawable != null) nonRippleGradientDrawable.setColor(color);
+        }
+    }
+
+    @Override
+    public void setClickable(boolean clickable) {
+        super.setClickable(clickable);
+        button.setClickable(clickable);
+    }
+
     public abstract ArrayList<View> goneViews();
     public abstract ArrayList<View> rotateViews();
     public abstract int trueWidth();
     public abstract int trueHeight();
     public abstract int contentWidth();
     public abstract int contentHeight();
-    public abstract void toPress();
-    public abstract void toNormal();
+    protected abstract void toPress();
+    protected abstract void toNormal();
     public abstract void setRotateAnchorPoints();
     public abstract void setSelfScaleAnchorPoints();
     public PointF centerPoint;

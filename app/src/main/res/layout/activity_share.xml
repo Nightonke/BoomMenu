@@ -97,6 +97,12 @@
         app:bmb_buttonEnum="textInsideCircle"
         app:bmb_piecePlaceEnum="piecePlace_share"
         app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
+        app:bmb_showMoveEaseEnum="outExpo"
+        app:bmb_showScaleEaseEnum="outExpo"
+        app:bmb_showRotateEaseEnum="outExpo"
+        app:bmb_hideMoveEaseEnum="inExpo"
+        app:bmb_hideScaleEaseEnum="inExpo"
+        app:bmb_hideRotateEaseEnum="inExpo"
         />
 
     <com.nightonke.boommenu.BoomMenuButton

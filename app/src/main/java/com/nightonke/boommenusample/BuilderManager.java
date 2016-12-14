@@ -1,5 +1,7 @@
 package com.nightonke.boommenusample;
 
+import android.graphics.Color;
+
 import com.nightonke.boommenu.BoomButtons.HamButton;
 import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
 import com.nightonke.boommenu.BoomButtons.TextInsideCircleButton;
@@ -50,10 +52,24 @@ public class BuilderManager {
                 .normalTextRes(R.string.text_inside_circle_button_text_normal);
     }
 
+    static TextInsideCircleButton.Builder getTextInsideCircleButtonBuilderWithDifferentPieceColor() {
+        return new TextInsideCircleButton.Builder()
+                .normalImageRes(getImageResource())
+                .normalTextRes(R.string.text_inside_circle_button_text_normal)
+                .pieceColor(Color.WHITE);
+    }
+
     static TextOutsideCircleButton.Builder getTextOutsideCircleButtonBuilder() {
         return new TextOutsideCircleButton.Builder()
                 .normalImageRes(getImageResource())
                 .normalTextRes(R.string.text_outside_circle_button_text_normal);
+    }
+
+    static TextOutsideCircleButton.Builder getTextOutsideCircleButtonBuilderWithDifferentPieceColor() {
+        return new TextOutsideCircleButton.Builder()
+                .normalImageRes(getImageResource())
+                .normalTextRes(R.string.text_outside_circle_button_text_normal)
+                .pieceColor(Color.WHITE);
     }
 
     static HamButton.Builder getHamButtonBuilder() {
@@ -61,6 +77,14 @@ public class BuilderManager {
                 .normalImageRes(getImageResource())
                 .normalTextRes(R.string.text_ham_button_text_normal)
                 .subNormalTextRes(R.string.text_ham_button_sub_text_normal);
+    }
+
+    static HamButton.Builder getHamButtonBuilderWithDifferentPieceColor() {
+        return new HamButton.Builder()
+                .normalImageRes(getImageResource())
+                .normalTextRes(R.string.text_ham_button_text_normal)
+                .subNormalTextRes(R.string.text_ham_button_sub_text_normal)
+                .pieceColor(Color.WHITE);
     }
 
     private static BuilderManager ourInstance = new BuilderManager();

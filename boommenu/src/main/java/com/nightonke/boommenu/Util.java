@@ -1,6 +1,8 @@
 package com.nightonke.boommenu;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -16,6 +18,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.StateSet;
 import android.view.View;
 
@@ -31,6 +34,18 @@ import java.util.Random;
  */
 
 public class Util {
+
+    static Activity scanForActivity(Context context) {
+        if (context == null) {
+            Log.w(BoomMenuButton.TAG, "scanForActivity: context is null!");
+            return null;
+        } else if (context instanceof Activity)
+            return (Activity)context;
+        else if (context instanceof ContextWrapper)
+            return scanForActivity(((ContextWrapper)context).getBaseContext());
+        Log.w(BoomMenuButton.TAG, "scanForActivity: context is null!");
+        return null;
+    }
 
     static void setVisibility(int visibility, View... views) {
         for (View view : views) if (view != null) view.setVisibility(visibility);
@@ -144,7 +159,8 @@ public class Util {
         return (float) Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
     }
 
-    public static StateListDrawable getOvalStateListDrawable(View view,
+    // Bitmap drawable in state-list drawable is able to perform a click-effect.
+    public static StateListDrawable getOvalStateListBitmapDrawable(View view,
                                                              int radius,
                                                              int normalColor,
                                                              int highlightedColor,
@@ -162,13 +178,32 @@ public class Util {
         return stateListDrawable;
     }
 
-    public static StateListDrawable getRectangleStateListDrawable(View view,
-                                                                  int width,
-                                                                  int height,
-                                                                  int cornerRadius,
-                                                                  int normalColor,
-                                                                  int highlightedColor,
-                                                                  int unableColor) {
+    // Gradient drawable in state-list drawable is not able to perform a click-effect.
+    public static StateListDrawable getOvalStateListGradientDrawable(View view,
+                                                                     int normalColor,
+                                                                     int highlightedColor,
+                                                                     int unableColor) {
+        StateListDrawable stateListDrawable = new StateListDrawable();
+        stateListDrawable.addState(
+                new int[]{android.R.attr.state_pressed},
+                getOvalDrawable(view, highlightedColor));
+        stateListDrawable.addState(
+                new int[]{-android.R.attr.state_enabled},
+                getOvalDrawable(view, unableColor));
+        stateListDrawable.addState(
+                StateSet.WILD_CARD,
+                getOvalDrawable(view, normalColor));
+        return stateListDrawable;
+    }
+
+    // Bitmap drawable in state-list drawable is able to perform a click-effect.
+    public static StateListDrawable getRectangleStateListBitmapDrawable(View view,
+                                                                        int width,
+                                                                        int height,
+                                                                        int cornerRadius,
+                                                                        int normalColor,
+                                                                        int highlightedColor,
+                                                                        int unableColor) {
         StateListDrawable stateListDrawable = new StateListDrawable();
         stateListDrawable.addState(
                 new int[]{android.R.attr.state_pressed},
@@ -179,6 +214,25 @@ public class Util {
         stateListDrawable.addState(
                 StateSet.WILD_CARD,
                 getRectangleBitmapDrawable(view, width, height, cornerRadius, normalColor));
+        return stateListDrawable;
+    }
+
+    // Gradient drawable in state-list drawable is not able to perform a click-effect.
+    public static StateListDrawable getRectangleStateListGradientDrawable(View view,
+                                                                          int cornerRadius,
+                                                                          int normalColor,
+                                                                          int highlightedColor,
+                                                                          int unableColor) {
+        StateListDrawable stateListDrawable = new StateListDrawable();
+        stateListDrawable.addState(
+                new int[]{android.R.attr.state_pressed},
+                getRectangleDrawable(view, cornerRadius, highlightedColor));
+        stateListDrawable.addState(
+                new int[]{-android.R.attr.state_enabled},
+                getRectangleDrawable(view, cornerRadius, unableColor));
+        stateListDrawable.addState(
+                StateSet.WILD_CARD,
+                getRectangleDrawable(view, cornerRadius, normalColor));
         return stateListDrawable;
     }
 

@@ -25,7 +25,7 @@ public class ShareActivity extends AppCompatActivity {
         setContentView(R.layout.activity_share);
 
         initBmb(bmb1 = (BoomMenuButton)findViewById(R.id.bmb1));
-        initBmb(bmb2 = (BoomMenuButton)findViewById(R.id.bmb2));
+        initBmbWithWhitePieceColor(bmb2 = (BoomMenuButton)findViewById(R.id.bmb2));
         initBmb(bmb3 = (BoomMenuButton)findViewById(R.id.bmb3));
 
         bmb1.setShareLineLength(45);
@@ -45,6 +45,13 @@ public class ShareActivity extends AppCompatActivity {
         assert bmb != null;
         for (int i = 0; i < bmb.getButtonPlaceEnum().buttonNumber(); i++)
             bmb.addBuilder(BuilderManager.getTextInsideCircleButtonBuilder());
+        return bmb;
+    }
+
+    private BoomMenuButton initBmbWithWhitePieceColor(BoomMenuButton bmb) {
+        assert bmb != null;
+        for (int i = 0; i < bmb.getButtonPlaceEnum().buttonNumber(); i++)
+            bmb.addBuilder(BuilderManager.getTextInsideCircleButtonBuilderWithDifferentPieceColor());
         return bmb;
     }
 

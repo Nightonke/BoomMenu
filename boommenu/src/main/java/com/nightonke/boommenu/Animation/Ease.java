@@ -3,6 +3,8 @@ package com.nightonke.boommenu.Animation;
 import android.animation.TimeInterpolator;
 import android.graphics.PointF;
 
+import java.util.ArrayList;
+
 import static java.lang.Math.PI;
 import static java.lang.Math.pow;
 import static java.lang.Math.sin;
@@ -23,15 +25,22 @@ public class Ease implements TimeInterpolator {
     private PointF c = new PointF();
     private Boolean ableToDefineWithControlPoints = true;
 
-    Ease(float startX, float startY, float endX, float endY) {
-        init(startX, startY, endX, endY);
+    private static ArrayList<Ease> eases;
+
+    public static Ease getInstance(EaseEnum easeEnum) {
+        if (eases == null) {
+            eases = new ArrayList<>(EaseEnum.values().length);
+            for (int length = EaseEnum.values().length; length > 0; length--) eases.add(null);
+        }
+        Ease ease = eases.get(easeEnum.getValue());
+        if (ease == null) {
+            ease = new Ease(easeEnum);
+            eases.set(easeEnum.getValue(), ease);
+        }
+        return ease;
     }
 
-    Ease(double startX, double startY, double endX, double endY) {
-        init(startX, startY, endX, endY);
-    }
-
-    public Ease(EaseEnum easeEnum) {
+    private Ease(EaseEnum easeEnum) {
         switch (easeEnum) {
             case EaseInBack:
                 init(0.6, -0.2, 0.735, 0.045);
@@ -115,11 +124,11 @@ public class Ease implements TimeInterpolator {
             case EaseOutElastic:
             case EaseInOutElastic:
                 ableToDefineWithControlPoints = false;
-                this.easeEnum = easeEnum;
                 break;
             default:
                 throw new RuntimeException("Ease-enum not found!");
         }
+        this.easeEnum = easeEnum;
     }
 
     @Override

@@ -99,13 +99,23 @@ public class AnimationManager {
             long delay,
             long duration,
             TypeEvaluator evaluator,
+            int... values) {
+        return animate(target, property, delay, duration, evaluator, null, values);
+    }
+
+    public static ObjectAnimator animate(
+            Object target,
+            String property,
+            long delay,
+            long duration,
+            TypeEvaluator evaluator,
             AnimatorListenerAdapter listenerAdapter,
             int... values) {
         ObjectAnimator animator = ObjectAnimator.ofInt(target, property, values);
         animator.setStartDelay(delay);
         animator.setDuration(duration);
         animator.setEvaluator(evaluator);
-        animator.addListener(listenerAdapter);
+        if (listenerAdapter != null) animator.addListener(listenerAdapter);
         animator.start();
         return animator;
     }
