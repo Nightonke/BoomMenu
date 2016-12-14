@@ -73,7 +73,7 @@ Use different and cute ease-animations for buttons.
 1. [Different Order for Buttons](https://github.com/Nightonke/BoomMenu/wiki/Different-Order-for-Buttons)  
 Different order enum for boom-buttons.
 10. [Other Animations Attributes for Buttons](https://github.com/Nightonke/BoomMenu/wiki/Other-Animations-Attributes-for-Buttons)  
-Delay, duration, rotate-degrees...
+Delay, duration, rotate-degrees, frames...
 11. [Click Event and Listener](https://github.com/Nightonke/BoomMenu/wiki/Click-Event-and-Listener)  
 Listener for clicking each button or animation-states.
 12. [Control BMB](https://github.com/Nightonke/BoomMenu/wiki/Control-BMB)  
