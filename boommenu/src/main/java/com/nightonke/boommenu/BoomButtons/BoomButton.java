@@ -366,10 +366,12 @@ public abstract class BoomButton extends FrameLayout {
     @SuppressLint("NewApi")
     protected void initCircleButtonDrawable() {
         if (rippleEffectWorks) {
-            rippleDrawable = new RippleDrawable(
+            RippleDrawable rippleDrawable = new RippleDrawable(
                     ColorStateList.valueOf(highlightedColor),
                     Util.getOvalDrawable(button, unable ? unableColor : normalColor),
                     null);
+            Util.setDrawable(button, rippleDrawable);
+            this.rippleDrawable = rippleDrawable;
         } else {
             nonRippleBitmapDrawable = Util.getOvalStateListBitmapDrawable(
                     button,
@@ -383,6 +385,7 @@ public abstract class BoomButton extends FrameLayout {
                 // but not able to perform a click-effect.
                 nonRippleGradientDrawable = Util.getOvalDrawable(button, unable ? unableColor : normalColor);
             }
+            Util.setDrawable(button, nonRippleBitmapDrawable);
         }
     }
 
@@ -403,8 +406,6 @@ public abstract class BoomButton extends FrameLayout {
         });
 
         initCircleButtonDrawable();
-        if (rippleEffectWorks) Util.setDrawable(button, rippleDrawable);
-        else Util.setDrawable(button, nonRippleBitmapDrawable);
 
         button.setOnTouchListener(new OnTouchListener() {
             @Override
@@ -438,10 +439,12 @@ public abstract class BoomButton extends FrameLayout {
     @SuppressLint("NewApi")
     protected void initHamButtonDrawable() {
         if (rippleEffectWorks) {
-            rippleDrawable = new RippleDrawable(
+            RippleDrawable rippleDrawable = new RippleDrawable(
                     ColorStateList.valueOf(highlightedColor),
                     Util.getRectangleDrawable(button, buttonCornerRadius, unable ? unableColor : normalColor),
                     null);
+            Util.setDrawable(button, rippleDrawable);
+            this.rippleDrawable = rippleDrawable;
         } else {
             nonRippleBitmapDrawable = Util.getRectangleStateListBitmapDrawable(
                     button,
@@ -457,6 +460,7 @@ public abstract class BoomButton extends FrameLayout {
                 // but not able to perform a click-effect.
                 nonRippleGradientDrawable = Util.getRectangleDrawable(button, buttonCornerRadius, unable ? unableColor : normalColor);
             }
+            Util.setDrawable(button, nonRippleBitmapDrawable);
         }
     }
 
@@ -477,8 +481,6 @@ public abstract class BoomButton extends FrameLayout {
         });
 
         initHamButtonDrawable();
-        if (rippleEffect) Util.setDrawable(button, rippleDrawable);
-        else Util.setDrawable(button, nonRippleBitmapDrawable);
 
         button.setOnTouchListener(new OnTouchListener() {
             @Override

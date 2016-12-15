@@ -44,6 +44,14 @@ public class SimpleCircleButtonActivity extends AppCompatActivity {
                 bmb.clearBuilders();
                 for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++)
                     bmb.addBuilder(BuilderManager.getSimpleCircleButtonBuilder());
+                // Still don't know why pieces' width and height are zero in some low system.
+                // But by this method, the problem
+                bmb.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        bmb.requestLayout();
+                    }
+                });
             }
         });
     }
