@@ -1,6 +1,6 @@
 # BoomMenu 
 [![Developer](https://img.shields.io/badge/Developer-Nightonke-red.svg)](https://github.com/Nightonke)
-[![Demo](https://img.shields.io/badge/Demo-Download-orange.svg)](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V2.0.0.apk?raw=true)
+[![Demo](https://img.shields.io/badge/Demo-Download-orange.svg)](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V2.0.2.apk?raw=true)
 [![Download](https://api.bintray.com/packages/nightonke/maven/boommenu/images/download.svg)](https://bintray.com/nightonke/maven/boommenu)
 [![Lisense](https://img.shields.io/badge/License-Apache%202-lightgrey.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
@@ -21,13 +21,13 @@ And now the BMB-Android 2.0.0 comes.
 
 ##Gradle & Maven
 ```
-compile 'com.nightonke:boommenu:2.0.1'
+compile 'com.nightonke:boommenu:2.0.2'
 ```
 ```
 <dependency>
   <groupId>com.nightonke</groupId>
   <artifactId>boommenu</artifactId>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
   <type>pom</type>
 </dependency>
 ```
@@ -35,8 +35,8 @@ compile 'com.nightonke:boommenu:2.0.1'
 ##Demo
 <img src="https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu.png" width="200">  
 Or by link:  
-[Boom V2.0.1 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V2.0.1.apk?raw=true)  
-[Boom V2.0.1 in Fir](http://fir.im/tv85)  
+[Boom V2.0.2 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V2.0.2.apk?raw=true)  
+[Boom V2.0.2 in Fir](http://fir.im/tv85)  
 
 ##Wiki
 Check the [wiki](https://github.com/Nightonke/BoomMenu/wiki) to use BMB.
