@@ -15,63 +15,70 @@ import java.util.ArrayList;
  */
 class ExceptionManager {
 
-    static void judge(PiecePlaceEnum piecePlaceEnum) {
+    static void judge(PiecePlaceEnum piecePlaceEnum,
+                      ButtonPlaceEnum buttonPlaceEnum,
+                      ButtonEnum buttonEnum,
+                      BoomEnum boomEnum,
+                      ArrayList<BoomButtonBuilder> boomButtonBuilders) {
+        judge(piecePlaceEnum);
+        judge(buttonPlaceEnum);
+        judge(buttonEnum);
+        judge(boomEnum);
+        judge(boomButtonBuilders);
+
+        int pieces = piecePlaceEnum.pieceNumber();
+        int buttons = buttonPlaceEnum.buttonNumber();
+        int builders = boomButtonBuilders.size();
+
+        if (pieces == -1) {
+            if (PiecePlaceEnum.Share == piecePlaceEnum) {
+                int minPieces = piecePlaceEnum.minPieceNumber();
+                int maxPieces = piecePlaceEnum.maxPieceNumber();
+                if (buttonPlaceEnum.buttonNumber() < minPieces
+                        || buttonPlaceEnum.buttonNumber() > maxPieces) {
+                    throw new RuntimeException("ButtonPlaceEnum(" + buttonPlaceEnum + ") is not match for PiecePlaceEnum(" + piecePlaceEnum + ")!");
+                } else if (builders < minPieces || builders > maxPieces) {
+                    throw new RuntimeException("Number of builders(" + builders + ") is not match for PiecePlaceEnum(" + piecePlaceEnum + ")!");
+                } else if (buttonEnum == ButtonEnum.Ham) {
+                    throw new RuntimeException("Share style BMB is not support ham-boom-buttons");
+                }
+            }
+        }
+
+        if (pieces != buttons
+                && buttonPlaceEnum != ButtonPlaceEnum.Horizontal
+                && buttonPlaceEnum != ButtonPlaceEnum.Vertical
+                && piecePlaceEnum != PiecePlaceEnum.Share) {
+            throw new RuntimeException("Number of pieces is not equal to buttons'!");
+        }
+        if (pieces != builders && piecePlaceEnum != PiecePlaceEnum.Share)
+            throw new RuntimeException("Number of builders is not equal to buttons'!");
+
+    }
+
+    private static void judge(PiecePlaceEnum piecePlaceEnum) {
         if (piecePlaceEnum == null || piecePlaceEnum == PiecePlaceEnum.Unknown)
             throw new RuntimeException("Unknown piece-place-enum!");
     }
 
-    static void judge(ButtonPlaceEnum buttonPlaceEnum) {
+    private static void judge(ButtonPlaceEnum buttonPlaceEnum) {
         if (buttonPlaceEnum == null || buttonPlaceEnum == ButtonPlaceEnum.Unknown)
             throw new RuntimeException("Unknown button-place-enum!");
     }
 
-    static void judge(ButtonEnum buttonEnum) {
+    private static void judge(ArrayList<BoomButtonBuilder> boomButtonBuilders) {
+        if (boomButtonBuilders == null || boomButtonBuilders.size() == 0)
+            throw new RuntimeException("Empty builders!");
+    }
+
+    private static void judge(ButtonEnum buttonEnum) {
         if (buttonEnum == null || buttonEnum == ButtonEnum.Unknown)
             throw new RuntimeException("Unknown button-enum!");
     }
 
-    static void judge(BoomEnum boomEnum) {
+    private static void judge(BoomEnum boomEnum) {
         if (boomEnum == null || boomEnum == BoomEnum.Unknown)
             throw new RuntimeException("Unknown boom-enum!");
-    }
-
-    static void judge(ButtonEnum buttonEnum, PiecePlaceEnum piecePlaceEnum) {
-        if (piecePlaceEnum == PiecePlaceEnum.Share && buttonEnum == ButtonEnum.Ham)
-            throw new RuntimeException("Share style BMB is not support ham-boom-buttons");
-    }
-
-    static void judge(PiecePlaceEnum piecePlaceEnum,
-                      ButtonPlaceEnum buttonPlaceEnum,
-                      ArrayList<BoomButtonBuilder> builders) {
-        judge(piecePlaceEnum);
-        judge(buttonPlaceEnum);
-        int piecePlaceNumber = piecePlaceEnum.pieceNumber();
-        int buttonPlaceNumber = buttonPlaceEnum.buttonNumber();
-        if (piecePlaceNumber == -1) {
-            if (piecePlaceEnum == PiecePlaceEnum.Share) {
-                int minPieceNumber = piecePlaceEnum.minPieceNumber();
-                int maxPieceNumber = piecePlaceEnum.maxPieceNumber();
-                if (buttonPlaceEnum.buttonNumber() < minPieceNumber
-                        || buttonPlaceEnum.buttonNumber() > maxPieceNumber) {
-                    throw new RuntimeException("ButtonPlaceEnum(" + buttonPlaceEnum + ") is not match for PiecePlaceEnum(" + piecePlaceEnum + ")!");
-                } else if (builders.size() < minPieceNumber || builders.size() > maxPieceNumber) {
-                    throw new RuntimeException("Number of builders(" + builders.size() + ") is not match for PiecePlaceEnum(" + piecePlaceEnum + ")!");
-                }
-            } else {
-                throw new RuntimeException("Unknown piece-place-enum!");
-            }
-        }
-        if (buttonPlaceNumber == -1)
-            throw new RuntimeException("Unknown button-place-enum!");
-        if (piecePlaceNumber != buttonPlaceNumber
-                && buttonPlaceEnum != ButtonPlaceEnum.Horizontal
-                && buttonPlaceEnum != ButtonPlaceEnum.Vertical
-                && piecePlaceEnum != PiecePlaceEnum.Share)
-            throw new RuntimeException("Number of pieces is not equal to buttons'!");
-        if (builders == null || builders.size() == 0)
-            throw new RuntimeException("Empty builders!");
-        if (piecePlaceNumber != builders.size() && piecePlaceEnum != PiecePlaceEnum.Share)
-            throw new RuntimeException("Number of builders is not equal to buttons'!");
     }
 
     private static ExceptionManager ourInstance = new ExceptionManager();

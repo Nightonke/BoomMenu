@@ -6,6 +6,7 @@
     <bool name="default_bmb_boomInWholeScreen">true</bool>
     <bool name="default_bmb_inList">false</bool>
     <bool name="default_bmb_inFragment">false</bool>
+    <bool name="default_bmb_backPressListened">true</bool>
 
     <!--Shadow-->
     <bool name="default_bmb_shadow_effect">true</bool>
@@ -24,24 +25,24 @@
     <color name="default_bmb_unable_color">#00000000</color>
 
     <!--Piece-->
-    <dimen name="default_bmb_dotRadius">6px</dimen>
-    <dimen name="default_bmb_hamWidth">40px</dimen>
-    <dimen name="default_bmb_hamHeight">6px</dimen>
-    <dimen name="default_bmb_pieceHorizontalMargin">5px</dimen>
-    <dimen name="default_bmb_pieceVerticalMargin">5px</dimen>
-    <dimen name="default_bmb_pieceInclinedMargin">7.071067811865475px</dimen>
+    <dimen name="default_bmb_dotRadius">3dp</dimen>
+    <dimen name="default_bmb_hamWidth">20dp</dimen>
+    <dimen name="default_bmb_hamHeight">3dp</dimen>
+    <dimen name="default_bmb_pieceHorizontalMargin">2.5dp</dimen>
+    <dimen name="default_bmb_pieceVerticalMargin">2.5dp</dimen>
+    <dimen name="default_bmb_pieceInclinedMargin">3.535533905932738dp</dimen>
     <integer name="default_bmb_pieceEnum">-1</integer>
-    <dimen name="default_bmb_sharedLineLength">35px</dimen>
+    <dimen name="default_bmb_sharedLineLength">18dp</dimen>
     <color name="default_bmb_shareLine1Color">#ffffffff</color>
     <color name="default_bmb_shareLine2Color">#ffffffff</color>
-    <dimen name="default_bmb_shareLineWidth">3px</dimen>
+    <dimen name="default_bmb_shareLineWidth">1.5dp</dimen>
 
     <!--Animation-->
     <color name="default_bmb_dimColor">#55000000</color>
-    <integer name="default_bmb_showDuration">500</integer>
-    <integer name="default_bmb_showDelay">100</integer>
-    <integer name="default_bmb_hideDuration">500</integer>
-    <integer name="default_bmb_hideDelay">100</integer>
+    <integer name="default_bmb_showDuration">300</integer>
+    <integer name="default_bmb_showDelay">50</integer>
+    <integer name="default_bmb_hideDuration">300</integer>
+    <integer name="default_bmb_hideDelay">50</integer>
     <bool name="default_bmb_cancelable">true</bool>
     <bool name="default_bmb_autoHide">true</bool>
     <integer name="default_bmb_orderEnum">2</integer>

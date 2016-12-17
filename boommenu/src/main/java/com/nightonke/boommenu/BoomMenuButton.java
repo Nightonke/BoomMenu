@@ -13,6 +13,7 @@ import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,11 +58,12 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     // Basic
     private Context context;
     private boolean needToLayout = true;
-    private boolean cacheOptimization = true;
-    private boolean boomInWholeScreen = true;
-    private boolean inList = false;
-    private boolean inFragment = false;
-    private Runnable listLayoutRunnable;
+    private boolean cacheOptimization;
+    private boolean boomInWholeScreen;
+    private boolean inList;
+    private boolean inFragment;
+    private boolean isBackPressListened = true;
+    private Runnable layoutJobsRunnable;
 
     // Shadow
     private boolean shadowEffect;
@@ -84,39 +86,39 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     // Piece
     private ArrayList<BoomPiece> pieces;
     private ArrayList<Point> piecePositions;
-    private int dotRadius = 6;
-    private int hamWidth = 40;
-    private int hamHeight = 6;
-    private int pieceHorizontalMargin = 5;
-    private int pieceVerticalMargin = 5;
-    private int pieceInclinedMargin = (int) (5 * Math.sqrt(2));
-    private int shareLineLength = 35;
-    private int shareLine1Color = Color.WHITE;
-    private int shareLine2Color = Color.WHITE;
-    private int shareLineWidth = 3;
+    private int dotRadius;
+    private int hamWidth;
+    private int hamHeight;
+    private int pieceHorizontalMargin;
+    private int pieceVerticalMargin;
+    private int pieceInclinedMargin;
+    private int shareLineLength;
+    private int shareLine1Color;
+    private int shareLine2Color;
+    private int shareLineWidth;
     private ShareLinesView shareLinesView;
     private PiecePlaceEnum piecePlaceEnum = PiecePlaceEnum.Unknown;
 
     // Animation
     private int animatingViewNumber = 0;
     private OnBoomListener onBoomListener;
-    private int dimColor = Color.parseColor("#55000000");
-    private long showDuration = 500;
-    private long showDelay = 100;
-    private long hideDuration = 500;
-    private long hideDelay = 100;
-    private boolean cancelable = true;
-    private boolean autoHide = true;
-    private OrderEnum orderEnum = OrderEnum.RANDOM;
-    private int frames = 60;
-    private BoomEnum boomEnum = BoomEnum.HORIZONTAL_THROW_2;
-    private EaseEnum showMoveEaseEnum = EaseEnum.EaseOutBack;
-    private EaseEnum showScaleEaseEnum = EaseEnum.EaseOutBack;
-    private EaseEnum showRotateEaseEnum = EaseEnum.EaseOutBack;
-    private EaseEnum hideMoveEaseEnum = EaseEnum.EaseInBack;
-    private EaseEnum hideScaleEaseEnum = EaseEnum.EaseInBack;
-    private EaseEnum hideRotateEaseEnum = EaseEnum.EaseInBack;
-    private int rotateDegree = 720;
+    private int dimColor;
+    private long showDuration;
+    private long showDelay;
+    private long hideDuration;
+    private long hideDelay;
+    private boolean cancelable;
+    private boolean autoHide;
+    private OrderEnum orderEnum;
+    private int frames;
+    private BoomEnum boomEnum;
+    private EaseEnum showMoveEaseEnum;
+    private EaseEnum showScaleEaseEnum;
+    private EaseEnum showRotateEaseEnum;
+    private EaseEnum hideMoveEaseEnum;
+    private EaseEnum hideScaleEaseEnum;
+    private EaseEnum hideRotateEaseEnum;
+    private int rotateDegree;
     private BoomStateEnum boomStateEnum = BoomStateEnum.DidHide;
 
     // Background
@@ -170,7 +172,6 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
         initAttrs(context, attrs);
         initShadow();
         initButton();
-        initListLayoutRunnable();
     }
 
     private void initAttrs(Context context, AttributeSet attrs) {
@@ -183,6 +184,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
             boomInWholeScreen = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_boomInWholeScreen, R.bool.default_bmb_boomInWholeScreen);
             inList = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_inList, R.bool.default_bmb_inList);
             inFragment = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_inFragment, R.bool.default_bmb_inFragment);
+            isBackPressListened = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_backPressListened, R.bool.default_bmb_backPressListened);
 
             // Shadow
             shadowEffect = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_shadowEffect, R.bool.default_bmb_shadow_effect);
@@ -311,15 +313,15 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
         }
     }
 
-    private void initListLayoutRunnable() {
-        if (listLayoutRunnable == null) {
-            listLayoutRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    doLayoutJobs();
-                }
-            };
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KeyEvent.KEYCODE_BACK == keyCode
+                && isBackPressListened
+                && (boomStateEnum == BoomStateEnum.WillShow || boomStateEnum == BoomStateEnum.DidShow)) {
+            reboom();
+            return true;
         }
+        return super.onKeyDown(keyCode, event);
     }
 
     //endregion
@@ -330,19 +332,12 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-
-        if (needToLayout) {
-            if (inList) {
-                initListLayoutRunnable();
-                post(listLayoutRunnable);
-            } else {
-                doLayoutJobs();
-            }
-        }
+        if (needToLayout) delayToDoLayoutJobs();
         needToLayout = false;
     }
 
     private void doLayoutJobs() {
+        ExceptionManager.judge(piecePlaceEnum, buttonPlaceEnum, buttonEnum, boomEnum, boomButtonBuilders);
         removePieces();
         createPieces();
         placeShareLinesView();
@@ -360,8 +355,6 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     }
 
     private void createPieces() {
-        ExceptionManager.judge(buttonEnum, piecePlaceEnum);
-        ExceptionManager.judge(piecePlaceEnum, buttonPlaceEnum, boomButtonBuilders);
         calculatePiecePositions();
         int pieceNumber = pieceNumber();
         pieces = new ArrayList<>(pieceNumber);
@@ -369,7 +362,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
             BoomPiece piece = PiecePlaceManager.createPiece(
                     context,
                     piecePlaceEnum,
-                    boomButtonBuilders.get(i).pieceColor());
+                    boomButtonBuilders.get(i).pieceColor(context));
             pieces.add(piece);
         }
     }
@@ -444,8 +437,6 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     }
 
     private void calculatePiecePositions() {
-        ExceptionManager.judge(buttonEnum);
-        ExceptionManager.judge(piecePlaceEnum);
         switch (buttonEnum) {
             case SimpleCircle:
             case TextInsideCircle:
@@ -488,33 +479,18 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      * Boom the BMB!
      */
     public void boom() {
-        if (isAnimating() || boomStateEnum != BoomStateEnum.DidHide) return;
-        boomStateEnum = BoomStateEnum.WillShow;
-        if (onBoomListener != null) onBoomListener.onBoomWillShow();
-        // We have to calculate the start positions again when BMB is used in list-view
-        // or in fragment.
-        if (inList || inFragment) calculateStartPositions();
-        createButtons();
-        dimBackground(false);
-        ExceptionManager.judge(boomEnum);
-        startShowAnimations(false);
-    }
-
-    /**
-     * Re-boom the BMB!
-     */
-    public void reboom() {
-        if (isAnimating() || boomStateEnum != BoomStateEnum.DidShow) return;
-        boomStateEnum = BoomStateEnum.WillHide;
-        if (onBoomListener != null) onBoomListener.onBoomWillHide();
-        lightBackground(false);
-        startHideAnimations(false);
+        innerBoom(false);
     }
 
     /**
      * Boom the BMB with duration 0!
      */
     public void boomImmediately() {
+        innerBoom(true);
+    }
+
+    private void innerBoom(boolean immediately) {
+        ExceptionManager.judge(piecePlaceEnum, buttonPlaceEnum, buttonEnum, boomEnum, boomButtonBuilders);
         if (isAnimating() || boomStateEnum != BoomStateEnum.DidHide) return;
         boomStateEnum = BoomStateEnum.WillShow;
         if (onBoomListener != null) onBoomListener.onBoomWillShow();
@@ -522,20 +498,39 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
         // or in fragment.
         if (inList || inFragment) calculateStartPositions();
         createButtons();
-        dimBackground(true);
-        ExceptionManager.judge(boomEnum);
-        startShowAnimations(true);
+        dimBackground(immediately);
+        startShowAnimations(immediately);
+        if (isBackPressListened) {
+            setFocusable(true);
+            setFocusableInTouchMode(true);
+            requestFocus();
+        }
+    }
+
+    /**
+     * Re-boom the BMB!
+     */
+    public void reboom() {
+        innerReboom(false);
     }
 
     /**
      * Re-boom the BMB with duration 0!
      */
     public void reboomImmediately() {
+        innerReboom(true);
+    }
+
+    private void innerReboom(boolean immediately) {
         if (isAnimating() || boomStateEnum != BoomStateEnum.DidShow) return;
         boomStateEnum = BoomStateEnum.WillHide;
         if (onBoomListener != null) onBoomListener.onBoomWillHide();
-        lightBackground(true);
-        startHideAnimations(true);
+        lightBackground(immediately);
+        startHideAnimations(immediately);
+        if (isBackPressListened) {
+            setFocusable(false);
+            setFocusableInTouchMode(false);
+        }
     }
 
     private void dimBackground(boolean immediately) {
@@ -671,7 +666,13 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
                         background.getLayoutParams().width,
                         background.getLayoutParams().height),
                 frames, startPosition, endPosition, xs, ys);
-        if (boomButton.isNeededColorAnimation()) AnimationManager.animate(boomButton, "buttonColor", delay, duration, ShowRgbEvaluator.getInstance(), boomButton.pieceColor(), boomButton.buttonColor());
+        if (boomButton.isNeededColorAnimation()) {
+            if (boomButton.prepareColorTransformAnimation()) {
+                AnimationManager.animate(boomButton, "rippleButtonColor", delay, duration, ShowRgbEvaluator.getInstance(), boomButton.pieceColor(), boomButton.buttonColor());
+            } else {
+                AnimationManager.animate(boomButton, "nonRippleButtonColor", delay, duration, ShowRgbEvaluator.getInstance(), boomButton.pieceColor(), boomButton.buttonColor());
+            }
+        }
         AnimationManager.animate(boomButton, "x", delay, duration, Ease.getInstance(showMoveEaseEnum), xs);
         AnimationManager.animate(boomButton, "y", delay, duration, Ease.getInstance(showMoveEaseEnum), ys);
         AnimationManager.rotate(boomButton, delay, duration, Ease.getInstance(showRotateEaseEnum), 0, rotateDegree);
@@ -717,7 +718,13 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
                         background.getLayoutParams().width,
                         background.getLayoutParams().height),
                 frames, startPosition, endPosition, xs, ys);
-        if (boomButton.isNeededColorAnimation()) AnimationManager.animate(boomButton, "buttonColor", delay, duration, HideRgbEvaluator.getInstance(), boomButton.buttonColor(), boomButton.pieceColor());
+        if (boomButton.isNeededColorAnimation()) {
+            if (boomButton.prepareColorTransformAnimation()) {
+                AnimationManager.animate(boomButton, "rippleButtonColor", delay, duration, HideRgbEvaluator.getInstance(), boomButton.buttonColor(), boomButton.pieceColor());
+            } else {
+                AnimationManager.animate(boomButton, "nonRippleButtonColor", delay, duration, HideRgbEvaluator.getInstance(), boomButton.buttonColor(), boomButton.pieceColor());
+            }
+        }
         AnimationManager.animate(boomButton, "x", delay, duration, Ease.getInstance(hideMoveEaseEnum), xs);
         AnimationManager.animate(boomButton, "y", delay, duration, Ease.getInstance(hideMoveEaseEnum), ys);
         AnimationManager.rotate(boomButton, delay, duration, Ease.getInstance(hideRotateEaseEnum), 0, rotateDegree);
@@ -793,8 +800,6 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     private void createButtons() {
         boomButtons = new ArrayList<>(pieces.size());
         int buttonNumber = pieces.size();
-        ExceptionManager.judge(buttonEnum, piecePlaceEnum);
-        ExceptionManager.judge(piecePlaceEnum, buttonPlaceEnum, boomButtonBuilders);
         switch (buttonEnum) {
             case SimpleCircle:
                 for (int i = 0; i < buttonNumber; i++) {
@@ -866,7 +871,6 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     }
 
     private void calculateEndPositions() {
-        ExceptionManager.judge(buttonEnum);
         switch (buttonEnum) {
             case SimpleCircle:
                 endPositions = ButtonPlaceManager.getCircleButtonPositions(
@@ -975,6 +979,18 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
         } else {
             requestLayout();
         }
+    }
+
+    private void delayToDoLayoutJobs() {
+        if (layoutJobsRunnable == null) {
+            layoutJobsRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    doLayoutJobs();
+                }
+            };
+        }
+        post(layoutJobsRunnable);
     }
 
     private int pieceNumber() {
@@ -1161,6 +1177,19 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setInFragment(boolean inFragment) {
         this.inFragment = inFragment;
+    }
+
+    public boolean isBackPressListened() {
+        return isBackPressListened;
+    }
+
+    /**
+     * Whether BMB will reboom when the back-key is pressed.
+     *
+     * @param backPressListened whether BMB will reboom when the back-key is pressed
+     */
+    public void setBackPressListened(boolean backPressListened) {
+        isBackPressListened = backPressListened;
     }
 
     public boolean isShadowEffect() {

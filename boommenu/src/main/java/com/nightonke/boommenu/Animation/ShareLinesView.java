@@ -9,6 +9,8 @@ import android.graphics.PointF;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.nightonke.boommenu.Util;
+
 import java.util.ArrayList;
 
 
@@ -59,7 +61,7 @@ public class ShareLinesView extends View {
                         long hideDuration,
                         long hideDelay) {
         float xOffset = dotRadius - lineWidth / 4f;
-        float yOffset = (float) (dotRadius - lineWidth * Math.sqrt(3) / 4f) + 0.5f;
+        float yOffset = (float) (dotRadius - lineWidth * Math.sqrt(3) / 4f) + Util.dp2px(0.25f);
 
         this.piecePositions = new ArrayList<>();
         for (Point piecePosition : piecePositions) {

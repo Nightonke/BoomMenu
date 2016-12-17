@@ -7,6 +7,7 @@
         <attr name="bmb_boomInWholeScreen" format="boolean|reference"/>
         <attr name="bmb_inList" format="boolean|reference"/>
         <attr name="bmb_inFragment" format="boolean|reference"/>
+        <attr name="bmb_backPressListened" format="boolean|reference"/>
 
         <!--Shadow-->
         <attr name="bmb_shadowEffect" format="boolean|reference"/>

@@ -1,5 +1,6 @@
 package com.nightonke.boommenu.BoomButtons;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -28,6 +29,7 @@ public abstract class BoomButtonBuilder {
 
     // piece
     Integer pieceColor = null;
+    Integer pieceColorRes = null;
 
     // Shadow
     boolean shadowEffect = true;
@@ -91,17 +93,23 @@ public abstract class BoomButtonBuilder {
     // Button
     boolean rippleEffect = true;
     int normalColor = Util.getColor();
+    Integer normalColorRes = null;
     int highlightedColor = Util.getColor();
+    Integer highlightedColorRes = null;
     int unableColor = Util.getColor();
+    Integer unableColorRes = null;
     boolean unable = false;
     int buttonRadius = Util.dp2px(40);
     int buttonWidth = Util.dp2px(300);
     int buttonHeight = Util.dp2px(60);
     int buttonCornerRadius = Util.dp2px(5);
 
-    public int pieceColor() {
-        if (pieceColor == null) return unable ? unableColor : normalColor;
-        else return pieceColor;
+    public int pieceColor(Context context) {
+        if (pieceColor == null && pieceColorRes == null)
+            if (unable) return Util.getColor(context, unableColorRes, unableColor);
+            else return Util.getColor(context, normalColorRes, normalColor);
+        else if (pieceColor == null) return Util.getColor(context, pieceColorRes);
+        else return Util.getColor(context, pieceColorRes, pieceColor);
     }
 
     public void setUnable(boolean unable) {

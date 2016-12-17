@@ -784,6 +784,17 @@ public class HamButton extends BoomButton {
         }
 
         /**
+         * The resource of color of boom-button when it is at normal-state.
+         *
+         * @param normalColorRes resource of normal color
+         * @return the builder
+         */
+        public Builder normalColorRes(int normalColorRes) {
+            this.normalColorRes = normalColorRes;
+            return this;
+        }
+
+        /**
          * The color of boom-button when it is at highlighted-state.
          *
          * @param highlightedColor the highlighted color
@@ -791,6 +802,17 @@ public class HamButton extends BoomButton {
          */
         public Builder highlightedColor(int highlightedColor) {
             this.highlightedColor = highlightedColor;
+            return this;
+        }
+
+        /**
+         * The resource of color of boom-button when it is at highlighted-state.
+         *
+         * @param highlightedColorRes resource of highlighted color
+         * @return the builder
+         */
+        public Builder highlightedColorRes(int highlightedColorRes) {
+            this.highlightedColorRes = highlightedColorRes;
             return this;
         }
 
@@ -806,6 +828,17 @@ public class HamButton extends BoomButton {
         }
 
         /**
+         * The resource of color of boom-button when it is at unable-state.
+         *
+         * @param unableColorRes resource of unable color
+         * @return the builder
+         */
+        public Builder unableColorRes(int unableColorRes) {
+            this.unableColorRes = unableColorRes;
+            return this;
+        }
+
+        /**
          * The color of boom-button when it is just a piece.
          *
          * @param pieceColor color of piece
@@ -813,6 +846,17 @@ public class HamButton extends BoomButton {
          */
         public HamButton.Builder pieceColor(int pieceColor) {
             this.pieceColor = pieceColor;
+            return this;
+        }
+
+        /**
+         * The resource of color of boom-button when it is just a piece.
+         *
+         * @param pieceColorRes resource of color of piece
+         * @return the builder
+         */
+        public Builder pieceColorRes(int pieceColorRes) {
+            this.pieceColorRes = pieceColorRes;
             return this;
         }
 

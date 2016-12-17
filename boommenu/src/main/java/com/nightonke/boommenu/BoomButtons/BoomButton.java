@@ -54,6 +54,7 @@ public abstract class BoomButton extends FrameLayout {
 
     // piece
     protected Integer pieceColor = null;
+    protected Integer pieceColorRes = null;
 
     // Shadow
     protected boolean shadowEffect = true;
@@ -119,8 +120,11 @@ public abstract class BoomButton extends FrameLayout {
     // Button Colors
     protected boolean rippleEffect = true;
     protected int normalColor;
+    protected Integer normalColorRes = null;
     protected int highlightedColor;
+    protected Integer highlightedColorRes = null;
     protected int unableColor;
+    protected Integer unableColorRes = null;
     protected boolean unable = false;
     protected boolean rippleEffectWorks = true;
     protected RippleDrawable rippleDrawable;
@@ -146,6 +150,7 @@ public abstract class BoomButton extends FrameLayout {
         containsSubText = builder.containsSubText;
 
         pieceColor = builder.pieceColor;
+        pieceColorRes = builder.pieceColorRes;
 
         shadowEffect = builder.shadowEffect;
         if (shadowEffect) {
@@ -201,8 +206,11 @@ public abstract class BoomButton extends FrameLayout {
 
         rippleEffect = builder.rippleEffect;
         normalColor = builder.normalColor;
+        normalColorRes = builder.normalColorRes;
         highlightedColor = builder.highlightedColor;
+        highlightedColorRes = builder.highlightedColorRes;
         unableColor = builder.unableColor;
+        unableColorRes = builder.unableColorRes;
         unable = builder.unable;
         buttonRadius = builder.buttonRadius;
         buttonWidth = builder.buttonWidth;
@@ -367,8 +375,8 @@ public abstract class BoomButton extends FrameLayout {
     protected void initCircleButtonDrawable() {
         if (rippleEffectWorks) {
             RippleDrawable rippleDrawable = new RippleDrawable(
-                    ColorStateList.valueOf(highlightedColor),
-                    Util.getOvalDrawable(button, unable ? unableColor : normalColor),
+                    ColorStateList.valueOf(highlightedColor()),
+                    Util.getOvalDrawable(button, unable ? unableColor() : normalColor()),
                     null);
             Util.setDrawable(button, rippleDrawable);
             this.rippleDrawable = rippleDrawable;
@@ -376,14 +384,14 @@ public abstract class BoomButton extends FrameLayout {
             nonRippleBitmapDrawable = Util.getOvalStateListBitmapDrawable(
                     button,
                     buttonRadius,
-                    normalColor,
-                    highlightedColor,
-                    unableColor);
+                    normalColor(),
+                    highlightedColor(),
+                    unableColor());
             if (isNeededColorAnimation()) {
                 // Then we need to create 2 drawables to perform the color-transaction effect.
                 // Because gradient-drawable is able to change the color,
                 // but not able to perform a click-effect.
-                nonRippleGradientDrawable = Util.getOvalDrawable(button, unable ? unableColor : normalColor);
+                nonRippleGradientDrawable = Util.getOvalDrawable(button, unable ? unableColor() : normalColor());
             }
             Util.setDrawable(button, nonRippleBitmapDrawable);
         }
@@ -440,8 +448,8 @@ public abstract class BoomButton extends FrameLayout {
     protected void initHamButtonDrawable() {
         if (rippleEffectWorks) {
             RippleDrawable rippleDrawable = new RippleDrawable(
-                    ColorStateList.valueOf(highlightedColor),
-                    Util.getRectangleDrawable(button, buttonCornerRadius, unable ? unableColor : normalColor),
+                    ColorStateList.valueOf(highlightedColor()),
+                    Util.getRectangleDrawable(button, buttonCornerRadius, unable ? unableColor() : normalColor()),
                     null);
             Util.setDrawable(button, rippleDrawable);
             this.rippleDrawable = rippleDrawable;
@@ -451,14 +459,14 @@ public abstract class BoomButton extends FrameLayout {
                     buttonWidth,
                     buttonHeight,
                     buttonCornerRadius,
-                    normalColor,
-                    highlightedColor,
-                    unableColor);
+                    normalColor(),
+                    highlightedColor(),
+                    unableColor());
             if (isNeededColorAnimation()) {
                 // Then we need to create 2 drawables to perform the color-transaction effect.
                 // Because gradient-drawable is able to change the color,
                 // but not able to perform a click-effect.
-                nonRippleGradientDrawable = Util.getRectangleDrawable(button, buttonCornerRadius, unable ? unableColor : normalColor);
+                nonRippleGradientDrawable = Util.getRectangleDrawable(button, buttonCornerRadius, unable ? unableColor() : normalColor());
             }
             Util.setDrawable(button, nonRippleBitmapDrawable);
         }
@@ -594,19 +602,22 @@ public abstract class BoomButton extends FrameLayout {
     }
 
     public int pieceColor() {
-        if (pieceColor == null) return unable ? unableColor : normalColor;
-        else return pieceColor;
+        if (pieceColor == null && pieceColorRes == null)
+            if (unable) return unableColor();
+            else return normalColor();
+        else if (pieceColor == null) return Util.getColor(context, pieceColorRes);
+        else return Util.getColor(context, pieceColorRes, pieceColor);
     }
 
     public int buttonColor() {
-        if (unable) return unableColor;
-        else return normalColor;
+        if (unable) return unableColor();
+        else return normalColor();
     }
 
     public boolean isNeededColorAnimation() {
         if (pieceColor == null) return false;
-        if (unable) return pieceColor.compareTo(unableColor) != 0;
-        else return pieceColor.compareTo(normalColor) != 0;
+        if (unable) return pieceColor.compareTo(unableColor()) != 0;
+        else return pieceColor.compareTo(normalColor()) != 0;
     }
 
     @Override
@@ -638,18 +649,39 @@ public abstract class BoomButton extends FrameLayout {
 
     }
 
-    protected void setButtonColor(int color) {
+    public boolean prepareColorTransformAnimation() {
         if (rippleEffectWorks) {
-            if (rippleDrawable != null) ((GradientDrawable)rippleDrawable.getDrawable(0)).setColor(color);
-        } else {
-            if (nonRippleGradientDrawable != null) nonRippleGradientDrawable.setColor(color);
+            if (rippleDrawable == null) throw new RuntimeException("Background drawable is null!");
+        } else if (nonRippleGradientDrawable == null) {
+            throw new RuntimeException("Background drawable is null!");
         }
+        return rippleEffectWorks;
+    }
+
+    protected void setNonRippleButtonColor(int color) {
+        nonRippleGradientDrawable.setColor(color);
+    }
+
+    protected void setRippleButtonColor(int color) {
+        ((GradientDrawable)rippleDrawable.getDrawable(0)).setColor(color);
     }
 
     @Override
     public void setClickable(boolean clickable) {
         super.setClickable(clickable);
         button.setClickable(clickable);
+    }
+
+    protected int normalColor() {
+        return Util.getColor(context, normalColorRes, normalColor);
+    }
+
+    protected int highlightedColor() {
+        return Util.getColor(context, highlightedColorRes, highlightedColor);
+    }
+
+    protected int unableColor() {
+        return Util.getColor(context, unableColorRes, unableColor);
     }
 
     public abstract ArrayList<View> goneViews();

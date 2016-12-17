@@ -271,6 +271,20 @@ public class Util {
         return typedArray.getColor(id, Util.getColor(typedArray, defaultId));
     }
 
+    public static int getColor(Context context, int id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return context.getResources().getColor(id, null);
+        } else {
+            //noinspection deprecation
+            return context.getResources().getColor(id);
+        }
+    }
+
+    public static int getColor(Context context, Integer id, int color) {
+        if (id == null) return color;
+        else return getColor(context, id);
+    }
+
     public static void setDrawable(View view, Drawable drawable) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             view.setBackground(drawable);
