@@ -6,8 +6,8 @@
 
     <FrameLayout
         android:id="@+id/button"
-        android:layout_width="@dimen/default_bmb_ham_button_width"
-        android:layout_height="@dimen/default_bmb_ham_button_height"
+        android:layout_width="@dimen/default_bmb_text_inside_circle_width"
+        android:layout_height="@dimen/default_bmb_text_inside_circle_height"
         android:clickable="true">
 
     </FrameLayout>

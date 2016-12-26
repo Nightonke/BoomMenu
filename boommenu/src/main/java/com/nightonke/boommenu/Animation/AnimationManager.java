@@ -167,7 +167,7 @@ public class AnimationManager {
 
         switch (boomEnum) {
             case LINE:
-                for (int i = 0; i <= frames; i++)
+                for (int i = 0; i < xs.length; i++)
                 {
                     float offset = i * p;
                     xs[i] = x1 + offset * xOffset;
@@ -180,7 +180,7 @@ public class AnimationManager {
                 a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2)) / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
                 b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
                 c = y1 - (x1 * x1) * a - x1 * b;
-                for (int i = 0; i <= frames; i++)
+                for (int i = 0; i < xs.length; i++)
                 {
                     float offset = i * p;
                     xs[i] = x1 + offset * xOffset;
@@ -193,7 +193,7 @@ public class AnimationManager {
                 a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2)) / (x1 * x1 * (x2 - x3) + x2 * x2 * (x3 - x1) + x3 * x3 * (x1 - x2));
                 b = (y1 - y2) / (x1 - x2) - a * (x1 + x2);
                 c = y1 - (x1 * x1) * a - x1 * b;
-                for (int i = 0; i <= frames; i++)
+                for (int i = 0; i < xs.length; i++)
                 {
                     float offset = i * p;
                     xs[i] = x1 + offset * xOffset;
@@ -206,7 +206,7 @@ public class AnimationManager {
                 a = (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / (y1 * y1 * (y2 - y3) + y2 * y2 * (y3 - y1) + y3 * y3 * (y1 - y2));
                 b = (x1 - x2) / (y1 - y2) - a * (y1 + y2);
                 c = x1 - (y1 * y1) * a - y1 * b;
-                for (int i = 0; i <= frames; i++)
+                for (int i = 0; i < xs.length; i++)
                 {
                     float offset = i * p;
                     ys[i] = y1 + offset * yOffset;
@@ -219,7 +219,7 @@ public class AnimationManager {
                 a = (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / (y1 * y1 * (y2 - y3) + y2 * y2 * (y3 - y1) + y3 * y3 * (y1 - y2));
                 b = (x1 - x2) / (y1 - y2) - a * (y1 + y2);
                 c = x1 - (y1 * y1) * a - y1 * b;
-                for (int i = 0; i <= frames; i++)
+                for (int i = 0; i < xs.length; i++)
                 {
                     float offset = i * p;
                     ys[i] = y1 + offset * yOffset;
@@ -232,7 +232,7 @@ public class AnimationManager {
                 a = (y1 * (x3 - x2) + y3 * (x2 - x1) + y2 * (x1 - x3)) / (x1 * x1 * (x3 - x2) + x3 * x3 * (x2 - x1) + x2 * x2 * (x1 - x3));
                 b = (y1 - y3) / (x1 - x3) - a * (x1 + x3);
                 c = y1 - (x1 * x1) * a - x1 * b;
-                for (int i = 0; i <= frames; i++)
+                for (int i = 0; i < xs.length; i++)
                 {
                     float offset = i * p;
                     xs[i] = x1 + offset * xOffset;
@@ -249,7 +249,7 @@ public class AnimationManager {
                 a = (y1 * (x3 - x2) + y3 * (x2 - x1) + y2 * (x1 - x3)) / (x1 * x1 * (x3 - x2) + x3 * x3 * (x2 - x1) + x2 * x2 * (x1 - x3));
                 b = (y1 - y3) / (x1 - x3) - a * (x1 + x3);
                 c = y1 - (x1 * x1) * a - x1 * b;
-                for (int i = 0; i <= frames; i++)
+                for (int i = 0; i < xs.length; i++)
                 {
                     float offset = i * p;
                     xs[i] = x2 + offset * xOffset;
@@ -316,7 +316,7 @@ public class AnimationManager {
                 a = (y1 * (x3 - x2) + y3 * (x2 - x1) + y2 * (x1 - x3)) / (x1 * x1 * (x3 - x2) + x3 * x3 * (x2 - x1) + x2 * x2 * (x1 - x3));
                 b = (y1 - y3) / (x1 - x3) - a * (x1 + x3);
                 c = y1 - (x1 * x1) * a - x1 * b;
-                for (int i = 0; i <= frames; i++) {
+                for (int i = 0; i < xs.length; i++) {
                     float offset = i * p;
                     xs[i] = x2 + offset * xOffset;
                     ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;
@@ -328,7 +328,7 @@ public class AnimationManager {
                 a = (y1 * (x3 - x2) + y3 * (x2 - x1) + y2 * (x1 - x3)) / (x1 * x1 * (x3 - x2) + x3 * x3 * (x2 - x1) + x2 * x2 * (x1 - x3));
                 b = (y1 - y3) / (x1 - x3) - a * (x1 + x3);
                 c = y1 - (x1 * x1) * a - x1 * b;
-                for (int i = 0; i <= frames; i++) {
+                for (int i = 0; i < xs.length; i++) {
                     float offset = i * p;
                     xs[i] = x1 + offset * xOffset;
                     ys[i] = a * xs[i] * xs[i] + b * xs[i] + c;

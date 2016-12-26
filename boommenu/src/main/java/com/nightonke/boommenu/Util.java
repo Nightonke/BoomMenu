@@ -308,7 +308,7 @@ public class Util {
         return Color.HSVToColor(hsv);
     }
 
-    private static int[] colors = new int[] {
+    private static final int[] colors = new int[] {
             Color.parseColor("#F44336"),
             Color.parseColor("#E91E63"),
             Color.parseColor("#9C27B0"),
@@ -329,7 +329,7 @@ public class Util {
             Color.parseColor("#607D8B"),
     };
 
-    private static ArrayList<Integer> usedColor = new ArrayList<>();
+    private static final ArrayList<Integer> usedColor = new ArrayList<>();
 
     public static int getColor() {
         Random random = new Random();

@@ -145,7 +145,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     private float buttonRightMargin;
     private ArrayList<Point> startPositions;
     private ArrayList<Point> endPositions;
-    private float bottomHamButtonTopMargin = -1f;
+    private Float bottomHamButtonTopMargin;
 
     private void ___________________________1_Initialization() {}
     //region Constructor and Initializer
@@ -246,7 +246,12 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
             buttonBottomMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_buttonBottomMargin, R.dimen.default_bmb_buttonBottomMargin);
             buttonLeftMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_buttonLeftMargin, R.dimen.default_bmb_buttonLeftMargin);
             buttonRightMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_buttonRightMargin, R.dimen.default_bmb_buttonRightMargin);
-            bottomHamButtonTopMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_bottomHamButtonTopMargin, R.dimen.default_bmb_bottomHamButtonTopMargin);
+            int valueFromResource = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_bottomHamButtonTopMargin, R.dimen.default_bmb_bottomHamButtonTopMargin);
+            if (valueFromResource == 0) {
+                bottomHamButtonTopMargin = null;
+            } else {
+                bottomHamButtonTopMargin = (float) valueFromResource;
+            }
         } finally {
             typedArray.recycle();
         }
@@ -1845,6 +1850,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setButtonVerticalMargin(float buttonVerticalMargin) {
         this.buttonVerticalMargin = buttonVerticalMargin;
+        bottomHamButtonTopMargin = null;
     }
 
     public float getButtonInclinedMargin() {

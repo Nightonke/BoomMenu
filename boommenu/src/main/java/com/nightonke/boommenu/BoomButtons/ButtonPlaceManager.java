@@ -786,7 +786,7 @@ public class ButtonPlaceManager {
                                                          float buttonBottomMargin,
                                                          float buttonLeftMargin,
                                                          float buttonRightMargin,
-                                                         float bottomHamButtonTopMargin) {
+                                                         Float bottomHamButtonTopMargin) {
         ArrayList<Point> positions = new ArrayList<>(buttonNumber);
         float w = buttonWidth, h = buttonHeight;
         float hm = buttonHorizontalMargin, vm = buttonVerticalMargin;
@@ -821,7 +821,7 @@ public class ButtonPlaceManager {
                     positions.add(point(0, 0));
                     for (int i = 0; i < half; i++) positions.add(point(0, h + vm + i * (h + vm)));
                 }
-                if (buttonNumber >= 2 && bottomHamButtonTopMargin != Util.dp2px(-1))
+                if (buttonNumber >= 2 && bottomHamButtonTopMargin != null)
                     positions.get(positions.size() - 1).offset(0, (int) (bottomHamButtonTopMargin - vm));
                 break;
         }

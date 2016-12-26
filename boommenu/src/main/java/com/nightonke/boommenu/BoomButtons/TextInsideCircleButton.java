@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class TextInsideCircleButton extends BoomButton {
 
-    protected TextInsideCircleButton(Builder builder, Context context) {
+    private TextInsideCircleButton(Builder builder, Context context) {
         super(context);
         this.context = context;
         init(builder);

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class HamButton extends BoomButton {
 
-    protected HamButton(Builder builder, Context context) {
+    private HamButton(Builder builder, Context context) {
         super(context);
         this.context = context;
         init(builder);
