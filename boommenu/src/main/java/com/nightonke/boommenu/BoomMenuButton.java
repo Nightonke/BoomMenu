@@ -12,6 +12,7 @@ import android.graphics.Point;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
+import android.os.PowerManager;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -650,10 +651,28 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
 
     private void startEachShowAnimation(final BoomPiece piece,
                                         final BoomButton boomButton,
-                                        Point startPosition,
-                                        Point endPosition,
-                                        int delayFactor,
-                                        boolean immediately) {
+                                        final Point startPosition,
+                                        final Point endPosition,
+                                        final int delayFactor,
+                                        final boolean immediately) {
+        if (isBatterySaveModeTurnOn()) {
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    innerStartEachShowAnimation(piece, boomButton, startPosition, endPosition, delayFactor, immediately);
+                }
+            });
+        } else {
+            innerStartEachShowAnimation(piece, boomButton, startPosition, endPosition, delayFactor, immediately);
+        }
+    }
+
+    private void innerStartEachShowAnimation(final BoomPiece piece,
+                                             final BoomButton boomButton,
+                                             Point startPosition,
+                                             Point endPosition,
+                                             int delayFactor,
+                                             boolean immediately) {
         animatingViewNumber++;
         float[] xs = new float[frames + 1];
         float[] ys = new float[frames + 1];
@@ -1033,6 +1052,11 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
                     hideDuration,
                     hideDelay);
         }
+    }
+
+    private boolean isBatterySaveModeTurnOn() {
+        PowerManager powerManager = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && powerManager.isPowerSaveMode();
     }
 
     private void ___________________________5_Builders_and_Buttons() {}
