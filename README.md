@@ -35,7 +35,7 @@ compile 'com.nightonke:boommenu:2.0.8'
 <img src="https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu.png" width="200">  
 Or by link:  
 [Boom V2.0.8 in Github](https://github.com/Nightonke/BoomMenu/blob/master/Apk/BoomMenu%20V2.0.8.apk?raw=true)  
-[Boom V2.0.8 in Fir](http://fir.im/tv85)  
+[Boom V2.0.8 in Fir](http://fir.im/boommenubutton)  
 
 ## Wiki
 Check the [wiki](https://github.com/Nightonke/BoomMenu/wiki) to use BMB.
