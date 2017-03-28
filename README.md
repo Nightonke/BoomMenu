@@ -10,10 +10,9 @@ Approximately 8 months ago, I got an inspiration to creating something that can 
 
 Between months, I always think about BMB and try to write a better design pattern for implements of BMB. My first try is [BMB-iOS](https://github.com/Nightonke/VHBoomMenuButton), which contains more family characteristics, for instance, buttons-alignment, text-inside/outside-button.
 
-And now the BMB-Android 2.0.0 comes.
-
-<img src="https://github.com/Nightonke/BoomMenu/blob/master/Pictures/text-inside-button.gif" width="250">
-<img src="https://github.com/Nightonke/BoomMenu/blob/master/Pictures/ham-button.gif" width="250">
+And now the BMB-Android 2.0.0 comes.  
+<img src="https://github.com/Nightonke/BoomMenu/blob/master/Pictures/text-inside-button.gif" width="250"/>
+<img src="https://github.com/Nightonke/BoomMenu/blob/master/Pictures/ham-button.gif" width="250"/>
 <img src="https://github.com/Nightonke/BoomMenu/blob/master/Pictures/text-outside-button.gif" width="250">
 <img src="https://github.com/Nightonke/BoomMenu/blob/master/Pictures/actionbar-example.gif" width="250">
 <img src="https://github.com/Nightonke/BoomMenu/blob/master/Pictures/list-example.gif" width="250">
