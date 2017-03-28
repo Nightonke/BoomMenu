@@ -103,6 +103,7 @@ public abstract class BoomButtonBuilder {
     int buttonWidth = Util.dp2px(300);
     int buttonHeight = Util.dp2px(60);
     int buttonCornerRadius = Util.dp2px(5);
+    boolean isRound = true;  // only for simple circle/text inside/text outside circle button
 
     public int pieceColor(Context context) {
         if (pieceColor == null && pieceColorRes == null)

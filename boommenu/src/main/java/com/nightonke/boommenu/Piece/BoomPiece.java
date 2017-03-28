@@ -20,7 +20,7 @@ public abstract class BoomPiece extends View {
         super(context);
     }
 
-    public abstract void init(int color);
+    public abstract void init(int color, int cornerRadius);
 
     public abstract void setColor(int color);
 

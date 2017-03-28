@@ -16,10 +16,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.text_inside_circle_button_example).setOnClickListener(this);
         findViewById(R.id.text_outside_circle_button_example).setOnClickListener(this);
         findViewById(R.id.ham_button_example).setOnClickListener(this);
+        findViewById(R.id.square_and_piece_corner_radius_example).setOnClickListener(this);
         findViewById(R.id.boom_example).setOnClickListener(this);
         findViewById(R.id.button_place_alignment_example).setOnClickListener(this);
         findViewById(R.id.order_example).setOnClickListener(this);
         findViewById(R.id.actionbar_example).setOnClickListener(this);
+        findViewById(R.id.tool_bar_example).setOnClickListener(this);
         findViewById(R.id.ease_example).setOnClickListener(this);
         findViewById(R.id.listener_example).setOnClickListener(this);
         findViewById(R.id.control_example).setOnClickListener(this);
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.list_example).setOnClickListener(this);
         findViewById(R.id.recycler_view_example).setOnClickListener(this);
         findViewById(R.id.fragment_example).setOnClickListener(this);
+        findViewById(R.id.change_boom_button_example).setOnClickListener(this);
     }
 
     @Override
@@ -44,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.ham_button_example:
                 startActivity(new Intent(this, HamButtonActivity.class));
                 break;
+            case R.id.square_and_piece_corner_radius_example:
+                startActivity(new Intent(this, SquareAndPieceCornerRadiusActivity.class));
+                break;
             case R.id.boom_example:
                 startActivity(new Intent(this, BoomExampleActivity.class));
                 break;
@@ -52,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.order_example:
                 startActivity(new Intent(this, OrderExampleActivity.class));
+                break;
+            case R.id.tool_bar_example:
+                startActivity(new Intent(this, ToolBarActivity.class));
                 break;
             case R.id.actionbar_example:
                 startActivity(new Intent(this, ActionBarActivity.class));
@@ -76,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.fragment_example:
                 startActivity(new Intent(this, FragmentActivity.class));
+                break;
+            case R.id.change_boom_button_example:
+                startActivity(new Intent(this, ChangeBoomButtonActivity.class));
                 break;
         }
     }

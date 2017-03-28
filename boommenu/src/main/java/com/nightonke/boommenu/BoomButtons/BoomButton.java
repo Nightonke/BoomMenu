@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nightonke.boommenu.BMBShadow;
+import com.nightonke.boommenu.ButtonEnum;
 import com.nightonke.boommenu.R;
 import com.nightonke.boommenu.Util;
 
@@ -48,9 +49,11 @@ public abstract class BoomButton extends FrameLayout {
     protected int buttonWidth;  // for ham button
     protected int buttonHeight;  // for ham button
     protected int buttonCornerRadius;  // for ham button
+    protected boolean isRound;
     protected boolean rotateImage;
     protected boolean rotateText;
     protected boolean containsSubText;  // for ham button
+    protected ButtonEnum buttonEnum = ButtonEnum.Unknown;
 
     // piece
     protected Integer pieceColor = null;
@@ -215,6 +218,13 @@ public abstract class BoomButton extends FrameLayout {
         buttonRadius = builder.buttonRadius;
         buttonWidth = builder.buttonWidth;
         buttonHeight = builder.buttonHeight;
+        isRound = builder.isRound;
+        if (buttonEnum == ButtonEnum.SimpleCircle
+                || buttonEnum == ButtonEnum.TextInsideCircle
+                || buttonEnum == ButtonEnum.TextOutsideCircle) {
+            if (isRound) buttonCornerRadius = builder.buttonRadius;
+            else buttonCornerRadius = builder.buttonCornerRadius;
+        } else buttonCornerRadius = builder.buttonCornerRadius;
         buttonCornerRadius = builder.buttonCornerRadius;
         rippleEffectWorks = rippleEffect && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
 
@@ -374,19 +384,32 @@ public abstract class BoomButton extends FrameLayout {
     @SuppressLint("NewApi")
     protected void initCircleButtonDrawable() {
         if (rippleEffectWorks) {
+            GradientDrawable gradientDrawable = isRound ?
+                    Util.getOvalDrawable(button, unable ? unableColor() : normalColor()) :
+                    Util.getRectangleDrawable(button, buttonCornerRadius, unable ? unableColor() : normalColor());
             RippleDrawable rippleDrawable = new RippleDrawable(
                     ColorStateList.valueOf(highlightedColor()),
-                    Util.getOvalDrawable(button, unable ? unableColor() : normalColor()),
+                    gradientDrawable,
                     null);
             Util.setDrawable(button, rippleDrawable);
             this.rippleDrawable = rippleDrawable;
         } else {
-            nonRippleBitmapDrawable = Util.getOvalStateListBitmapDrawable(
-                    button,
-                    buttonRadius,
-                    normalColor(),
-                    highlightedColor(),
-                    unableColor());
+            if (isRound)
+                nonRippleBitmapDrawable = Util.getOvalStateListBitmapDrawable(
+                        button,
+                        buttonRadius,
+                        normalColor(),
+                        highlightedColor(),
+                        unableColor());
+            else
+                nonRippleBitmapDrawable = Util.getRectangleStateListBitmapDrawable(
+                        button,
+                        buttonWidth,
+                        buttonHeight,
+                        buttonCornerRadius,
+                        normalColor(),
+                        highlightedColor(),
+                        unableColor());
             if (isNeededColorAnimation()) {
                 // Then we need to create 2 drawables to perform the color-transaction effect.
                 // Because gradient-drawable is able to change the color,
@@ -682,6 +705,33 @@ public abstract class BoomButton extends FrameLayout {
 
     protected int unableColor() {
         return Util.getColor(context, unableColorRes, unableColor);
+    }
+
+    /**
+     * Get the image view of a boom button.
+     *
+     * @return image view
+     */
+    public ImageView getImageView() {
+        return image;
+    }
+
+    /**
+     * Get the text view of a boom button.
+     *
+     * @return text view
+     */
+    public TextView getTextView() {
+        return text;
+    }
+
+    /**
+     * Get the sub text view of a boom button.
+     *
+     * @return sub text view
+     */
+    public TextView getSubTextView() {
+        return subText;
     }
 
     public abstract ArrayList<View> goneViews();

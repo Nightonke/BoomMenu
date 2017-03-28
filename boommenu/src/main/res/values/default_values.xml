@@ -28,6 +28,7 @@
     <dimen name="default_bmb_dotRadius">3dp</dimen>
     <dimen name="default_bmb_hamWidth">20dp</dimen>
     <dimen name="default_bmb_hamHeight">3dp</dimen>
+    <dimen name="default_bmb_pieceCornerRadius">-1dp</dimen>
     <dimen name="default_bmb_pieceHorizontalMargin">2.5dp</dimen>
     <dimen name="default_bmb_pieceVerticalMargin">2.5dp</dimen>
     <dimen name="default_bmb_pieceInclinedMargin">3.535533905932738dp</dimen>

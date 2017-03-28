@@ -29,7 +29,12 @@
         <activity android:name=".ControlActivity" />
         <activity android:name=".ShareActivity" />
         <activity android:name=".FragmentActivity" />
-        <activity android:name=".RecyclerViewActivity"/>
+        <activity android:name=".RecyclerViewActivity" />
+        <activity
+            android:name=".ToolBarActivity"
+            android:theme="@style/NoTitleTheme" />
+        <activity android:name=".SquareAndPieceCornerRadiusActivity" />
+        <activity android:name=".ChangeBoomButtonActivity" />
     </application>
 
 </manifest>

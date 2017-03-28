@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.nightonke.boommenu.ButtonEnum;
 import com.nightonke.boommenu.R;
 
 import java.util.ArrayList;
@@ -25,13 +26,15 @@ public class TextInsideCircleButton extends BoomButton {
     private TextInsideCircleButton(Builder builder, Context context) {
         super(context);
         this.context = context;
+        this.buttonEnum = ButtonEnum.TextInsideCircle;
         init(builder);
     }
 
     private void init(Builder builder) {
         LayoutInflater.from(context).inflate(R.layout.bmb_text_inside_circle_button, this, true);
         initAttrs(builder);
-        initShadow(buttonRadius + shadowRadius);
+        if (isRound) initShadow(buttonRadius + shadowRadius);
+        else initShadow(shadowCornerRadius);
         initCircleButton();
         initText(button);
         initImage();
@@ -253,6 +256,17 @@ public class TextInsideCircleButton extends BoomButton {
          */
         public Builder shadowRadius(int shadowRadius) {
             this.shadowRadius = shadowRadius;
+            return this;
+        }
+
+        /**
+         * Set the corner-radius of the shadow.
+         *
+         * @param shadowCornerRadius corner-radius of the shadow
+         * @return the builder
+         */
+        public Builder shadowCornerRadius(int shadowCornerRadius) {
+            this.shadowCornerRadius = shadowCornerRadius;
             return this;
         }
 
@@ -661,6 +675,28 @@ public class TextInsideCircleButton extends BoomButton {
          */
         public Builder buttonRadius(int buttonRadius) {
             this.buttonRadius = buttonRadius;
+            return this;
+        }
+
+        /**
+         * Set the corner-radius of button.
+         *
+         * @param buttonCornerRadius corner-radius of button
+         * @return the builder
+         */
+        public Builder buttonCornerRadius(int buttonCornerRadius) {
+            this.buttonCornerRadius = buttonCornerRadius;
+            return this;
+        }
+
+        /**
+         * Whether the button is a circle shape.
+         *
+         * @param isRound is or not
+         * @return the builder
+         */
+        public Builder isRound(boolean isRound) {
+            this.isRound = isRound;
             return this;
         }
 

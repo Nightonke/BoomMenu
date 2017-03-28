@@ -49,6 +49,13 @@
                 />
 
             <Button
+                android:id="@+id/square_and_piece_corner_radius_example"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/square_and_piece_corner_radius_example"
+                />
+
+            <Button
                 android:id="@+id/boom_example"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -74,6 +81,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/actionbar_example"
+                />
+
+            <Button
+                android:id="@+id/tool_bar_example"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tool_bar_example"
                 />
 
             <Button
@@ -123,6 +137,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/fragment_example"
+                />
+
+            <Button
+                android:id="@+id/change_boom_button_example"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/change_boom_button_example"
                 />
 
         </LinearLayout>

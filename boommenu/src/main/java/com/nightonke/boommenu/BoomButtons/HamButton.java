@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.nightonke.boommenu.ButtonEnum;
 import com.nightonke.boommenu.R;
 import com.nightonke.boommenu.Util;
 
@@ -27,6 +28,7 @@ public class HamButton extends BoomButton {
     private HamButton(Builder builder, Context context) {
         super(context);
         this.context = context;
+        this.buttonEnum = ButtonEnum.Ham;
         init(builder);
     }
 

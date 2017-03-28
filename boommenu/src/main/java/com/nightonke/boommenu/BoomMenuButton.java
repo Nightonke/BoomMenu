@@ -90,6 +90,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     private int dotRadius;
     private int hamWidth;
     private int hamHeight;
+    private int pieceCornerRadius = -1;
     private int pieceHorizontalMargin;
     private int pieceVerticalMargin;
     private int pieceInclinedMargin;
@@ -209,9 +210,10 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
             dotRadius = Util.getDimenSize(typedArray, R.styleable.BoomMenuButton_bmb_dotRadius, R.dimen.default_bmb_dotRadius);
             hamWidth = Util.getDimenSize(typedArray, R.styleable.BoomMenuButton_bmb_hamWidth, R.dimen.default_bmb_hamWidth);
             hamHeight = Util.getDimenSize(typedArray, R.styleable.BoomMenuButton_bmb_hamHeight, R.dimen.default_bmb_hamHeight);
+            pieceCornerRadius = Util.getDimenSize(typedArray, R.styleable.BoomMenuButton_bmb_pieceCornerRadius, R.dimen.default_bmb_pieceCornerRadius);
             pieceHorizontalMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_pieceHorizontalMargin, R.dimen.default_bmb_pieceHorizontalMargin);
             pieceVerticalMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_pieceVerticalMargin, R.dimen.default_bmb_pieceVerticalMargin);
-            pieceVerticalMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_pieceInclinedMargin, R.dimen.default_bmb_pieceInclinedMargin);
+            pieceInclinedMargin = Util.getDimenOffset(typedArray, R.styleable.BoomMenuButton_bmb_pieceInclinedMargin, R.dimen.default_bmb_pieceInclinedMargin);
             shareLineLength = Util.getDimenSize(typedArray, R.styleable.BoomMenuButton_bmb_sharedLineLength, R.dimen.default_bmb_sharedLineLength);
             shareLine1Color = Util.getColor(typedArray, R.styleable.BoomMenuButton_bmb_shareLine1Color, R.color.default_bmb_shareLine1Color);
             shareLine2Color = Util.getColor(typedArray, R.styleable.BoomMenuButton_bmb_shareLine2Color, R.color.default_bmb_shareLine2Color);
@@ -368,7 +370,8 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
             BoomPiece piece = PiecePlaceManager.createPiece(
                     context,
                     piecePlaceEnum,
-                    boomButtonBuilders.get(i).pieceColor(context));
+                    boomButtonBuilders.get(i),
+                    pieceCornerRadius);
             pieces.add(piece);
         }
     }
@@ -1146,6 +1149,30 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public ArrayList<BoomButtonBuilder> getBuilders() {
         return boomButtonBuilders;
+    }
+
+    /**
+     * Get a boom button at index.
+     * Notice that the boom button may be null,
+     * because boom buttons are cleared in some situation(in list, in fragment, etc.)
+     *
+     * @param index index
+     * @return boom button
+     */
+    public BoomButton getBoomButton(int index) {
+        if (boomButtons != null && 0 <= index && index < boomButtons.size()) return boomButtons.get(index);
+        return null;
+    }
+
+    /**
+     * Get boom buttons.
+     * Notice that the boom button may be null,
+     * because boom buttons are cleared in some situation(in list, in fragment, etc.)
+     *
+     * @return boom buttons
+     */
+    public ArrayList<BoomButton> getBoomButtons() {
+        return boomButtons;
     }
 
     //endregion

@@ -34,6 +34,7 @@
         <attr name="bmb_dotRadius" format="dimension|reference"/>
         <attr name="bmb_hamWidth" format="dimension|reference"/>
         <attr name="bmb_hamHeight" format="dimension|reference"/>
+        <attr name="bmb_pieceCornerRadius" format="dimension|reference"/>
         <attr name="bmb_pieceHorizontalMargin" format="dimension|reference"/>
         <attr name="bmb_pieceVerticalMargin" format="dimension|reference"/>
         <attr name="bmb_pieceInclinedMargin" format="dimension|reference"/>
@@ -349,12 +350,12 @@
             <enum name="buttonPlace_sc_9_1" value="32"/>
             <enum name="buttonPlace_sc_9_2" value="33"/>
             <enum name="buttonPlace_sc_9_3" value="34"/>
-            <enum name="buttonPlace_ham_1 " value="35"/>
-            <enum name="buttonPlace_ham_2 " value="36"/>
-            <enum name="buttonPlace_ham_3 " value="37"/>
-            <enum name="buttonPlace_ham_4 " value="38"/>
-            <enum name="buttonPlace_ham_5 " value="39"/>
-            <enum name="buttonPlace_ham_6 " value="40"/>
+            <enum name="buttonPlace_ham_1" value="35"/>
+            <enum name="buttonPlace_ham_2" value="36"/>
+            <enum name="buttonPlace_ham_3" value="37"/>
+            <enum name="buttonPlace_ham_4" value="38"/>
+            <enum name="buttonPlace_ham_5" value="39"/>
+            <enum name="buttonPlace_ham_6" value="40"/>
             <enum name="buttonPlace_horizontal" value="41"/>
             <enum name="buttonPlace_vertical" value="42"/>
         </attr>

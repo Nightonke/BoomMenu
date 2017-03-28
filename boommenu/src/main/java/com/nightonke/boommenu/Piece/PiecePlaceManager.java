@@ -3,6 +3,8 @@ package com.nightonke.boommenu.Piece;
 import android.content.Context;
 import android.graphics.Point;
 
+import com.nightonke.boommenu.BoomButtons.BoomButtonBuilder;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -407,8 +409,9 @@ public class PiecePlaceManager {
     }
 
     public static BoomPiece createPiece(Context context,
-                                 PiecePlaceEnum piecePlaceEnum,
-                                 int color) {
+                                        PiecePlaceEnum piecePlaceEnum,
+                                        BoomButtonBuilder builder,
+                                        int pieceCornerRadius) {
         switch (piecePlaceEnum) {
             case DOT_1:
             case DOT_2_1:
@@ -446,27 +449,27 @@ public class PiecePlaceManager {
             case DOT_9_2:
             case DOT_9_3:
             case Share:
-                return createDot(context, color);
+                return createDot(context, builder, pieceCornerRadius);
             case HAM_1:
             case HAM_2:
             case HAM_3:
             case HAM_4:
             case HAM_5:
             case HAM_6:
-                return createHam(context, color);
+                return createHam(context, builder, pieceCornerRadius);
         }
         throw new RuntimeException("Unknown button-enum!");
     }
 
-    private static Dot createDot(Context context, int color) {
+    private static Dot createDot(Context context, BoomButtonBuilder builder, int pieceCornerRadius) {
         Dot dot = new Dot(context);
-        dot.init(color);
+        dot.init(builder.pieceColor(context), pieceCornerRadius);
         return dot;
     }
 
-    private static Ham createHam(Context context, int color) {
+    private static Ham createHam(Context context, BoomButtonBuilder builder, int pieceCornerRadius) {
         Ham ham = new Ham(context);
-        ham.init(color);
+        ham.init(builder.pieceColor(context), pieceCornerRadius);
         return ham;
     }
 

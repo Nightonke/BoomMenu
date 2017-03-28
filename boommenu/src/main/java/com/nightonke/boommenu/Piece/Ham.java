@@ -21,9 +21,10 @@ final class Ham extends BoomPiece {
     }
 
     @Override
-    public void init(int color) {
-        Drawable backgroundDrawable = Util.getDrawable(this, R.drawable.piece_ham, null);
+    public void init(int color, int cornerRadius) {
+        Drawable backgroundDrawable = Util.getDrawable(this, R.drawable.piece, null);
         ((GradientDrawable)backgroundDrawable).setColor(color);
+        ((GradientDrawable)backgroundDrawable).setCornerRadius(cornerRadius);
         Util.setDrawable(this, backgroundDrawable);
     }
 
