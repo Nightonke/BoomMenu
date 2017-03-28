@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.nightonke.boommenu.BoomMenuButton;
 
+import static com.nightonke.boommenusample.R.id.bmb1;
+
 public class SquareAndPieceCornerRadiusActivity extends AppCompatActivity {
 
     @Override

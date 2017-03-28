@@ -1476,6 +1476,19 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
         toLayout();
     }
 
+    public int getPieceCornerRadius() {
+        return pieceCornerRadius;
+    }
+
+    /**
+     * Set the corner radius of pieces.
+     *
+     * @param pieceCornerRadius corner radius of pieces
+     */
+    public void setPieceCornerRadius(int pieceCornerRadius) {
+        this.pieceCornerRadius = pieceCornerRadius;
+    }
+
     public int getPieceHorizontalMargin() {
         return pieceHorizontalMargin;
     }
