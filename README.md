@@ -95,7 +95,7 @@ What if I want BMB to boom in just its parent-view?
 What's more for every version?  
 18. [Structure for BMB](https://github.com/Nightonke/BoomMenu/wiki/Structure-for-BMB)  
 Structure for BMB when I designed it, for sharing and communicating.
-1. [Change Boom Buttons Dynamically](https://github.com/Nightonke/BoomMenu/wiki/Change-Boom-Buttons-Dynamically)
+1. [Change Boom Buttons Dynamically](https://github.com/Nightonke/BoomMenu/wiki/Change-Boom-Buttons-Dynamically)  
 Change Boom Buttons Dynamically.
 
 ## Issues & Feedbacks
