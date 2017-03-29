@@ -26,7 +26,7 @@ public class BuilderManager {
             R.drawable.dolphin,
             R.drawable.eagle,
             R.drawable.horse,
-            R.drawable.jellyfish,
+            R.drawable.elephant,
             R.drawable.owl,
             R.drawable.peacock,
             R.drawable.pig,
