@@ -21,6 +21,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.StateSet;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -98,6 +100,27 @@ public class Util {
             //noinspection deprecation
             return view.getResources().getDrawable(id);
         }
+    }
+
+    public static void setDrawable(ImageView image, int id, Drawable drawable) {
+        if (image == null) return;
+        if (id == 0) {
+            if (drawable != null) image.setImageDrawable(drawable);
+        } else image.setImageResource(id);
+    }
+
+    public static void setText(TextView textView, int id, String text) {
+        if (textView == null) return;
+        if (id == 0) {
+            if (text != null && !text.equals(textView.getText())) textView.setText(text);
+        } else textView.setText(id);
+    }
+
+    public static void setTextColor(TextView textView, int id, int color) {
+        if (textView == null) return;
+        if (id == 0) {
+            textView.setTextColor(color);
+        } else textView.setTextColor(getColor(textView.getContext(), id));
     }
 
     public static Drawable getDrawable(View view, int id) {
@@ -280,8 +303,8 @@ public class Util {
         }
     }
 
-    public static int getColor(Context context, Integer id, int color) {
-        if (id == null) return color;
+    public static int getColor(Context context, int id, int color) {
+        if (id == 0) return color;
         else return getColor(context, id);
     }
 

@@ -106,6 +106,13 @@ public class BuilderManager {
                 .subNormalTextRes(R.string.text_ham_button_sub_text_normal);
     }
 
+    static HamButton.Builder getHamButtonBuilder(String text, String subText) {
+        return new HamButton.Builder()
+                .normalImageRes(getImageResource())
+                .normalText(text)
+                .subNormalText(subText);
+    }
+
     static HamButton.Builder getPieceCornerRadiusHamButtonBuilder() {
         return new HamButton.Builder()
                 .normalImageRes(getImageResource())

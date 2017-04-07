@@ -1087,9 +1087,25 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
         toLayout();
     }
 
+    /**
+     * Set builders array, notice that @needToLayout will be called.
+     *
+     * @param builders builders
+     */
     public void setBuilders(ArrayList<BoomButtonBuilder> builders) {
         boomButtonBuilders = builders;
         toLayout();
+    }
+
+    /**
+     * Get a builder at index.
+     *
+     * @param index index
+     * @return the builder at the index
+     */
+    public BoomButtonBuilder getBuilder(int index) {
+        if (boomButtonBuilders == null || index < 0 || index >= boomButtonBuilders.size()) return null;
+        else return boomButtonBuilders.get(index);
     }
 
     /**

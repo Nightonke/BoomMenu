@@ -36,4 +36,7 @@ final class Dot extends BoomPiece {
     public void setColor(int color) {
         ((GradientDrawable)getBackground()).setColor(color);
     }
+
+    @Override
+    public void setColorRes(int colorRes) { setColor(Util.getColor(getContext(), colorRes)); }
 }

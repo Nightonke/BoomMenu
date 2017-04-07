@@ -24,6 +24,8 @@ public abstract class BoomPiece extends View {
 
     public abstract void setColor(int color);
 
+    public abstract void setColorRes(int colorRes);
+
     public void place(int left, int top, int width, int height) {
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) getLayoutParams();
         if (layoutParams != null) {

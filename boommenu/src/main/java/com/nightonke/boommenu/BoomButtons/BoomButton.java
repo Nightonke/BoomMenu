@@ -57,7 +57,7 @@ public abstract class BoomButton extends FrameLayout {
 
     // piece
     protected Integer pieceColor = null;
-    protected Integer pieceColorRes = null;
+    protected int pieceColorRes = 0;
 
     // Shadow
     protected boolean shadowEffect = true;
@@ -69,25 +69,28 @@ public abstract class BoomButton extends FrameLayout {
     protected BMBShadow shadow;
 
     // Images
-    protected int normalImageRes = -1;
-    protected int highlightedImageRes = -1;
-    protected int unableImageRes = -1;
+    protected int normalImageRes = 0;
     protected Drawable normalImageDrawable;
+    protected int highlightedImageRes = 0;
     protected Drawable highlightedImageDrawable;
+    protected int unableImageRes = 0;
     protected Drawable unableImageDrawable;
     protected Rect imageRect = null;
     protected Rect imagePadding = null;
 
     // Text
-    protected int normalTextRes = -1;
-    protected int highlightedTextRes = -1;
-    protected int unableTextRes = -1;
+    protected int normalTextRes = 0;
     protected String normalText;
+    protected int highlightedTextRes = 0;
     protected String highlightedText;
+    protected int unableTextRes = 0;
     protected String unableText;
     protected int normalTextColor;
+    protected int normalTextColorRes = 0;
     protected int highlightedTextColor;
+    protected int highlightedTextColorRes = 0;
     protected int unableTextColor;
+    protected int unableTextColorRes = 0;
     protected Rect textRect = null;
     protected Rect textPadding = null;
     protected Typeface typeface;
@@ -97,15 +100,18 @@ public abstract class BoomButton extends FrameLayout {
     protected int textSize;
 
     // Sub text
-    protected int subNormalTextRes = -1;
-    protected int subHighlightedTextRes = -1;
-    protected int subUnableTextRes = -1;
+    protected int subNormalTextRes = 0;
     protected String subNormalText;
+    protected int subHighlightedTextRes = 0;
     protected String subHighlightedText;
+    protected int subUnableTextRes = 0;
     protected String subUnableText;
     protected int subNormalTextColor;
+    protected int subNormalTextColorRes = 0;
     protected int subHighlightedTextColor;
+    protected int subHighlightedTextColorRes = 0;
     protected int subUnableTextColor;
+    protected int subUnableTextColorRes = 0;
     protected Rect subTextRect = null;
     protected Rect subTextPadding = null;
     protected Typeface subTypeface;
@@ -123,11 +129,11 @@ public abstract class BoomButton extends FrameLayout {
     // Button Colors
     protected boolean rippleEffect = true;
     protected int normalColor;
-    protected Integer normalColorRes = null;
+    protected int normalColorRes = 0;
     protected int highlightedColor;
-    protected Integer highlightedColorRes = null;
+    protected int highlightedColorRes = 0;
     protected int unableColor;
-    protected Integer unableColorRes = null;
+    protected int unableColorRes = 0;
     protected boolean unable = false;
     protected boolean rippleEffectWorks = true;
     protected RippleDrawable rippleDrawable;
@@ -173,15 +179,18 @@ public abstract class BoomButton extends FrameLayout {
         imageRect = builder.imageRect;
         imagePadding = builder.imagePadding;
 
-        normalTextRes = builder.normalTextRes;
-        highlightedTextRes = builder.highlightedTextRes;
-        unableTextRes = builder.unableTextRes;
         normalText = builder.normalText;
+        normalTextRes = builder.normalTextRes;
         highlightedText = builder.highlightedText;
+        highlightedTextRes = builder.highlightedTextRes;
         unableText = builder.unableText;
+        unableTextRes = builder.unableTextRes;
         normalTextColor = builder.normalTextColor;
+        normalTextColorRes = builder.normalTextColorRes;
         highlightedTextColor = builder.highlightedTextColor;
+        highlightedTextColorRes = builder.highlightedTextColorRes;
         unableTextColor = builder.unableTextColor;
+        unableTextColorRes = builder.unableTextColorRes;
         textRect = builder.textRect;
         textPadding = builder.textPadding;
         typeface = builder.typeface;
@@ -190,15 +199,18 @@ public abstract class BoomButton extends FrameLayout {
         ellipsize = builder.ellipsize;
         textSize = builder.textSize;
 
-        subNormalTextRes = builder.subNormalTextRes;
-        subHighlightedTextRes = builder.subHighlightedTextRes;
-        subUnableTextRes = builder.subUnableTextRes;
         subNormalText = builder.subNormalText;
+        subNormalTextRes = builder.subNormalTextRes;
         subHighlightedText = builder.subHighlightedText;
+        subHighlightedTextRes = builder.subHighlightedTextRes;
         subUnableText = builder.subUnableText;
+        subUnableTextRes = builder.subUnableTextRes;
         subNormalTextColor = builder.subNormalTextColor;
+        subNormalTextColorRes = builder.subNormalTextColorRes;
         subHighlightedTextColor = builder.subHighlightedTextColor;
+        subHighlightedTextColorRes = builder.subHighlightedTextColorRes;
         subUnableTextColor = builder.subUnableTextColor;
+        subUnableTextColorRes = builder.subUnableTextColorRes;
         subTextRect = builder.subTextRect;
         subTextPadding = builder.subTextPadding;
         subTypeface = builder.subTypeface;
@@ -285,41 +297,17 @@ public abstract class BoomButton extends FrameLayout {
 
     protected void initImage() {
         image = new ImageView(context);
-        LayoutParams params = new LayoutParams(
-                imageRect.right - imageRect.left,
-                imageRect.bottom - imageRect.top);
-        params.leftMargin = imageRect.left;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-            params.setMarginStart(imageRect.left);
-        params.topMargin = imageRect.top;
-        if (imagePadding != null) {
-            image.setPadding(
-                    imagePadding.left,
-                    imagePadding.top,
-                    imagePadding.right,
-                    imagePadding.bottom);
-        }
-        button.addView(image, params);
+        updateImageRect();
+        updateImagePadding();
+        button.addView(image);
         lastStateIsNormal = false;
         toNormal();
     }
 
     protected void initText(ViewGroup parent) {
         text = new TextView(context);
-        FrameLayout.LayoutParams params = new LayoutParams(
-                textRect.right - textRect.left,
-                textRect.bottom - textRect.top);
-        params.leftMargin = textRect.left;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-            params.setMarginStart(textRect.left);
-        params.topMargin = textRect.top;
-        if (textPadding != null) {
-            text.setPadding(
-                    textPadding.left,
-                    textPadding.top,
-                    textPadding.right,
-                    textPadding.bottom);
-        }
+        updateTextRect();
+        updateTextPadding();
         if (typeface != null) text.setTypeface(typeface);
         text.setMaxLines(maxLines);
         text.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
@@ -339,26 +327,14 @@ public abstract class BoomButton extends FrameLayout {
                 }
             });
         }
-        parent.addView(text, params);
+        parent.addView(text);
     }
 
     protected void initSubText(ViewGroup parent) {
         if (!containsSubText) return;
         subText = new TextView(context);
-        FrameLayout.LayoutParams params = new LayoutParams(
-                subTextRect.right - subTextRect.left,
-                subTextRect.bottom - subTextRect.top);
-        params.leftMargin = subTextRect.left;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-            params.setMarginStart(subTextRect.left);
-        params.topMargin = subTextRect.top;
-        if (subTextPadding != null) {
-            subText.setPadding(
-                    subTextPadding.left,
-                    subTextPadding.top,
-                    subTextPadding.right,
-                    subTextPadding.bottom);
-        }
+        updateSubTextRect();
+        updateSubTextPadding();
         if (subTypeface != null) subText.setTypeface(subTypeface);
         subText.setMaxLines(maxLines);
         subText.setTextSize(TypedValue.COMPLEX_UNIT_SP, subTextSize);
@@ -378,7 +354,7 @@ public abstract class BoomButton extends FrameLayout {
                 }
             });
         }
-        parent.addView(subText, params);
+        parent.addView(subText);
     }
 
     @SuppressLint("NewApi")
@@ -444,13 +420,13 @@ public abstract class BoomButton extends FrameLayout {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         if (Util.pointInView(new PointF(event.getX(), event.getY()), button)) {
-                            toPress();
+                            toHighlighted();
                             ableToHighlight = true;
                         }
                         break;
                     case MotionEvent.ACTION_MOVE:
                         if (Util.pointInView(new PointF(event.getX(), event.getY()), button)) {
-                            toPress();
+                            toHighlighted();
                         } else {
                             ableToHighlight = false;
                             toNormal();
@@ -519,13 +495,13 @@ public abstract class BoomButton extends FrameLayout {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         if (Util.pointInView(new PointF(event.getX(), event.getY()), button)) {
-                            toPress();
+                            toHighlighted();
                             ableToHighlight = true;
                         }
                         break;
                     case MotionEvent.ACTION_MOVE:
                         if (Util.pointInView(new PointF(event.getX(), event.getY()), button)) {
-                            toPress();
+                            toHighlighted();
                         } else {
                             ableToHighlight = false;
                             toNormal();
@@ -550,82 +526,162 @@ public abstract class BoomButton extends FrameLayout {
         return layoutParams;
     }
 
-    protected void toPressImage() {
-        if (unable && unableImageRes != -1) image.setImageResource(unableImageRes);
-        else if (unable && unableImageDrawable != null) image.setImageDrawable(unableImageDrawable);
-        else if (highlightedImageRes != -1) image.setImageResource(highlightedImageRes);
-        else if (highlightedImageDrawable != null) image.setImageDrawable(highlightedImageDrawable);
+    /**
+     * When the parameters about image are changed by builder, the corresponding builder should
+     * call this method to update the image on the ImageView.
+     */
+    void updateImage() {
+        if (lastStateIsNormal) toNormalImage();
+        else toHighlightedImage();
+    }
+
+    void updateText() {
+        if (lastStateIsNormal) toNormalText();
+        else toHighlightedText();
+    }
+
+    void updateSubText() {
+        if (lastStateIsNormal) toNormalSubText();
+        else toHighlightedSubText();
+    }
+
+    void updateImageRect() {
+        LayoutParams params = new LayoutParams(
+                imageRect.right - imageRect.left,
+                imageRect.bottom - imageRect.top);
+        params.leftMargin = imageRect.left;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+            params.setMarginStart(imageRect.left);
+        params.topMargin = imageRect.top;
+        if (image != null) image.setLayoutParams(params);
+    }
+
+    void updateImagePadding() {
+        if (imagePadding != null && image != null) {
+            image.setPadding(
+                    imagePadding.left,
+                    imagePadding.top,
+                    imagePadding.right,
+                    imagePadding.bottom);
+        }
+    }
+
+    void updateTextRect() {
+        FrameLayout.LayoutParams params = new LayoutParams(
+                textRect.right - textRect.left,
+                textRect.bottom - textRect.top);
+        params.leftMargin = textRect.left;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+            params.setMarginStart(textRect.left);
+        params.topMargin = textRect.top;
+        if (text != null) text.setLayoutParams(params);
+    }
+
+    void updateTextPadding() {
+        if (textPadding != null && text != null) {
+            text.setPadding(
+                    textPadding.left,
+                    textPadding.top,
+                    textPadding.right,
+                    textPadding.bottom);
+        }
+    }
+
+    void updateSubTextRect() {
+        FrameLayout.LayoutParams params = new LayoutParams(
+                subTextRect.right - subTextRect.left,
+                subTextRect.bottom - subTextRect.top);
+        params.leftMargin = subTextRect.left;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+            params.setMarginStart(subTextRect.left);
+        params.topMargin = subTextRect.top;
+        if (subText != null) subText.setLayoutParams(params);
+    }
+
+    void updateSubTextPadding() {
+        if (subTextPadding != null && subText != null) {
+            subText.setPadding(
+                    subTextPadding.left,
+                    subTextPadding.top,
+                    subTextPadding.right,
+                    subTextPadding.bottom);
+        }
+    }
+
+    void updateButtonDrawable() {
+        if (buttonEnum == ButtonEnum.SimpleCircle
+                || buttonEnum == ButtonEnum.TextInsideCircle
+                || buttonEnum == ButtonEnum.TextOutsideCircle) {
+            initCircleButtonDrawable();
+        } else initHamButtonDrawable();
+    }
+
+    void updateUnable() {
+        if (rippleEffectWorks) updateButtonDrawable();
+        button.setEnabled(!unable);
+        if (lastStateIsNormal) {
+            toNormalImage();
+            toNormalText();
+            toNormalSubText();
+        } else {
+            toHighlightedImage();
+            toHighlightedText();
+            toHighlightedSubText();
+        }
     }
 
     protected void toNormalImage() {
-        if (unable && unableImageRes != -1) image.setImageResource(unableImageRes);
-        else if (unable && unableImageDrawable != null) image.setImageDrawable(unableImageDrawable);
-        else if (normalImageRes != -1) image.setImageResource(normalImageRes);
-        else if (normalImageDrawable != null) image.setImageDrawable(normalImageDrawable);
+        if (unable) Util.setDrawable(image, unableImageRes, unableImageDrawable);
+        else Util.setDrawable(image, normalImageRes, normalImageDrawable);
     }
 
-    protected void toPressText() {
-        if (unable && unableTextRes != -1) setText(unableTextRes);
-        else if (unable && unableText != null) setText(unableText);
-        else if (highlightedTextRes != -1) setText(highlightedTextRes);
-        else if (highlightedText != null) setText(highlightedText);
-
-        if (unable) text.setTextColor(unableTextColor);
-        else text.setTextColor(highlightedTextColor);
+    protected void toHighlightedImage() {
+        if (unable) Util.setDrawable(image, unableImageRes, unableImageDrawable);
+        else Util.setDrawable(image, highlightedImageRes, highlightedImageDrawable);
     }
 
     protected void toNormalText() {
-        if (unable && unableTextRes != -1) setText(unableTextRes);
-        else if (unable && unableText != null) setText(unableText);
-        else if (normalTextRes != -1) setText(normalTextRes);
-        else if (normalText != null) setText(normalText);
-
-        if (unable) text.setTextColor(unableTextColor);
-        else text.setTextColor(normalTextColor);
+        if (unable) {
+            Util.setText(text, unableTextRes, unableText);
+            Util.setTextColor(text, unableTextColorRes, unableTextColor);
+        } else {
+            Util.setText(text, normalTextRes, normalText);
+            Util.setTextColor(text, normalTextColorRes, normalTextColor);
+        }
     }
 
-    protected void toPressSubText() {
-        if (unable && subUnableTextRes != -1) setSubText(subUnableTextRes);
-        else if (unable && subUnableText != null) setSubText(subUnableText);
-        else if (subHighlightedTextRes != -1) setSubText(subHighlightedTextRes);
-        else if (subHighlightedText != null) setSubText(subHighlightedText);
-
-        if (subText != null) {
-            if (unable) subText.setTextColor(subUnableTextColor);
-            else subText.setTextColor(subHighlightedTextColor);
+    protected void toHighlightedText() {
+        if (unable) {
+            Util.setText(text, unableTextRes, unableText);
+            Util.setTextColor(text, unableTextColorRes, unableTextColor);
+        } else {
+            Util.setText(text, highlightedTextRes, highlightedText);
+            Util.setTextColor(text, highlightedTextColorRes, highlightedTextColor);
         }
     }
 
     protected void toNormalSubText() {
-        if (unable && subUnableTextRes != -1) setSubText(subUnableTextRes);
-        else if (unable && subUnableText != null) setSubText(subUnableText);
-        else if (subNormalTextRes != -1) setSubText(subNormalTextRes);
-        else if (subNormalText != null) setSubText(subNormalText);
-
-        if (subText != null) {
-            if (unable) subText.setTextColor(subUnableTextColor);
-            else subText.setTextColor(subNormalTextColor);
+        if (unable) {
+            Util.setText(subText, subUnableTextRes, subUnableText);
+            Util.setTextColor(subText, subUnableTextColorRes, subUnableTextColor);
+        } else {
+            Util.setText(subText, subNormalTextRes, subNormalText);
+            Util.setTextColor(subText, subNormalTextColorRes, subNormalTextColor);
         }
     }
 
-    private void setText(int stringRes) {
-        setText((String) getContext().getResources().getText(stringRes));
-    }
-
-    private void setText(String string) {
-        if (string != null && !string.equals(text.getText())) text.setText(string);
-    }
-
-    private void setSubText(int stringRes) {
-        setSubText((String) getContext().getResources().getText(stringRes));
-    }
-
-    private void setSubText(String string) {
-        if (string != null && subText != null && !string.equals(subText.getText())) subText.setText(string);
+    protected void toHighlightedSubText() {
+        if (unable) {
+            Util.setText(subText, subUnableTextRes, subUnableText);
+            Util.setTextColor(subText, subUnableTextColorRes, subUnableTextColor);
+        } else {
+            Util.setText(subText, subHighlightedTextRes, subHighlightedText);
+            Util.setTextColor(subText, subHighlightedTextColorRes, subHighlightedTextColor);
+        }
     }
 
     public int pieceColor() {
-        if (pieceColor == null && pieceColorRes == null)
+        if (pieceColor == null && pieceColorRes == 0)
             if (unable) return unableColor();
             else return normalColor();
         else if (pieceColor == null) return Util.getColor(context, pieceColorRes);
@@ -638,7 +694,7 @@ public abstract class BoomButton extends FrameLayout {
     }
 
     public boolean isNeededColorAnimation() {
-        if (pieceColor == null) return false;
+        Integer pieceColor = pieceColor();
         if (unable) return pieceColor.compareTo(unableColor()) != 0;
         else return pieceColor.compareTo(normalColor()) != 0;
     }
@@ -740,7 +796,7 @@ public abstract class BoomButton extends FrameLayout {
     public abstract int trueHeight();
     public abstract int contentWidth();
     public abstract int contentHeight();
-    protected abstract void toPress();
+    protected abstract void toHighlighted();
     protected abstract void toNormal();
     public abstract void setRotateAnchorPoints();
     public abstract void setSelfScaleAnchorPoints();

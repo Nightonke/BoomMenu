@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,6 +22,7 @@ import java.util.ArrayList;
  * For more projects: https://github.com/Nightonke
  */
 
+@SuppressWarnings("unused")
 public class HamButton extends BoomButton {
 
     private HamButton(Builder builder, Context context) {
@@ -86,11 +86,11 @@ public class HamButton extends BoomButton {
     }
 
     @Override
-    public void toPress() {
+    public void toHighlighted() {
         if (lastStateIsNormal && ableToHighlight) {
-            toPressImage();
-            toPressText();
-            toPressSubText();
+            toHighlightedImage();
+            toHighlightedText();
+            toHighlightedSubText();
             lastStateIsNormal = false;
         }
     }
@@ -115,117 +115,13 @@ public class HamButton extends BoomButton {
 
     }
 
-    /**
-     * Builder of ham boom button.
-     * You can use this builder to set:
-     * rotateImage,
-     * shadowEffect,
-     * shadowOffsetX,
-     * shadowOffsetY,
-     * shadowRadius,
-     * shadowColor,
-     * normalImageRes,
-     * highlightedImageRes,
-     * unableImageRes,
-     * normalImageDrawable,
-     * highlightedImageDrawable,
-     * unableImageRes,
-     * imageRect,
-     * imagePadding,
-     * normalTextRes,
-     * highlightedTextRes,
-     * unableTextRes,
-     * normalText,
-     * highlightedText,
-     * unableText,
-     * normalTextColor,
-     * highlightedTextColor,
-     * unableTextColor,
-     * textRect,
-     * textPadding,
-     * typeface,
-     * maxLines,
-     * textGravity,
-     * ellipsize,
-     * textSize,
-     * subNormalTextRes,
-     * subHighlightedTextRes,
-     * subUnableTextRes,
-     * subNormalText,
-     * subHighlightedText,
-     * subUnableText,
-     * subNormalTextColor,
-     * subHighlightedTextColor
-     * subUnableTextColor,
-     * subTextRect,
-     * subTextPadding,
-     * subTypeface,
-     * subMaxLines,
-     * subTextGravity,
-     * subEllipsize,
-     * subTextSize,
-     * rippleEffect,
-     * normalColor,
-     * highlightedColor,
-     * rippleColor,
-     * unableColor,
-     * unable,
-     * buttonWidth,
-     * buttonHeight.
-     */
-    public static class Builder extends BoomButtonBuilder {
+    public static class Builder extends BoomButtonWithTextBuilder<Builder> {
 
         public Builder() {
             imageRect = new Rect(0, 0, Util.dp2px(60), Util.dp2px(60));
             textRect = new Rect(Util.dp2px(70), Util.dp2px(10), Util.dp2px(280), Util.dp2px(40));
             textGravity = Gravity.START|Gravity.CENTER_VERTICAL;
             textSize = 15;
-        }
-
-        //region setters
-
-        /**
-         * Set the index of the boom-button, don't use this method.
-         *
-         * @param index the index
-         * @return the builder
-         */
-        public Builder index(int index) {
-            this.index = index;
-            return this;
-        }
-
-        /**
-         * Set the listener of the boom-button, don't use this method.
-         *
-         * @param listener the listener
-         * @return the builder
-         */
-        public Builder innerListener(InnerOnBoomButtonClickListener listener) {
-            this.listener = listener;
-            return this;
-        }
-
-        /**
-         * Set listener for when the boom-button is clicked.
-         *
-         * @param onBMClickListener OnBMClickListener
-         * @return the builder
-         */
-        public Builder listener(OnBMClickListener onBMClickListener) {
-            this.onBMClickListener = onBMClickListener;
-            return this;
-        }
-
-        /**
-         * Whether the image-view should rotate.
-         *
-         * @param rotateImage rotate or not
-         * @return the builder
-         */
-        public Builder rotateImage(boolean rotateImage) {
-            this.rotateImage = rotateImage;
-            return this;
         }
 
         /**
@@ -240,443 +136,266 @@ public class HamButton extends BoomButton {
         }
 
         /**
-         * Whether the boom-button should have a shadow effect.
-         *
-         * @param shadowEffect have shadow effect or not
-         * @return the builder
-         */
-        public Builder shadowEffect(boolean shadowEffect) {
-            this.shadowEffect = shadowEffect;
-            return this;
-        }
-
-        /**
-         * Set the horizontal shadow-offset of the boom-button.
-         *
-         * @param shadowOffsetX the shadow offset x
-         * @return the builder
-         */
-        public Builder shadowOffsetX(int shadowOffsetX) {
-            this.shadowOffsetX = shadowOffsetX;
-            return this;
-        }
-
-        /**
-         * Set the vertical shadow-offset of the boom-button.
-         *
-         * @param shadowOffsetY the shadow offset y
-         * @return the builder
-         */
-        public Builder shadowOffsetY(int shadowOffsetY) {
-            this.shadowOffsetY = shadowOffsetY;
-            return this;
-        }
-
-        /**
-         * Set the radius of shadow of the boom-button.
-         *
-         * @param shadowRadius the shadow radius
-         * @return the builder
-         */
-        public Builder shadowRadius(int shadowRadius) {
-            this.shadowRadius = shadowRadius;
-            return this;
-        }
-
-        /**
-         * Set the corner-radius of the shadow.
-         *
-         * @param shadowCornerRadius corner-radius of the shadow
-         * @return the builder
-         */
-        public Builder shadowCornerRadius(int shadowCornerRadius) {
-            this.shadowCornerRadius = shadowCornerRadius;
-            return this;
-        }
-
-        /**
-         * Set the color of the shadow of boom-button.
-         *
-         * @param shadowColor the shadow color
-         * @return the builder
-         */
-        public Builder shadowColor(int shadowColor) {
-            this.shadowColor = shadowColor;
-            return this;
-        }
-
-        /**
-         * Set the image resource when boom-button is at normal-state.
-         *
-         * @param normalImageRes the normal image res
-         * @return the builder
-         */
-        public Builder normalImageRes(int normalImageRes) {
-            this.normalImageRes = normalImageRes;
-            return this;
-        }
-
-        /**
-         * Set the image resource when boom-button is at highlighted-state.
-         *
-         * @param highlightedImageRes the highlighted image res
-         * @return the builder
-         */
-        public Builder highlightedImageRes(int highlightedImageRes) {
-            this.highlightedImageRes = highlightedImageRes;
-            return this;
-        }
-
-        /**
-         * Set the image resource when boom-button is at unable-state.
-         *
-         * @param unableImageRes the unable image res
-         * @return the builder
-         */
-        public Builder unableImageRes(int unableImageRes) {
-            this.unableImageRes = unableImageRes;
-            return this;
-        }
-
-        /**
-         * Set the image drawable when boom-button is at normal-state.
-         *
-         * @param normalImageDrawable the normal image drawable
-         * @return the builder
-         */
-        public Builder normalImageDrawable(Drawable normalImageDrawable) {
-            this.normalImageDrawable = normalImageDrawable;
-            return this;
-        }
-
-        /**
-         * Set the image drawable when boom-button is at highlighted-state.
-         *
-         * @param highlightedImageDrawable the highlighted image drawable
-         * @return the builder
-         */
-        public Builder highlightedImageDrawable(Drawable highlightedImageDrawable) {
-            this.highlightedImageDrawable = highlightedImageDrawable;
-            return this;
-        }
-
-        /**
-         * Set the image drawable when boom-button is at unable-state.
-         *
-         * @param unableImageDrawable the unable image drawable
-         * @return the builder
-         */
-        public Builder unableImageDrawable(Drawable unableImageDrawable) {
-            this.unableImageDrawable = unableImageDrawable;
-            return this;
-        }
-
-        /**
-         * Set the rect of image.
-         * By this method, you can set the position and size of the image-view in boom-button.
-         * For example, builder.imageRect(new Rect(0, 50, 100, 100)) will make the
-         * image-view's size to be 100 * 50 and margin-top to be 50 pixel.
-         *
-         * @param imageRect the image rect, in pixel.
-         * @return the builder
-         */
-        public Builder imageRect(Rect imageRect) {
-            this.imageRect = imageRect;
-            return this;
-        }
-
-        /**
-         * Set the padding of image.
-         * By this method, you can control the padding in the image-view.
-         * For instance, builder.imagePadding(new Rect(10, 10, 10, 10)) will make the
-         * image-view content 10-pixel padding to itself.
-         *
-         * @param imagePadding the image padding
-         * @return the builder
-         */
-        public Builder imagePadding(Rect imagePadding) {
-            this.imagePadding = imagePadding;
-            return this;
-        }
-
-        /**
-         * Set the text resource when boom-button is at normal-state.
-         *
-         * @param normalTextRes text resource
-         * @return the builder
-         */
-        public Builder normalTextRes(int normalTextRes) {
-            this.normalTextRes = normalTextRes;
-            return this;
-        }
-
-        /**
-         * Set the text resource when boom-button is at highlighted-state.
-         *
-         * @param highlightedTextRes text resource
-         * @return the builder
-         */
-        public Builder highlightedTextRes(int highlightedTextRes) {
-            this.highlightedTextRes = highlightedTextRes;
-            return this;
-        }
-
-        /**
-         * Set the text resource when boom-button is at unable-state.
-         *
-         * @param unableTextRes text resource
-         * @return the builder
-         */
-        public Builder unableTextRes(int unableTextRes) {
-            this.unableTextRes = unableTextRes;
-            return this;
-        }
-
-        /**
-         * Set the text when boom-button is at normal-state.
-         *
-         * @param normalText text
-         * @return the builder
-         */
-        public Builder normalText(String normalText) {
-            this.normalText = normalText;
-            return this;
-        }
-
-        /**
-         * Set the text when boom-button is at highlighted-state.
-         *
-         * @param highlightedText text
-         * @return the builder
-         */
-        public Builder highlightedText(String highlightedText) {
-            this.highlightedText = highlightedText;
-            return this;
-        }
-
-        /**
-         * Set the text when boom-button is at unable-state.
-         *
-         * @param unableText text
-         * @return the builder
-         */
-        public Builder unableText(String unableText) {
-            this.unableText = unableText;
-            return this;
-        }
-
-        /**
-         * Set the color of text when boom-button is at normal-state.
-         *
-         * @param normalTextColor color of text
-         * @return the builder
-         */
-        public Builder normalTextColor(int normalTextColor) {
-            this.normalTextColor = normalTextColor;
-            return this;
-        }
-
-        /**
-         * Set the color of text when boom-button is at highlighted-state.
-         *
-         * @param highlightedTextColor color of text
-         * @return the builder
-         */
-        public Builder highlightedTextColor(int highlightedTextColor) {
-            this.highlightedTextColor = highlightedTextColor;
-            return this;
-        }
-
-        /**
-         * Set the color of text when boom-button is at unable-state.
-         *
-         * @param unableTextColor color the text
-         * @return the builder
-         */
-        public Builder unableTextColor(int unableTextColor) {
-            this.unableTextColor = unableTextColor;
-            return this;
-        }
-
-        /**
-         * Set the rect of text.
-         * By this method, you can set the position and size of the text-view in boom-button.
-         * For example, builder.textRect(new Rect(0, 50, 100, 100)) will make the
-         * text-view's size to be 100 * 50 and margin-top to be 50 pixel.
-         *
-         * @param textRect the text rect, in pixel.
-         * @return the builder
-         */
-        public Builder textRect(Rect textRect) {
-            this.textRect = textRect;
-            return this;
-        }
-
-        /**
-         * Set the padding of text.
-         * By this method, you can control the padding in the text-view.
-         * For instance, builder.textPadding(new Rect(10, 10, 10, 10)) will make the
-         * text-view content 10-pixel padding to itself.
-         *
-         * @param textPadding the image padding
-         * @return the builder
-         */
-        public Builder textPadding(Rect textPadding) {
-            this.textPadding = textPadding;
-            return this;
-        }
-
-        /**
-         * Set the typeface of the text.
-         *
-         * @param typeface typeface
-         * @return the builder
-         */
-        public Builder typeface(Typeface typeface) {
-            this.typeface = typeface;
-            return this;
-        }
-
-        /**
-         * Set the maximum of the lines of text-view.
-         *
-         * @param maxLines maximum lines
-         * @return the builder
-         */
-        public Builder maxLines(int maxLines) {
-            this.maxLines = maxLines;
-            return this;
-        }
-
-        /**
-         * Set the gravity of text-view.
-         *
-         * @param gravity gravity, for example, Gravity.CENTER
-         * @return the builder
-         */
-        public Builder textGravity(int gravity) {
-            this.textGravity = gravity;
-            return this;
-        }
-
-        /**
-         * Set the ellipsize of the text-view.
-         *
-         * @param ellipsize ellipsize
-         * @return the builder
-         */
-        public Builder ellipsize(TextUtils.TruncateAt ellipsize) {
-            this.ellipsize = ellipsize;
-            return this;
-        }
-
-        /**
-         * Set the text size of the text-view.
-         *
-         * @param textSize size of text, in sp
-         * @return the builder
-         */
-        public Builder textSize(int textSize) {
-            this.textSize = textSize;
-            return this;
-        }
-
-        /**
-         * Set the sub-text resource when boom-button is at normal-state.
-         *
-         * @param subNormalTextRes sub-text resource
-         * @return the builder
-         */
-        public Builder subNormalTextRes(int subNormalTextRes) {
-            this.subNormalTextRes = subNormalTextRes;
-            return this;
-        }
-
-        /**
-         * Set the sub-text resource when boom-button is at highlighted-state.
-         *
-         * @param subHighlightedTextRes sub-text resource
-         * @return the builder
-         */
-        public Builder subHighlightedTextRes(int subHighlightedTextRes) {
-            this.subHighlightedTextRes = subHighlightedTextRes;
-            return this;
-        }
-
-        /**
-         * Set the sub-text resource when boom-button is at unable-state.
-         *
-         * @param subUnableTextRes sub-text resource
-         * @return the builder
-         */
-        public Builder subUnableTextRes(int subUnableTextRes) {
-            this.subUnableTextRes = subUnableTextRes;
-            return this;
-        }
-
-        /**
          * Set the sub-text when boom-button is at normal-state.
+         * <br/>
+         * <br/>
+         * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
+         * then synchronize this change to boom-button.
          *
          * @param subNormalText sub-text
          * @return the builder
          */
         public Builder subNormalText(String subNormalText) {
-            this.subNormalText = subNormalText;
+            if (this.subNormalText == null || !this.subNormalText.equals(subNormalText)) {
+                this.subNormalText = subNormalText;
+                BoomButton button = button();
+                if (button != null) {
+                    button.subNormalText = subNormalText;
+                    button.updateSubText();
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Set the sub-text resource when boom-button is at normal-state.
+         * <br/>
+         * <br/>
+         * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
+         * then synchronize this change to boom-button.
+         *
+         * @param subNormalTextRes sub-text resource
+         * @return the builder
+         */
+        public Builder subNormalTextRes(int subNormalTextRes) {
+            if (this.subNormalTextRes != subNormalTextRes) {
+                this.subNormalTextRes = subNormalTextRes;
+                BoomButton button = button();
+                if (button != null) {
+                    button.subNormalTextRes = subNormalTextRes;
+                    button.updateSubText();
+                }
+            }
             return this;
         }
 
         /**
          * Set the sub-text when boom-button is at highlighted-state.
+         * <br/>
+         * <br/>
+         * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
+         * then synchronize this change to boom-button.
          *
          * @param subHighlightedText sub-text
          * @return the builder
          */
         public Builder subHighlightedText(String subHighlightedText) {
-            this.subHighlightedText = subHighlightedText;
+            if (this.subHighlightedText == null || !this.subHighlightedText.equals(subHighlightedText)) {
+                this.subHighlightedText = subHighlightedText;
+                BoomButton button = button();
+                if (button != null) {
+                    button.subHighlightedText = subHighlightedText;
+                    button.updateSubText();
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Set the sub-text resource when boom-button is at highlighted-state.
+         * <br/>
+         * <br/>
+         * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
+         * then synchronize this change to boom-button.
+         *
+         * @param subHighlightedTextRes sub-text resource
+         * @return the builder
+         */
+        public Builder subHighlightedTextRes(int subHighlightedTextRes) {
+            if (this.subHighlightedTextRes != subHighlightedTextRes) {
+                this.subHighlightedTextRes = subHighlightedTextRes;
+                BoomButton button = button();
+                if (button != null) {
+                    button.subHighlightedTextRes = subHighlightedTextRes;
+                    button.updateSubText();
+                }
+            }
             return this;
         }
 
         /**
          * Set the sub-text when boom-button is at unable-state.
+         * <br/>
+         * <br/>
+         * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
+         * then synchronize this change to boom-button.
          *
          * @param subUnableText sub-text
          * @return the builder
          */
         public Builder subUnableText(String subUnableText) {
-            this.subUnableText = subUnableText;
+            if (this.subUnableText == null || !this.subUnableText.equals(subUnableText)) {
+                this.subUnableText = subUnableText;
+                BoomButton button = button();
+                if (button != null) {
+                    button.subUnableText = subUnableText;
+                    button.updateSubText();
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Set the sub-text resource when boom-button is at unable-state.
+         * <br/>
+         * <br/>
+         * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
+         * then synchronize this change to boom-button.
+         *
+         * @param subUnableTextRes sub-text resource
+         * @return the builder
+         */
+        public Builder subUnableTextRes(int subUnableTextRes) {
+            if (this.subUnableTextRes != subUnableTextRes) {
+                this.subUnableTextRes = subUnableTextRes;
+                BoomButton button = button();
+                if (button != null) {
+                    button.subUnableTextRes = subUnableTextRes;
+                    button.updateSubText();
+                }
+            }
             return this;
         }
 
         /**
          * Set the color of sub-text when boom-button is at normal-state.
+         * <br/>
+         * <br/>
+         * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
+         * then synchronize this change to boom-button.
          *
          * @param subNormalTextColor color of sub-text
          * @return the builder
          */
         public Builder subNormalTextColor(int subNormalTextColor) {
-            this.subNormalTextColor = subNormalTextColor;
+            if (this.subNormalTextColor != subNormalTextColor) {
+                this.subNormalTextColor = subNormalTextColor;
+                BoomButton button = button();
+                if (button != null) {
+                    button.subNormalTextColor = subNormalTextColor;
+                    button.updateSubText();
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Set the color of sub-text when boom-button is at normal-state.
+         * <br/>
+         * <br/>
+         * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
+         * then synchronize this change to boom-button.
+         *
+         * @param subNormalTextColorRes color resource of sub-text
+         * @return the builder
+         */
+        public Builder subNormalTextColorRes(int subNormalTextColorRes) {
+            if (this.subNormalTextColorRes != subNormalTextColorRes) {
+                this.subNormalTextColorRes = subNormalTextColorRes;
+                BoomButton button = button();
+                if (button != null) {
+                    button.subNormalTextColorRes = subNormalTextColorRes;
+                    button.updateSubText();
+                }
+            }
             return this;
         }
 
         /**
          * Set the color of sub-text when boom-button is at highlighted-state.
+         * <br/>
+         * <br/>
+         * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
+         * then synchronize this change to boom-button.
          *
          * @param subHighlightedTextColor color of sub-text
          * @return the builder
          */
         public Builder subHighlightedTextColor(int subHighlightedTextColor) {
-            this.subHighlightedTextColor = subHighlightedTextColor;
+            if (this.subHighlightedTextColor != subHighlightedTextColor) {
+                this.subHighlightedTextColor = subHighlightedTextColor;
+                BoomButton button = button();
+                if (button != null) {
+                    button.subHighlightedTextColor = subHighlightedTextColor;
+                    button.updateSubText();
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Set the color of sub-text when boom-button is at highlighted-state.
+         * <br/>
+         * <br/>
+         * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
+         * then synchronize this change to boom-button.
+         *
+         * @param subHighlightedTextColorRes color resource of sub-text
+         * @return the builder
+         */
+        public Builder subHighlightedTextColorRes(int subHighlightedTextColorRes) {
+            if (this.subHighlightedTextColorRes != subHighlightedTextColorRes) {
+                this.subHighlightedTextColorRes = subHighlightedTextColorRes;
+                BoomButton button = button();
+                if (button != null) {
+                    button.subHighlightedTextColorRes = subHighlightedTextColorRes;
+                    button.updateSubText();
+                }
+            }
             return this;
         }
 
         /**
          * Set the color of sub-text when boom-button is at unable-state.
+         * <br/>
+         * <br/>
+         * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
+         * then synchronize this change to boom-button.
          *
-         * @param subUnableTextColor color the sub-text
+         * @param subUnableTextColor color of sub-text
          * @return the builder
          */
         public Builder subUnableTextColor(int subUnableTextColor) {
-            this.subUnableTextColor = subUnableTextColor;
+            if (this.subUnableTextColor != subUnableTextColor) {
+                this.subUnableTextColor = subUnableTextColor;
+                BoomButton button = button();
+                if (button != null) {
+                    button.subUnableTextColor = subUnableTextColor;
+                    button.updateSubText();
+                }
+            }
+            return this;
+        }
+
+        /**
+         * Set the color of sub-text when boom-button is at unable-state.
+         * <br/>
+         * <br/>
+         * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
+         * then synchronize this change to boom-button.
+         *
+         * @param subUnableTextColorRes color resource of sub-text
+         * @return the builder
+         */
+        public Builder subUnableTextColorRes(int subUnableTextColorRes) {
+            if (this.subUnableTextColorRes != subUnableTextColorRes) {
+                this.subUnableTextColorRes = subUnableTextColorRes;
+                BoomButton button = button();
+                if (button != null) {
+                    button.subUnableTextColorRes = subUnableTextColorRes;
+                    button.updateSubText();
+                }
+            }
             return this;
         }
 
@@ -685,12 +404,23 @@ public class HamButton extends BoomButton {
          * By this method, you can set the position and size of the sub-text-view in boom-button.
          * For example, builder.textRect(new Rect(0, 50, 100, 100)) will make the
          * sub-text-view's size to be 100 * 50 and margin-top to be 50 pixel.
+         * <br/>
+         * <br/>
+         * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
+         * then synchronize this change to boom-button.
          *
          * @param subTextRect the sub-text rect, in pixel.
          * @return the builder
          */
         public Builder subTextRect(Rect subTextRect) {
-            this.subTextRect = subTextRect;
+            if (this.subTextRect != subTextRect) {
+                this.subTextRect = subTextRect;
+                BoomButton button = button();
+                if (button != null) {
+                    button.subTextRect = subTextRect;
+                    button.updateSubTextRect();
+                }
+            }
             return this;
         }
 
@@ -699,12 +429,23 @@ public class HamButton extends BoomButton {
          * By this method, you can control the padding in the sub-text-view.
          * For instance, builder.textPadding(new Rect(10, 10, 10, 10)) will make the
          * sub-text-view content 10-pixel padding to itself.
+         * <br/>
+         * <br/>
+         * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
+         * then synchronize this change to boom-button.
          *
          * @param subTextPadding the sub-text padding
          * @return the builder
          */
         public Builder subTextPadding(Rect subTextPadding) {
-            this.subTextPadding = subTextPadding;
+            if (this.subTextPadding != subTextPadding) {
+                this.subTextPadding = subTextPadding;
+                BoomButton button = button();
+                if (button != null) {
+                    button.subTextPadding = subTextPadding;
+                    button.updateSubTextPadding();
+                }
+            }
             return this;
         }
 
@@ -764,116 +505,6 @@ public class HamButton extends BoomButton {
         }
 
         /**
-         * Whether the boom-button should have a ripple effect.
-         *
-         * @param rippleEffect the ripple effect
-         * @return the builder
-         */
-        public Builder rippleEffect(boolean rippleEffect) {
-            this.rippleEffect = rippleEffect;
-            return this;
-        }
-
-        /**
-         * The color of boom-button when it is at normal-state.
-         *
-         * @param normalColor the normal color
-         * @return the builder
-         */
-        public Builder normalColor(int normalColor) {
-            this.normalColor = normalColor;
-            return this;
-        }
-
-        /**
-         * The resource of color of boom-button when it is at normal-state.
-         *
-         * @param normalColorRes resource of normal color
-         * @return the builder
-         */
-        public Builder normalColorRes(int normalColorRes) {
-            this.normalColorRes = normalColorRes;
-            return this;
-        }
-
-        /**
-         * The color of boom-button when it is at highlighted-state.
-         *
-         * @param highlightedColor the highlighted color
-         * @return the builder
-         */
-        public Builder highlightedColor(int highlightedColor) {
-            this.highlightedColor = highlightedColor;
-            return this;
-        }
-
-        /**
-         * The resource of color of boom-button when it is at highlighted-state.
-         *
-         * @param highlightedColorRes resource of highlighted color
-         * @return the builder
-         */
-        public Builder highlightedColorRes(int highlightedColorRes) {
-            this.highlightedColorRes = highlightedColorRes;
-            return this;
-        }
-
-        /**
-         * The color of boom-button when it is at unable-state.
-         *
-         * @param unableColor the unable color
-         * @return the builder
-         */
-        public Builder unableColor(int unableColor) {
-            this.unableColor = unableColor;
-            return this;
-        }
-
-        /**
-         * The resource of color of boom-button when it is at unable-state.
-         *
-         * @param unableColorRes resource of unable color
-         * @return the builder
-         */
-        public Builder unableColorRes(int unableColorRes) {
-            this.unableColorRes = unableColorRes;
-            return this;
-        }
-
-        /**
-         * The color of boom-button when it is just a piece.
-         *
-         * @param pieceColor color of piece
-         * @return the builder
-         */
-        public HamButton.Builder pieceColor(int pieceColor) {
-            this.pieceColor = pieceColor;
-            return this;
-        }
-
-        /**
-         * The resource of color of boom-button when it is just a piece.
-         *
-         * @param pieceColorRes resource of color of piece
-         * @return the builder
-         */
-        public Builder pieceColorRes(int pieceColorRes) {
-            this.pieceColorRes = pieceColorRes;
-            return this;
-        }
-
-        /**
-         * Whether the boom-button is unable, default value is false.
-         *
-         * @param unable the unable
-         * @return the builder
-         */
-        public Builder unable(boolean unable) {
-            this.unable = unable;
-            return this;
-        }
-
-        /**
          * Set the width of boom-button, in pixel.
          *
          * @param buttonWidth width of button
@@ -906,10 +537,6 @@ public class HamButton extends BoomButton {
             return this;
         }
 
-        //endregion
-
-        //region getters
-
         /**
          * Get the width of boom-button.
          *
@@ -937,7 +564,9 @@ public class HamButton extends BoomButton {
          * @return the ham button
          */
         public HamButton build(Context context) {
-            return new HamButton(this, context);
+            HamButton button = new HamButton(this, context);
+            weakReferenceButton(button);
+            return button;
         }
     }
 }

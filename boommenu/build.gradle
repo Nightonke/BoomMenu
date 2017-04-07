@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/Nightonke/BoomMenu'
     gitUrl = 'https://github.com/Nightonke/BoomMenu.git'
 
-    libraryVersion = '2.0.8'
+    libraryVersion = '2.0.9'
 
     developerId = 'nightonke'
     developerName = 'Weiping Huang'
@@ -31,8 +31,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 1
-        versionName "2.0.8"
+        versionCode 2090
+        versionName "2.0.9"
     }
     buildTypes {
         release {

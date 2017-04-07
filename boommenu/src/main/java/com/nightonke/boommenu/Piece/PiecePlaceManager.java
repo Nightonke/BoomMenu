@@ -463,12 +463,14 @@ public class PiecePlaceManager {
 
     private static Dot createDot(Context context, BoomButtonBuilder builder, int pieceCornerRadius) {
         Dot dot = new Dot(context);
+        builder.piece(dot);
         dot.init(builder.pieceColor(context), pieceCornerRadius);
         return dot;
     }
 
     private static Ham createHam(Context context, BoomButtonBuilder builder, int pieceCornerRadius) {
         Ham ham = new Ham(context);
+        builder.piece(ham);
         ham.init(builder.pieceColor(context), pieceCornerRadius);
         return ham;
     }
