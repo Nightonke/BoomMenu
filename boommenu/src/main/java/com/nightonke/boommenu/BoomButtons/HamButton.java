@@ -137,8 +137,7 @@ public class HamButton extends BoomButton {
 
         /**
          * Set the sub-text when boom-button is at normal-state.
-         * <br/>
-         * <br/>
+         * <br><br>
          * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
          * then synchronize this change to boom-button.
          *
@@ -159,8 +158,7 @@ public class HamButton extends BoomButton {
 
         /**
          * Set the sub-text resource when boom-button is at normal-state.
-         * <br/>
-         * <br/>
+         * <br><br>
          * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
          * then synchronize this change to boom-button.
          *
@@ -181,8 +179,7 @@ public class HamButton extends BoomButton {
 
         /**
          * Set the sub-text when boom-button is at highlighted-state.
-         * <br/>
-         * <br/>
+         * <br><br>
          * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
          * then synchronize this change to boom-button.
          *
@@ -203,8 +200,7 @@ public class HamButton extends BoomButton {
 
         /**
          * Set the sub-text resource when boom-button is at highlighted-state.
-         * <br/>
-         * <br/>
+         * <br><br>
          * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
          * then synchronize this change to boom-button.
          *
@@ -225,8 +221,7 @@ public class HamButton extends BoomButton {
 
         /**
          * Set the sub-text when boom-button is at unable-state.
-         * <br/>
-         * <br/>
+         * <br><br>
          * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
          * then synchronize this change to boom-button.
          *
@@ -247,8 +242,7 @@ public class HamButton extends BoomButton {
 
         /**
          * Set the sub-text resource when boom-button is at unable-state.
-         * <br/>
-         * <br/>
+         * <br><br>
          * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
          * then synchronize this change to boom-button.
          *
@@ -269,8 +263,7 @@ public class HamButton extends BoomButton {
 
         /**
          * Set the color of sub-text when boom-button is at normal-state.
-         * <br/>
-         * <br/>
+         * <br><br>
          * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
          * then synchronize this change to boom-button.
          *
@@ -291,8 +284,7 @@ public class HamButton extends BoomButton {
 
         /**
          * Set the color of sub-text when boom-button is at normal-state.
-         * <br/>
-         * <br/>
+         * <br><br>
          * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
          * then synchronize this change to boom-button.
          *
@@ -313,8 +305,7 @@ public class HamButton extends BoomButton {
 
         /**
          * Set the color of sub-text when boom-button is at highlighted-state.
-         * <br/>
-         * <br/>
+         * <br><br>
          * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
          * then synchronize this change to boom-button.
          *
@@ -335,8 +326,7 @@ public class HamButton extends BoomButton {
 
         /**
          * Set the color of sub-text when boom-button is at highlighted-state.
-         * <br/>
-         * <br/>
+         * <br><br>
          * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
          * then synchronize this change to boom-button.
          *
@@ -357,8 +347,7 @@ public class HamButton extends BoomButton {
 
         /**
          * Set the color of sub-text when boom-button is at unable-state.
-         * <br/>
-         * <br/>
+         * <br><br>
          * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
          * then synchronize this change to boom-button.
          *
@@ -379,8 +368,7 @@ public class HamButton extends BoomButton {
 
         /**
          * Set the color of sub-text when boom-button is at unable-state.
-         * <br/>
-         * <br/>
+         * <br><br>
          * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
          * then synchronize this change to boom-button.
          *
@@ -404,8 +392,7 @@ public class HamButton extends BoomButton {
          * By this method, you can set the position and size of the sub-text-view in boom-button.
          * For example, builder.textRect(new Rect(0, 50, 100, 100)) will make the
          * sub-text-view's size to be 100 * 50 and margin-top to be 50 pixel.
-         * <br/>
-         * <br/>
+         * <br><br>
          * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
          * then synchronize this change to boom-button.
          *
@@ -429,8 +416,7 @@ public class HamButton extends BoomButton {
          * By this method, you can control the padding in the sub-text-view.
          * For instance, builder.textPadding(new Rect(10, 10, 10, 10)) will make the
          * sub-text-view content 10-pixel padding to itself.
-         * <br/>
-         * <br/>
+         * <br><br>
          * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
          * then synchronize this change to boom-button.
          *

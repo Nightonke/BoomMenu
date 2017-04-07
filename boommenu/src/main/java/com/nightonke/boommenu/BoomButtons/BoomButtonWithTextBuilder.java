@@ -16,8 +16,7 @@ public abstract class BoomButtonWithTextBuilder<T> extends BoomButtonBuilder<T> 
 
     /**
      * Set the text when boom-button is at normal-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -38,8 +37,7 @@ public abstract class BoomButtonWithTextBuilder<T> extends BoomButtonBuilder<T> 
 
     /**
      * Set the text resource when boom-button is at normal-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -60,8 +58,7 @@ public abstract class BoomButtonWithTextBuilder<T> extends BoomButtonBuilder<T> 
 
     /**
      * Set the text when boom-button is at highlighted-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -82,8 +79,7 @@ public abstract class BoomButtonWithTextBuilder<T> extends BoomButtonBuilder<T> 
 
     /**
      * Set the text resource when boom-button is at highlighted-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -104,8 +100,7 @@ public abstract class BoomButtonWithTextBuilder<T> extends BoomButtonBuilder<T> 
 
     /**
      * Set the text when boom-button is at unable-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -126,8 +121,7 @@ public abstract class BoomButtonWithTextBuilder<T> extends BoomButtonBuilder<T> 
 
     /**
      * Set the text resource when boom-button is at unable-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -148,8 +142,7 @@ public abstract class BoomButtonWithTextBuilder<T> extends BoomButtonBuilder<T> 
 
     /**
      * Set the color of text when boom-button is at normal-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -170,8 +163,7 @@ public abstract class BoomButtonWithTextBuilder<T> extends BoomButtonBuilder<T> 
 
     /**
      * Set the color of text when boom-button is at normal-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -192,8 +184,7 @@ public abstract class BoomButtonWithTextBuilder<T> extends BoomButtonBuilder<T> 
 
     /**
      * Set the color of text when boom-button is at highlighted-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -214,8 +205,7 @@ public abstract class BoomButtonWithTextBuilder<T> extends BoomButtonBuilder<T> 
 
     /**
      * Set the color of text when boom-button is at highlighted-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -236,8 +226,7 @@ public abstract class BoomButtonWithTextBuilder<T> extends BoomButtonBuilder<T> 
 
     /**
      * Set the color of text when boom-button is at unable-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -258,8 +247,7 @@ public abstract class BoomButtonWithTextBuilder<T> extends BoomButtonBuilder<T> 
 
     /**
      * Set the color of text when boom-button is at unable-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -283,8 +271,7 @@ public abstract class BoomButtonWithTextBuilder<T> extends BoomButtonBuilder<T> 
      * By this method, you can set the position and size of the text-view in boom-button.
      * For example, builder.textRect(new Rect(0, 50, 100, 100)) will make the
      * text-view's size to be 100 * 50 and margin-top to be 50 pixel.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -308,8 +295,7 @@ public abstract class BoomButtonWithTextBuilder<T> extends BoomButtonBuilder<T> 
      * By this method, you can control the padding in the text-view.
      * For instance, builder.textPadding(new Rect(10, 10, 10, 10)) will make the
      * text-view content 10-pixel padding to itself.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *

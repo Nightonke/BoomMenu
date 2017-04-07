@@ -267,8 +267,7 @@ public abstract class BoomButtonBuilder<T> {
 
     /**
      * Set the image drawable when boom-button is at normal-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -289,8 +288,7 @@ public abstract class BoomButtonBuilder<T> {
 
     /**
      * Set the image resource when boom-button is at normal-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -311,8 +309,7 @@ public abstract class BoomButtonBuilder<T> {
 
     /**
      * Set the image drawable when boom-button is at highlighted-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -333,8 +330,7 @@ public abstract class BoomButtonBuilder<T> {
 
     /**
      * Set the image resource when boom-button is at highlighted-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -355,8 +351,7 @@ public abstract class BoomButtonBuilder<T> {
 
     /**
      * Set the image drawable when boom-button is at unable-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -377,8 +372,7 @@ public abstract class BoomButtonBuilder<T> {
 
     /**
      * Set the image resource when boom-button is at unable-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -402,8 +396,7 @@ public abstract class BoomButtonBuilder<T> {
      * By this method, you can set the position and size of the image-view in boom-button.
      * For example, builder.imageRect(new Rect(0, 50, 100, 100)) will make the
      * image-view's size to be 100 * 50 and margin-top to be 50 pixel.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -427,8 +420,7 @@ public abstract class BoomButtonBuilder<T> {
      * By this method, you can control the padding in the image-view.
      * For instance, builder.imagePadding(new Rect(10, 10, 10, 10)) will make the
      * image-view content 10-pixel padding to itself.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -460,8 +452,7 @@ public abstract class BoomButtonBuilder<T> {
 
     /**
      * The color of boom-button when it is at normal-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -482,8 +473,7 @@ public abstract class BoomButtonBuilder<T> {
 
     /**
      * The resource of color of boom-button when it is at normal-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -504,8 +494,7 @@ public abstract class BoomButtonBuilder<T> {
 
     /**
      * The color of boom-button when it is at highlighted-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -526,8 +515,7 @@ public abstract class BoomButtonBuilder<T> {
 
     /**
      * The resource of color of boom-button when it is at highlighted-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -548,8 +536,7 @@ public abstract class BoomButtonBuilder<T> {
 
     /**
      * The color of boom-button when it is at unable-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -570,8 +557,7 @@ public abstract class BoomButtonBuilder<T> {
 
     /**
      * The resource of color of boom-button when it is at unable-state.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -592,8 +578,7 @@ public abstract class BoomButtonBuilder<T> {
 
     /**
      * The color of boom-button when it is just a piece.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -612,8 +597,7 @@ public abstract class BoomButtonBuilder<T> {
 
     /**
      * The resource of color of boom-button when it is just a piece.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
@@ -632,8 +616,7 @@ public abstract class BoomButtonBuilder<T> {
 
     /**
      * Whether the boom-button is unable, default value is false.
-     * <br/>
-     * <br/>
+     * <br><br>
      * <STRONG>Synchronicity:</STRONG> If the boom-button existed,
      * then synchronize this change to boom-button.
      *
