@@ -28,7 +28,7 @@ public class ActionBarActivity extends AppCompatActivity {
 
         View actionBar = mInflater.inflate(R.layout.custom_actionbar, null);
         TextView mTitleTextView = (TextView) actionBar.findViewById(R.id.title_text);
-        mTitleTextView.setText(R.string.app_name);
+        mTitleTextView.setText("ActionBar");
         mActionBar.setCustomView(actionBar);
         mActionBar.setDisplayShowCustomEnabled(true);
         ((Toolbar) actionBar.getParent()).setContentInsetsAbsolute(0,0);

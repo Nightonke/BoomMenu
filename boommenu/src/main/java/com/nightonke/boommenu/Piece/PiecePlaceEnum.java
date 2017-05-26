@@ -53,6 +53,8 @@ public enum PiecePlaceEnum {
 
     Share  (99999),
 
+    Custom (100000),
+
     Unknown(-1);
 
     private final int value;
@@ -78,57 +80,48 @@ public enum PiecePlaceEnum {
     public int pieceNumber() {
         switch (this) {
             case DOT_1:
-            case HAM_1:
-                return 1;
+            case HAM_1: return 1;
             case DOT_2_1:
             case DOT_2_2:
-            case HAM_2:
-                return 2;
+            case HAM_2: return 2;
             case DOT_3_1:
             case DOT_3_2:
             case DOT_3_3:
             case DOT_3_4:
-            case HAM_3:
-                return 3;
+            case HAM_3: return 3;
             case DOT_4_1:
             case DOT_4_2:
-            case HAM_4:
-                return 4;
+            case HAM_4: return 4;
             case DOT_5_1:
             case DOT_5_2:
             case DOT_5_3:
             case DOT_5_4:
-            case HAM_5:
-                return 5;
+            case HAM_5: return 5;
             case DOT_6_1:
             case DOT_6_2:
             case DOT_6_3:
             case DOT_6_4:
             case DOT_6_5:
             case DOT_6_6:
-            case HAM_6:
-                return 6;
+            case HAM_6: return 6;
             case DOT_7_1:
             case DOT_7_2:
             case DOT_7_3:
             case DOT_7_4:
             case DOT_7_5:
-            case DOT_7_6:
-                return 7;
+            case DOT_7_6: return 7;
             case DOT_8_1:
             case DOT_8_2:
             case DOT_8_3:
             case DOT_8_4:
             case DOT_8_5:
             case DOT_8_6:
-            case DOT_8_7:
-                return 8;
+            case DOT_8_7: return 8;
             case DOT_9_1:
             case DOT_9_2:
-            case DOT_9_3:
-                return 9;
-            default:
-                return -1;
+            case DOT_9_3: return 9;
+            case Unknown: return 0;
+            default: return -1;
         }
     }
 
@@ -139,10 +132,10 @@ public enum PiecePlaceEnum {
      */
     public int minPieceNumber() {
         switch (this) {
-            case Share:
-                return 3;
-            default:
-                return -1;
+            case Share: return 3;
+            case Custom: return 1;
+            case Unknown: return 0;
+            default: return -1;
         }
     }
 
@@ -154,9 +147,9 @@ public enum PiecePlaceEnum {
     public int maxPieceNumber() {
         switch (this) {
             case Share:
-                return 9;
-            default:
-                return -1;
+            case Custom: return Integer.MAX_VALUE;
+            case Unknown: return 0;
+            default: return -1;
         }
     }
 }

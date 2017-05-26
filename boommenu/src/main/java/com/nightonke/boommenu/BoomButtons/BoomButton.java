@@ -54,6 +54,7 @@ public abstract class BoomButton extends FrameLayout {
     protected boolean rotateText;
     protected boolean containsSubText;  // for ham button
     protected ButtonEnum buttonEnum = ButtonEnum.Unknown;
+    private boolean touchable = false;
 
     // piece
     protected Integer pieceColor = null;
@@ -320,12 +321,6 @@ public abstract class BoomButton extends FrameLayout {
             text.setFocusable(true);
             text.setFocusableInTouchMode(true);
             text.setFreezesText(true);
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    text.setSelected(true);
-                }
-            });
         }
         parent.addView(text);
     }
@@ -347,12 +342,6 @@ public abstract class BoomButton extends FrameLayout {
             subText.setFocusable(true);
             subText.setFocusableInTouchMode(true);
             subText.setFreezesText(true);
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    subText.setSelected(true);
-                }
-            });
         }
         parent.addView(subText);
     }
@@ -407,6 +396,7 @@ public abstract class BoomButton extends FrameLayout {
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!touchable) return;
                 if (listener != null) listener.onButtonClick(index, BoomButton.this);
                 if (onBMClickListener != null) onBMClickListener.onBoomButtonClick(index);
             }
@@ -417,6 +407,7 @@ public abstract class BoomButton extends FrameLayout {
         button.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                if (!touchable) return false;
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         if (Util.pointInView(new PointF(event.getX(), event.getY()), button)) {
@@ -482,6 +473,7 @@ public abstract class BoomButton extends FrameLayout {
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!touchable) return;
                 if (listener != null) listener.onButtonClick(index, BoomButton.this);
                 if (onBMClickListener != null) onBMClickListener.onBoomButtonClick(index);
             }
@@ -492,6 +484,7 @@ public abstract class BoomButton extends FrameLayout {
         button.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                if (!touchable) return false;
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         if (Util.pointInView(new PointF(event.getX(), event.getY()), button)) {
@@ -705,27 +698,34 @@ public abstract class BoomButton extends FrameLayout {
         unable = !enabled;
     }
 
-    public void cleanListener() {
-        listener = null;
-    }
-
     public void willShow() {
+        touchable = false;
         if (!rippleEffectWorks && isNeededColorAnimation())
             Util.setDrawable(button, nonRippleGradientDrawable);
+        else updateButtonDrawable();
     }
 
     public void didShow() {
+        touchable = true;
         if (!rippleEffectWorks && isNeededColorAnimation())
             Util.setDrawable(button, nonRippleBitmapDrawable);
+        if (text != null) text.setSelected(true);
+        if (subText != null) subText.setSelected(true);
     }
 
     public void willHide() {
+        touchable = false;
         if (!rippleEffectWorks && isNeededColorAnimation())
             Util.setDrawable(button, nonRippleGradientDrawable);
     }
 
     public void didHide() {
+        if (text != null) text.setSelected(false);
+        if (subText != null) subText.setSelected(false);
+    }
 
+    public void hideAllGoneViews() {
+        for (View view : goneViews()) view.setAlpha(0);
     }
 
     public boolean prepareColorTransformAnimation() {
@@ -764,6 +764,20 @@ public abstract class BoomButton extends FrameLayout {
     }
 
     /**
+     * Get the layout view of a boom button.
+     *
+     * @return layout view
+     */
+    public ViewGroup getLayout() { return layout; }
+
+    /**
+     * Get the shadow view of a boom button.
+     *
+     * @return shadow view
+     */
+    public BMBShadow getShadow() { return shadow; }
+
+    /**
      * Get the image view of a boom button.
      *
      * @return image view
@@ -790,6 +804,7 @@ public abstract class BoomButton extends FrameLayout {
         return subText;
     }
 
+    public abstract ButtonEnum type();
     public abstract ArrayList<View> goneViews();
     public abstract ArrayList<View> rotateViews();
     public abstract int trueWidth();

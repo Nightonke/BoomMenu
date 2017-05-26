@@ -23,6 +23,11 @@
     <color name="default_bmb_normal_color">#FF4081</color>
     <color name="default_bmb_highlighted_color">#00000000</color>
     <color name="default_bmb_unable_color">#00000000</color>
+    <bool name="default_bmb_draggable">false</bool>
+    <dimen name="default_bmb_edgeInsetsLeft">15dp</dimen>
+    <dimen name="default_bmb_edgeInsetsTop">15dp</dimen>
+    <dimen name="default_bmb_edgeInsetsRight">15dp</dimen>
+    <dimen name="default_bmb_edgeInsetsBottom">15dp</dimen>
 
     <!--Piece-->
     <dimen name="default_bmb_dotRadius">3dp</dimen>
@@ -56,6 +61,9 @@
     <integer name="default_bmb_hideScaleEaseEnum">21</integer>
     <integer name="default_bmb_hideRotateEaseEnum">21</integer>
     <integer name="default_bmb_rotateDegree">720</integer>
+    <bool name="default_bmb_use3DTransformAnimation">false</bool>
+    <bool name="default_bmb_autoBoom">false</bool>
+    <bool name="default_bmb_autoBoomImmediately">false</bool>
 
     <!--Boom Button-->
     <integer name="default_bmb_buttonPlaceEnum">-1</integer>
@@ -67,7 +75,7 @@
     <dimen name="default_bmb_buttonBottomMargin">30dp</dimen>
     <dimen name="default_bmb_buttonLeftMargin">30dp</dimen>
     <dimen name="default_bmb_buttonRightMargin">30dp</dimen>
-    <dimen name="default_bmb_bottomHamButtonTopMargin">0dp</dimen>
+    <dimen name="default_bmb_bottomHamButtonTopMargin">-1dp</dimen>
 
     <!--Simple Circle Button-->
     <dimen name="default_bmb_simple_circle_width">80dp</dimen>

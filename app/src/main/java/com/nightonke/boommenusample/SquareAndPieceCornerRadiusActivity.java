@@ -5,8 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.nightonke.boommenu.BoomMenuButton;
 
-import static com.nightonke.boommenusample.R.id.bmb1;
-
 public class SquareAndPieceCornerRadiusActivity extends AppCompatActivity {
 
     @Override
@@ -24,7 +22,7 @@ public class SquareAndPieceCornerRadiusActivity extends AppCompatActivity {
 
         BoomMenuButton bmb3 = (BoomMenuButton) findViewById(R.id.bmb3);
         for (int i = 0; i < bmb3.getPiecePlaceEnum().pieceNumber(); i++)
-            bmb3.addBuilder(BuilderManager.getSquareTextOutsideCircleButtonBuilder());
+            bmb3.addBuilder(BuilderManager.getTextOutsideCircleButtonBuilderWithDifferentPieceColor());
 
         BoomMenuButton bmb4 = (BoomMenuButton) findViewById(R.id.bmb4);
         for (int i = 0; i < bmb4.getPiecePlaceEnum().pieceNumber(); i++)

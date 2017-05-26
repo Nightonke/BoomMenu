@@ -1,6 +1,7 @@
 package com.nightonke.boommenu.Piece;
 
 import android.content.Context;
+import android.graphics.RectF;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -20,19 +21,19 @@ public abstract class BoomPiece extends View {
         super(context);
     }
 
-    public abstract void init(int color, int cornerRadius);
+    public abstract void init(int color, float cornerRadius);
 
     public abstract void setColor(int color);
 
     public abstract void setColorRes(int colorRes);
 
-    public void place(int left, int top, int width, int height) {
+    public void place(RectF rectF) {
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) getLayoutParams();
         if (layoutParams != null) {
-            layoutParams.leftMargin = left;
-            layoutParams.topMargin = top;
-            layoutParams.width = width;
-            layoutParams.height = height;
+            layoutParams.leftMargin = (int) rectF.left;
+            layoutParams.topMargin = (int) rectF.top;
+            layoutParams.width = (int) rectF.right;
+            layoutParams.height = (int) rectF.bottom;
             setLayoutParams(layoutParams);
         }
     }

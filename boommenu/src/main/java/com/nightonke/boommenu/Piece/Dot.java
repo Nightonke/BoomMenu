@@ -21,7 +21,7 @@ final class Dot extends BoomPiece {
     }
 
     @Override
-    public void init(int color, int cornerRadius) {
+    public void init(int color, float cornerRadius) {
         Drawable backgroundDrawable;
         if (cornerRadius < 0) backgroundDrawable = Util.getDrawable(this, R.drawable.piece_dot, null)
                 .mutate();

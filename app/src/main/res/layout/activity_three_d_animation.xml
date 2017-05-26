@@ -2,14 +2,44 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_ease"
+    android:id="@+id/activity_order_example"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.nightonke.boommenusample.SquareAndPieceCornerRadiusActivity">
+    tools:context="com.nightonke.boommenusample.ThreeDAnimationActivity">
+
+    <TextView
+        android:id="@+id/tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Drag BMBs and try the difference between 2D and 3D animations."/>
+
+    <Switch
+        android:id="@+id/three_d_animation_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/tip"
+        android:text="3D Animation   "/>
+
+    <SeekBar
+        android:id="@+id/duration_seek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/three_d_animation_switch" />
+
+    <TextView
+        android:id="@+id/duration_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|end"
+        android:layout_below="@id/duration_seek"
+        />
 
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb1"
@@ -18,6 +48,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        app:bmb_draggable="true"
         app:bmb_normalColor="@android:color/white"
         app:bmb_highlightedColor="@android:color/darker_gray"
         app:bmb_buttonEnum="simpleCircle"
@@ -31,13 +62,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        app:bmb_normalColor="@android:color/white"
-        app:bmb_highlightedColor="@android:color/darker_gray"
-        app:bmb_buttonEnum="textInsideCircle"
-        app:bmb_piecePlaceEnum="piecePlace_dot_9_1"
-        app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
-        app:bmb_pieceCornerRadius="2dp"
+        android:layout_centerHorizontal="true"
+        app:bmb_draggable="true"
+        app:bmb_normalColor="@android:color/holo_green_light"
+        app:bmb_highlightedColor="@android:color/holo_green_dark"
+        app:bmb_buttonEnum="ham"
+        app:bmb_piecePlaceEnum="piecePlace_ham_4"
+        app:bmb_buttonPlaceEnum="buttonPlace_ham_4"
         />
 
     <com.nightonke.boommenu.BoomMenuButton
@@ -47,26 +78,12 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        app:bmb_draggable="true"
         app:bmb_normalColor="@android:color/holo_blue_light"
         app:bmb_highlightedColor="@android:color/holo_blue_bright"
         app:bmb_buttonEnum="textOutsideCircle"
         app:bmb_piecePlaceEnum="piecePlace_dot_9_1"
         app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
-        />
-
-    <com.nightonke.boommenu.BoomMenuButton
-        android:id="@+id/bmb4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        app:bmb_normalColor="@android:color/white"
-        app:bmb_highlightedColor="@android:color/darker_gray"
-        app:bmb_buttonEnum="ham"
-        app:bmb_piecePlaceEnum="piecePlace_ham_4"
-        app:bmb_buttonPlaceEnum="buttonPlace_ham_4"
-        app:bmb_pieceCornerRadius="2dp"
         />
 
 </RelativeLayout>

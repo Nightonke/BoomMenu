@@ -113,7 +113,10 @@ public class Util {
         if (textView == null) return;
         if (id == 0) {
             if (text != null && !text.equals(textView.getText())) textView.setText(text);
-        } else textView.setText(id);
+        } else {
+            CharSequence oldText = textView.getContext().getResources().getText(id);
+            if (!oldText.equals(textView.getText())) textView.setText(id);
+        }
     }
 
     public static void setTextColor(TextView textView, int id, int color) {

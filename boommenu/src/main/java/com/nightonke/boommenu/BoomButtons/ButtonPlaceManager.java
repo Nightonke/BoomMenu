@@ -1,10 +1,15 @@
 package com.nightonke.boommenu.BoomButtons;
 
 import android.graphics.Point;
+import android.graphics.PointF;
 
-import com.nightonke.boommenu.Util;
+import com.nightonke.boommenu.BoomMenuButton;
+import com.nightonke.boommenu.ButtonEnum;
 
 import java.util.ArrayList;
+
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 /**
  * Created by Weiping Huang at 20:26 on 16/11/19
@@ -15,937 +20,789 @@ import java.util.ArrayList;
 
 public class ButtonPlaceManager {
 
-    public static ArrayList<Point> getCircleButtonPositions(ButtonPlaceEnum placeEnum,
-                                                            ButtonPlaceAlignmentEnum alignmentEnum,
-                                                            Point parentSize,
-                                                            float radius,
-                                                            int buttonNumber,
-                                                            float buttonHorizontalMargin,
-                                                            float buttonVerticalMargin,
-                                                            float buttonInclinedMargin,
-                                                            float buttonTopMargin,
-                                                            float buttonBottomMargin,
-                                                            float buttonLeftMargin,
-                                                            float buttonRightMargin) {
+    public static ArrayList<PointF> getPositions(Point parentSize,
+                                                 float w,
+                                                 float h,
+                                                 int buttonNumber,
+                                                 BoomMenuButton bmb) {
+        ArrayList<PointF> ps = new ArrayList<>(buttonNumber);
 
-        ArrayList<Point> positions = new ArrayList<>(buttonNumber);
-        float a, b, c, e, r = radius;
-        float hm = buttonHorizontalMargin, vm = buttonVerticalMargin, im = buttonInclinedMargin;
-        int h = buttonNumber / 2;
+        int halfButtonNumber = buttonNumber / 2;
 
-        switch (placeEnum) {
+        float hm = bmb.getButtonHorizontalMargin();
+        float hm_0_5 = hm / 2;
+        float hm_1_5 = hm * 1.5f;
+        float hm_2_0 = hm * 2;
+        float vm = bmb.getButtonVerticalMargin();
+        float vm_0_5 = vm / 2;
+        float vm_1_5 = vm * 1.5f;
+        float vm_2_0 = vm * 2;
+        float w_0_5 = w / 2;
+        float w_1_5 = w * 1.5f;
+        float w_2_0 = w * 2;
+        float h_0_5 = h / 2;
+        float h_1_5 = h * 1.5f;
+        float h_2_0 = h * 2;
+
+        switch (bmb.getButtonPlaceEnum()) {
             case Horizontal:
                 if (buttonNumber % 2 == 0) {
-                    for (int i = h - 1; i >= 0; i--) positions.add(point(-r - hm / 2 - i * (2 * r + hm), 0));
-                    for (int i = 0; i < h; i++) positions.add(point(r + hm / 2 + i * (2 * r + hm), 0));
+                    for (int i = halfButtonNumber - 1; i >= 0; i--)
+                        ps.add(point(-w_0_5 - hm_0_5 - i * (w + hm), 0));
+                    for (int i = 0; i < halfButtonNumber; i++)
+                        ps.add(point(+w_0_5 + hm_0_5 + i * (w + hm), 0));
                 } else {
-                    for (int i = h - 1; i >= 0; i--) positions.add(point(-2 * r - hm - i * (2 * r + hm), 0));
-                    positions.add(point(0, 0));
-                    for (int i = 0; i < h; i++) positions.add(point(2 * r + hm + i * (2 * r + hm), 0));
+                    for (int i = halfButtonNumber - 1; i >= 0; i--)
+                        ps.add(point(-w - hm - i * (w + hm), 0));
+                    ps.add(point(0, 0));
+                    for (int i = 0; i < halfButtonNumber; i++)
+                        ps.add(point(+w + hm + i * (w + hm), 0));
                 }
                 break;
-            case Vertical:
+            case Vertical: case HAM_1: case HAM_2: case HAM_3: case HAM_4: case HAM_5: case HAM_6:
                 if (buttonNumber % 2 == 0) {
-                    for (int i = h - 1; i >= 0; i--) positions.add(point(0, -r - vm / 2 - i * (2 * r + vm)));
-                    for (int i = 0; i < h; i++) positions.add(point(0, r + vm / 2 + i * (2 * r + vm)));
+                    for (int i = halfButtonNumber - 1; i >= 0; i--)
+                        ps.add(point(0, -h_0_5 - vm_0_5 - i * (h + vm)));
+                    for (int i = 0; i < halfButtonNumber; i++)
+                        ps.add(point(0, +h_0_5 + vm_0_5 + i * (h + vm)));
                 } else {
-                    for (int i = h - 1; i >= 0; i--) positions.add(point(0, -2 * r - vm - i * (2 * r + vm)));
-                    positions.add(point(0, 0));
-                    for (int i = 0; i < h; i++) positions.add(point(0, 2 * r + vm + i * (2 * r + vm)));
+                    for (int i = halfButtonNumber - 1; i >= 0; i--)
+                        ps.add(point(0, -h - vm - i * (h + vm)));
+                    ps.add(point(0, 0));
+                    for (int i = 0; i < halfButtonNumber; i++)
+                        ps.add(point(0, +h + vm + i * (h + vm)));
                 }
                 break;
             case SC_1:
-                positions.add(point(0, 0));
+                ps.add(point(0, 0));
                 break;
             case SC_2_1:
-                positions.add(point(-hm / 2 - r, 0));
-                positions.add(point(hm / 2 + r, 0));
+                ps.add(point(-hm_0_5 - w_0_5, 0));
+                ps.add(point(+hm_0_5 + w_0_5, 0));
                 break;
             case SC_2_2:
-                positions.add(point(0, -vm / 2 - r));
-                positions.add(point(0, vm / 2 + r));
+                ps.add(point(0, -vm_0_5 - h_0_5));
+                ps.add(point(0, +vm_0_5 + h_0_5));
                 break;
             case SC_3_1:
-                positions.add(point(-hm - 2 * r, 0));
-                positions.add(point(0, 0));
-                positions.add(point(hm + 2 * r, 0));
+                ps.add(point(-hm - w, 0));
+                ps.add(point(0, 0));
+                ps.add(point(+hm + w, 0));
                 break;
             case SC_3_2:
-                positions.add(point(0, -vm - 2 * r));
-                positions.add(point(0, 0));
-                positions.add(point(0, vm + 2 * r));
+                ps.add(point(0, -vm - h));
+                ps.add(point(0, 0));
+                ps.add(point(0, +vm + h));
                 break;
             case SC_3_3:
-                b = hm / 2 + r;
-                c = (float) (b / (Math.sqrt(3) / 2));
-                a = c / 2;
-                positions.add(point(-b, -a));
-                positions.add(point(b, -a));
-                positions.add(point(0, c));
+                ps.add(point(-hm_0_5 - w_0_5, -vm_0_5 - h_0_5));
+                ps.add(point(+hm_0_5 + w_0_5, -vm_0_5 - h_0_5));
+                ps.add(point(0, vm_0_5 + h_0_5));
                 break;
             case SC_3_4:
-                b = hm / 2 + r;
-                c = (float) (b / (Math.sqrt(3) / 2));
-                a = c / 2;
-                positions.add(point(0, -c));
-                positions.add(point(-b, a));
-                positions.add(point(b, a));
+                ps.add(point(0, -vm_0_5 - h_0_5));
+                ps.add(point(-hm_0_5 - w_0_5, +vm_0_5 + h_0_5));
+                ps.add(point(+hm_0_5 + w_0_5, +vm_0_5 + h_0_5));
                 break;
             case SC_4_1:
-                positions.add(point(-hm / 2 - r, -vm / 2 - r));
-                positions.add(point(hm / 2 + r, -vm / 2 - r));
-                positions.add(point(-hm / 2 - r, vm / 2 + r));
-                positions.add(point(hm / 2 + r, vm / 2 + r));
+                ps.add(point(-hm_0_5 - w_0_5, -vm_0_5 - h_0_5));
+                ps.add(point(+hm_0_5 + w_0_5, -vm_0_5 - h_0_5));
+                ps.add(point(-hm_0_5 - w_0_5, +vm_0_5 + h_0_5));
+                ps.add(point(+hm_0_5 + w_0_5, +vm_0_5 + h_0_5));
                 break;
             case SC_4_2:
-                a = (float) ((2 * r + im) / Math.sqrt(2));
-                positions.add(point(0, -a));
-                positions.add(point(a, 0));
-                positions.add(point(0, a));
-                positions.add(point(-a, 0));
+                ps.add(point(0, -vm_0_5 - h_0_5));
+                ps.add(point(-hm - w, 0));
+                ps.add(point(+hm + w, 0));
+                ps.add(point(0, +vm_0_5 + h_0_5));
                 break;
             case SC_5_1:
-                b = hm / 2 + r;
-                c = (float) (b / (Math.sqrt(3) / 2));
-                a = c / 2;
-                positions.add(point(-2 * b, -c));
-                positions.add(point(0, -c));
-                positions.add(point(2 * b, -c));
-                positions.add(point(-hm / 2 - r, a));
-                positions.add(point(hm / 2 + r, a));
+                ps.add(point(-hm - w, -vm_0_5 - h_0_5));
+                ps.add(point(0, -vm_0_5 - h_0_5));
+                ps.add(point(+hm + w, -vm_0_5 - h_0_5));
+                ps.add(point(-hm_0_5 - w_0_5, +vm_0_5 + h_0_5));
+                ps.add(point(+hm_0_5 + w_0_5, +vm_0_5 + h_0_5));
                 break;
             case SC_5_2:
-                b = hm / 2 + r;
-                c = (float) (b / (Math.sqrt(3) / 2));
-                a = c / 2;
-                positions.add(point(hm / 2 + r, -a));
-                positions.add(point(-hm / 2 - r, -a));
-                positions.add(point(2 * b, c));
-                positions.add(point(0, c));
-                positions.add(point(-2 * b, c));
+                ps.add(point(-hm_0_5 - w_0_5, -vm_0_5 - h_0_5));
+                ps.add(point(+hm_0_5 + w_0_5, -vm_0_5 - h_0_5));
+                ps.add(point(-hm - w, +vm_0_5 + h_0_5));
+                ps.add(point(0, +vm_0_5 + h_0_5));
+                ps.add(point(+hm + w, +vm_0_5 + h_0_5));
                 break;
             case SC_5_3:
-                positions.add(point(0, 0));
-                positions.add(point(0, -vm - 2 * r));
-                positions.add(point(hm + 2 * r, 0));
-                positions.add(point(0, vm + 2 * r));
-                positions.add(point(-hm - 2 * r, 0));
+                ps.add(point(0, -vm - h));
+                ps.add(point(-hm - w, 0));
+                ps.add(point(0, 0));
+                ps.add(point(+hm + w, 0));
+                ps.add(point(0, +vm + h));
                 break;
             case SC_5_4:
-                a = (float) ((2 * r + im) / Math.sqrt(2));
-                positions.add(point(0, 0));
-                positions.add(point(a, -a));
-                positions.add(point(a, a));
-                positions.add(point(-a, a));
-                positions.add(point(-a, -a));
+                ps.add(point(-hm - w, -vm_0_5 - h_0_5));
+                ps.add(point(+hm + w, -vm_0_5 - h_0_5));
+                ps.add(point(0, 0));
+                ps.add(point(-hm - w, +vm_0_5 + h_0_5));
+                ps.add(point(+hm + w, +vm_0_5 + h_0_5));
                 break;
             case SC_6_1:
-                positions.add(point(-hm - 2 * r, -vm / 2 - r));
-                positions.add(point(0, -vm / 2 - r));
-                positions.add(point(hm + 2 * r, -vm / 2 - r));
-                positions.add(point(-hm - 2 * r, vm / 2 + r));
-                positions.add(point(0, vm / 2 + r));
-                positions.add(point(hm + 2 * r, vm / 2 + r));
+                ps.add(point(-hm - w, -vm_0_5 - h_0_5));
+                ps.add(point(0, -vm_0_5 - h_0_5));
+                ps.add(point(+hm + w, -vm_0_5 - h_0_5));
+                ps.add(point(-hm - w, +vm_0_5 + h_0_5));
+                ps.add(point(0, +vm_0_5 + h_0_5));
+                ps.add(point(+hm + w, +vm_0_5 + h_0_5));
                 break;
             case SC_6_2:
-                positions.add(point(-hm / 2 - r, -vm - 2 * r));
-                positions.add(point(-hm / 2 - r, 0));
-                positions.add(point(-hm / 2 - r, vm + 2 * r));
-                positions.add(point(hm / 2 + r, -vm - 2 * r));
-                positions.add(point(hm / 2 + r, 0));
-                positions.add(point(hm / 2 + r, vm + 2 * r));
+                ps.add(point(-hm_0_5 - w_0_5, -vm - h));
+                ps.add(point(+hm_0_5 + w_0_5, -vm - h));
+                ps.add(point(-hm_0_5 - w_0_5, 0));
+                ps.add(point(+hm_0_5 + w_0_5, 0));
+                ps.add(point(-hm_0_5 - w_0_5, +vm + h));
+                ps.add(point(+hm_0_5 + w_0_5, +vm + h));
                 break;
             case SC_6_3:
-                b = hm / 2 + r;
-                c = (float) (b / (Math.sqrt(3) / 2));
-                a = c / 2;
-                positions.add(point(-b, -a - c));
-                positions.add(point(b, -a - c));
-                positions.add(point(2 * b, 0));
-                positions.add(point(b, a + c));
-                positions.add(point(-b, a + c));
-                positions.add(point(-2 * b, 0));
+                ps.add(point(-hm_0_5 - w_0_5, -vm - h));
+                ps.add(point(+hm_0_5 + w_0_5, -vm - h));
+                ps.add(point(-hm - w, 0));
+                ps.add(point(+hm + w, 0));
+                ps.add(point(-hm_0_5 - w_0_5, +vm + h));
+                ps.add(point(+hm_0_5 + w_0_5, +vm + h));
                 break;
             case SC_6_4:
-                b  = hm / 2 + r;
-                c = (float) (b / (Math.sqrt(3) / 2));
-                a = c / 2;
-                positions.add(point(0, -2 * b));
-                positions.add(point(a + c, -b));
-                positions.add(point(a + c, b));
-                positions.add(point(0, 2 * b));
-                positions.add(point(-a - c, b));
-                positions.add(point(-a - c, -b));
+                ps.add(point(0, -vm - h));
+                ps.add(point(-hm - w, -vm_0_5 - h_0_5));
+                ps.add(point(+hm + w, -vm_0_5 - h_0_5));
+                ps.add(point(-hm - w, +vm_0_5 + h_0_5));
+                ps.add(point(+hm + w, +vm_0_5 + h_0_5));
+                ps.add(point(0, +vm + h));
                 break;
             case SC_6_5:
-                b = hm / 2 + r;
-                c = (float) (b / (Math.sqrt(3) / 2));
-                a = c / 2;
-                e = c - a;
-                positions.add(point(-2 * b, -a - c + e));
-                positions.add(point(0, -a - c + e));
-                positions.add(point(2 * b, -a - c + e));
-                positions.add(point(-hm / 2 - r, e));
-                positions.add(point(hm / 2 + r, e));
-                positions.add(point(0, a + c + e));
+                ps.add(point(-hm - w, -vm - h));
+                ps.add(point(0, -vm - h));
+                ps.add(point(+hm + w, -vm - h));
+                ps.add(point(-hm_0_5 - w_0_5, 0));
+                ps.add(point(+hm_0_5 + w_0_5, 0));
+                ps.add(point(0, vm + h));
                 break;
             case SC_6_6:
-                b = hm / 2 + r;
-                c = (float) (b / (Math.sqrt(3) / 2));
-                a = c / 2;
-                e = c - a;
-                positions.add(point(0, -a - c - e));
-                positions.add(point(-hm / 2 - r, -e));
-                positions.add(point(hm / 2 + r, -e));
-                positions.add(point(-2 * b, a + c - e));
-                positions.add(point(0, a + c - e));
-                positions.add(point(2 * b, a + c - e));
+                ps.add(point(0, -vm - h));
+                ps.add(point(-hm_0_5 - w_0_5, 0));
+                ps.add(point(+hm_0_5 + w_0_5, 0));
+                ps.add(point(-hm - w, vm + h));
+                ps.add(point(0, vm + h));
+                ps.add(point(+hm + w, vm + h));
                 break;
             case SC_7_1:
-                positions.add(point(-hm - 2 * r, -vm - 2 * r));
-                positions.add(point(0, -vm - 2 * r));
-                positions.add(point(hm + 2 * r, -vm - 2 * r));
-                positions.add(point(-hm - 2 * r, 0));
-                positions.add(point(0, 0));
-                positions.add(point(hm + 2 * r, 0));
-                positions.add(point(0, vm + 2 * r));
+                ps.add(point(-hm - w, -vm - h));
+                ps.add(point(0, -vm - h));
+                ps.add(point(+hm + w, -vm - h));
+                ps.add(point(-hm - w, 0));
+                ps.add(point(0, 0));
+                ps.add(point(+hm + w, 0));
+                ps.add(point(0, vm + h));
                 break;
             case SC_7_2:
-                positions.add(point(0, -vm - 2 * r));
-                positions.add(point(-hm - 2 * r, 0));
-                positions.add(point(0, 0));
-                positions.add(point(hm + 2 * r, 0));
-                positions.add(point(-hm - 2 * r, vm + 2 * r));
-                positions.add(point(0, vm + 2 * r));
-                positions.add(point(hm + 2 * r, vm + 2 * r));
+                ps.add(point(-hm - w, -vm - h));
+                ps.add(point(0, -vm - h));
+                ps.add(point(+hm + w, -vm - h));
+                ps.add(point(-hm - w, 0));
+                ps.add(point(0, 0));
+                ps.add(point(+hm + w, 0));
+                ps.add(point(0, vm + h));
                 break;
             case SC_7_3:
-                b = hm / 2 + r;
-                c = (float) (b / (Math.sqrt(3) / 2));
-                a = c / 2;
-                positions.add(point(0, 0));
-                positions.add(point(-b, -a - c));
-                positions.add(point(b, -a - c));
-                positions.add(point(2 * b, 0));
-                positions.add(point(b, a + c));
-                positions.add(point(-b, a + c));
-                positions.add(point(-2 * b, 0));
+                ps.add(point(-hm_0_5 - w_0_5, -vm - h));
+                ps.add(point(+hm_0_5 + w_0_5, -vm - h));
+                ps.add(point(-hm - w, 0));
+                ps.add(point(0, 0));
+                ps.add(point(+hm + w, 0));
+                ps.add(point(-hm_0_5 - w_0_5, +vm + h));
+                ps.add(point(+hm_0_5 + w_0_5, +vm + h));
                 break;
             case SC_7_4:
-                b = hm / 2 + r;
-                c = (float) (b / (Math.sqrt(3) / 2));
-                a = c / 2;
-                positions.add(point(0, 0));
-                positions.add(point(0, -2 * b));
-                positions.add(point(a + c, -b));
-                positions.add(point(a + c, b));
-                positions.add(point(0, 2 * b));
-                positions.add(point(-a - c, b));
-                positions.add(point(-a - c, -b));
+                ps.add(point(0, -vm - h));
+                ps.add(point(-hm - w, -vm_0_5 - h_0_5));
+                ps.add(point(+hm + w, -vm_0_5 - h_0_5));
+                ps.add(point(0, 0));
+                ps.add(point(-hm - w, +vm_0_5 + h_0_5));
+                ps.add(point(+hm + w, +vm_0_5 + h_0_5));
+                ps.add(point(0, +vm + h));
                 break;
             case SC_7_5:
-                b = hm / 2 + r;
-                c = (float) (b / (Math.sqrt(3) / 2));
-                a = c / 2;
-                positions.add(point(-3 * b, -a));
-                positions.add(point(-b, -a));
-                positions.add(point(b, -a));
-                positions.add(point(3 * b, -a));
-                positions.add(point(-2 * b, c));
-                positions.add(point(0, c));
-                positions.add(point(2 * b, c));
+                ps.add(point(-hm_1_5 - w_1_5, -vm_0_5 - h_0_5));
+                ps.add(point(-hm_0_5 - w_0_5, -vm_0_5 - h_0_5));
+                ps.add(point(+hm_0_5 + w_0_5, -vm_0_5 - h_0_5));
+                ps.add(point(+hm_1_5 + w_1_5, -vm_0_5 - h_0_5));
+                ps.add(point(-hm - w, vm_0_5 + h_0_5));
+                ps.add(point(0, vm_0_5 + h_0_5));
+                ps.add(point(+hm + w, vm_0_5 + h_0_5));
                 break;
             case SC_7_6:
-                b = hm / 2 + r;
-                c = (float) (b / (Math.sqrt(3) / 2));
-                a = c / 2;
-                positions.add(point(-2 * b, -c));
-                positions.add(point(0, -c));
-                positions.add(point(2 * b, -c));
-                positions.add(point(-3 * b, a));
-                positions.add(point(-b, a));
-                positions.add(point(b, a));
-                positions.add(point(3 * b, a));
+                ps.add(point(-hm - w, -vm_0_5 - h_0_5));
+                ps.add(point(0, -vm_0_5 - h_0_5));
+                ps.add(point(+hm + w, -vm_0_5 - h_0_5));
+                ps.add(point(-hm_1_5 - w_1_5, +vm_0_5 + h_0_5));
+                ps.add(point(-hm_0_5 - w_0_5, +vm_0_5 + h_0_5));
+                ps.add(point(+hm_0_5 + w_0_5, +vm_0_5 + h_0_5));
+                ps.add(point(+hm_1_5 + w_1_5, +vm_0_5 + h_0_5));
                 break;
             case SC_8_1:
-                b = hm / 2 + r;
-                c = (float) (b / (Math.sqrt(3) / 2));
-                a = c / 2;
-                positions.add(point(-2 * b, -a - c));
-                positions.add(point(0, -a - c));
-                positions.add(point(2 * b, -a - c));
-                positions.add(point(-hm / 2 - r, 0));
-                positions.add(point(hm / 2 + r, 0));
-                positions.add(point(-2 * b, a + c));
-                positions.add(point(0, a + c));
-                positions.add(point(2 * b, a + c));
+                ps.add(point(-hm - w, -vm - h));
+                ps.add(point(0, -vm - h));
+                ps.add(point(+hm + w, -vm - h));
+                ps.add(point(-hm_0_5 - w_0_5, 0));
+                ps.add(point(+hm_0_5 + w_0_5, 0));
+                ps.add(point(-hm - w, +vm + h));
+                ps.add(point(0, +vm + h));
+                ps.add(point(+hm + w, +vm + h));
                 break;
             case SC_8_2:
-                b = hm / 2 + r;
-                c = (float) (b / (Math.sqrt(3) / 2));
-                a = c / 2;
-                positions.add(point(-a - c, -2 * b));
-                positions.add(point(-a - c, 0));
-                positions.add(point(-a - c, 2 * b));
-                positions.add(point(0, -vm / 2 - r));
-                positions.add(point(0, vm / 2 + r));
-                positions.add(point(a + c, -2 * b));
-                positions.add(point(a + c, 0));
-                positions.add(point(a + c, 2 * b));
+                ps.add(point(-hm - w, -vm - h));
+                ps.add(point(+hm + w, -vm - h));
+                ps.add(point(0, -vm_0_5 - h_0_5));
+                ps.add(point(-hm - w, 0));
+                ps.add(point(+hm + w, 0));
+                ps.add(point(0, +vm_0_5 + h_0_5));
+                ps.add(point(-hm - w, +vm + h));
+                ps.add(point(+hm + w, +vm + h));
                 break;
             case SC_8_3:
-                positions.add(point(-hm - 2 * r, -vm - 2 * r));
-                positions.add(point(0, -vm - 2 * r));
-                positions.add(point(hm + 2 * r, -vm - 2 * r));
-                positions.add(point(-hm - 2 * r, 0));
-                positions.add(point(hm + 2 * r, 0));
-                positions.add(point(-hm - 2 * r, vm + 2 * r));
-                positions.add(point(0, vm + 2 * r));
-                positions.add(point(hm + 2 * r, vm + 2 * r));
+                ps.add(point(-hm - w, -vm - h));
+                ps.add(point(0, -vm - h));
+                ps.add(point(+hm + w, -vm - h));
+                ps.add(point(-hm - w, 0));
+                ps.add(point(+hm + w, 0));
+                ps.add(point(-hm - w, +vm + h));
+                ps.add(point(0, +vm + h));
+                ps.add(point(+hm + w, +vm + h));
                 break;
             case SC_8_4:
-                b = hm / 2 + r;
-                c = (float) (b / (Math.sqrt(3) / 2));
-                a = c / 2;
-                positions.add(point(0, -2 * a - 2 * c));
-                positions.add(point(-hm / 2 - r, -a - c));
-                positions.add(point(hm / 2 + r, -a - c));
-                positions.add(point(-2 * b, 0));
-                positions.add(point(2 * b, 0));
-                positions.add(point(-hm / 2 - r, a + c));
-                positions.add(point(hm / 2 + r, a + c));
-                positions.add(point(0, 2 * a + 2 * c));
+                ps.add(point(0, -vm_2_0 - h_2_0));
+                ps.add(point(-hm_0_5 - w_0_5, -vm - h));
+                ps.add(point(+hm_0_5 + w_0_5, -vm - h));
+                ps.add(point(-hm - w, 0));
+                ps.add(point(+hm + w, 0));
+                ps.add(point(-hm_0_5 - w_0_5, +vm + h));
+                ps.add(point(+hm_0_5 + w_0_5, +vm + h));
+                ps.add(point(0, +vm_2_0 + h_2_0));
                 break;
             case SC_8_5:
-                a = (float) ((2 * r + im) / Math.sqrt(2));
-                positions.add(point(0, -2 * a));
-                positions.add(point(a, -a));
-                positions.add(point(2 * a, 0));
-                positions.add(point(a, a));
-                positions.add(point(0, 2 * a));
-                positions.add(point(-a, a));
-                positions.add(point(-2 * a, 0));
-                positions.add(point(-a, -a));
+                ps.add(point(0, -vm - h));
+                ps.add(point(-hm - w, -vm_0_5 - h_0_5));
+                ps.add(point(+hm + w, -vm_0_5 - h_0_5));
+                ps.add(point(-hm_2_0 - w_2_0, 0));
+                ps.add(point(+hm_2_0 + w_2_0, 0));
+                ps.add(point(-hm - w, +vm_0_5 + h_0_5));
+                ps.add(point(+hm + w, +vm_0_5 + h_0_5));
+                ps.add(point(0, +vm + h));
                 break;
             case SC_8_6:
-                positions.add(point(-hm * 3 / 2 - 3 * r, -vm / 2 - r));
-                positions.add(point(-hm / 2 - r, -vm / 2 - r));
-                positions.add(point(hm / 2 + r, -vm / 2 - r));
-                positions.add(point(hm * 3 / 2 + 3 * r, -vm / 2 - r));
-                positions.add(point(-hm * 3 / 2 - 3 * r, vm / 2 + r));
-                positions.add(point(-hm / 2 - r, vm / 2 + r));
-                positions.add(point(hm / 2 + r, vm / 2 + r));
-                positions.add(point(hm * 3 / 2 + 3 * r, vm / 2 + r));
+                ps.add(point(-hm_1_5 - w_1_5, -vm_0_5 - h_0_5));
+                ps.add(point(-hm_0_5 - w_0_5, -vm_0_5 - h_0_5));
+                ps.add(point(+hm_0_5 + w_0_5, -vm_0_5 - h_0_5));
+                ps.add(point(+hm_1_5 + w_1_5, -vm_0_5 - h_0_5));
+                ps.add(point(-hm_1_5 - w_1_5, +vm_0_5 + h_0_5));
+                ps.add(point(-hm_0_5 - w_0_5, +vm_0_5 + h_0_5));
+                ps.add(point(+hm_0_5 + w_0_5, +vm_0_5 + h_0_5));
+                ps.add(point(+hm_1_5 + w_1_5, +vm_0_5 + h_0_5));
                 break;
             case SC_8_7:
-                positions.add(point(-hm / 2 - r, -vm * 3 / 2 - 3 * r));
-                positions.add(point(hm / 2 + r, -vm * 3 / 2 - 3 * r));
-                positions.add(point(-hm / 2 - r, -vm / 2 - r));
-                positions.add(point(hm / 2 + r, -vm / 2 - r));
-                positions.add(point(-hm / 2 - r, vm / 2 + r));
-                positions.add(point(hm / 2 + r, vm / 2 + r));
-                positions.add(point(-hm / 2 - r, vm * 3 / 2 + 3 * r));
-                positions.add(point(hm / 2 + r, vm * 3 / 2 + 3 * r));
+                ps.add(point(-hm_0_5 - w_0_5, -vm_1_5 - h_1_5));
+                ps.add(point(+hm_0_5 + w_0_5, -vm_1_5 - h_1_5));
+                ps.add(point(-hm_0_5 - w_0_5, -vm_0_5 - h_0_5));
+                ps.add(point(+hm_0_5 + w_0_5, -vm_0_5 - h_0_5));
+                ps.add(point(-hm_0_5 - w_0_5, +vm_0_5 + h_0_5));
+                ps.add(point(+hm_0_5 + w_0_5, +vm_0_5 + h_0_5));
+                ps.add(point(-hm_0_5 - w_0_5, +vm_1_5 + h_1_5));
+                ps.add(point(+hm_0_5 + w_0_5, +vm_1_5 + h_1_5));
                 break;
             case SC_9_1:
-                positions.add(point(-hm - 2 * r, -vm - 2 * r));
-                positions.add(point(0, -vm - 2 * r));
-                positions.add(point(hm + 2 * r, -vm - 2 * r));
-                positions.add(point(-hm - 2 * r, 0));
-                positions.add(point(0, 0));
-                positions.add(point(hm + 2 * r, 0));
-                positions.add(point(-hm - 2 * r, vm + 2 * r));
-                positions.add(point(0, vm + 2 * r));
-                positions.add(point(hm + 2 * r, vm + 2 * r));
+                ps.add(point(-hm - w, -vm - h));
+                ps.add(point(0, -vm - h));
+                ps.add(point(+hm + w, -vm - h));
+                ps.add(point(-hm - w, 0));
+                ps.add(point(0, 0));
+                ps.add(point(+hm + w, 0));
+                ps.add(point(-hm - w, +vm + h));
+                ps.add(point(0, +vm + h));
+                ps.add(point(+hm + w, +vm + h));
                 break;
             case SC_9_2:
-                b = hm / 2 + r;
-                c = (float) (b / (Math.sqrt(3) / 2));
-                a = c / 2;
-                positions.add(point(0, -2 * a - 2 * c));
-                positions.add(point(-hm / 2 - r, -a - c));
-                positions.add(point(hm / 2 + r, -a - c));
-                positions.add(point(-2 * b, 0));
-                positions.add(point(0, 0));
-                positions.add(point(2 * b, 0));
-                positions.add(point(-hm / 2 - r, a + c));
-                positions.add(point(hm / 2 + r, a + c));
-                positions.add(point(0, 2 * a + 2 * c));
+                ps.add(point(0, -vm_2_0 - h_2_0));
+                ps.add(point(-hm_0_5 - w_0_5, -vm - h));
+                ps.add(point(+hm_0_5 + w_0_5, -vm - h));
+                ps.add(point(-hm - w, 0));
+                ps.add(point(0, 0));
+                ps.add(point(+hm + w, 0));
+                ps.add(point(-hm_0_5 - w_0_5, +vm + h));
+                ps.add(point(+hm_0_5 + w_0_5, +vm + h));
+                ps.add(point(0, +vm_2_0 + h_2_0));
                 break;
             case SC_9_3:
-                a = (float) ((2 * r + im) / Math.sqrt(2));
-                positions.add(point(0, -2 * a));
-                positions.add(point(a, -a));
-                positions.add(point(2 * a, 0));
-                positions.add(point(a, a));
-                positions.add(point(0, 0));
-                positions.add(point(0, 2 * a));
-                positions.add(point(-a, a));
-                positions.add(point(-2 * a, 0));
-                positions.add(point(-a, -a));
+                ps.add(point(0, -vm - h));
+                ps.add(point(-hm - w, -vm_0_5 - h_0_5));
+                ps.add(point(+hm + w, -vm_0_5 - h_0_5));
+                ps.add(point(-hm_2_0 - w_2_0, 0));
+                ps.add(point(0, 0));
+                ps.add(point(+hm_2_0 + w_2_0, 0));
+                ps.add(point(-hm - w, +vm_0_5 + h_0_5));
+                ps.add(point(+hm + w, +vm_0_5 + h_0_5));
+                ps.add(point(0, +vm + h));
+                break;
+            case Custom:
+                for (PointF p : bmb.getCustomButtonPlacePositions()) ps.add(point(p.x, p.y));
+                break;
+            default:
+                throw new RuntimeException("Button place enum not found!");
+        }
+
+        switch (bmb.getButtonPlaceEnum()) {
+            case SC_3_3:
+                adjust(ps, 0, (float) (+pow(hm_0_5 + w_0_5, 2) / (vm + h)));
+                break;
+            case SC_3_4:
+                adjust(ps, 0, (float) (-pow(hm_0_5 + w_0_5, 2) / (vm + h)));
+                break;
+            case SC_4_2: case SC_5_1: case SC_5_2: case SC_5_3: case SC_5_4: case SC_6_1:
+            case SC_6_2: case SC_6_3: case SC_6_4: case SC_6_5: case SC_6_6: case SC_7_1:
+            case SC_7_2: case SC_7_3: case SC_7_4: case SC_7_5: case SC_7_6: case SC_8_1:
+            case SC_8_2: case SC_8_3: case SC_8_4: case SC_8_5: case SC_8_6: case SC_8_7:
+            case SC_9_1: case SC_9_2: case SC_9_3:
+                adjust(ps, 0, h_0_5 - w_0_5);
+                break;
+            default:
+                if (buttonNumber >= 2
+                        && bmb.getButtonEnum().equals(ButtonEnum.Ham)
+                        && bmb.getBottomHamButtonTopMargin() > 0
+                        && !bmb.getButtonPlaceEnum().equals(ButtonPlaceEnum.Horizontal))
+                    ps.get(ps.size() - 1).offset(0, bmb.getBottomHamButtonTopMargin() - vm);
+        }
+
+        adjust(ps, parentSize.x / 2, parentSize.y / 2);
+        adjust(ps, parentSize, w_0_5, h_0_5, bmb);
+
+        return ps;
+    }
+
+    public static ArrayList<PointF> getPositions(Point parentSize,
+                                                 float r,
+                                                 int buttonNumber,
+                                                 BoomMenuButton bmb) {
+        ArrayList<PointF> ps = new ArrayList<>(buttonNumber);
+
+        int halfButtonNumber = buttonNumber / 2;
+
+        float hm = bmb.getButtonHorizontalMargin();
+        float hm_0_5 = hm / 2;
+        float hm_1_5 = hm * 1.5f;
+
+        float vm = bmb.getButtonVerticalMargin();
+        float vm_0_5 = vm / 2;
+        float vm_1_5 = vm * 1.5f;
+
+        float im = bmb.getButtonInclinedMargin();
+
+        float r_2_0 = 2 * r;
+        float r_3_0 = 3 * r;
+
+        float a, b, c, e;
+        b = hm_0_5 + r;
+        c = (float) (b / (sqrt(3) / 2));
+        a = c / 2;
+        e = c - a;
+
+        switch (bmb.getButtonPlaceEnum()) {
+            case SC_4_2: case SC_5_4: case SC_8_5: case SC_9_3:
+                a = (float) ((r_2_0 + im) / sqrt(2));
+                break;
+            case SC_8_2:
+                b = vm_0_5 + r;
+                c = (float) (b / (sqrt(3) / 2));
+                a = c / 2;
+                e = c - a;
                 break;
         }
 
-        calculatePositionsInParent(positions, parentSize);
+        float a_2_0 = 2 * a;
+        float b_2_0 = 2 * b;
+        float b_3_0 = 3 * b;
+        float c_2_0 = 2 * c;
 
-        calculateOffset(
-                positions,
-                alignmentEnum,
-                parentSize,
-                radius * 2,
-                radius * 2,
-                buttonTopMargin,
-                buttonBottomMargin,
-                buttonLeftMargin,
-                buttonRightMargin);
-
-        return positions;
-    }
-
-    public static ArrayList<Point> getCircleButtonPositions(ButtonPlaceEnum placeEnum,
-                                                            ButtonPlaceAlignmentEnum alignmentEnum,
-                                                            Point parentSize,
-                                                            float buttonWidth,
-                                                            float buttonHeight,
-                                                            int buttonNumber,
-                                                            float buttonHorizontalMargin,
-                                                            float buttonVerticalMargin,
-                                                            float buttonInclinedMargin,
-                                                            float buttonTopMargin,
-                                                            float buttonBottomMargin,
-                                                            float buttonLeftMargin,
-                                                            float buttonRightMargin) {
-
-        ArrayList<Point> positions = new ArrayList<>(buttonNumber);
-        float a, b, c, e, w = buttonWidth, h = buttonHeight;
-        float hm = buttonHorizontalMargin, vm = buttonVerticalMargin, im = buttonInclinedMargin;
-        int half = buttonNumber / 2;
-
-        switch (placeEnum) {
+        switch (bmb.getButtonPlaceEnum()) {
             case Horizontal:
                 if (buttonNumber % 2 == 0) {
-                    for (int i = half - 1; i >= 0; i--) positions.add(point(-w / 2 - hm / 2 - i * (w + hm), 0));
-                    for (int i = 0; i < half; i++) positions.add(point(w / 2  + hm / 2 + i * (w + hm), 0));
+                    for (int i = halfButtonNumber - 1; i >= 0; i--)
+                        ps.add(point(-r - hm_0_5 - i * (r_2_0 + hm), 0));
+                    for (int i = 0; i < halfButtonNumber; i++)
+                        ps.add(point(+r + hm_0_5 + i * (r_2_0 + hm), 0));
                 } else {
-                    for (int i = half - 1; i >= 0; i--) positions.add(point(-w - hm - i * (w + hm), 0));
-                    positions.add(point(0, 0));
-                    for (int i = 0; i < half; i++) positions.add(point(w + hm + i * (w + hm), 0));
+                    for (int i = halfButtonNumber - 1; i >= 0; i--)
+                        ps.add(point(-r_2_0 - hm - i * (r_2_0 + hm), 0));
+                    ps.add(point(0, 0));
+                    for (int i = 0; i < halfButtonNumber; i++)
+                        ps.add(point(+r_2_0 + hm + i * (r_2_0 + hm), 0));
                 }
                 break;
             case Vertical:
                 if (buttonNumber % 2 == 0) {
-                    for (int i = half - 1; i >= 0; i--) positions.add(point(0, -h / 2 - vm / 2 - i * (h + vm)));
-                    for (int i = 0; i < half; i++) positions.add(point(0, h / 2 + vm / 2 + i * (h + vm)));
+                    for (int i = halfButtonNumber - 1; i >= 0; i--)
+                        ps.add(point(0, -r - vm_0_5 - i * (r_2_0 + vm)));
+                    for (int i = 0; i < halfButtonNumber; i++)
+                        ps.add(point(0, +r + vm_0_5 + i * (r_2_0 + vm)));
                 } else {
-                    for (int i = half - 1; i >= 0; i--) positions.add(point(0, -h - vm - i * (h + vm)));
-                    positions.add(point(0, 0));
-                    for (int i = 0; i < half; i++) positions.add(point(0, h + vm + i * (h + vm)));
+                    for (int i = halfButtonNumber - 1; i >= 0; i--)
+                        ps.add(point(0, -r_2_0 - vm - i * (r_2_0 + vm)));
+                    ps.add(point(0, 0));
+                    for (int i = 0; i < halfButtonNumber; i++)
+                        ps.add(point(0, +r_2_0 + vm + i * (r_2_0 + vm)));
                 }
                 break;
             case SC_1:
-                positions.add(point(0, 0));
+                ps.add(point(0, 0));
                 break;
             case SC_2_1:
-                positions.add(point(-hm / 2 - w / 2, 0));
-                positions.add(point(hm / 2 + w / 2, 0));
+                ps.add(point(-hm_0_5 - r, 0));
+                ps.add(point(+hm_0_5 + r, 0));
                 break;
             case SC_2_2:
-                positions.add(point(0, -vm / 2 - h / 2));
-                positions.add(point(0, vm / 2 + h / 2));
+                ps.add(point(0, -vm_0_5 - r));
+                ps.add(point(0, +vm_0_5 + r));
                 break;
             case SC_3_1:
-                positions.add(point(-hm - w, 0));
-                positions.add(point(0, 0));
-                positions.add(point(hm + w, 0));
+                ps.add(point(-hm - r_2_0, 0));
+                ps.add(point(0, 0));
+                ps.add(point(+hm + r_2_0, 0));
                 break;
             case SC_3_2:
-                positions.add(point(0, -vm - h));
-                positions.add(point(0, 0));
-                positions.add(point(0, vm + h));
+                ps.add(point(0, -vm - r_2_0));
+                ps.add(point(0, 0));
+                ps.add(point(0, +vm + r_2_0));
                 break;
             case SC_3_3:
-                positions.add(point(-hm / 2 - w / 2, -vm / 2 - h / 2));
-                positions.add(point(hm / 2 + w / 2, -vm / 2 - h / 2));
-                positions.add(point(0, vm / 2 + h / 2));
+                ps.add(point(-b, -a));
+                ps.add(point(+b, -a));
+                ps.add(point(0, c));
                 break;
             case SC_3_4:
-                positions.add(point(0, -vm / 2 - h / 2));
-                positions.add(point(-hm / 2 - w / 2, vm / 2 + h / 2));
-                positions.add(point(hm / 2 + w / 2, vm / 2 + h / 2));
+                ps.add(point(0, -c));
+                ps.add(point(-b, a));
+                ps.add(point(+b, a));
                 break;
             case SC_4_1:
-                positions.add(point(-hm / 2 - w / 2, -vm / 2 - h / 2));
-                positions.add(point(hm / 2 + w / 2, -vm / 2 - h / 2));
-                positions.add(point(-hm / 2 - w / 2, vm / 2 + h / 2));
-                positions.add(point(hm / 2 + w / 2, vm / 2 + h / 2));
+                ps.add(point(-hm_0_5 - r, -vm_0_5 - r));
+                ps.add(point(+hm_0_5 + r, -vm_0_5 - r));
+                ps.add(point(-hm_0_5 - r, +vm_0_5 + r));
+                ps.add(point(+hm_0_5 + r, +vm_0_5 + r));
                 break;
             case SC_4_2:
-                positions.add(point(0, -vm / 2 - h / 2));
-                positions.add(point(hm + w, 0));
-                positions.add(point(0, vm / 2 + h / 2));
-                positions.add(point(-hm - w, 0));
+                ps.add(point(0, -a));
+                ps.add(point(-a, 0));
+                ps.add(point(+a, 0));
+                ps.add(point(0, +a));
                 break;
             case SC_5_1:
-                positions.add(point(-hm - w, -vm / 2 - h / 2));
-                positions.add(point(0, -vm / 2 - h / 2));
-                positions.add(point(hm + w, -vm / 2 - h / 2));
-                positions.add(point(-hm / 2 - w / 2, vm / 2 + h / 2));
-                positions.add(point(hm / 2 + w / 2, vm / 2 + h / 2));
+                ps.add(point(-b_2_0, -c));
+                ps.add(point(0, -c));
+                ps.add(point(+b_2_0, -c));
+                ps.add(point(-hm_0_5 - r, a));
+                ps.add(point(+hm_0_5 + r, a));
                 break;
             case SC_5_2:
-                positions.add(point(-hm / 2 - w / 2, -vm / 2 - h / 2));
-                positions.add(point(hm / 2 + w / 2, -vm / 2 - h / 2));
-                positions.add(point(-hm - w, vm / 2 + h / 2));
-                positions.add(point(0, vm / 2 + h / 2));
-                positions.add(point(hm + w, vm / 2 + h / 2));
+                ps.add(point(-hm_0_5 - r, -a));
+                ps.add(point(+hm_0_5 + r, -a));
+                ps.add(point(-b_2_0, c));
+                ps.add(point(0, c));
+                ps.add(point(+b_2_0, c));
                 break;
             case SC_5_3:
-                positions.add(point(0, -vm - h));
-                positions.add(point(-hm - w, 0));
-                positions.add(point(0, 0));
-                positions.add(point(hm + w, 0));
-                positions.add(point(0, vm + h));
+                ps.add(point(0, -vm - r_2_0));
+                ps.add(point(-hm - r_2_0, 0));
+                ps.add(point(0, 0));
+                ps.add(point(+hm + r_2_0, 0));
+                ps.add(point(0, +vm + r_2_0));
                 break;
             case SC_5_4:
-                positions.add(point(-hm - w, -vm / 2 - h / 2));
-                positions.add(point(hm + w, -vm / 2 - h / 2));
-                positions.add(point(0, 0));
-                positions.add(point(-hm - w, vm / 2 + h / 2));
-                positions.add(point(hm + w, vm / 2 + h / 2));
+                ps.add(point(-a, -a));
+                ps.add(point(+a, -a));
+                ps.add(point(0, 0));
+                ps.add(point(-a, +a));
+                ps.add(point(+a, +a));
                 break;
             case SC_6_1:
-                positions.add(point(-hm - w, -vm / 2 - h / 2));
-                positions.add(point(0, -vm / 2 - h / 2));
-                positions.add(point(hm + w, -vm / 2 - h / 2));
-                positions.add(point(-hm - w, vm / 2 + h / 2));
-                positions.add(point(0, vm / 2 + h / 2));
-                positions.add(point(hm + w, vm / 2 + h / 2));
+                ps.add(point(-hm - r_2_0, -vm_0_5 - r));
+                ps.add(point(0, -vm_0_5 - r));
+                ps.add(point(+hm + r_2_0, -vm_0_5 - r));
+                ps.add(point(-hm - r_2_0, +vm_0_5 + r));
+                ps.add(point(0, +vm_0_5 + r));
+                ps.add(point(+hm + r_2_0, +vm_0_5 + r));
                 break;
             case SC_6_2:
-                positions.add(point(-hm / 2 - w / 2, -vm - h));
-                positions.add(point(-hm / 2 - w / 2, 0));
-                positions.add(point(-hm / 2 - w / 2, vm + h));
-                positions.add(point(hm / 2 + w / 2, -vm - h));
-                positions.add(point(hm / 2 + w / 2, 0));
-                positions.add(point(hm / 2 + w / 2, vm + h));
+                ps.add(point(-hm_0_5 - r, -vm - r_2_0));
+                ps.add(point(+hm_0_5 + r, -vm - r_2_0));
+                ps.add(point(-hm_0_5 - r, 0));
+                ps.add(point(+hm_0_5 + r, 0));
+                ps.add(point(-hm_0_5 - r, +vm + r_2_0));
+                ps.add(point(+hm_0_5 + r, +vm + r_2_0));
                 break;
             case SC_6_3:
-                positions.add(point(-hm / 2 - w / 2, -vm - h));
-                positions.add(point(hm / 2 + w / 2, -vm - h));
-                positions.add(point(-hm - w, 0));
-                positions.add(point(hm + w, 0));
-                positions.add(point(-hm / 2 - w / 2, vm + h));
-                positions.add(point(hm / 2 + w / 2, vm + h));
+                ps.add(point(-b, -a - c));
+                ps.add(point(+b, -a - c));
+                ps.add(point(-b_2_0, 0));
+                ps.add(point(+b_2_0, 0));
+                ps.add(point(-b, +a + c));
+                ps.add(point(+b, +a + c));
                 break;
             case SC_6_4:
-                positions.add(point(0, -vm - h));
-                positions.add(point(hm + w, -vm / 2 - h / 2));
-                positions.add(point(hm + w, vm / 2 + h / 2));
-                positions.add(point(0, vm + h));
-                positions.add(point(-hm - w, -vm / 2 - h / 2));
-                positions.add(point(-hm - w, vm / 2 + h / 2));
+                ps.add(point(0, -b_2_0));
+                ps.add(point(-a - c, -b));
+                ps.add(point(+a + c, -b));
+                ps.add(point(-a - c, +b));
+                ps.add(point(+a + c, +b));
+                ps.add(point(0, +b_2_0));
                 break;
             case SC_6_5:
-                positions.add(point(-hm - w, -vm - h));
-                positions.add(point(0, -vm - h));
-                positions.add(point(hm + w, -vm - h));
-                positions.add(point(-hm / 2 - w / 2, 0));
-                positions.add(point(hm / 2 + w / 2, 0));
-                positions.add(point(0, vm + h));
+                ps.add(point(-b_2_0, -a - c + e));
+                ps.add(point(0, -a - c + e));
+                ps.add(point(+b_2_0, -a - c + e));
+                ps.add(point(-hm_0_5 - r, +e));
+                ps.add(point(+hm_0_5 + r, +e));
+                ps.add(point(0, +a + c + e));
                 break;
             case SC_6_6:
-                positions.add(point(0, -vm - h));
-                positions.add(point(-hm / 2 - w / 2, 0));
-                positions.add(point(hm / 2 + w / 2, 0));
-                positions.add(point(-hm - w, vm + h));
-                positions.add(point(0, vm + h));
-                positions.add(point(hm + w, vm + h));
+                ps.add(point(0, -a - c - e));
+                ps.add(point(-hm_0_5 - r, -e));
+                ps.add(point(+hm_0_5 + r, -e));
+                ps.add(point(-b_2_0, +a + c - e));
+                ps.add(point(0, +a + c - e));
+                ps.add(point(+b_2_0, +a + c - e));
                 break;
             case SC_7_1:
-                positions.add(point(-hm - w, -vm - h));
-                positions.add(point(0, -vm - h));
-                positions.add(point(hm + w, -vm - h));
-                positions.add(point(-hm - w, 0));
-                positions.add(point(0, 0));
-                positions.add(point(hm + w, 0));
-                positions.add(point(0, vm + h));
+                ps.add(point(-hm - r_2_0, -vm - r_2_0));
+                ps.add(point(0, -vm - r_2_0));
+                ps.add(point(+hm + r_2_0, -vm - r_2_0));
+                ps.add(point(-hm - r_2_0, 0));
+                ps.add(point(0, 0));
+                ps.add(point(+hm + r_2_0, 0));
+                ps.add(point(0, vm + r_2_0));
                 break;
             case SC_7_2:
-                positions.add(point(0, -vm - h));
-                positions.add(point(-hm - w, 0));
-                positions.add(point(0, 0));
-                positions.add(point(hm + w, 0));
-                positions.add(point(-hm - w, vm + h));
-                positions.add(point(0, vm + h));
-                positions.add(point(hm + w, vm + h));
+                ps.add(point(0, -vm - r_2_0));
+                ps.add(point(-hm - r_2_0, 0));
+                ps.add(point(0, 0));
+                ps.add(point(+hm + r_2_0, 0));
+                ps.add(point(-hm - r_2_0, vm + r_2_0));
+                ps.add(point(0, vm + r_2_0));
+                ps.add(point(+hm + r_2_0, vm + r_2_0));
                 break;
             case SC_7_3:
-                positions.add(point(-hm / 2 - w / 2, -vm - h));
-                positions.add(point(hm / 2 + w / 2, -vm - h));
-                positions.add(point(-hm - w, 0));
-                positions.add(point(0, 0));
-                positions.add(point(hm + w, 0));
-                positions.add(point(-hm / 2 - w / 2, vm + h));
-                positions.add(point(hm / 2 + w / 2, vm + h));
+                ps.add(point(-b, -a - c));
+                ps.add(point(+b, -a - c));
+                ps.add(point(-b_2_0, 0));
+                ps.add(point(0, 0));
+                ps.add(point(+b_2_0, 0));
+                ps.add(point(-b, +a + c));
+                ps.add(point(+b, +a + c));
                 break;
             case SC_7_4:
-                positions.add(point(0, -vm - h));
-                positions.add(point(hm + w, -vm / 2 - h / 2));
-                positions.add(point(hm + w, vm / 2 + h / 2));
-                positions.add(point(0, 0));
-                positions.add(point(0, vm + h));
-                positions.add(point(-hm - w, -vm / 2 - h / 2));
-                positions.add(point(-hm - w, vm / 2 + h / 2));
+                ps.add(point(0, -b_2_0));
+                ps.add(point(-a - c, -b));
+                ps.add(point(+a + c, -b));
+                ps.add(point(0, 0));
+                ps.add(point(-a - c, +b));
+                ps.add(point(+a + c, +b));
+                ps.add(point(0, +b_2_0));
                 break;
             case SC_7_5:
-                positions.add(point(-hm * 3 / 2 - w * 3 / 2, -vm / 2 - h / 2));
-                positions.add(point(-hm / 2 - w / 2, -vm / 2 - h / 2));
-                positions.add(point(hm / 2 + w / 2, -vm / 2 - h / 2));
-                positions.add(point(hm * 3 / 2 + w * 3 / 2, -vm / 2 - h / 2));
-                positions.add(point(-hm - w, vm / 2 + h / 2));
-                positions.add(point(0, vm / 2 + h / 2));
-                positions.add(point(hm + w, vm / 2 + h / 2));
+                ps.add(point(-b_3_0, -a));
+                ps.add(point(-b, -a));
+                ps.add(point(+b, -a));
+                ps.add(point(+b_3_0, -a));
+                ps.add(point(-b_2_0, c));
+                ps.add(point(0, c));
+                ps.add(point(+b_2_0, c));
                 break;
             case SC_7_6:
-                positions.add(point(-hm - w, -vm / 2 - h / 2));
-                positions.add(point(0, -vm / 2 - h / 2));
-                positions.add(point(hm + w, -vm / 2 - h / 2));
-                positions.add(point(-hm * 3 / 2 - w * 3 / 2, vm / 2 + h / 2));
-                positions.add(point(-hm / 2 - w / 2, vm / 2 + h / 2));
-                positions.add(point(hm / 2 + w / 2, vm / 2 + h / 2));
-                positions.add(point(hm * 3 / 2 + w * 3 / 2, vm / 2 + h / 2));
+                ps.add(point(-b_2_0, -c));
+                ps.add(point(0, -c));
+                ps.add(point(+b_2_0, -c));
+                ps.add(point(-b_3_0, a));
+                ps.add(point(-b, a));
+                ps.add(point(+b, a));
+                ps.add(point(+b_3_0, a));
                 break;
             case SC_8_1:
-                positions.add(point(-hm - w, -vm - h));
-                positions.add(point(0, -vm - h));
-                positions.add(point(hm + w, -vm - h));
-                positions.add(point(-hm / 2 - w / 2, 0));
-                positions.add(point(hm / 2 + w / 2, 0));
-                positions.add(point(-hm - w, vm + h));
-                positions.add(point(0, vm + h));
-                positions.add(point(hm + w, vm + h));
+                ps.add(point(-b_2_0, -a - c));
+                ps.add(point(0, -a - c));
+                ps.add(point(+b_2_0, -a - c));
+                ps.add(point(-hm_0_5 - r, 0));
+                ps.add(point(+hm_0_5 + r, 0));
+                ps.add(point(-b_2_0, +a + c));
+                ps.add(point(0, +a + c));
+                ps.add(point(+b_2_0, +a + c));
                 break;
             case SC_8_2:
-                positions.add(point(-hm - w, -vm - h));
-                positions.add(point(-hm - w, 0));
-                positions.add(point(-hm - w, vm + h));
-                positions.add(point(0, -vm / 2 - h / 2));
-                positions.add(point(0, vm / 2 + h / 2));
-                positions.add(point(hm + w, -vm - h));
-                positions.add(point(hm + w, 0));
-                positions.add(point(hm + w, vm + h));
+                ps.add(point(-a - c, -b_2_0));
+                ps.add(point(+a + c, -b_2_0));
+                ps.add(point(0, -vm_0_5 - r));
+                ps.add(point(-a - c, 0));
+                ps.add(point(+a + c, 0));
+                ps.add(point(0, +vm_0_5 + r));
+                ps.add(point(-a - c, +b_2_0));
+                ps.add(point(+a + c, +b_2_0));
                 break;
             case SC_8_3:
-                positions.add(point(-hm - w, -vm - h));
-                positions.add(point(0, -vm - h));
-                positions.add(point(hm + w, -vm - h));
-                positions.add(point(-hm - w, 0));
-                positions.add(point(hm + w, 0));
-                positions.add(point(-hm - w, vm + h));
-                positions.add(point(0, vm + h));
-                positions.add(point(hm + w, vm + h));
+                ps.add(point(-hm - r_2_0, -vm - r_2_0));
+                ps.add(point(0, -vm - r_2_0));
+                ps.add(point(+hm + r_2_0, -vm - r_2_0));
+                ps.add(point(-hm - r_2_0, 0));
+                ps.add(point(+hm + r_2_0, 0));
+                ps.add(point(-hm - r_2_0, +vm + r_2_0));
+                ps.add(point(0, +vm + r_2_0));
+                ps.add(point(+hm + r_2_0, +vm + r_2_0));
                 break;
             case SC_8_4:
-                positions.add(point(0, -vm * 2 - h * 2));
-                positions.add(point(hm / 2 + w / 2, -vm - h));
-                positions.add(point(hm + w, 0));
-                positions.add(point(hm / 2 + w / 2, vm + h));
-                positions.add(point(0, vm * 2 + h * 2));
-                positions.add(point(-hm / 2 - w / 2, vm + h));
-                positions.add(point(-hm - w, 0));
-                positions.add(point(-hm / 2 - w / 2, -vm - h));
+                ps.add(point(0, -a_2_0 - c_2_0));
+                ps.add(point(-hm_0_5 - r, -a - c));
+                ps.add(point(+hm_0_5 + r, -a - c));
+                ps.add(point(-b_2_0, 0));
+                ps.add(point(+b_2_0, 0));
+                ps.add(point(-hm_0_5 - r, +a + c));
+                ps.add(point(+hm_0_5 + r, +a + c));
+                ps.add(point(0, +a_2_0 + c_2_0));
                 break;
             case SC_8_5:
-                positions.add(point(0, -vm - h));
-                positions.add(point(hm + w, -vm / 2 - h / 2));
-                positions.add(point(hm * 2 + w * 2, 0));
-                positions.add(point(hm + w, vm / 2 + h / 2));
-                positions.add(point(0, vm + h));
-                positions.add(point(-hm - w, vm / 2 + h / 2));
-                positions.add(point(-hm * 2 - w * 2, 0));
-                positions.add(point(-hm - w, -vm / 2 - h / 2));
+                ps.add(point(0, -a_2_0));
+                ps.add(point(-a, -a));
+                ps.add(point(+a, -a));
+                ps.add(point(-a_2_0, 0));
+                ps.add(point(+a_2_0, 0));
+                ps.add(point(-a, +a));
+                ps.add(point(+a, +a));
+                ps.add(point(0, +a_2_0));
                 break;
             case SC_8_6:
-                positions.add(point(-hm * 3 / 2 - 3 * w / 2, -vm / 2 - h / 2));
-                positions.add(point(-hm / 2 - w / 2, -vm / 2 - h / 2));
-                positions.add(point(hm / 2 + w / 2, -vm / 2 - h / 2));
-                positions.add(point(hm * 3 / 2 + 3 * w / 2, -vm / 2 - h / 2));
-                positions.add(point(-hm * 3 / 2 - 3 * w / 2, vm / 2 + h / 2));
-                positions.add(point(-hm / 2 - w / 2, vm / 2 + h / 2));
-                positions.add(point(hm / 2 + w / 2, vm / 2 + h / 2));
-                positions.add(point(hm * 3 / 2 + 3 * w / 2, vm / 2 + h / 2));
+                ps.add(point(-hm_1_5 - r_3_0, -vm_0_5 - r));
+                ps.add(point(-hm_0_5 - r, -vm_0_5 - r));
+                ps.add(point(+hm_0_5 + r, -vm_0_5 - r));
+                ps.add(point(+hm_1_5 + r_3_0, -vm_0_5 - r));
+                ps.add(point(-hm_1_5 - r_3_0, +vm_0_5 + r));
+                ps.add(point(-hm_0_5 - r, +vm_0_5 + r));
+                ps.add(point(+hm_0_5 + r, +vm_0_5 + r));
+                ps.add(point(+hm_1_5 + r_3_0, +vm_0_5 + r));
                 break;
             case SC_8_7:
-                positions.add(point(-hm / 2 - w / 2, -vm * 3 / 2 - 3 * h / 2));
-                positions.add(point(hm / 2 + w / 2, -vm * 3 / 2 - 3 * h / 2));
-                positions.add(point(-hm / 2 - w / 2, -vm / 2 - h / 2));
-                positions.add(point(hm / 2 + w / 2, -vm / 2 - h / 2));
-                positions.add(point(-hm / 2 - w / 2, vm / 2 + h / 2));
-                positions.add(point(hm / 2 + w / 2, vm / 2 + h / 2));
-                positions.add(point(-hm / 2 - w / 2, vm * 3 / 2 + 3 * h / 2));
-                positions.add(point(hm / 2 + w / 2, vm * 3 / 2 + 3 * h / 2));
+                ps.add(point(-hm_0_5 - r, -vm_1_5 - r_3_0));
+                ps.add(point(+hm_0_5 + r, -vm_1_5 - r_3_0));
+                ps.add(point(-hm_0_5 - r, -vm_0_5 - r));
+                ps.add(point(+hm_0_5 + r, -vm_0_5 - r));
+                ps.add(point(-hm_0_5 - r, +vm_0_5 + r));
+                ps.add(point(+hm_0_5 + r, +vm_0_5 + r));
+                ps.add(point(-hm_0_5 - r, +vm_1_5 + r_3_0));
+                ps.add(point(+hm_0_5 + r, +vm_1_5 + r_3_0));
                 break;
             case SC_9_1:
-                positions.add(point(-hm - w, -vm - h));
-                positions.add(point(0, -vm - h));
-                positions.add(point(hm + w, -vm - h));
-                positions.add(point(-hm - w, 0));
-                positions.add(point(0, 0));
-                positions.add(point(hm + w, 0));
-                positions.add(point(-hm - w, vm + h));
-                positions.add(point(0, vm + h));
-                positions.add(point(hm + w, vm + h));
+                ps.add(point(-hm - r_2_0, -vm - r_2_0));
+                ps.add(point(0, -vm - r_2_0));
+                ps.add(point(+hm + r_2_0, -vm - r_2_0));
+                ps.add(point(-hm - r_2_0, 0));
+                ps.add(point(0, 0));
+                ps.add(point(+hm + r_2_0, 0));
+                ps.add(point(-hm - r_2_0, +vm + r_2_0));
+                ps.add(point(0, +vm + r_2_0));
+                ps.add(point(+hm + r_2_0, +vm + r_2_0));
                 break;
             case SC_9_2:
-                positions.add(point(0, -vm * 2 - h * 2));
-                positions.add(point(hm / 2 + w / 2, -vm - h));
-                positions.add(point(hm + w, 0));
-                positions.add(point(hm / 2 + w / 2, vm + h));
-                positions.add(point(0, vm * 2 + h * 2));
-                positions.add(point(-hm / 2 - w / 2, vm + h));
-                positions.add(point(-hm - w, 0));
-                positions.add(point(-hm / 2 - w / 2, -vm - h));
-                positions.add(point(0, 0));
+                ps.add(point(0, -a_2_0 - c_2_0));
+                ps.add(point(-hm_0_5 - r, -a - c));
+                ps.add(point(+hm_0_5 + r, -a - c));
+                ps.add(point(-b_2_0, 0));
+                ps.add(point(0, 0));
+                ps.add(point(+b_2_0, 0));
+                ps.add(point(-hm_0_5 - r, +a + c));
+                ps.add(point(+hm_0_5 + r, +a + c));
+                ps.add(point(0, +a_2_0 + c_2_0));
                 break;
             case SC_9_3:
-                positions.add(point(0, -vm - h));
-                positions.add(point(hm + w, -vm / 2 - h / 2));
-                positions.add(point(hm * 2 + w * 2, 0));
-                positions.add(point(hm + w, vm / 2 + h / 2));
-                positions.add(point(0, vm + h));
-                positions.add(point(-hm - w, vm / 2 + h / 2));
-                positions.add(point(-hm * 2 - w * 2, 0));
-                positions.add(point(-hm - w, -vm / 2 - h / 2));
-                positions.add(point(0, 0));
+                ps.add(point(0, -a_2_0));
+                ps.add(point(-a, -a));
+                ps.add(point(+a, -a));
+                ps.add(point(-a_2_0, 0));
+                ps.add(point(0, 0));
+                ps.add(point(+a_2_0, 0));
+                ps.add(point(-a, +a));
+                ps.add(point(+a, +a));
+                ps.add(point(0, +a_2_0));
                 break;
+            case Custom:
+                for (PointF p : bmb.getCustomButtonPlacePositions()) ps.add(point(p.x, p.y));
+                break;
+            default:
+                throw new RuntimeException("Button place enum not found!");
         }
 
-        switch (placeEnum) {
-            case SC_3_3:
-                adjustOffset(positions, 0, calculateYOffsetToCenter(hm, vm, w, h));
-                break;
-            case SC_3_4:
-                adjustOffset(positions, 0, -calculateYOffsetToCenter(hm, vm, w, h));
-                break;
-            case SC_4_2:
-            case SC_5_1:
-            case SC_5_2:
-            case SC_5_3:
-            case SC_5_4:
-            case SC_6_1:
-            case SC_6_2:
-            case SC_6_3:
-            case SC_6_4:
-            case SC_6_5:
-            case SC_6_6:
-            case SC_7_1:
-            case SC_7_2:
-            case SC_7_3:
-            case SC_7_4:
-            case SC_7_5:
-            case SC_7_6:
-            case SC_8_1:
-            case SC_8_2:
-            case SC_8_3:
-            case SC_8_4:
-            case SC_8_5:
-            case SC_8_6:
-            case SC_8_7:
-            case SC_9_1:
-            case SC_9_2:
-            case SC_9_3:
-                adjustOffset(positions, 0, (h - w) / 2);
-                break;
-        }
+        adjust(ps, parentSize.x / 2, parentSize.y / 2);
+        adjust(ps, parentSize, r, r, bmb);
 
-        calculatePositionsInParent(positions, parentSize);
-
-        calculateOffset(
-                positions,
-                alignmentEnum,
-                parentSize,
-                w,
-                h,
-                buttonTopMargin,
-                buttonBottomMargin,
-                buttonLeftMargin,
-                buttonRightMargin);
-
-        return positions;
+        return ps;
     }
 
-    public static ArrayList<Point> getHamButtonPositions(ButtonPlaceEnum placeEnum,
-                                                         ButtonPlaceAlignmentEnum alignmentEnum,
-                                                         Point parentSize,
-                                                         float buttonWidth,
-                                                         float buttonHeight,
-                                                         int buttonNumber,
-                                                         float buttonHorizontalMargin,
-                                                         float buttonVerticalMargin,
-                                                         float buttonTopMargin,
-                                                         float buttonBottomMargin,
-                                                         float buttonLeftMargin,
-                                                         float buttonRightMargin,
-                                                         Float bottomHamButtonTopMargin) {
-        ArrayList<Point> positions = new ArrayList<>(buttonNumber);
-        float w = buttonWidth, h = buttonHeight;
-        float hm = buttonHorizontalMargin, vm = buttonVerticalMargin;
-        int half = buttonNumber / 2;
+    private static void adjust(ArrayList<PointF> ps, Point parentSize, float halfWidth,
+                               float halfHeight, BoomMenuButton bmb) {
+        float minY = Float.MAX_VALUE;
+        float maxY = Float.MIN_VALUE;
+        float minX = Float.MAX_VALUE;
+        float maxX = Float.MIN_VALUE;
 
-        switch (placeEnum) {
-            case Horizontal:
-                if (buttonNumber % 2 == 0) {
-                    for (int i = half - 1; i >= 0; i--)
-                        positions.add(point(-w / 2 - hm / 2 - i * (w + hm), 0));
-                    for (int i = 0; i < half; i++)
-                        positions.add(point(w / 2 + hm / 2 + i * (w + hm), 0));
-                } else {
-                    for (int i = half - 1; i >= 0; i--)
-                        positions.add(point(-w - hm - i * (w + hm), 0));
-                    positions.add(point(0, 0));
-                    for (int i = 0; i < half; i++) positions.add(point(w + hm + i * (w + hm), 0));
-                }
-                break;
-            case Vertical:
-            case HAM_1:
-            case HAM_2:
-            case HAM_3:
-            case HAM_4:
-            case HAM_5:
-            case HAM_6:
-                if (buttonNumber % 2 == 0) {
-                    for (int i = half - 1; i >= 0; i--) positions.add(point(0, -h / 2 - vm / 2 - i * (h + vm)));
-                    for (int i = 0; i < half; i++) positions.add(point(0, h / 2 + vm / 2 + i * (h + vm)));
-                } else {
-                    for (int i = half - 1; i >= 0; i--) positions.add(point(0, -h - vm - i * (h + vm)));
-                    positions.add(point(0, 0));
-                    for (int i = 0; i < half; i++) positions.add(point(0, h + vm + i * (h + vm)));
-                }
-                if (buttonNumber >= 2 && bottomHamButtonTopMargin != null)
-                    positions.get(positions.size() - 1).offset(0, (int) (bottomHamButtonTopMargin - vm));
-                break;
+        for (PointF position : ps) {
+            maxY = Math.max(maxY, position.y);
+            minY = Math.min(minY, position.y);
+            maxX = Math.max(maxX, position.x);
+            minX = Math.min(minX, position.x);
         }
 
-        calculatePositionsInParent(positions, parentSize);
-
-        calculateOffset(
-                positions,
-                alignmentEnum,
-                parentSize,
-                w,
-                h,
-                buttonTopMargin,
-                buttonBottomMargin,
-                buttonLeftMargin,
-                buttonRightMargin);
-
-        return positions;
-    }
-
-    private static void calculatePositionsInParent(ArrayList<Point> positions,
-                                                   Point parentSize) {
-        for (int i = 0; i < positions.size(); i++) {
-            Point point = positions.get(i);
-            positions.set(i, new Point(
-                    (int) (point.x + parentSize.x / 2.0),
-                    (int) (point.y + parentSize.y / 2.0)));
-        }
-    }
-
-    private static float calculateYOffsetToCenter(float horizontalMargin,
-                                                  float verticalMargin,
-                                                  float width,
-                                                  float height) {
-        return (horizontalMargin / 2 + width / 2) * (horizontalMargin / 2 + width / 2) / (verticalMargin + height);
-    }
-
-    private static void adjustOffset(ArrayList<Point> position, float x, float y) {
-        for (int i = 0; i < position.size(); i++) {
-            position.set(i, point(position.get(i).x + x, position.get(i).y + y));
-        }
-    }
-
-    private static void calculateOffset(ArrayList<Point> positions,
-                                        ButtonPlaceAlignmentEnum alignmentEnum,
-                                        Point parentSize,
-                                        float width,
-                                        float height,
-                                        float buttonTopMargin,
-                                        float buttonBottomMargin,
-                                        float buttonLeftMargin,
-                                        float buttonRightMargin) {
-        int minHeight = Integer.MAX_VALUE;
-        int maxHeight = Integer.MIN_VALUE;
-        int minWidth = Integer.MAX_VALUE;
-        int maxWidth = Integer.MIN_VALUE;
-        Point offset = new Point(0, 0);
-
-        for (Point position : positions) {
-            maxHeight = Math.max(maxHeight, position.y);
-            minHeight = Math.min(minHeight, position.y);
-            maxWidth = Math.max(maxWidth, position.x);
-            minWidth = Math.min(minWidth, position.x);
-        }
-
-        switch (alignmentEnum) {
+        float yOffset = 0;
+        float xOffset = 0;
+        switch (bmb.getButtonPlaceAlignmentEnum()) {
             case Center:
                 break;
             case Top:
-                offset.y = (int) (height / 2 + buttonTopMargin - minHeight);
+                yOffset = halfHeight + bmb.getButtonTopMargin() - minY;
                 break;
             case Bottom:
-                offset.y = (int) (parentSize.y - height / 2 - maxHeight - buttonBottomMargin);
+                yOffset = parentSize.y - halfHeight - maxY - bmb.getButtonBottomMargin();
                 break;
             case Left:
-                offset.x = (int) (width / 2 + buttonLeftMargin - minWidth);
+                xOffset = halfWidth + bmb.getButtonLeftMargin() - minY;
                 break;
             case Right:
-                offset.x = (int) (parentSize.x - width / 2 - maxWidth - buttonRightMargin);
+                xOffset = parentSize.y - halfHeight - maxY - bmb.getButtonRightMargin();
                 break;
             case TL:
-                offset.y = (int) (height / 2 + buttonTopMargin - minHeight);
-                offset.x = (int) (width / 2 + buttonLeftMargin - minWidth);
+                yOffset = halfHeight + bmb.getButtonTopMargin() - minY;
+                xOffset = halfWidth + bmb.getButtonLeftMargin() - minY;
                 break;
             case TR:
-                offset.y = (int) (height / 2 + buttonTopMargin - minHeight);
-                offset.x = (int) (parentSize.x - width / 2 - maxWidth - buttonRightMargin);
+                yOffset = halfHeight + bmb.getButtonTopMargin() - minY;
+                xOffset = parentSize.y - halfHeight - maxY - bmb.getButtonRightMargin();
                 break;
             case BL:
-                offset.y = (int) (parentSize.y - height / 2 - maxHeight - buttonBottomMargin);
-                offset.x = (int) (width / 2 + buttonLeftMargin - minWidth);
+                yOffset = parentSize.y - halfHeight - maxY - bmb.getButtonBottomMargin();
+                xOffset = halfWidth + bmb.getButtonLeftMargin() - minY;
                 break;
             case BR:
-                offset.y = (int) (parentSize.y - height / 2 - maxHeight - buttonBottomMargin);
-                offset.x = (int) (parentSize.x - width / 2 - maxWidth - buttonRightMargin);
+                yOffset = parentSize.y - halfHeight - maxY - bmb.getButtonBottomMargin();
+                xOffset = parentSize.y - halfHeight - maxY - bmb.getButtonRightMargin();
                 break;
-            case Unknown:
-                throw new RuntimeException("Unknown button-place-alignment-enum!");
         }
 
-        for (int i = 0; i < positions.size(); i++) {
-            Point position = positions.get(i);
-            positions.set(i, new Point(position.x + offset.x, position.y + offset.y));
-        }
+        adjust(ps, xOffset, yOffset);
     }
 
-    private static Point point(float x, float y) {
-        return new Point((int) x, (int) y);
+    private static void adjust(ArrayList<PointF> ps, float offsetX, float offsetY) {
+        for (int i = 0; i < ps.size(); i++) ps.get(i).offset(offsetX, offsetY);
     }
 
-    private static Point point(double x, double y) {
-        return new Point((int) x, (int) y);
-    }
-
-    private static Point point(int x, int y) {
-        return new Point(x, y);
-    }
-
-    private static ButtonPlaceManager ourInstance = new ButtonPlaceManager();
-
-    public static ButtonPlaceManager getInstance() {
-        return ourInstance;
-    }
-
-    private ButtonPlaceManager() {
+    private static PointF point(float x, float y) {
+        return new PointF(x, y);
     }
 }

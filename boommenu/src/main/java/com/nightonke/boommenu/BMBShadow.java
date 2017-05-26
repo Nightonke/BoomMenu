@@ -11,7 +11,6 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-
 /**
  * Created by Weiping Huang at 19:09 on 16/11/6
  * For Personal Open Source

@@ -51,8 +51,10 @@ public enum ButtonPlaceEnum {
     HAM_5 (39),
     HAM_6 (40),
 
-    Horizontal(Integer.MAX_VALUE - 1),
-    Vertical(Integer.MAX_VALUE),
+    Horizontal(Integer.MAX_VALUE - 2),
+    Vertical(Integer.MAX_VALUE - 1),
+
+    Custom(Integer.MAX_VALUE),
 
     Unknown(-1);
 
@@ -80,60 +82,78 @@ public enum ButtonPlaceEnum {
     public int buttonNumber() {
         switch (this) {
             case SC_1:
-            case HAM_1:
-                return 1;
+            case HAM_1: return 1;
             case SC_2_1:
             case SC_2_2:
-            case HAM_2:
-                return 2;
+            case HAM_2: return 2;
             case SC_3_1:
             case SC_3_2:
             case SC_3_3:
             case SC_3_4:
-            case HAM_3:
-                return 3;
+            case HAM_3: return 3;
             case SC_4_1:
             case SC_4_2:
-            case HAM_4:
-                return 4;
+            case HAM_4: return 4;
             case SC_5_1:
             case SC_5_2:
             case SC_5_3:
             case SC_5_4:
-            case HAM_5:
-                return 5;
+            case HAM_5: return 5;
             case SC_6_1:
             case SC_6_2:
             case SC_6_3:
             case SC_6_4:
             case SC_6_5:
             case SC_6_6:
-            case HAM_6:
-                return 6;
+            case HAM_6: return 6;
             case SC_7_1:
             case SC_7_2:
             case SC_7_3:
             case SC_7_4:
             case SC_7_5:
-            case SC_7_6:
-                return 7;
+            case SC_7_6: return 7;
             case SC_8_1:
             case SC_8_2:
             case SC_8_3:
             case SC_8_4:
             case SC_8_5:
             case SC_8_6:
-            case SC_8_7:
-                return 8;
+            case SC_8_7: return 8;
             case SC_9_1:
             case SC_9_2:
-            case SC_9_3:
-                return 9;
+            case SC_9_3: return 9;
+            case Unknown: return 0;
+            default: return -1;
+        }
+    }
+
+    /**
+     * Get the minimum button number for this buttonPlaceEnum
+     *
+     * @return minimum button number
+     */
+    public int minButtonNumber() {
+        switch (this) {
             case Horizontal:
             case Vertical:
-                return Integer.MAX_VALUE;
-            default:
-                return -1;
+            case Custom: return 1;
+            case Unknown: return 0;
+            default: return -1;
+        }
+    }
+
+    /**
+     * Get the maximum button number for this buttonPlaceEnum
+     *
+     * @return maximum button number
+     */
+    public int maxButtonNumber() {
+        switch (this) {
+            case Horizontal:
+            case Vertical:
+            case Custom: return Integer.MAX_VALUE;
+            case Unknown: return 0;
+            default: return -1;
         }
     }
 }

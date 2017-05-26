@@ -91,6 +91,13 @@
                 />
 
             <Button
+                android:id="@+id/draggable_example"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/draggable_example"
+                />
+
+            <Button
                 android:id="@+id/ease_example"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -144,6 +151,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/change_boom_button_example"
+                />
+
+            <Button
+                android:id="@+id/three_d_animation_example"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/three_d_animation_example"
+                />
+
+            <Button
+                android:id="@+id/custom_position_example"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_position_example"
+                />
+
+            <Button
+                android:id="@+id/fade_views_example"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/fade_views_example"
                 />
 
         </LinearLayout>

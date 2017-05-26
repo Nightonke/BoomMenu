@@ -20,6 +20,8 @@ import static java.lang.Math.sin;
 public class Ease implements TimeInterpolator {
 
     private EaseEnum easeEnum;
+    private PointF start = new PointF(0, 0);
+    private PointF end = new PointF(1, 1);
     private PointF a = new PointF();
     private PointF b = new PointF();
     private PointF c = new PointF();
@@ -42,80 +44,80 @@ public class Ease implements TimeInterpolator {
 
     private Ease(EaseEnum easeEnum) {
         switch (easeEnum) {
-            case EaseInBack:
-                init(0.6, -0.2, 0.735, 0.045);
-                break;
-            case EaseInCirc:
-                init(0.6, 0.04, 0.98, 0.335);
-                break;
-            case EaseInCubic:
-                init(0.55, 0.055, 0.675, 0.19);
-                break;
-            case EaseInExpo:
-                init(0.95, 0.05, 0.795, 0.035);
+            case Linear:
+                init(0.000, 0.000, 1.000, 1.000);
                 break;
             case EaseInSine:
-                init(0.47, 0, 0.745, 0.715);
-                break;
-            case EaseInQuad:
-                init(0.55, 0.085, 0.68, 0.53);
-                break;
-            case EaseInQuint:
-                init(0.755, 0.05, 0.855, 0.06);
-                break;
-            case EaseInQuart:
-                init(0.895, 0.03, 0.685, 0.22);
-                break;
-            case EaseOutBack:
-                init(0.174, 0.885, 0.32, 1.275);
-                break;
-            case EaseOutCirc:
-                init(0.075, 0.82, 0.165, 1);
-                break;
-            case EaseOutCubic:
-                init(0.215, 0.610, 0.355, 1);
-                break;
-            case EaseOutExpo:
-                init(0.19, 1, 0.22, 1);
+                init(0.470, 0.000, 0.745, 0.715);
                 break;
             case EaseOutSine:
-                init(0.39, 0.575, 0.565, 1);
-                break;
-            case EaseOutQuad:
-                init(0.25, 0.46, 0.45, 0.94);
-                break;
-            case EaseOutQuint:
-                init(0.23, 1, 0.32, 1);
-                break;
-            case EaseOutQuart:
-                init(0.165, 0.84, 0.44, 1);
-                break;
-            case EaseInOutBack:
-                init(0.68, -0.55, 0.265, 1.55);
-                break;
-            case EaseInOutCirc:
-                init(0.785, 0.135, 0.15, 0.86);
-                break;
-            case EaseInOutCubic:
-                init(0.645, 0.045, 0.335, 1);
-                break;
-            case EaseInOutExpo:
-                init(1, 0, 0, 1);
+                init(0.390, 0.575, 0.565, 1.000);
                 break;
             case EaseInOutSine:
-                init(0.445, 0.05, 0.55, 0.95);
+                init(0.445, 0.050, 0.550, 0.950);
+                break;
+            case EaseInQuad:
+                init(0.550, 0.085, 0.680, 0.530);
+                break;
+            case EaseOutQuad:
+                init(0.250, 0.460, 0.450, 0.940);
                 break;
             case EaseInOutQuad:
-                init(0.455, 0.03, 0.515, 0.955);
+                init(0.455, 0.030, 0.515, 0.955);
                 break;
-            case EaseInOutQuint:
-                init(0.86, 0, 0.07, 1);
+            case EaseInCubic:
+                init(0.550, 0.055, 0.675, 0.190);
+                break;
+            case EaseOutCubic:
+                init(0.215, 0.610, 0.355, 1.000);
+                break;
+            case EaseInOutCubic:
+                init(0.645, 0.045, 0.335, 1.000);
+                break;
+            case EaseInQuart:
+                init(0.895, 0.030, 0.685, 0.220);
+                break;
+            case EaseOutQuart:
+                init(0.165, 0.840, 0.440, 1.000);
                 break;
             case EaseInOutQuart:
-                init(0.77, 0, 0.175, 1);
+                init(0.770, 0.000, 0.175, 1.000);
                 break;
-            case Linear:
-                init(0, 0, 1, 1);
+            case EaseInQuint:
+                init(0.755, 0.050, 0.855, 0.060);
+                break;
+            case EaseOutQuint:
+                init(0.230, 1.000, 0.320, 1.000);
+                break;
+            case EaseInOutQuint:
+                init(0.860, 0.000, 0.070, 1.000);
+                break;
+            case EaseInCirc:
+                init(0.600, 0.040, 0.980, 0.335);
+                break;
+            case EaseOutCirc:
+                init(0.075, 0.820, 0.165, 1.000);
+                break;
+            case EaseInOutCirc:
+                init(0.785, 0.135, 0.150, 0.860);
+                break;
+            case EaseInExpo:
+                init(0.950, 0.050, 0.795, 0.035);
+                break;
+            case EaseOutExpo:
+                init(0.190, 1.000, 0.220, 1.000);
+                break;
+            case EaseInOutExpo:
+                init(1.000, 0.000, 0.000, 1.000);
+                break;
+            case EaseInBack:
+                init(0.600, -0.20, 0.735, 0.045);
+                break;
+            case EaseOutBack:
+                init(0.174, 0.885, 0.320, 1.275);
+                break;
+            case EaseInOutBack:
+                init(0.680, -0.55, 0.265, 1.550);
                 break;
             case EaseInBounce:
             case EaseOutBounce:
@@ -131,10 +133,20 @@ public class Ease implements TimeInterpolator {
         this.easeEnum = easeEnum;
     }
 
+    private void init(float startX, float startY, float endX, float endY) {
+        ableToDefineWithControlPoints = true;
+        start = new PointF(startX, startY);
+        end = new PointF(endX, endY);
+    }
+
+    private void init(double startX, double startY, double endX, double endY) {
+        init((float) startX, (float) startY, (float) endX, (float) endY);
+    }
+
     @Override
     public float getInterpolation(float offset) {
         if (ableToDefineWithControlPoints) {
-            return getBezierCoordinateY(getXForTime(offset));
+            return getBezierCoordinateY(offset);
         } else {
             switch (easeEnum) {
                 case EaseInBounce:
@@ -155,94 +167,26 @@ public class Ease implements TimeInterpolator {
         }
     }
 
-    private void init(float startX, float startY, float endX, float endY) {
-        PointF start = new PointF(startX, startY);
-        PointF end = new PointF(endX, endY);
-        c.x = 3 * start.x;
-        b.x = 3 * (end.x - start.x) - c.x;
-        a.x = 1 - c.x - b.x;
+    private float getBezierCoordinateY(float time) {
+        if (start.x == 0 && start.y == 0 && end.x == 1 && end.y == 1) return time;
         c.y = 3 * start.y;
         b.y = 3 * (end.y - start.y) - c.y;
         a.y = 1 - c.y - b.y;
-    }
-
-    private void init(double startX, double startY, double endX, double endY) {
-        init((float) startX, (float) startY, (float) endX, (float) endY);
-    }
-
-    private float getXForTime(float time) {
-        float x = time;
-        float z;
-        for (int i = 1; i < 14; i++) {
-            z = getBezierCoordinateX(x) - time;
-            if (Math.abs(z) < 1e-3) {
-                break;
-            }
-            x -= z / getX(x);
-        }
-        return x;
-    }
-
-    private float getBezierCoordinateY(float time) {
         return time * (c.y + time * (b.y + time * a.y));
-    }
-
-    private float getBezierCoordinateX(float time) {
-        return time * (c.x + time * (b.x + time * a.x));
-    }
-
-    private float getX(float t) {
-        return c.x + t * (2 * b.x + 3 * a.x * t);
     }
 
     private float getEaseInBounceOffset(float offset) {
         float b = 0;
         float c = 1;
         float d = 1;
-        return c - getEaseBounceOffset2(d - offset, 0, c, d) + b;
+        return c - getEaseBounceOffsetHelper2(d - offset, 0, c, d) + b;
     }
 
-    private float getEaseOutBounceOffset(float offset) {
-        float b = 0;
-        float c = 1;
-        float d = 1;
-        if ((offset /= d) < (1 / 2.75))
-        {
-            return c * (7.5625f * offset * offset) + b;
-        }
-        else if (offset < (2 / 2.75))
-        {
-            offset -= (1.5 / 2.75);
-            return c * (7.5625f * offset * offset + 0.75f) + b;
-        }
-        else if (offset < (2.5 / 2.75))
-        {
-            offset -= (2.25 / 2.75);
-            return c * (7.5625f * offset * offset + 0.9375f) + b;
-        }
-        else
-        {
-            offset -= 2.625 / 2.75;
-            return c * (7.5625f * offset * offset + 0.984375f) + b;
-        }
+    private float getEaseBounceOffsetHelper1(float t, float b, float c, float d) {
+        return c - getEaseBounceOffsetHelper2(d - t, 0, c, d) + b;
     }
 
-    private float getEaseInOutBounceOffset(float offset) {
-        float b = 0;
-        float c = 1;
-        float d = 1;
-        if (offset < d / 2) {
-            return getEaseBounceOffset1(offset * 2, 0, c, d) * 0.5f + b;
-        } else {
-            return getEaseBounceOffset2(offset * 2, 0, c, d) * 0.5f + c * 0.5f + b;
-        }
-    }
-
-    private float getEaseBounceOffset1(float t, float b, float c, float d) {
-        return c - getEaseBounceOffset2(d - t, 0, c, d) + b;
-    }
-
-    private float getEaseBounceOffset2(float t, float b, float c, float d) {
+    private float getEaseBounceOffsetHelper2(float t, float b, float c, float d) {
         if ((t /= d) < (1 / 2.75)) {
             return c * (7.5625f * t * t) + b;
         } else if (t < (2 / 2.75)) {
@@ -257,16 +201,41 @@ public class Ease implements TimeInterpolator {
         }
     }
 
+    private float getEaseOutBounceOffset(float t) {
+        float b = 0;
+        float c = 1;
+        float d = 1;
+        if ((t /= d) < (1 / 2.75)) {
+            return c * (7.5625f * t * t) + b;
+        } else if (t < (2 / 2.75)) {
+            t -= (1.5 / 2.75);
+            return c * (7.5625f * t * t + 0.75f) + b;
+        } else if (t < (2.5 / 2.75)) {
+            t -= (2.25 / 2.75);
+            return c * (7.5625f * t * t + 0.9375f) + b;
+        } else {
+            t -= 2.625 / 2.75;
+            return c * (7.5625f * t * t + 0.984375f) + b;
+        }
+    }
+
+    private float getEaseInOutBounceOffset(float offset) {
+        float b = 0;
+        float c = 1;
+        float d = 1;
+        if (offset < d / 2) {
+            return getEaseBounceOffsetHelper1(offset * 2, 0, c, d) * 0.5f + b;
+        } else {
+            return getEaseBounceOffsetHelper2(offset * 2, 0, c, d) * 0.5f + c * 0.5f + b;
+        }
+    }
+
     private float getEaseInElasticOffset(float offset) {
         float b = 0;
         float c = 1;
         float d = 1;
-        if (offset == 0) {
-            return b;
-        }
-        if ((offset /= d) == 1) {
-            return b + c;
-        }
+        if (offset == 0) return b;
+        if ((offset /= d) == 1) return b + c;
         float p = d * 0.3f;
         float s = p / 4;
         offset -= 1;
@@ -278,12 +247,8 @@ public class Ease implements TimeInterpolator {
         float b = 0;
         float c = 1;
         float d = 1;
-        if (offset == 0) {
-            return b;
-        }
-        if ((offset /= d) == 1) {
-            return b + c;
-        }
+        if (offset == 0) return b;
+        if ((offset /= d) == 1) return b + c;
         float p = d * 0.3f;
         float s = p / 4;
         return (c * (float)pow(2, -10 * offset)
@@ -294,12 +259,8 @@ public class Ease implements TimeInterpolator {
         float b = 0;
         float c = 1;
         float d = 1;
-        if (offset == 0) {
-            return b;
-        }
-        if ((offset /= d / 2) == 2) {
-            return b + c;
-        }
+        if (offset == 0) return b;
+        if ((offset /= d / 2) == 2) return b + c;
         float p = d * 0.45f;
         float s = p / 4;
         if (offset < 1) {

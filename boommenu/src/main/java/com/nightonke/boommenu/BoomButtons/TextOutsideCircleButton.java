@@ -44,6 +44,11 @@ public class TextOutsideCircleButton extends BoomButton {
     }
 
     @Override
+    public ButtonEnum type() {
+        return ButtonEnum.TextOutsideCircle;
+    }
+
+    @Override
     public ArrayList<View> goneViews() {
         ArrayList<View> goneViews = new ArrayList<>();
         goneViews.add(image);
@@ -233,6 +238,7 @@ public class TextOutsideCircleButton extends BoomButton {
          * @param context the context
          * @return the simple circle button
          */
+        @Override
         public TextOutsideCircleButton build(Context context) {
             TextOutsideCircleButton button = new TextOutsideCircleButton(this, context);
             weakReferenceButton(button);

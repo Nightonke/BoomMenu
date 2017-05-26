@@ -118,6 +118,8 @@ public abstract class BoomButtonBuilder<T> {
     int buttonCornerRadius = Util.dp2px(5);
     boolean isRound = true;  // only for simple circle/text inside/text outside circle button
 
+    public abstract BoomButton build(Context context);
+
     /**
      * Get the piece color, only used in BMB package.
      *
@@ -161,9 +163,9 @@ public abstract class BoomButtonBuilder<T> {
      * @param index the index
      * @return the builder
      */
-    public T index(int index) {
+    public BoomButtonBuilder index(int index) {
         this.index = index;
-        return (T) this;
+        return this;
     }
 
     /**
@@ -172,9 +174,9 @@ public abstract class BoomButtonBuilder<T> {
      * @param listener the listener
      * @return the builder
      */
-    public T innerListener(InnerOnBoomButtonClickListener listener) {
+    public BoomButtonBuilder innerListener(InnerOnBoomButtonClickListener listener) {
         this.listener = listener;
-        return (T) this;
+        return this;
     }
 
     /**

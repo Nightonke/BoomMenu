@@ -4,11 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.nightonke.boommenu.BoomMenuButton;
 import com.nightonke.boommenu.Util;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class ShareLinesView extends View {
 
     private int line1Color = Color.WHITE;
     private int line2Color = Color.WHITE;
-    private int lineWidth = 3;
+    private float lineWidth = 3;
 
     private Paint linePaint;
 
@@ -54,43 +55,38 @@ public class ShareLinesView extends View {
         linePaint.setAntiAlias(true);
     }
 
-    public void setData(ArrayList<Point> piecePositions,
-                        int dotRadius,
-                        long showDuration,
-                        long showDelay,
-                        long hideDuration,
-                        long hideDelay) {
-        float xOffset = dotRadius - lineWidth / 4f;
-        float yOffset = (float) (dotRadius - lineWidth * Math.sqrt(3) / 4f) + Util.dp2px(0.25f);
+    public void setData(ArrayList<RectF> piecePositions, BoomMenuButton bmb) {
+        float xOffset = bmb.getDotRadius() - lineWidth / 4f;
+        float yOffset = (float) (bmb.getDotRadius()  - lineWidth * Math.sqrt(3) / 4f) + Util.dp2px(0.25f);
 
         this.piecePositions = new ArrayList<>();
-        for (Point piecePosition : piecePositions) {
+        for (RectF piecePosition : piecePositions) {
             boolean existed = false;
             for (PointF p : this.piecePositions) {
-                if (p.equals(piecePosition.x, piecePosition.y)) {
+                if (p.equals(piecePosition.left, piecePosition.top)) {
                     existed = true;
                     break;
                 }
             }
-            if (!existed) this.piecePositions.add(new PointF(piecePosition));
+            if (!existed) this.piecePositions.add(new PointF(piecePosition.left, piecePosition.top));
         }
         for (PointF piecePosition : this.piecePositions) piecePosition.offset(xOffset, yOffset);
 
         int[] pieceNumbers = new int[3];
         int pieceNumber = piecePositions.size();
         for (int i = 0; i < pieceNumber; i++) pieceNumbers[i % 3]++;
-        animationShowDelay1 = showDelay * (pieceNumbers[0] - 1);
-        animationShowDuration1 = pieceNumbers[0] * showDelay;
-        animationShowDelay2 = (pieceNumbers[0] - 1 + pieceNumbers[1]) * showDelay;
-        animationShowDuration2 = (pieceNumbers[0] + pieceNumbers[1]) * showDelay;
-        animationShowDelay3 = showDelay * (pieceNumbers[2] - 1 + pieceNumbers[1] + pieceNumbers[0]) + showDuration;
+        animationShowDelay1 = bmb.getShowDelay() * (pieceNumbers[0] - 1);
+        animationShowDuration1 = pieceNumbers[0] * bmb.getShowDelay();
+        animationShowDelay2 = (pieceNumbers[0] - 1 + pieceNumbers[1]) * bmb.getShowDelay();
+        animationShowDuration2 = (pieceNumbers[0] + pieceNumbers[1]) * bmb.getShowDelay();
+        animationShowDelay3 = bmb.getShowDelay() * (pieceNumbers[2] - 1 + pieceNumbers[1] + pieceNumbers[0]) + bmb.getShowDuration();
         animationShowTotalDuration = animationShowDelay3;
 
-        animationHideDelay1 = (pieceNumbers[2] - 1) * hideDelay + hideDuration;
-        animationHideDuration1 = (pieceNumbers[2]) * hideDelay  + hideDuration;
-        animationHideDelay2 = hideDelay * (pieceNumbers[2] - 1 + pieceNumbers[1]) + hideDuration;
-        animationHideDuration2 = (pieceNumbers[2] + pieceNumbers[1]) * hideDelay  + hideDuration;
-        animationHideDelay3 = hideDelay * (pieceNumbers[2] - 1 + pieceNumbers[1] + pieceNumbers[0]) + hideDuration;
+        animationHideDelay1 = (pieceNumbers[2] - 1) * bmb.getHideDelay() + bmb.getHideDuration();
+        animationHideDuration1 = (pieceNumbers[2]) * bmb.getHideDelay()  + bmb.getHideDuration();
+        animationHideDelay2 = bmb.getHideDelay() * (pieceNumbers[2] - 1 + pieceNumbers[1]) + bmb.getHideDuration();
+        animationHideDuration2 = (pieceNumbers[2] + pieceNumbers[1]) * bmb.getHideDelay()  + bmb.getHideDuration();
+        animationHideDelay3 = bmb.getHideDelay() * (pieceNumbers[2] - 1 + pieceNumbers[1] + pieceNumbers[0]) + bmb.getHideDuration();
         animationHideTotalDuration = animationHideDelay3;
     }
 
@@ -137,7 +133,7 @@ public class ShareLinesView extends View {
         this.line2Color = line2Color;
     }
 
-    public void setLineWidth(int lineWidth) {
+    public void setLineWidth(float lineWidth) {
         this.lineWidth = lineWidth;
         linePaint.setStrokeWidth(lineWidth);
     }

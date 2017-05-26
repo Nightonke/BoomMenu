@@ -29,6 +29,11 @@
         <attr name="bmb_normalColor" format="color|reference"/>
         <attr name="bmb_highlightedColor" format="color|reference"/>
         <attr name="bmb_unableColor" format="color|reference"/>
+        <attr name="bmb_draggable" format="boolean|reference"/>
+        <attr name="bmb_edgeInsetsLeft" format="dimension|reference"/>
+        <attr name="bmb_edgeInsetsTop" format="dimension|reference"/>
+        <attr name="bmb_edgeInsetsRight" format="dimension|reference"/>
+        <attr name="bmb_edgeInsetsBottom" format="dimension|reference"/>
         
         <!--Piece-->
         <attr name="bmb_dotRadius" format="dimension|reference"/>
@@ -83,6 +88,7 @@
             <enum name="piecePlace_ham_6" value="40"/>
 
             <enum name="piecePlace_share" value="41"/>
+            <enum name="piecePlace_custom" value="42"/>
         </attr>
         <attr name="bmb_sharedLineLength" format="dimension|reference"/>
         <attr name="bmb_shareLine1Color" format="color|reference"/>
@@ -312,6 +318,9 @@
             <enum name="linear" value="30"/>
         </attr>
         <attr name="bmb_rotateDegree" format="integer|reference"/>
+        <attr name="bmb_use3DTransformAnimation" format="boolean|reference"/>
+        <attr name="bmb_autoBoom" format="boolean|reference"/>
+        <attr name="bmb_autoBoomImmediately" format="boolean|reference"/>
 
         <!--Boom Buttons-->
         <attr name="bmb_buttonPlaceEnum" format="enum|reference">
@@ -358,6 +367,7 @@
             <enum name="buttonPlace_ham_6" value="40"/>
             <enum name="buttonPlace_horizontal" value="41"/>
             <enum name="buttonPlace_vertical" value="42"/>
+            <enum name="buttonPlace_custom" value="43"/>
         </attr>
         <attr name="bmb_buttonPlaceAlignmentEnum" format="enum|reference">
             <enum name="buttonPlaceAlignment_center" value="0"/>

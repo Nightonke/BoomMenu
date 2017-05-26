@@ -12,83 +12,107 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.simple_circle_button_example).setOnClickListener(this);
-        findViewById(R.id.text_inside_circle_button_example).setOnClickListener(this);
-        findViewById(R.id.text_outside_circle_button_example).setOnClickListener(this);
-        findViewById(R.id.ham_button_example).setOnClickListener(this);
-        findViewById(R.id.square_and_piece_corner_radius_example).setOnClickListener(this);
-        findViewById(R.id.boom_example).setOnClickListener(this);
-        findViewById(R.id.button_place_alignment_example).setOnClickListener(this);
-        findViewById(R.id.order_example).setOnClickListener(this);
-        findViewById(R.id.actionbar_example).setOnClickListener(this);
-        findViewById(R.id.tool_bar_example).setOnClickListener(this);
-        findViewById(R.id.ease_example).setOnClickListener(this);
-        findViewById(R.id.listener_example).setOnClickListener(this);
-        findViewById(R.id.control_example).setOnClickListener(this);
-        findViewById(R.id.share_example).setOnClickListener(this);
-        findViewById(R.id.list_example).setOnClickListener(this);
-        findViewById(R.id.recycler_view_example).setOnClickListener(this);
-        findViewById(R.id.fragment_example).setOnClickListener(this);
-        findViewById(R.id.change_boom_button_example).setOnClickListener(this);
+        listenClickEventOf(R.id.simple_circle_button_example);
+        listenClickEventOf(R.id.text_inside_circle_button_example);
+        listenClickEventOf(R.id.text_outside_circle_button_example);
+        listenClickEventOf(R.id.ham_button_example);
+        listenClickEventOf(R.id.square_and_piece_corner_radius_example);
+        listenClickEventOf(R.id.boom_example);
+        listenClickEventOf(R.id.button_place_alignment_example);
+        listenClickEventOf(R.id.order_example);
+        listenClickEventOf(R.id.actionbar_example);
+        listenClickEventOf(R.id.tool_bar_example);
+        listenClickEventOf(R.id.draggable_example);
+        listenClickEventOf(R.id.ease_example);
+        listenClickEventOf(R.id.listener_example);
+        listenClickEventOf(R.id.control_example);
+        listenClickEventOf(R.id.share_example);
+        listenClickEventOf(R.id.list_example);
+        listenClickEventOf(R.id.recycler_view_example);
+        listenClickEventOf(R.id.fragment_example);
+        listenClickEventOf(R.id.change_boom_button_example);
+        listenClickEventOf(R.id.three_d_animation_example);
+        listenClickEventOf(R.id.custom_position_example);
+        listenClickEventOf(R.id.fade_views_example);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.simple_circle_button_example:
-                startActivity(new Intent(this, SimpleCircleButtonActivity.class));
+                startActivity(SimpleCircleButtonActivity.class);
                 break;
             case R.id.text_inside_circle_button_example:
-                startActivity(new Intent(this, TextInsideCircleButtonActivity.class));
+                startActivity(TextInsideCircleButtonActivity.class);
                 break;
             case R.id.text_outside_circle_button_example:
-                startActivity(new Intent(this, TextOutsideCircleButtonActivity.class));
+                startActivity(TextOutsideCircleButtonActivity.class);
                 break;
             case R.id.ham_button_example:
-                startActivity(new Intent(this, HamButtonActivity.class));
+                startActivity(HamButtonActivity.class);
                 break;
             case R.id.square_and_piece_corner_radius_example:
-                startActivity(new Intent(this, SquareAndPieceCornerRadiusActivity.class));
+                startActivity(SquareAndPieceCornerRadiusActivity.class);
                 break;
             case R.id.boom_example:
-                startActivity(new Intent(this, BoomExampleActivity.class));
+                startActivity(BoomExampleActivity.class);
                 break;
             case R.id.button_place_alignment_example:
-                startActivity(new Intent(this, ButtonPlaceAlignmentActivity.class));
+                startActivity(ButtonPlaceAlignmentActivity.class);
                 break;
             case R.id.order_example:
-                startActivity(new Intent(this, OrderExampleActivity.class));
+                startActivity(OrderExampleActivity.class);
                 break;
             case R.id.tool_bar_example:
-                startActivity(new Intent(this, ToolBarActivity.class));
+                startActivity(ToolBarActivity.class);
                 break;
             case R.id.actionbar_example:
-                startActivity(new Intent(this, ActionBarActivity.class));
+                startActivity(ActionBarActivity.class);
+                break;
+            case R.id.draggable_example:
+                startActivity(DraggableActivity.class);
                 break;
             case R.id.ease_example:
-                startActivity(new Intent(this, EaseActivity.class));
+                startActivity(EaseActivity.class);
                 break;
             case R.id.listener_example:
-                startActivity(new Intent(this, ListenerActivity.class));
+                startActivity(ListenerActivity.class);
                 break;
             case R.id.control_example:
-                startActivity(new Intent(this, ControlActivity.class));
+                startActivity(ControlActivity.class);
                 break;
             case R.id.share_example:
-                startActivity(new Intent(this, ShareActivity.class));
+                startActivity(ShareActivity.class);
                 break;
             case R.id.list_example:
-                startActivity(new Intent(this, ListViewActivity.class));
+                startActivity(ListViewActivity.class);
                 break;
             case R.id.recycler_view_example:
-                startActivity(new Intent(this, RecyclerViewActivity.class));
+                startActivity(RecyclerViewActivity.class);
                 break;
             case R.id.fragment_example:
-                startActivity(new Intent(this, FragmentActivity.class));
+                startActivity(FragmentActivity.class);
                 break;
             case R.id.change_boom_button_example:
-                startActivity(new Intent(this, ChangeBoomButtonActivity.class));
+                startActivity(ChangeBoomButtonActivity.class);
+                break;
+            case R.id.three_d_animation_example:
+                startActivity(ThreeDAnimationActivity.class);
+                break;
+            case R.id.custom_position_example:
+                startActivity(CustomPositionActivity.class);
+                break;
+            case R.id.fade_views_example:
+                startActivity(FadeViewsActivity.class);
                 break;
         }
+    }
+    
+    private void listenClickEventOf(int id) {
+        findViewById(id).setOnClickListener(this);
+    }
+    
+    private void startActivity(Class<?> cls) {
+        startActivity(new Intent(this, cls));
     }
 }

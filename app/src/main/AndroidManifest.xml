@@ -15,26 +15,51 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ListViewActivity" />
-        <activity android:name=".SimpleCircleButtonActivity" />
-        <activity android:name=".ButtonPlaceAlignmentActivity" />
-        <activity android:name=".TextInsideCircleButtonActivity" />
-        <activity android:name=".TextOutsideCircleButtonActivity" />
-        <activity android:name=".BoomExampleActivity" />
-        <activity android:name=".OrderExampleActivity" />
-        <activity android:name=".HamButtonActivity" />
-        <activity android:name=".ActionBarActivity" />
-        <activity android:name=".EaseActivity" />
-        <activity android:name=".ListenerActivity" />
-        <activity android:name=".ControlActivity" />
-        <activity android:name=".ShareActivity" />
-        <activity android:name=".FragmentActivity" />
-        <activity android:name=".RecyclerViewActivity" />
-        <activity
-            android:name=".ToolBarActivity"
+        <activity android:name=".SimpleCircleButtonActivity"
+            android:label="Simple Circle Button"/>
+        <activity android:name=".TextInsideCircleButtonActivity"
+            android:label="Text Inside Button"/>
+        <activity android:name=".TextOutsideCircleButtonActivity"
+            android:label="Text Outside Button"/>
+        <activity android:name=".HamButtonActivity"
+            android:label="Ham Button"/>
+        <activity android:name=".SquareAndPieceCornerRadiusActivity"
+            android:label="Square &amp; Piece Corner Radius"/>
+        <activity android:name=".BoomExampleActivity"
+            android:label="Boom"/>
+        <activity android:name=".ButtonPlaceAlignmentActivity"
+            android:label="Button Place Alignment"/>
+        <activity android:name=".OrderExampleActivity"
+            android:label="Order"/>
+        <activity android:name=".ActionBarActivity"
+            android:label="ActionBar"/>
+        <activity android:name=".ToolBarActivity"
             android:theme="@style/NoTitleTheme" />
-        <activity android:name=".SquareAndPieceCornerRadiusActivity" />
-        <activity android:name=".ChangeBoomButtonActivity" />
+        <activity android:name=".DraggableActivity"
+            android:label="Draggable"/>
+        <activity android:name=".EaseActivity"
+            android:label="Ease"/>
+        <activity android:name=".ListenerActivity"
+            android:label="Listener"/>
+        <activity android:name=".ControlActivity"
+            android:label="Control"/>
+        <activity android:name=".ShareActivity"
+            android:label="Share"/>
+        <activity android:name=".ListViewActivity"
+            android:label="List"/>
+        <activity android:name=".RecyclerViewActivity"
+            android:label="Recycler View"/>
+        <activity android:name=".FragmentActivity"
+            android:label="Fragment"/>
+        <activity android:name=".ChangeBoomButtonActivity"
+            android:label="Change Boom Button"/>
+        <activity android:name=".ThreeDAnimationActivity"
+            android:label="3D Animation"/>
+        <activity android:name=".CustomPositionActivity"
+            android:label="Custom Position"/>
+        <activity android:name=".FadeViewsActivity"
+            android:label="Fade Views"/>
+
     </application>
 
 </manifest>

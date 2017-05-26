@@ -14,7 +14,6 @@ import com.nightonke.boommenu.ButtonEnum;
 import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HamButtonActivity extends AppCompatActivity {
 
@@ -35,7 +34,8 @@ public class HamButtonActivity extends AppCompatActivity {
 
         ListView listView = (ListView) findViewById(R.id.list_view);
         assert listView != null;
-        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_expandable_list_item_1, getData()));
+        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_expandable_list_item_1,
+                BuilderManager.getHamButtonData(piecesAndButtons)));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -46,28 +46,5 @@ public class HamButtonActivity extends AppCompatActivity {
                     bmb.addBuilder(BuilderManager.getHamButtonBuilder());
             }
         });
-    }
-
-    private List<String> getData() {
-        List<String> data = new ArrayList<>();
-        for (int p = 0; p < PiecePlaceEnum.values().length - 1; p++) {
-            for (int b = 0; b < ButtonPlaceEnum.values().length - 1; b++) {
-                PiecePlaceEnum piecePlaceEnum = PiecePlaceEnum.getEnum(p);
-                ButtonPlaceEnum buttonPlaceEnum = ButtonPlaceEnum.getEnum(b);
-                if (piecePlaceEnum.pieceNumber() == buttonPlaceEnum.buttonNumber()
-                        || buttonPlaceEnum == ButtonPlaceEnum.Horizontal
-                        || buttonPlaceEnum == ButtonPlaceEnum.Vertical) {
-                    piecesAndButtons.add(new Pair<>(piecePlaceEnum, buttonPlaceEnum));
-                    data.add(piecePlaceEnum + " " + buttonPlaceEnum);
-                    if (piecePlaceEnum.getValue() < PiecePlaceEnum.HAM_1.getValue()
-                            || piecePlaceEnum == PiecePlaceEnum.Share
-                            || buttonPlaceEnum.getValue() < ButtonPlaceEnum.HAM_1.getValue()) {
-                        piecesAndButtons.remove(piecesAndButtons.size() - 1);
-                        data.remove(data.size() - 1);
-                    }
-                }
-            }
-        }
-        return data;
     }
 }

@@ -50,6 +50,11 @@ public class HamButton extends BoomButton {
     }
 
     @Override
+    public ButtonEnum type() {
+        return ButtonEnum.Ham;
+    }
+
+    @Override
     public ArrayList<View> goneViews() {
         ArrayList<View> goneViews = new ArrayList<>();
         goneViews.add(image);
@@ -549,6 +554,7 @@ public class HamButton extends BoomButton {
          * @param context the context
          * @return the ham button
          */
+        @Override
         public HamButton build(Context context) {
             HamButton button = new HamButton(this, context);
             weakReferenceButton(button);
