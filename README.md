@@ -48,18 +48,21 @@ Check the [wiki](https://github.com/Nightonke/BoomMenu/wiki) to use BMB.
 How to use BMB in just several lines of code?  
 2. [Simple Circle Button](https://github.com/Nightonke/BoomMenu/wiki/Simple-Circle-Button)  
 Add simple circle buttons with just an image for each to BMB.  
-    <img src="https://github.com/Nightonke/BoomMenu/raw/master/Pictures/BoomButton/SimpleCircleButton.png" width="600">
+    <img src="https://github.com/Nightonke/BoomMenu/raw/master/Pictures/BoomButton/SimpleCircleButton.png" width="400">
 3. [Text Inside Circle Button](https://github.com/Nightonke/BoomMenu/wiki/Text-Inside-Circle-Button)  
 Add text inside circle buttons with a text and image inside for each to BMB.  
-    <img src="https://github.com/Nightonke/BoomMenu/raw/master/Pictures/BoomButton/TextInsideCircleButton.png" width="600">
+    <img src="https://github.com/Nightonke/BoomMenu/raw/master/Pictures/BoomButton/TextInsideCircleButton.png" width="400">
 4. [Text Outside Circle Button](https://github.com/Nightonke/BoomMenu/wiki/Text-Outside-Circle-Button)    
 Add text outside circle buttons with a text and image outside for each to BMB.  
-    <img src="https://github.com/Nightonke/BoomMenu/raw/master/Pictures/BoomButton/TextOutsideCircleButton.png" width="600">
+    <img src="https://github.com/Nightonke/BoomMenu/raw/master/Pictures/BoomButton/TextOutsideCircleButton.png" width="400">
 5. [Ham Button](https://github.com/Nightonke/BoomMenu/wiki/Ham-Button)  
 Add ham buttons with with a title, subtitle and image inside for each to BMB.  
-    <img src="https://github.com/Nightonke/BoomMenu/raw/master/Pictures/BoomButton/HamButton.png" width="600">
+    <img src="https://github.com/Nightonke/BoomMenu/raw/master/Pictures/BoomButton/HamButton.png" width="400">
 6. [Share Style](https://github.com/Nightonke/BoomMenu/wiki/Share-Style)  
 Make a share-style BMB.
+1. [Custom Position](https://github.com/Nightonke/BoomMenu/wiki/Custom-Position)  
+    Customize the number and positions of pieces and boom-buttons.  
+    <img src="https://github.com/Nightonke/BoomMenuButton-Images/raw/master/Android/CustomPosition.gif" width=300>
 7. [Button Place Alignments](https://github.com/Nightonke/BoomMenu/wiki/Button-Place-Alignments)  
 Place all the buttons to anywhere on screen.  
     <img src="https://github.com/Nightonke/BoomMenu/blob/master/Pictures/button-place-alignment-enum/button-place-alignment-1.png" width="200">
@@ -91,12 +94,15 @@ Example for use BMB in fragment.
 How to change the size or margins of dots on BMB?
 17. [Cache Optimization & Boom Area](https://github.com/Nightonke/BoomMenu/wiki/Cache-Optimization-&-Boom-Area)  
 What if I want BMB to boom in just its parent-view?
+1. [Change Boom Buttons Dynamically](https://github.com/Nightonke/BoomMenu/wiki/Change-Boom-Buttons-Dynamically)  
+Change Boom Buttons Dynamically.
+1. [Fade Views](https://github.com/Nightonke/BoomMenu/wiki/Fade-Views)  
+    Add faded views on BMB.  
+    <img src="https://github.com/Nightonke/BoomMenuButton-Images/raw/master/Android/FadeViews.gif" width=300>
 1. [Version History](https://github.com/Nightonke/BoomMenu/wiki/Version-History)  
 What's more for every version?  
 18. [Structure for BMB](https://github.com/Nightonke/BoomMenu/wiki/Structure-for-BMB)  
 Structure for BMB when I designed it, for sharing and communicating.
-1. [Change Boom Buttons Dynamically](https://github.com/Nightonke/BoomMenu/wiki/Change-Boom-Buttons-Dynamically)  
-Change Boom Buttons Dynamically.
 
 ## Issues & Feedbacks
 Try to tell me the bugs or enhancements about BMB, or contact me with Nightonke@outlook.com / 2584541288@qq.com. Before doing that, having a careful read on [readme](https://github.com/Nightonke/BoomMenu), [wiki](https://github.com/Nightonke/BoomMenu/wiki) and issues is really helpful. 
