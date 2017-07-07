@@ -62,6 +62,7 @@ public class BMBShadow extends FrameLayout {
     private void createShadow() {
         if (shadowEffect) {
             Bitmap shadowBitmap = createShadowBitmap();
+            if (shadowBitmap == null) return;
             BitmapDrawable shadowDrawable = new BitmapDrawable(getResources(), shadowBitmap);
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN) {
                 //noinspection deprecation
@@ -75,7 +76,12 @@ public class BMBShadow extends FrameLayout {
     }
 
     private Bitmap createShadowBitmap() {
-        Bitmap shadowBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ALPHA_8);
+        Bitmap shadowBitmap;
+        try {
+            shadowBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ALPHA_8);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
         Canvas canvas = new Canvas(shadowBitmap);
         RectF shadowRect = new RectF(
                 shadowRadius + Math.abs(shadowOffsetX),
