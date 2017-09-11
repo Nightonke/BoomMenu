@@ -771,6 +771,13 @@ public abstract class BoomButton extends FrameLayout {
     public ViewGroup getLayout() { return layout; }
 
     /**
+     * Get the button layout view of a boom button.
+     *
+     * @return button layout view
+     */
+    public FrameLayout getButton() { return button; }
+
+    /**
      * Get the shadow view of a boom button.
      *
      * @return shadow view

@@ -138,7 +138,7 @@ public abstract class BoomButtonBuilder<T> {
         this.unable = unable;
     }
 
-    protected BoomButton button() {
+    public BoomButton button() {
         if (boomButtonWeakReference != null) return boomButtonWeakReference.get();
         return null;
     }
