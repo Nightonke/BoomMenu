@@ -21,6 +21,7 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -174,6 +175,12 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     private boolean needToCalculateStartPositions = true;
     private int lastReboomIndex = -1;
 
+    // Orientation
+    private boolean isOrientationAdaptable;
+    private int lastOrientation = OrientationEventListener.ORIENTATION_UNKNOWN;
+    private boolean isOrientationChanged = false;
+    private OrientationEventListener orientationEventListener;
+
     private void ____________________________Initialization() {}
     //region Constructor and Initializer
 
@@ -212,6 +219,7 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
             inList = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_inList, R.bool.default_bmb_inList);
             inFragment = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_inFragment, R.bool.default_bmb_inFragment);
             isBackPressListened = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_backPressListened, R.bool.default_bmb_backPressListened);
+            isOrientationAdaptable = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_orientationAdaptable, R.bool.default_bmb_orientationAdaptable);
 
             // Shadow
             shadowEffect = Util.getBoolean(typedArray, R.styleable.BoomMenuButton_bmb_shadowEffect, R.bool.default_bmb_shadow_effect);
@@ -371,6 +379,9 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
+        if (isOrientationChanged) {
+            reLayoutAfterOrientationChanged();
+        }
         if (needToLayout) {
             if (inList) delayToDoLayoutJobs();
             else doLayoutJobs();
@@ -1057,6 +1068,74 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
         if (autoBoomImmediately) boomImmediately();
         else if (autoBoom) boom();
         autoBoomImmediately = autoBoom = false;
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (isOrientationAdaptable) initOrientationListener();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (orientationEventListener != null) orientationEventListener.disable();
+    }
+
+    private void initOrientationListener() {
+        if (orientationEventListener == null) {
+            orientationEventListener = new OrientationEventListener(context) {
+                @Override
+                public void onOrientationChanged(int orientation) {
+                    if (orientation != lastOrientation && lastOrientation != OrientationEventListener.ORIENTATION_UNKNOWN) {
+                        isOrientationChanged = true;
+                    }
+                    lastOrientation = orientation;
+                }
+            };
+        }
+        if (orientationEventListener.canDetectOrientation()) {
+            orientationEventListener.enable();
+        }
+    }
+
+    private void reLayoutAfterOrientationChanged() {
+        post(new Runnable() {
+            @Override
+            public void run() {
+                if (background != null) background.reLayout(BoomMenuButton.this);
+                calculateStartPositions(true);
+                calculateEndPositions();
+                switch (boomStateEnum) {
+                    case DidReboom:
+                        break;
+                    case DidBoom:
+                        placeButtons();
+                        break;
+                    case WillBoom:
+                    case WillReboom:
+                        stopAllAnimations(boomStateEnum == BoomStateEnum.WillBoom);
+                        placeButtons();
+                        break;
+                }
+            }
+        });
+    }
+
+    private void placeButtons() {
+        for (int i = 0; i < boomButtons.size(); i++) {
+            BoomButton boomButton = boomButtons.get(i);
+            PointF pointF = endPositions.get(i);
+            boomButton.setX(pointF.x);
+            boomButton.setY(pointF.y);
+        }
+    }
+
+    private void stopAllAnimations(boolean isBoomAnimation) {
+        if (background != null) background.clearAnimation();
+        for (BoomButton boomButton : boomButtons) {
+            boomButton.clearAnimation();
+        }
     }
 
     //endregion
@@ -2196,6 +2275,26 @@ public class BoomMenuButton extends FrameLayout implements InnerOnBoomButtonClic
      */
     public void setBottomHamButtonTopMargin(float bottomHamButtonTopMargin) {
         this.bottomHamButtonTopMargin = bottomHamButtonTopMargin;
+    }
+
+    public boolean isOrientationAdaptable() {
+        return isOrientationAdaptable;
+    }
+
+    /**
+     * Usually, you don't need to worry about the positions of sub-buttons of BMB when the screen
+     * orientation is changed. Because the activity will be destroyed and re-created. But if the
+     * "configChanges" property of activity is set, then you need to set orientation-adaptable to
+     * true, then BMB will change the positions of sub-buttons when orientation of screen is
+     * changed.
+     *
+     * @param orientationAdaptable orientationAdaptable
+     */
+    public void setOrientationAdaptable(boolean orientationAdaptable) {
+        isOrientationAdaptable = orientationAdaptable;
+        if (isOrientationAdaptable) {
+            initOrientationListener();
+        }
     }
 
     //endregion

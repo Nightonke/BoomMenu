@@ -52,7 +52,7 @@
 
         <TextView
             android:layout_width="40dp"
-            android:layout_height="10dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:gravity="center"

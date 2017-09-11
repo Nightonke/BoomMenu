@@ -45,6 +45,14 @@ class BackgroundView extends FrameLayout {
         rootView.addView(this);
     }
 
+    protected void reLayout(final BoomMenuButton bmb) {
+        ViewGroup rootView = bmb.getParentView();
+        FrameLayout.LayoutParams params = (LayoutParams) getLayoutParams();
+        params.width = rootView.getWidth();
+        params.height = rootView.getHeight();
+        setLayoutParams(params);
+    }
+
     protected void dim(long duration, AnimatorListenerAdapter completeListener) {
         setVisibility(VISIBLE);
         AnimationManager.animate(

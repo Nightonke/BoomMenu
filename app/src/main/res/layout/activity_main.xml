@@ -174,6 +174,13 @@
                 android:text="@string/fade_views_example"
                 />
 
+            <Button
+                android:id="@+id/orientation_example"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/orientation_example"
+                />
+
         </LinearLayout>
 
     </ScrollView>

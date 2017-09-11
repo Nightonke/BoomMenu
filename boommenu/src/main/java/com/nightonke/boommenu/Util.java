@@ -144,6 +144,9 @@ public class Util {
     }
 
     public static BitmapDrawable getOvalBitmapDrawable(View view, int radius, int color) {
+        if (radius <= 0) {
+            return null;
+        }
         Bitmap bitmap = Bitmap.createBitmap(
                 2 * radius,
                 2 * radius,
@@ -169,6 +172,9 @@ public class Util {
     }
 
     public static BitmapDrawable getRectangleBitmapDrawable(View view, int width, int height, int cornerRadius, int color) {
+        if (width <= 0 || height <= 0) {
+            return null;
+        }
         Bitmap bitmap = Bitmap.createBitmap(
                 width,
                 height,

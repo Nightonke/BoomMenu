@@ -7,6 +7,7 @@
     <bool name="default_bmb_inList">false</bool>
     <bool name="default_bmb_inFragment">false</bool>
     <bool name="default_bmb_backPressListened">true</bool>
+    <bool name="default_bmb_orientationAdaptable">false</bool>
 
     <!--Shadow-->
     <bool name="default_bmb_shadow_effect">true</bool>

@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listenClickEventOf(R.id.three_d_animation_example);
         listenClickEventOf(R.id.custom_position_example);
         listenClickEventOf(R.id.fade_views_example);
+        listenClickEventOf(R.id.orientation_example);
     }
 
     @Override
@@ -104,6 +105,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.fade_views_example:
                 startActivity(FadeViewsActivity.class);
+                break;
+            case R.id.orientation_example:
+                startActivity(OrientationActivity.class);
                 break;
         }
     }

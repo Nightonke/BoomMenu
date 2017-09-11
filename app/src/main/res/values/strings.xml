@@ -23,6 +23,7 @@
     <string name="three_d_animation_example">3D Animation Example</string>
     <string name="custom_position_example">Custom Position Example</string>
     <string name="fade_views_example">Fade Views Example</string>
+    <string name="orientation_example">Orientation Example</string>
 
     <string name="text_inside_circle_button_text_normal">Text Inside Circle Button(Normal)</string>
     <string name="text_inside_circle_button_text_highlighted">Text Inside Circle Button(Highlighted)</string>

@@ -77,9 +77,9 @@ public class BMBShadow extends FrameLayout {
 
     private Bitmap createShadowBitmap() {
         Bitmap shadowBitmap;
-        try {
+        if (getWidth() > 0 && getHeight() > 0) {
             shadowBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ALPHA_8);
-        } catch (IllegalArgumentException e) {
+        } else {
             return null;
         }
         Canvas canvas = new Canvas(shadowBitmap);
