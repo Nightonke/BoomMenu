@@ -20,7 +20,7 @@ And now the BMB-Android 2.0.0 comes.
 
 ## Gradle & Maven
 ```
-compile 'com.nightonke:boommenu:2.1.1'
+implementation 'com.nightonke:boommenu:2.1.1'
 ```
 ```
 <dependency>
