@@ -100,6 +100,14 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
+        
+        
+      - name: Touch local properties
+        run: touch local.properties
+      - name: Add Api Key
+        run: echo "apiKey=\"\"" >> local.properties  
+        
+        
       - name: Assemble Debug
         run: ./gradlew assembleDebug
 
