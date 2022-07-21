@@ -130,5 +130,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
-          name: BoomMenu
+          name: BoomMenuAPK
           path: app/build/outputs/apk/debug/**.apk
