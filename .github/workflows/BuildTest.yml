@@ -35,6 +35,13 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+            
+      
+      - name: Touch local properties
+        run: touch local.properties
+      - name: Add Api Key
+        run: echo "apiKey=\"\"" >> local.properties  
+        
 
       - name: Run Debug Tests
         run: ./gradlew testDebugUnitTest --continue
@@ -69,11 +76,20 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+            
+      
+      - name: Touch local properties
+        run: touch local.properties
+      - name: Add Api Key
+        run: echo "apiKey=\"\"" >> local.properties  
+        
+            
       - name: Instrumentation Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
           script: ./gradlew connectedAndroidTest
+          
 
       - name: Upload Android Test Reports
         if: ${{ always() }}
